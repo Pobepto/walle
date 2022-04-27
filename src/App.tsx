@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Text, Spacer } from 'ink'
+import { Box, Text } from 'ink'
 import { useLocation, useRoutes } from './Router'
 import { routes } from './routes'
 
@@ -8,12 +8,29 @@ export const App: React.FC = () => {
   const location = useLocation()
 
   return (
-    <Box borderStyle="classic">
-      <Spacer/>
-      <Text>
-        {location}
-      </Text>
-      <Box>
+    <Box flexDirection="row">
+      <Box
+        width="25%"
+        flexDirection="column"
+        borderColor="red"
+        borderStyle='bold'
+      >
+        <Text bold underline>
+          Left
+        </Text>
+        <Text>{location}</Text>
+      </Box>
+
+      <Box
+        width="75%"
+        flexDirection="column"
+        borderColor="red"
+        borderStyle='bold'
+        marginLeft={-1}
+      >
+        <Text bold underline>
+          Right
+        </Text>
         {route}
       </Box>
     </Box>

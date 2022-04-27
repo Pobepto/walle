@@ -1,3 +1,4 @@
+import React from 'react'
 import { Test, Ticker } from './modules'
 import { Routes } from './Router'
 
