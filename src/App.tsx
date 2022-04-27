@@ -1,22 +1,27 @@
-import React, { useState, useEffect } from 'react'
-import { Text, useInput } from 'ink'
+import React from 'react'
+import { useLocation, useRoute } from './Router'
+import { Ticker } from './modules/Ticker'
+import { Test } from './modules/Test'
+import { Box, Text, Spacer } from 'ink'
+
+const routes = {
+  ticker: () => <Ticker />,
+  test: () => <Test />
+}
 
 export const App: React.FC = () => {
-  const [counter, setCounter] = useState(0)
+  const route = useRoute(routes)
+  const location = useLocation()
 
-  useInput((input, key) => {
-    console.log(input, key)
-  })
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCounter((previousCounter) => previousCounter + 1)
-    }, 100)
-
-    return () => {
-      clearInterval(timer)
-    }
-  }, [])
-
-  return <Text color="green">{counter} tests passed</Text>
+  return (
+    <Box borderStyle="classic">
+      <Spacer/>
+      <Text>
+        {location}
+      </Text>
+      <Box>
+        {route}
+      </Box>
+    </Box>
+  )
 }
