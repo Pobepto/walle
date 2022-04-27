@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useInput, Text, Box } from 'ink'
 import { useNavigate } from '../Router'
 import { useStore } from '../store'
+import { ROUTE } from '../routes'
 
 export const Ticker: React.FC = () => {
   const [counter, setCounter] = useState(0)
@@ -20,7 +21,7 @@ export const Ticker: React.FC = () => {
 
   useInput((input, key) => {
     if (key.downArrow) {
-      navigate('test')
+      navigate(ROUTE.TEST)
     }
   })
 
@@ -30,7 +31,6 @@ export const Ticker: React.FC = () => {
     }, 100)
 
     return () => {
-      // console.log('leave from ticker')
       clearInterval(timer)
     }
   }, [])

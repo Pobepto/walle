@@ -1,17 +1,10 @@
-import React, { useEffect } from 'react'
-import { useLocation, useRoute } from './Router'
-import { Ticker } from './modules/Ticker'
-import { Test } from './modules/Test'
+import React from 'react'
 import { Box, Text, Spacer } from 'ink'
-import { useStore } from './store'
-
-const routes = {
-  ticker: () => <Ticker />,
-  test: () => <Test />
-}
+import { useLocation, useRoutes } from './Router'
+import { routes } from './routes'
 
 export const App: React.FC = () => {
-  const route = useRoute(routes)
+  const route = useRoutes(routes)
   const location = useLocation()
 
   return (
