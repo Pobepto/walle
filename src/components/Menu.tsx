@@ -2,16 +2,19 @@ import React, { useState } from 'react'
 import { Text, Box, useInput } from 'ink'
 
 interface Props {
+  focused: boolean,
   items: {
     title: string,
     onSelect: () => void;
   }[];
 }
 
-export const Menu: React.FC<Props> = ({ items }) => {
+export const Menu: React.FC<Props> = ({ focused, items }) => {
   const [selectedIndex, setIndex] = useState(0)
 
   useInput((_, key) => {
+    if (!focused) return
+
     if (key.upArrow) {
       setIndex(i => i === 0 ? items.length - 1 : i - 1)
     } else if (key.downArrow) {

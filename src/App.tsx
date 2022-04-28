@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Text, useInput } from 'ink'
 import { routes, useLocation, useRoutes } from './routes'
 import { useAppStore } from './store'
+import { Menu } from './components/Menu'
 
 export const App: React.FC = () => {
   const route = useRoutes(routes)
@@ -26,7 +27,23 @@ export const App: React.FC = () => {
         <Text bold underline>
           Left
         </Text>
-        <Text>{location}</Text>
+        <Menu
+          focused={menuFocused}
+          items={[
+            {
+              title: 'Account',
+              onSelect: () => console.log('Account')
+            },
+            {
+              title: 'DEX',
+              onSelect: () => console.log('DEX')
+            },
+            {
+              title: 'Settings',
+              onSelect: () => console.log('Settings')
+            }
+          ]}
+        />
       </Box>
 
       <Box
