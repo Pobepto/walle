@@ -1,11 +1,15 @@
-import { Store } from '..'
+import create from 'zustand'
+import { Action } from '..'
+import { generateWallet } from './generateWallet'
 
 export interface AccountStore {
-  something: string,
-  ping: () => void;
+  phrase: string,
+  generateWallet: () => void;
 }
 
-export const createAccountStore: Store<AccountStore> = (set, get) => ({
-  something: 'pi pi bo bo',
-  ping: () => set(store => ({ something: store.something + ' co co co' }))
-})
+export type AccountAction = Action<AccountStore>
+
+export const useAccountStore = create<AccountStore>((set, get) => ({
+  phrase: '',
+  generateWallet: generateWallet(set, get)
+}))
