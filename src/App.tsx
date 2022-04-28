@@ -1,18 +1,27 @@
 import React from 'react'
-import { Box, Text } from 'ink'
+import { Box, Text, useInput } from 'ink'
 import { routes, useLocation, useRoutes } from './routes'
+import { useAppStore } from './store'
 
 export const App: React.FC = () => {
   const route = useRoutes(routes)
+  const menuFocused = useAppStore(state => state.menuFocused)
+  const toggleMenu = useAppStore(state => state.toggleMenu)
   const location = useLocation()
+
+  useInput((_, key) => {
+    if (key.tab) {
+      toggleMenu()
+    }
+  })
 
   return (
     <Box flexDirection="row">
       <Box
         width="25%"
         flexDirection="column"
-        borderColor="red"
-        borderStyle='bold'
+        borderColor={menuFocused ? 'red' : 'black'}
+        borderStyle="bold"
       >
         <Text bold underline>
           Left
@@ -23,8 +32,8 @@ export const App: React.FC = () => {
       <Box
         width="75%"
         flexDirection="column"
-        borderColor="red"
-        borderStyle='bold'
+        borderColor={!menuFocused ? 'red' : 'black'}
+        borderStyle="bold"
         marginLeft={-1}
       >
         <Text bold underline>
