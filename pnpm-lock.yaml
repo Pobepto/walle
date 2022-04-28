@@ -20,6 +20,7 @@ specifiers:
   ink: ^3.2.0
   ink-text-input: ^4.0.3
   react: ^17.0.2
+  tsdef: ^0.0.14
   typescript: ^4.6.3
   zustand: 3.7.2
 
@@ -46,6 +47,7 @@ devDependencies:
   eslint-plugin-promise: 6.0.0_eslint@8.14.0
   eslint-plugin-react: 7.29.4_eslint@8.14.0
   eslint-plugin-react-hooks: 4.5.0_eslint@8.14.0
+  tsdef: 0.0.14
   typescript: 4.6.3
 
 packages:
@@ -2271,6 +2273,10 @@ packages:
       json5: 1.0.1
       minimist: 1.2.6
       strip-bom: 3.0.0
+    dev: true
+
+  /tsdef/0.0.14:
+    resolution: {integrity: sha512-UjMD4XKRWWFlFBfwKVQmGFT5YzW/ZaF8x6KpCDf92u9wgKeha/go3FU0e5WqDjXsCOdfiavCkfwfVHNDxRDGMA==}
     dev: true
 
   /tslib/1.14.1:

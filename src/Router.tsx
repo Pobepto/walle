@@ -8,11 +8,11 @@ interface RouterValue<T> {
 export type Routes = Record<number, () => JSX.Element>
 
 interface RouterProps<T> {
-  children: React.ReactElement | React.ReactElement[];
+  children: React.ReactNode;
   defaultPath: T;
 }
 
-export const routerFactory = <T extends number, >() => {
+export const routerFactory = <T extends number, >(routes: Routes) => {
   const RouterContext = createContext<RouterValue<T>>(null)
 
   const Router: React.FC<RouterProps<T>> = ({ children, defaultPath }) => {
@@ -31,8 +31,7 @@ export const routerFactory = <T extends number, >() => {
   const useRouterContext = () => useContext(RouterContext)
   const useNavigate = () => useRouterContext().navigate
   const useLocation = () => useRouterContext().path
-
-  const useRoutes = (routes: Routes) => {
+  const useRoute = () => {
     const location = useLocation()
 
     return routes[location]()
@@ -42,6 +41,6 @@ export const routerFactory = <T extends number, >() => {
     Router,
     useNavigate,
     useLocation,
-    useRoutes
+    useRoute
   }
 }

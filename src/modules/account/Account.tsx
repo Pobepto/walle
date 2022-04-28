@@ -11,7 +11,6 @@ export const Account: React.FC = () => {
 
   const [test, setTest] = useState('')
 
-
   return (
     <Box display="flex" flexDirection="column">
       <Menu

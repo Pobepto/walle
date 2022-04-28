@@ -1,15 +1,14 @@
 import React from 'react'
 import { Box, Text, useInput } from 'ink'
-import { routes, useLocation, useRoutes } from './routes'
+import { useRoute } from './routes'
 import { useAppStore } from './store'
 import { Menu } from './components/Menu'
 import { Header } from './components/Header'
 
 export const App: React.FC = () => {
-  const route = useRoutes(routes)
+  const route = useRoute()
   const menuFocused = useAppStore(state => state.menuFocused)
   const toggleMenu = useAppStore(state => state.toggleMenu)
-  const location = useLocation()
 
   useInput((_, key) => {
     if (key.tab) {

@@ -1,12 +1,9 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Wallet } from '@ethersproject/wallet'
-
-import { useAccountStore } from '../store'
+import { useWallet } from '../hooks/useWallet'
 
 export const Header: React.FC = () => {
-  const phrase = useAccountStore(state => state.phrase)
-  const wallet = phrase && Wallet.fromMnemonic(phrase)
+  const wallet = useWallet() // TODO: why wallet is not Nullable?
 
   return (
     <Box borderStyle="classic" borderColor="cyan">
