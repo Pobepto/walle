@@ -1,23 +1,27 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { ROUTE, useNavigate } from '../../routes'
+import { Wallet } from '@ethersproject/wallet'
 import { Menu } from '../../components/Menu'
+import { useAccountStore } from '../../store'
 
 export const Account: React.FC = () => {
-  const navigate = useNavigate()
+  const phrase = useAccountStore(state => state.phrase)
+  const generateWallet = useAccountStore(state => state.generateWallet)
+
+  const wallet = phrase && Wallet.fromMnemonic(phrase)
 
   return (
     <Box>
-      <Text>Account</Text>
+      <Text>Account: {wallet?.address}</Text>
       <Menu
         items={[
           {
             title: 'Create account',
-            onSelect: () => navigate(ROUTE.ACCOUNT)
+            onSelect: () => generateWallet()
           },
           {
             title: 'Import account',
-            onSelect: () => null
+            onSelect: () => console.log('import')
           }
         ]}
       />

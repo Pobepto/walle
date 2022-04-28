@@ -16,10 +16,11 @@ specifiers:
   eslint-plugin-n: ^15.0.0
   eslint-plugin-promise: ^6.0.0
   eslint-plugin-react: ^7.29.4
+  eslint-plugin-react-hooks: ^4.5.0
   ink: ^3.2.0
   react: ^17.0.2
   typescript: ^4.6.3
-  zustand: ^4.0.0-rc.0
+  zustand: 3.7.2
 
 dependencies:
   '@ethersproject/abi': 5.6.1
@@ -29,7 +30,7 @@ dependencies:
   '@ethersproject/wallet': 5.6.0
   ink: 3.2.0_@types+react@18.0.8+react@17.0.2
   react: 17.0.2
-  zustand: 4.0.0-rc.0_react@17.0.2
+  zustand: 3.7.2_react@17.0.2
 
 devDependencies:
   '@types/react': 18.0.8
@@ -42,6 +43,7 @@ devDependencies:
   eslint-plugin-n: 15.2.0_eslint@8.14.0
   eslint-plugin-promise: 6.0.0_eslint@8.14.0
   eslint-plugin-react: 7.29.4_eslint@8.14.0
+  eslint-plugin-react-hooks: 4.5.0_eslint@8.14.0
   typescript: 4.6.3
 
 packages:
@@ -1178,6 +1180,15 @@ packages:
       eslint: 8.14.0
     dev: true
 
+  /eslint-plugin-react-hooks/4.5.0_eslint@8.14.0:
+    resolution: {integrity: sha512-8k1gRt7D7h03kd+SAAlzXkQwWK22BnK6GKZG+FJA6BAGy22CFvl8kCIXKpVux0cCxMWDQUPqSok0LKaZ0aOcCw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
+    dependencies:
+      eslint: 8.14.0
+    dev: true
+
   /eslint-plugin-react/7.29.4_eslint@8.14.0:
     resolution: {integrity: sha512-CVCXajliVh509PcZYRFyu/BoUEz452+jtQJq2b3Bae4v3xBUWPLCmtmBM+ZinG4MzwmxJgJ2M5rMqhqLVn7MtQ==}
     engines: {node: '>=4'}
@@ -2304,14 +2315,6 @@ packages:
       punycode: 2.1.1
     dev: true
 
-  /use-sync-external-store/1.0.0_react@17.0.2:
-    resolution: {integrity: sha512-AFVsxg5GkFg8GDcxnl+Z0lMAz9rE8DGJCc28qnBuQF7lac57B5smLcT37aXpXIIPz75rW4g3eXHPjhHwdGskOw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0-rc
-    dependencies:
-      react: 17.0.2
-    dev: false
-
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
     dev: true
@@ -2396,18 +2399,14 @@ packages:
       '@types/yoga-layout': 1.9.2
     dev: false
 
-  /zustand/4.0.0-rc.0_react@17.0.2:
-    resolution: {integrity: sha512-jMimx6EIlLb/hwgnkVZ4Wd/UI73wXedUB6L/kcdIYbOYHcjIFRc7JEB8IXFZt+1rQq2qwuts7kN6kuHhFss47A==}
+  /zustand/3.7.2_react@17.0.2:
+    resolution: {integrity: sha512-PIJDIZKtokhof+9+60cpockVOq05sJzHCriyvaLBmEJixseQ1a5Kdov6fWZfWOu5SK9c+FhH1jU0tntLxRJYMA==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
-      immer: '>=9.0'
       react: '>=16.8'
     peerDependenciesMeta:
-      immer:
-        optional: true
       react:
         optional: true
     dependencies:
       react: 17.0.2
-      use-sync-external-store: 1.0.0_react@17.0.2
     dev: false
