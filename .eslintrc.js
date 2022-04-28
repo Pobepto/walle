@@ -11,7 +11,13 @@ module.exports = {
   globals: {
     JSX: true
   },
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'standard'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'standard'
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -21,5 +27,7 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: ['react', '@typescript-eslint'],
-  rules: {}
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'warn'
+  }
 }

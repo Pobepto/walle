@@ -1,7 +1,6 @@
 import React from 'react'
 import { Text, useInput } from 'ink'
-import { useNavigate } from '../Router'
-import { ROUTE } from '../routes'
+import { ROUTE, useNavigate } from '../routes'
 
 export const Test: React.FC = () => {
   const navigate = useNavigate()

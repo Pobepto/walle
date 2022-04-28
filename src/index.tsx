@@ -1,10 +1,10 @@
 import React from 'react'
 import { render } from 'ink'
 import { App } from './App'
-import { Router } from './Router'
+import { Router, ROUTE } from './routes'
 
 render(
-  <Router defaultPath='ticker'>
+  <Router defaultPath={ROUTE.TICKER}>
     <App />
   </Router>
 )

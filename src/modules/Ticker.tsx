@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useInput, Text, Box } from 'ink'
-import { useNavigate } from '../Router'
 import { useStore } from '../store'
-import { ROUTE } from '../routes'
+import { ROUTE, useNavigate } from '../routes'
 
 export const Ticker: React.FC = () => {
   const [counter, setCounter] = useState(0)

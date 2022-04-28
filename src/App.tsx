@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { useLocation, useRoutes } from './Router'
-import { routes } from './routes'
+import { routes, useLocation, useRoutes } from './routes'
 
 export const App: React.FC = () => {
   const route = useRoutes(routes)

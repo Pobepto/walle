@@ -1,43 +1,47 @@
 import React, { createContext, useContext, useState } from 'react'
 
-interface RouterValue {
-  path: string,
-  navigate: (to: string) => void
+interface RouterValue<T> {
+  path: T,
+  navigate: (to: T) => void
 }
 
-export type Routes = Record<string, () => JSX.Element>
+export type Routes = Record<number, () => JSX.Element>
 
-const RouterContext = createContext<RouterValue>(null)
-
-interface RouterProps {
+interface RouterProps<T> {
   children: React.ReactElement | React.ReactElement[];
-  defaultPath: string;
+  defaultPath: T;
 }
 
-export const Router: React.FC<RouterProps> = ({ children, defaultPath = '' }) => {
-  const [path, setPath] = useState(defaultPath)
+export const routerFactory = <T extends number, >() => {
+  const RouterContext = createContext<RouterValue<T>>(null)
 
-  return (
-    <RouterContext.Provider value={{
-      path,
-      navigate: setPath
-    }}>
-      {children}
-    </RouterContext.Provider>
-  )
-}
+  const Router: React.FC<RouterProps<T>> = ({ children, defaultPath }) => {
+    const [path, setPath] = useState(defaultPath)
 
-export const useRouterContext = () => useContext(RouterContext)
-export const useNavigate = () => useRouterContext().navigate
-export const useLocation = () => useRouterContext().path
-
-export const useRoutes = (routes: Routes) => {
-  const location = useLocation()
-  const route = routes[location]
-
-  if (!route) {
-    throw new Error(`Route ${location} not found!`)
+    return (
+      <RouterContext.Provider value={{
+        path,
+        navigate: setPath
+      }}>
+        {children}
+      </RouterContext.Provider>
+    )
   }
 
-  return route()
+  const useRouterContext = () => useContext(RouterContext)
+  const useNavigate = () => useRouterContext().navigate
+  const useLocation = () => useRouterContext().path
+
+  const useRoutes = (routes: Routes) => {
+    const location = useLocation()
+
+    return routes[location]()
+  }
+
+  return {
+    Router,
+    useNavigate,
+    useLocation,
+    useRoutes
+  }
 }

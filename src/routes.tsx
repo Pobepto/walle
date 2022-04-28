@@ -1,11 +1,13 @@
 import React from 'react'
 import { Test, Ticker } from './modules'
-import { Routes } from './Router'
+import { Routes, routerFactory } from './Router'
 
-export const ROUTE = {
-  TICKER: 'ticker',
-  TEST: 'test'
+export enum ROUTE {
+  TICKER,
+  TEST
 }
+
+export const { Router, useLocation, useNavigate, useRoutes } = routerFactory<ROUTE>()
 
 export const routes: Routes = {
   [ROUTE.TICKER]: () => <Ticker />,
