@@ -18,6 +18,7 @@ specifiers:
   eslint-plugin-react: ^7.29.4
   eslint-plugin-react-hooks: ^4.5.0
   ink: ^3.2.0
+  ink-text-input: ^4.0.3
   react: ^17.0.2
   typescript: ^4.6.3
   zustand: 3.7.2
@@ -29,6 +30,7 @@ dependencies:
   '@ethersproject/providers': 5.6.4
   '@ethersproject/wallet': 5.6.0
   ink: 3.2.0_@types+react@18.0.8+react@17.0.2
+  ink-text-input: 4.0.3_ink@3.2.0+react@17.0.2
   react: 17.0.2
   zustand: 3.7.2_react@17.0.2
 
@@ -1561,6 +1563,19 @@ packages:
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  /ink-text-input/4.0.3_ink@3.2.0+react@17.0.2:
+    resolution: {integrity: sha512-eQD01ik9ltmNoHmkeQ2t8LszYkv2XwuPSUz3ie/85qer6Ll/j0QSlSaLNl6ENHZakBHdCBVZY04iOXcLLXA0PQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      ink: ^3.0.0-3
+      react: ^16.5.2 || ^17.0.0
+    dependencies:
+      chalk: 4.1.2
+      ink: 3.2.0_@types+react@18.0.8+react@17.0.2
+      react: 17.0.2
+      type-fest: 0.15.1
+    dev: false
+
   /ink/3.2.0_@types+react@18.0.8+react@17.0.2:
     resolution: {integrity: sha512-firNp1q3xxTzoItj/eOOSZQnYSlyrWks5llCTVX37nJ59K3eXbQ8PtzCguqo8YI19EELo5QxaKnJd4VxzhU8tg==}
     engines: {node: '>=10'}
@@ -2281,6 +2296,11 @@ packages:
 
   /type-fest/0.12.0:
     resolution: {integrity: sha512-53RyidyjvkGpnWPMF9bQgFtWp+Sl8O2Rp13VavmJgfAP9WWG6q6TkrKU8iyJdnwnfgHI6k2hTlgqH4aSdjoTbg==}
+    engines: {node: '>=10'}
+    dev: false
+
+  /type-fest/0.15.1:
+    resolution: {integrity: sha512-n+UXrN8i5ioo7kqT/nF8xsEzLaqFra7k32SEsSPwvXVGyAcRgV/FUQN/sgfptJTR1oRmmq7z4IXMFSM7im7C9A==}
     engines: {node: '>=10'}
     dev: false
 
