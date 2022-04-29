@@ -8,6 +8,7 @@ export const Account: React.FC = () => {
   const menuFocused = useAppStore(state => state.menuFocused)
   const generateWallet = useAccountStore(state => state.generateWallet)
   const importWallet = useAccountStore(state => state.importWallet)
+  const deriveMnemonicAddress = useAccountStore(state => state.deriveMnemonicAddress)
 
   const [test, setTest] = useState('')
 
@@ -23,6 +24,10 @@ export const Account: React.FC = () => {
           {
             title: 'Import account',
             onSelect: () => importWallet(test)
+          },
+          {
+            title: 'Derive address',
+            onSelect: () => deriveMnemonicAddress()
           }
         ]}
       />
