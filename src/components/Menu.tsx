@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Text, Box, useInput } from 'ink'
+import { Text, Box } from 'ink'
+import { useInput } from '../hooks/useInput'
 
 interface Props {
   focused: boolean,
@@ -12,7 +13,7 @@ interface Props {
 export const Menu: React.FC<Props> = ({ focused, items }) => {
   const [selectedIndex, setIndex] = useState(0)
 
-  useInput((_, key) => {
+  useInput(key => {
     if (key.upArrow) {
       setIndex(i => i === 0 ? items.length - 1 : i - 1)
     } else if (key.downArrow) {
@@ -24,7 +25,7 @@ export const Menu: React.FC<Props> = ({ focused, items }) => {
 
       item.onSelect && item.onSelect()
     }
-  }, { isActive: focused })
+  }, focused)
 
   return (
     <Box flexDirection='column'>
