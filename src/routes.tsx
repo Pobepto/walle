@@ -1,12 +1,14 @@
 import React from 'react'
-import { Account } from './modules'
+import { Account, Welcome } from './modules'
 import { routerFactory } from './Router'
 
 export enum ROUTE {
+  WELCOME,
   ACCOUNT
 }
 
 const router = routerFactory<ROUTE>({
+  [ROUTE.WELCOME]: () => <Welcome />,
   [ROUTE.ACCOUNT]: () => <Account />
 })
 

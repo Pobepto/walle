@@ -4,7 +4,7 @@ import { App } from './App'
 import { Router, ROUTE } from './routes'
 
 render(
-  <Router defaultPath={ROUTE.ACCOUNT}>
+  <Router defaultPath={ROUTE.WELCOME}>
     <App />
   </Router>
 )

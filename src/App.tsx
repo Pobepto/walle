@@ -1,11 +1,12 @@
 import React from 'react'
 import { Box, Text, useInput } from 'ink'
-import { useRoute } from './routes'
+import { ROUTE, useNavigate, useRoute } from './routes'
 import { useAppStore } from './store'
 import { Menu } from './components/Menu'
 import { Header } from './components/Header'
 
 export const App: React.FC = () => {
+  const navigate = useNavigate()
   const route = useRoute()
   const menuFocused = useAppStore(state => state.menuFocused)
   const toggleMenu = useAppStore(state => state.toggleMenu)
@@ -34,7 +35,7 @@ export const App: React.FC = () => {
             items={[
               {
                 title: 'Account',
-                onSelect: () => console.log('Account')
+                onSelect: () => navigate(ROUTE.ACCOUNT)
               },
               {
                 title: 'DEX',
