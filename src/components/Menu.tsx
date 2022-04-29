@@ -1,41 +1,41 @@
-import React, { useState } from 'react'
-import { Text, Box } from 'ink'
-import { useInput } from '../hooks/useInput'
+import React from 'react'
+import { Box, Key } from 'ink'
+import { useSelection } from '../hooks/useSelection'
+import { Button } from './Button'
+
+interface MenuItem {
+  title: string,
+  onSelect: () => void;
+}
 
 interface Props {
   focused: boolean,
-  items: {
-    title: string,
-    onSelect: () => void;
-  }[];
+  prevKey?: keyof Key;
+  nextKey?: keyof Key;
+  selectKey?: keyof Key;
+  items: MenuItem[];
 }
 
-export const Menu: React.FC<Props> = ({ focused, items }) => {
-  const [selectedIndex, setIndex] = useState(0)
-
-  useInput(key => {
-    if (key.upArrow) {
-      setIndex(i => i === 0 ? items.length - 1 : i - 1)
-    } else if (key.downArrow) {
-      setIndex(i => i === items.length - 1 ? 0 : i + 1)
-    }
-
-    if (key.return) {
-      const item = items[selectedIndex]
-
-      item.onSelect && item.onSelect()
-    }
-  }, focused)
+export const Menu: React.FC<Props> = ({
+  focused,
+  items,
+  prevKey = 'leftArrow',
+  nextKey = 'rightArrow',
+  selectKey = 'return'
+}) => {
+  const selection = useSelection(items.length, prevKey, nextKey, focused)
 
   return (
     <Box flexDirection='column'>
       {items.map((item, index) => (
-        <Text
+        <Button
           key={index}
-          bold={index === selectedIndex}
+          keyType={selectKey}
+          isFocused={index === selection}
+          onPress={item.onSelect}
         >
           {item.title}
-        </Text>
+        </Button>
       ))}
     </Box>
   )

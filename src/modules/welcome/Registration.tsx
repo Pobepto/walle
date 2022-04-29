@@ -1,13 +1,13 @@
-import { Box, Key, Text } from 'ink'
+import { Box, Text } from 'ink'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Button } from '../../components/Button'
-import { useInput } from '../../hooks/useInput'
+import { useSelection } from '../../hooks/useSelection'
 import { ROUTE, useNavigate } from '../../routes'
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate()
-  const currentIndex = useMove(2, 'leftArrow', 'rightArrow')
+  const selection = useSelection(2, 'leftArrow', 'rightArrow')
 
   return (
     <Box flexDirection="column">
@@ -16,14 +16,14 @@ export const Registration: React.FC = () => {
       <Box>
         <Button
           keyType="return"
-          isFocused={currentIndex === 0}
+          isFocused={selection === 0}
           onPress={() => navigate(ROUTE.REGISTRATION_IMPORT)}
         >
           Import wallet
         </Button>
         <Button
           keyType="return"
-          isFocused={currentIndex === 1}
+          isFocused={selection === 1}
           onPress={() => navigate(ROUTE.REGISTRATION_CREATE)}
         >
           Create wallet
@@ -31,18 +31,4 @@ export const Registration: React.FC = () => {
       </Box>
     </Box>
   )
-}
-
-const useMove = (amount: number, prevKey: keyof Key, nextKey: keyof Key) => {
-  const [currentIndex, setIndex] = useState(0)
-
-  useInput((key) => {
-    if (key[prevKey]) {
-      setIndex(i => i === 0 ? amount - 1 : i - 1)
-    } else if (key[nextKey]) {
-      setIndex(i => i === amount - 1 ? 0 : i + 1)
-    }
-  })
-
-  return currentIndex
 }

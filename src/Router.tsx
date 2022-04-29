@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 
 interface RouterValue<T> {
   path: T,
@@ -10,6 +10,10 @@ export type Routes = Record<number, () => JSX.Element>
 interface RouterProps<T> {
   children: React.ReactNode;
   defaultPath: T;
+}
+
+interface RedirectProps<T> {
+  to: T;
 }
 
 export const routerFactory = <T extends number, >(routes: Routes) => {
@@ -37,8 +41,19 @@ export const routerFactory = <T extends number, >(routes: Routes) => {
     return routes[location]()
   }
 
+  const Redirect: React.FC<RedirectProps<T>> = ({ to }) => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+      navigate(to)
+    })
+
+    return null
+  }
+
   return {
     Router,
+    Redirect,
     useNavigate,
     useLocation,
     useRoute
