@@ -1,7 +1,7 @@
 import create from 'zustand'
 import { Action } from '..'
 
-interface Chain {
+export interface Chain {
   chainId: number;
   name: string;
   rpc: string;

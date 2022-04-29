@@ -1,9 +1,10 @@
 import React from 'react'
-import { Box, Text, useInput } from 'ink'
+import { Box, Text } from 'ink'
 import { ROUTE, useNavigate } from '../routes'
 import { useAppStore } from '../store'
 import { Menu } from '../components/Menu'
 import { Header } from '../components/Header'
+import { useInput } from '../hooks/useInput'
 
 interface Props {
   children: React.ReactNode
@@ -14,7 +15,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
   const menuFocused = useAppStore(state => state.menuFocused)
   const toggleMenu = useAppStore(state => state.toggleMenu)
 
-  useInput((_, key) => {
+  useInput(key => {
     if (key.tab) {
       toggleMenu()
     }
@@ -49,6 +50,8 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
                 onSelect: () => console.log('Settings')
               }
             ]}
+            prevKey='upArrow'
+            nextKey='downArrow'
           />
         </Box>
 

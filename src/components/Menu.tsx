@@ -31,7 +31,7 @@ export const Menu: React.FC<Props> = ({
         <Button
           key={index}
           keyType={selectKey}
-          isFocused={index === selection}
+          isFocused={focused && index === selection}
           onPress={item.onSelect}
         >
           {item.title}

@@ -30,6 +30,8 @@ export const Account: React.FC = () => {
             onSelect: () => deriveMnemonicAddress()
           }
         ]}
+        prevKey='upArrow'
+        nextKey='downArrow'
       />
       <Box borderColor="blue" borderStyle="bold">
         <TextInput value={test} onChange={setTest} focus={!menuFocused}/>

@@ -21,4 +21,4 @@ const router = routerFactory<ROUTE>({
   [ROUTE.ACCOUNT]: () => <BaseLayout><Account /></BaseLayout>
 })
 
-export const { Router, useLocation, useNavigate, useRoute } = router
+export const { Redirect, Router, useLocation, useNavigate, useRoute } = router
