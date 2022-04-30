@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from 'ink'
-import { Menu } from '../../components/Menu'
+import { Menu } from '../../components'
 import { useAccountStore, useAppStore } from '../../store'
 import TextInput from 'ink-text-input'
 

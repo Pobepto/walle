@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink'
 
 import React from 'react'
-import { Button } from '../../components/Button'
+import { Button } from '../../components'
 import { useSelection } from '../../hooks/useSelection'
 import { ROUTE, useNavigate } from '../../routes'
 

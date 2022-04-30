@@ -2,8 +2,7 @@ import React from 'react'
 import { Box, Text } from 'ink'
 import { ROUTE, useNavigate } from '../routes'
 import { useAppStore } from '../store'
-import { Menu } from '../components/Menu'
-import { Header } from '../components/Header'
+import { Menu, Header } from '../components'
 import { useInput } from '../hooks/useInput'
 
 interface Props {

@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink'
 
 import React from 'react'
-import { Button } from '../../components/Button'
+import { Button } from '../../components'
 // import { useWallet } from '../../hooks/useWallet'
 import { ROUTE, useNavigate } from '../../routes'
 
