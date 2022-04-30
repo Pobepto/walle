@@ -4,8 +4,29 @@ import React from 'react'
 import { Input } from '../../components'
 import { useSelection } from '../../hooks/useSelection'
 
+const getSeed = (wordLen: number) => {
+  const wordInRow = 4
+  const rows = wordLen / wordInRow
+  const result = new Array(rows)
+    .fill(
+      new Array(wordInRow).fill({})
+    )
+    .map(
+      (row, rowIndex) => row.map(
+        (_, index) => (({
+          key: index + (rowIndex * wordInRow),
+          text: `${index + (rowIndex * wordInRow) + 1}.`
+        }))
+      )
+    )
+
+  return result
+}
+
 export const ImportWallet: React.FC = () => {
   const selection = useSelection(12, 'leftArrow', 'rightArrow')
+
+  const seed = getSeed(12)
 
   return (
     <Box flexDirection="column">
@@ -13,7 +34,21 @@ export const ImportWallet: React.FC = () => {
         <Text>Import</Text>
       </Box>
       <Box flexDirection="column">
-        <Box flexDirection="row">
+        {seed.map((row, index) => {
+          return (
+            <Box key={`row-${index}`} flexDirection="row">
+              {row.map((el) => {
+                return (
+                  <Box key={el.key} flexDirection="row" borderStyle="classic" width="20">
+                    <Text>{el.text}</Text>
+                    <Input value="" onChange={(e) => console.log(e)} focus={selection === el.key} />
+                  </Box>
+                )
+              })}
+            </Box>
+          )
+        })}
+        {/* <Box flexDirection="row">
           <Box flexDirection="row" borderStyle="classic" width="20">
             <Text>1. </Text>
             <Input value="" onChange={(e) => console.log(e)} focus={selection === 0} />
@@ -66,7 +101,7 @@ export const ImportWallet: React.FC = () => {
             <Text>12. </Text>
             <Input value="" onChange={(e) => console.log(e)} focus={selection === 11} />
           </Box>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   )
