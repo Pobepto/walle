@@ -1,6 +1,6 @@
 import { Box, Text } from 'ink'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from '../../components'
 import { useSelection } from '../../hooks/useSelection'
 
@@ -24,9 +24,25 @@ const getSeed = (wordLen: number) => {
 }
 
 export const ImportWallet: React.FC = () => {
-  const selection = useSelection(12, 'leftArrow', 'rightArrow')
+  const selection = useSelection(12, 'tab', 'return')
+  const [seeds, setSeeds] = useState({
+    0: '',
+    1: '',
+    2: '',
+    3: '',
+    4: '',
+    5: '',
+    6: '',
+    7: '',
+    8: '',
+    9: '',
+    10: '',
+    11: ''
+  })
 
   const seed = getSeed(12)
+
+  const onInputChange = (e, key) => setSeeds(prev => ({ ...prev, [key]: e }))
 
   return (
     <Box flexDirection="column">
@@ -37,71 +53,21 @@ export const ImportWallet: React.FC = () => {
         {seed.map((row, index) => {
           return (
             <Box key={`row-${index}`} flexDirection="row">
-              {row.map((el) => {
+              {row.map(({ key, text }) => {
                 return (
-                  <Box key={el.key} flexDirection="row" borderStyle="classic" width="20">
-                    <Text>{el.text}</Text>
-                    <Input value="" onChange={(e) => console.log(e)} focus={selection === el.key} />
+                  <Box key={key} flexDirection="row" borderStyle="classic" width="20">
+                    <Text>{text}</Text>
+                    <Input
+                      value={seeds[key]}
+                      onChange={(e) => onInputChange(e, key)}
+                      focus={selection === key}
+                    />
                   </Box>
                 )
               })}
             </Box>
           )
         })}
-        {/* <Box flexDirection="row">
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>1. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 0} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>2. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 1} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>3. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 2} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>4. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 3} />
-          </Box>
-        </Box>
-        <Box flexDirection="row">
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>5. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 4} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>6. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 5} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>7. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 6} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>8. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 7} />
-          </Box>
-        </Box>
-        <Box flexDirection="row">
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>9. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 8} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>10. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 9} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>11. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 10} />
-          </Box>
-          <Box flexDirection="row" borderStyle="classic" width="20">
-            <Text>12. </Text>
-            <Input value="" onChange={(e) => console.log(e)} focus={selection === 11} />
-          </Box>
-        </Box> */}
       </Box>
     </Box>
   )
