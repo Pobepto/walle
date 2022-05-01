@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Input } from '../../components'
 import { useSelection } from '../../hooks/useSelection'
 
-const getSeed = (wordLen: number) => {
+const generateSeedObject = (wordLen: number) => {
   const wordInRow = 4
   const rows = wordLen / wordInRow
   const result = new Array(rows)
@@ -40,7 +40,7 @@ export const ImportWallet: React.FC = () => {
     11: ''
   })
 
-  const seed = getSeed(12)
+  const seed = generateSeedObject(12)
 
   const onInputChange = (e, key) => setSeeds(prev => ({ ...prev, [key]: e }))
 
