@@ -13,18 +13,8 @@ interface InkTextProps {
   onSubmit?: (value: string) => void;
 }
 
-interface Props extends InkTextProps {
-  onFocus?: AnyFunction;
-  onBlur?: AnyFunction;
-}
+interface Props extends InkTextProps {}
 
-export const Input: React.FC<Props> = ({ onFocus, onBlur, ...props }) => {
-  useEffect(() => {
-    onFocus && onFocus()
-    return () => {
-      onBlur && onBlur()
-    }
-  }, [onFocus, onBlur])
-
+export const Input: React.FC<Props> = ({ ...props }) => {
   return <InkTextInput {...props} />
 }

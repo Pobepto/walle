@@ -1,6 +1,6 @@
 import React from 'react'
 import { BaseLayout, WelcomeLayout } from './layout'
-import { Account, CreateWallet, ImportWallet, Registration, Welcome } from './modules'
+import { Account, CreateWallet, ImportWallet, Registration, SetPassword, Welcome } from './modules'
 import { routerFactory } from './Router'
 
 export enum ROUTE {
@@ -17,7 +17,7 @@ const router = routerFactory<ROUTE>({
   [ROUTE.REGISTRATION]: () => <WelcomeLayout><Registration /></WelcomeLayout>,
   [ROUTE.REGISTRATION_IMPORT]: () => <WelcomeLayout><ImportWallet /></WelcomeLayout>,
   [ROUTE.REGISTRATION_CREATE]: () => <WelcomeLayout><CreateWallet /></WelcomeLayout>,
-  [ROUTE.REGISTRATION_PASSWORD]: () => <WelcomeLayout><Account /></WelcomeLayout>,
+  [ROUTE.REGISTRATION_PASSWORD]: () => <WelcomeLayout><SetPassword /></WelcomeLayout>,
   [ROUTE.ACCOUNT]: () => <BaseLayout><Account /></BaseLayout>
 })
 
