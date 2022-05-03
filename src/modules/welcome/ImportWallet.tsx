@@ -1,9 +1,10 @@
 import { Box, Text } from 'ink'
 
 import React from 'react'
-import { Input } from '../../components'
+import { Button, Input } from '../../components'
 import { useForm } from '../../hooks/useForm'
 import { useSelection } from '../../hooks/useSelection'
+import { ROUTE, useNavigate } from '../../routes'
 
 type Inputs = {
   0: string;
@@ -40,7 +41,8 @@ const generateSeedObject = (wordLen: number) => {
 }
 
 export const ImportWallet: React.FC = () => {
-  const selection = useSelection(12, 'tab', 'return')
+  const navigate = useNavigate()
+  const selection = useSelection(13, 'tab', 'return')
   const { register } = useForm<Inputs>({
     0: 'sun'
   })
@@ -70,6 +72,13 @@ export const ImportWallet: React.FC = () => {
           )
         })}
       </Box>
+      <Button
+        keyType="return"
+        isFocused={selection === 12}
+        onPress={() => navigate(ROUTE.REGISTRATION_PASSWORD)}
+      >
+        Import wallet
+      </Button>
     </Box>
   )
 }
