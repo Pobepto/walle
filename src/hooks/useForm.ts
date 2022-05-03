@@ -14,8 +14,8 @@ export const useForm = <T extends FieldValues = FieldValues>(
 ) => {
   const [data, setData] = useState<Partial<T>>(initialValues)
 
-  const onChange = (e: string, name: keyof T) => {
-    setData(state => ({ ...state, [name]: '' }))
+  const onChange = (value: string, name: keyof T) => {
+    setData(state => ({ ...state, [name]: value }))
   }
 
   const onBlur = (name: keyof T) => {
@@ -26,8 +26,7 @@ export const useForm = <T extends FieldValues = FieldValues>(
     console.log('focus ', name)
   }
 
-  // TODO: fix initialValue type
-  const register = (name: keyof T, initialValue: any = ''): InputProps => {
+  const register = (name: keyof T): InputProps => {
     const fieldProps: Omit<InputProps, 'value'> = {
       onBlur: () => onBlur(name),
       onFocus: () => onFocus(name),
@@ -36,11 +35,10 @@ export const useForm = <T extends FieldValues = FieldValues>(
 
     if (name in data) {
       return { ...fieldProps, value: data[name] }
-    } else {
-      console.log('registering ', name)
-      setData(state => ({ ...state, [name]: initialValue }))
-      return { ...fieldProps, value: initialValue }
     }
+
+    setData(state => ({ ...state, [name]: initialValues[name] ?? '' }))
+    return { ...fieldProps, value: initialValues[name] ?? '' }
   }
 
   return { register, data }

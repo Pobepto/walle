@@ -9,16 +9,10 @@ type Inputs = {
 }
 
 export const SetPassword: React.FC = () => {
-  const { register, data } = useForm<Inputs>()
-
-  console.log(data)
-
-  const a = register('password')
-
-  console.log(a)
+  const { register } = useForm<Inputs>()
 
   return (
-    <Box>
+    <Box flexDirection="column">
       <Text>Set password to protect your wallet</Text>
       <Box borderStyle="classic" flexDirection="column">
         <Text>New password: </Text>

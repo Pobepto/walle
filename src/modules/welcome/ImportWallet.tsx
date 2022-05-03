@@ -1,8 +1,24 @@
 import { Box, Text } from 'ink'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Input } from '../../components'
+import { useForm } from '../../hooks/useForm'
 import { useSelection } from '../../hooks/useSelection'
+
+type Inputs = {
+  0: string;
+  1: string;
+  2: string;
+  3: string;
+  4: string;
+  5: string;
+  6: string;
+  7: string;
+  8: string;
+  9: string;
+  10: string;
+  11: string;
+}
 
 const generateSeedObject = (wordLen: number) => {
   const wordInRow = 4
@@ -25,24 +41,10 @@ const generateSeedObject = (wordLen: number) => {
 
 export const ImportWallet: React.FC = () => {
   const selection = useSelection(12, 'tab', 'return')
-  const [seeds, setSeeds] = useState({
-    0: '',
-    1: '',
-    2: '',
-    3: '',
-    4: '',
-    5: '',
-    6: '',
-    7: '',
-    8: '',
-    9: '',
-    10: '',
-    11: ''
+  const { register } = useForm<Inputs>({
+    0: 'sun'
   })
-
   const seed = generateSeedObject(12)
-
-  const onInputChange = (e, key) => setSeeds(prev => ({ ...prev, [key]: e }))
 
   return (
     <Box flexDirection="column">
@@ -58,8 +60,7 @@ export const ImportWallet: React.FC = () => {
                   <Box key={key} flexDirection="row" borderStyle="classic" width="20">
                     <Text>{text}</Text>
                     <Input
-                      value={seeds[key]}
-                      onChange={(e) => onInputChange(e, key)}
+                      {...register(key)}
                       focus={selection === key}
                     />
                   </Box>
