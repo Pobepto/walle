@@ -4,7 +4,7 @@ import { Input } from '../../components'
 import { useForm } from '../../hooks/useForm'
 
 type Inputs = {
-  password: number;
+  password: string;
   repeatPassword: string;
 }
 
