@@ -15,14 +15,14 @@ export const Registration: React.FC = () => {
       <Text>Use {'<'}- or -{'>'} arrows to choose action</Text>
       <Box>
         <Button
-          keyType="return"
+          selectKey="return"
           isFocused={selection === 0}
           onPress={() => navigate(ROUTE.REGISTRATION_IMPORT)}
         >
           Import wallet
         </Button>
         <Button
-          keyType="return"
+          selectKey="return"
           isFocused={selection === 1}
           onPress={() => navigate(ROUTE.REGISTRATION_CREATE)}
         >

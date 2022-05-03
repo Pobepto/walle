@@ -17,7 +17,7 @@ export const CreateWallet: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Text>Your wallet: {wallet?.address}</Text>
-      <Button keyType="return" isFocused onPress={() => navigate(ROUTE.REGISTRATION_PASSWORD)}>
+      <Button selectKey="return" isFocused onPress={() => navigate(ROUTE.REGISTRATION_PASSWORD)}>
         Press &quot;Enter&quot; to continue...
       </Button>
     </Box>

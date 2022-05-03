@@ -15,7 +15,7 @@ export const Welcome: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Text>Walle - Best CLI Application ever</Text>
-      <Button keyType="return" isFocused onPress={() => navigate(ROUTE.REGISTRATION)}>
+      <Button selectKey="return" isFocused onPress={() => navigate(ROUTE.REGISTRATION)}>
         Press &quot;Enter&quot; to continue...
       </Button>
     </Box>

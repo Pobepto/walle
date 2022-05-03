@@ -1,6 +1,6 @@
 import InkTextInput from 'ink-text-input'
-import React, { useEffect } from 'react'
-import { AnyFunction } from 'tsdef'
+import React from 'react'
+import { useDidMountEffect } from '../hooks/useDidMountEffect'
 
 interface InkTextProps {
   placeholder?: string;
@@ -14,14 +14,14 @@ interface InkTextProps {
 }
 
 interface Props extends InkTextProps {
-  onFocus?: AnyFunction;
-  onBlur?: AnyFunction;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export const Input: React.FC<Props> = ({ onFocus, onBlur, ...props }) => {
   const { focus } = props
 
-  useEffect(() => {
+  useDidMountEffect(() => {
     if (focus) {
       onFocus()
     } else {

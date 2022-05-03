@@ -2,24 +2,23 @@ import { Box, Text } from 'ink'
 
 import React from 'react'
 import { Button, Input } from '../../components'
-import { useForm } from '../../hooks/useForm'
+import { lengthRule, useForm } from '../../hooks/useForm'
 import { useSelection } from '../../hooks/useSelection'
 import { ROUTE, useNavigate } from '../../routes'
 import { useAccountStore } from '../../store'
 
-type Inputs = {
-  0: string;
-  1: string;
-  2: string;
-  3: string;
-  4: string;
-  5: string;
-  6: string;
-  7: string;
-  8: string;
-  9: string;
-  10: string;
-  11: string;
+type RangeFromZeroToN<
+  N extends number,
+  T extends number[] = []
+> = T['length'] extends N ? T[number] : RangeFromZeroToN<N, [...T, T['length']]>;
+
+// type Range<From extends number, To extends number> = Exclude<
+//   RangeFromZeroToN<To>,
+//   RangeFromZeroToN<From>
+// >;
+
+type Inputs<Size extends number> = {
+  [K in RangeFromZeroToN<Size>]: string;
 }
 
 const generateSeedObject = (wordLen: number) => {
@@ -41,16 +40,18 @@ const generateSeedObject = (wordLen: number) => {
   return result
 }
 
+const MNEMONIC_PHRASE_LENGTH = 12
+
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
-  const selection = useSelection(13, 'tab', 'return')
   const importWallet = useAccountStore(state => state.importWallet)
-  const { data, register, errors, isValid } = useForm<Inputs>({
-    initialValues: {
-      0: 'sun'
-    },
+  const selection = useSelection(MNEMONIC_PHRASE_LENGTH + 1, 'tab', 'return')
+  const { data, register, errors, isValid } = useForm<Inputs<typeof MNEMONIC_PHRASE_LENGTH>>({
     rules: {
-      0: (value) => value.length > 10 ? '' : 'too small'
+      ...Array.from(new Array(MNEMONIC_PHRASE_LENGTH)).reduce((obj, _, index) => ({
+        ...obj,
+        [index]: lengthRule(1, 20)
+      }), {})
     }
   })
 
@@ -58,8 +59,6 @@ export const ImportWallet: React.FC = () => {
     if (!isValid) {
       return
     }
-
-    console.log('import')
 
     // try to import
     const phrase = Object.values(data).join(' ')
@@ -69,7 +68,7 @@ export const ImportWallet: React.FC = () => {
     navigate(ROUTE.REGISTRATION_PASSWORD)
   }
 
-  const seed = generateSeedObject(12)
+  const seed = generateSeedObject(MNEMONIC_PHRASE_LENGTH)
 
   return (
     <Box flexDirection="column" width="100%">
@@ -82,8 +81,13 @@ export const ImportWallet: React.FC = () => {
             <Box key={`row-${index}`} flexDirection="row" alignItems="center">
               {row.map(({ key, text }) => {
                 return (
-                  <Box key={key} flexDirection="row" borderStyle="classic" width="30"
-                  borderColor={errors[key] && errors[key].length && 'red'}>
+                  <Box
+                    key={key}
+                    flexDirection="row"
+                    borderStyle="classic"
+                    width="30"
+                    borderColor={errors[key] && errors[key].length && 'red'}
+                  >
                     <Text>{text}</Text>
                     <Input
                       {...register(key)}
@@ -97,8 +101,8 @@ export const ImportWallet: React.FC = () => {
         })}
       </Box>
       <Button
-        keyType="return"
-        isFocused={selection === 12}
+        selectKey="return"
+        isFocused={selection === MNEMONIC_PHRASE_LENGTH}
         onPress={onImport}
       >
         Import wallet

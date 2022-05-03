@@ -38,28 +38,37 @@ export const useForm = <T extends Values = Values>(
   }
 
   const onBlur = (name: keyof T) => {
-    console.log('blur ', name)
     validate(name)
   }
 
   const onFocus = (name: keyof T) => {
-    console.log('focus ', name)
+    //
   }
 
   const register = (name: keyof T): InputProps => {
-    const fieldProps: Omit<InputProps, 'value'> = {
+    if (!(name in data)) {
+      setData(state => ({ ...state, [name]: '' }))
+    }
+
+    return {
       onBlur: () => onBlur(name),
       onFocus: () => onFocus(name),
-      onChange: (e: string) => onChange(e, name)
+      onChange: (e: string) => onChange(e, name),
+      value: data[name] ?? ''
     }
-
-    if (name in data) {
-      return { ...fieldProps, value: data[name] }
-    }
-
-    setData(state => ({ ...state, [name]: initialValues[name] ?? '' }))
-    return { ...fieldProps, value: initialValues[name] ?? '' }
   }
 
   return { register, data, errors, isValid }
+}
+
+export const lengthRule = (min: number, max: number) => (value: string) => {
+  if (value.length < min) {
+    return `Must be at least ${min} characters`
+  }
+
+  if (value.length > max) {
+    return `Must be at most ${max} characters`
+  }
+
+  return ''
 }
