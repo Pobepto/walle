@@ -3,22 +3,14 @@ import { Box, Text } from 'ink'
 import React from 'react'
 import { Button, Input } from '../../components'
 import { lengthRule, useForm } from '../../hooks/useForm'
+import { useKey } from '../../hooks/useKey'
 import { useSelection } from '../../hooks/useSelection'
 import { ROUTE, useNavigate } from '../../routes'
 import { useAccountStore } from '../../store'
-
-type RangeFromZeroToN<
-  N extends number,
-  T extends number[] = []
-> = T['length'] extends N ? T[number] : RangeFromZeroToN<N, [...T, T['length']]>;
-
-// type Range<From extends number, To extends number> = Exclude<
-//   RangeFromZeroToN<To>,
-//   RangeFromZeroToN<From>
-// >;
+import type { Range } from '../../types'
 
 type Inputs<Size extends number> = {
-  [K in RangeFromZeroToN<Size>]: string;
+  [K in Range<0, Size>]: string;
 }
 
 const generateSeedObject = (wordLen: number) => {
@@ -30,10 +22,10 @@ const generateSeedObject = (wordLen: number) => {
     )
     .map(
       (row, rowIndex) => row.map(
-        (_, index) => (({
+        (_, index) => ({
           key: index + (rowIndex * wordInRow),
           text: `${index + (rowIndex * wordInRow) + 1}.`
-        }))
+        })
       )
     )
 
@@ -45,15 +37,19 @@ const MNEMONIC_PHRASE_LENGTH = 12
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
   const importWallet = useAccountStore(state => state.importWallet)
-  const selection = useSelection(MNEMONIC_PHRASE_LENGTH + 1, 'tab', 'return')
+  const [selection, select] = useSelection(MNEMONIC_PHRASE_LENGTH + 1, 'tab', 'return')
   const { data, register, errors, isValid } = useForm<Inputs<typeof MNEMONIC_PHRASE_LENGTH>>({
     rules: {
+      // oh shit, this is ugly
       ...Array.from(new Array(MNEMONIC_PHRASE_LENGTH)).reduce((obj, _, index) => ({
         ...obj,
         [index]: lengthRule(1, 20)
       }), {})
     }
   })
+
+  useKey('downArrow', () => select(MNEMONIC_PHRASE_LENGTH))
+  useKey('upArrow', () => select(0), selection === MNEMONIC_PHRASE_LENGTH)
 
   const onImport = () => {
     if (!isValid) {
@@ -100,13 +96,15 @@ export const ImportWallet: React.FC = () => {
           )
         })}
       </Box>
-      <Button
-        selectKey="return"
-        isFocused={selection === MNEMONIC_PHRASE_LENGTH}
-        onPress={onImport}
-      >
-        Import wallet
-      </Button>
+      <Box justifyContent='center' borderStyle={selection === MNEMONIC_PHRASE_LENGTH ? 'bold' : 'single'}>
+        <Button
+          selectKey="return"
+          isFocused={selection === MNEMONIC_PHRASE_LENGTH}
+          onPress={onImport}
+        >
+          Import wallet
+        </Button>
+      </Box>
     </Box>
   )
 }

@@ -7,7 +7,7 @@ import { ROUTE, useNavigate } from '../../routes'
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate()
-  const selection = useSelection(2, 'leftArrow', 'rightArrow')
+  const [selection] = useSelection(2, 'leftArrow', 'rightArrow')
 
   return (
     <Box flexDirection="column">

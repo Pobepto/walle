@@ -1,22 +1,23 @@
 import { Text, Key, TextProps } from 'ink'
-
 import React from 'react'
 import { AnyFunction } from 'tsdef'
-import { useInput } from '../hooks/useInput'
+import { useKey } from '../hooks/useKey'
 
 interface Props extends TextProps {
   children: React.ReactNode;
-  selectKey: keyof Key;
   onPress: AnyFunction;
   isFocused: boolean;
+  selectKey?: keyof Key;
 }
 
-export const Button: React.FC<Props> = ({ children, selectKey, onPress, isFocused, ...props }) => {
-  useInput(key => {
-    if (key[selectKey]) {
-      onPress()
-    }
-  }, isFocused)
+export const Button: React.FC<Props> = ({
+  children,
+  selectKey = 'return',
+  onPress,
+  isFocused,
+  ...props
+}) => {
+  useKey(selectKey, onPress, isFocused)
 
   return <Text {...props} bold={isFocused}>{children}</Text>
 }
