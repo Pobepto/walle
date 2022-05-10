@@ -56,7 +56,9 @@ export const useForm = <T extends Values = Values>(
     const rule = rules[name]
     if (rule) {
       const error = rule(data[name], data) || ''
-      setErrors(state => ({ ...state, [name]: error }))
+      if (error !== errors[name]) {
+        setErrors(state => ({ ...state, [name]: error }))
+      }
     }
   }
 
