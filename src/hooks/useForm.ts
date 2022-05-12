@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { Undefinable } from 'tsdef'
 
 type Values = Record<string, Undefinable<string>>
-type Rules<T> = Record<keyof T, (value: string) => string>
+type Rule<T> = (value: T[keyof T], data: Partial<T>) => string
+type Rules<T> = Record<keyof T, Rule<T>>
 
 interface InputProps {
   onBlur: () => void;
@@ -11,14 +12,27 @@ interface InputProps {
   value: string;
 }
 
+type ValidateAction = 'blur' | 'focus' | 'change';
+
+interface FormOptions {
+  validateAction?: ValidateAction | 'never';
+}
+
 interface FormArgs<T> {
   initialValues?: Partial<T>;
   rules?: Partial<Rules<T>>;
+  options?: FormOptions;
+}
+
+const defaultOptions: FormOptions = {
+  validateAction: 'blur'
 }
 
 export const useForm = <T extends Values = Values>(
-  { initialValues = {}, rules = {} }: FormArgs<T> = {}
+  { initialValues = {}, rules = {}, options = defaultOptions }: FormArgs<T> = {}
 ) => {
+  const { validateAction } = options
+
   const [data, setData] = useState<Partial<T>>(initialValues)
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
   const isValid = useMemo(
@@ -26,23 +40,46 @@ export const useForm = <T extends Values = Values>(
     [errors]
   )
 
-  const validate = (name: keyof T) => {
+  const validateAll = () => {
+    const newErrors: Partial<Record<keyof T, string>> = {}
+    Object.entries(rules).forEach(([key, rule]: [keyof T, Rule<T>]) => {
+      const error = rule(data[key], data) || ''
+      newErrors[key] = error
+    })
+
+    setErrors(newErrors)
+
+    return [!Object.values(newErrors).some(err => err.length), newErrors]
+  }
+
+  const validateInput = (name: keyof T) => {
     const rule = rules[name]
     if (rule) {
-      setErrors(state => ({ ...state, [name]: rule(data[name]) }))
+      const error = rule(data[name], data) || ''
+      if (error !== errors[name]) {
+        setErrors(state => ({ ...state, [name]: error }))
+      }
+    }
+  }
+
+  const validateInputOnAction = (name: keyof T, action: ValidateAction) => {
+    if (validateAction === action) {
+      validateInput(name)
     }
   }
 
   const onChange = (value: string, name: keyof T) => {
     setData(state => ({ ...state, [name]: value }))
+    // TODO: fix this
+    validateInputOnAction(name, 'change')
   }
 
   const onBlur = (name: keyof T) => {
-    validate(name)
+    validateInputOnAction(name, 'blur')
   }
 
   const onFocus = (name: keyof T) => {
-    //
+    validateInputOnAction(name, 'focus')
   }
 
   const register = (name: keyof T): InputProps => {
@@ -58,10 +95,16 @@ export const useForm = <T extends Values = Values>(
     }
   }
 
-  return { register, data, errors, isValid }
+  return { register, validateAll, data, errors, isValid }
 }
 
-export const lengthRule = (min: number, max: number) => (value: string) => {
+export const combineRules = <T>(...rules: Rule<T>[]) => (value: T[keyof T], data: Partial<T>) => {
+  return rules.reduce((err, rule) => {
+    return err || rule(value, data)
+  }, '')
+}
+
+export const lengthRule = (min: number, max = Infinity) => (value: string) => {
   if (value.length < min) {
     return `Must be at least ${min} characters`
   }
@@ -69,6 +112,4 @@ export const lengthRule = (min: number, max: number) => (value: string) => {
   if (value.length > max) {
     return `Must be at most ${max} characters`
   }
-
-  return ''
 }

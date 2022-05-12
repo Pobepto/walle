@@ -23,7 +23,7 @@ export const Menu: React.FC<Props> = ({
   nextKey = 'rightArrow',
   selectKey = 'return'
 }) => {
-  const selection = useSelection(items.length, prevKey, nextKey, focused)
+  const [selection] = useSelection(items.length, prevKey, nextKey, focused)
 
   return (
     <Box flexDirection='column'>

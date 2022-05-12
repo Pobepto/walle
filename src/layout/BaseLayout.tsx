@@ -3,7 +3,7 @@ import { Box, Text } from 'ink'
 import { ROUTE, useNavigate } from '../routes'
 import { useAppStore } from '../store'
 import { Menu, Header } from '../components'
-import { useInput } from '../hooks/useInput'
+import { useKey } from '../hooks/useKey'
 
 interface Props {
   children: React.ReactNode
@@ -14,11 +14,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
   const menuFocused = useAppStore(state => state.menuFocused)
   const toggleMenu = useAppStore(state => state.toggleMenu)
 
-  useInput(key => {
-    if (key.tab) {
-      toggleMenu()
-    }
-  })
+  useKey('tab', toggleMenu)
 
   return (
     <Box flexDirection="column">
