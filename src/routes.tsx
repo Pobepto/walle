@@ -12,13 +12,17 @@ export enum ROUTE {
   ACCOUNT
 }
 
+const layout = (Layout: React.FC<{ children: React.ReactNode }>, Component: React.FC) => <Layout><Component /></Layout>
+const welcome = (Component: React.FC) => layout(WelcomeLayout, Component)
+const base = (Component: React.FC) => layout(BaseLayout, Component)
+
 const router = routerFactory<ROUTE>({
-  [ROUTE.WELCOME]: () => <WelcomeLayout><Welcome /></WelcomeLayout>,
-  [ROUTE.REGISTRATION]: () => <WelcomeLayout><Registration /></WelcomeLayout>,
-  [ROUTE.REGISTRATION_IMPORT]: () => <WelcomeLayout><ImportWallet /></WelcomeLayout>,
-  [ROUTE.REGISTRATION_CREATE]: () => <WelcomeLayout><CreateWallet /></WelcomeLayout>,
-  [ROUTE.REGISTRATION_PASSWORD]: () => <WelcomeLayout><SetPassword /></WelcomeLayout>,
-  [ROUTE.ACCOUNT]: () => <BaseLayout><Account /></BaseLayout>
+  [ROUTE.WELCOME]: () => welcome(Welcome),
+  [ROUTE.REGISTRATION]: () => welcome(Registration),
+  [ROUTE.REGISTRATION_IMPORT]: () => welcome(ImportWallet),
+  [ROUTE.REGISTRATION_CREATE]: () => welcome(CreateWallet),
+  [ROUTE.REGISTRATION_PASSWORD]: () => welcome(SetPassword),
+  [ROUTE.ACCOUNT]: () => base(Account)
 })
 
 export const { Redirect, Router, useLocation, useNavigate, useRoute } = router

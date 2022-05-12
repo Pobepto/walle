@@ -32,6 +32,7 @@ export const SetPassword: React.FC = () => {
     const [isValid] = validateAll()
 
     if (isValid) {
+      // TODO: save password to store
       navigate(ROUTE.ACCOUNT)
     } else {
       prevent()

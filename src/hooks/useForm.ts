@@ -95,7 +95,7 @@ export const useForm = <T extends Values = Values>(
     }
   }
 
-  return { register, validateAll, data, errors, isValid }
+  return { register, validateAll, data, errors, isValid, setData }
 }
 
 export const combineRules = <T>(...rules: Rule<T>[]) => (value: T[keyof T], data: Partial<T>) => {

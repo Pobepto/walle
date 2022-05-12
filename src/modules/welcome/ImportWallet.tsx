@@ -1,7 +1,8 @@
 import { Box, Text } from 'ink'
 
-import React, { useMemo } from 'react'
-import { Button, Input } from '../../components'
+import React, { useMemo, useState } from 'react'
+import { Button, Input, Error } from '../../components'
+import { useClipboard } from '../../hooks/useClipboard'
 import { lengthRule, useForm } from '../../hooks/useForm'
 import { useKey } from '../../hooks/useKey'
 import { useSelection } from '../../hooks/useSelection'
@@ -35,11 +36,24 @@ export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
   const importWallet = useAccountStore(state => state.importWallet)
   const [selection, select] = useSelection(MNEMONIC_PHRASE_LENGTH + 1, 'tab', 'return')
+  const [error, setError] = useState('')
 
-  const { data, register, errors, isValid } = useForm<Inputs>({
+  const { data, register, errors, isValid, setData } = useForm<Inputs>({
     rules: Object.fromEntries(
       Array.from(Array(MNEMONIC_PHRASE_LENGTH), (_, index) => [index, lengthRule(1, 20)])
     )
+  })
+
+  useClipboard((clipboard) => {
+    const words = clipboard.split(' ')
+    if (words.length !== 12) return
+
+    setData(Object.fromEntries(
+      Array.from(
+        Array(MNEMONIC_PHRASE_LENGTH),
+        (_, index) => [index, words[index] ?? '']
+      )
+    ))
   })
 
   useKey('downArrow', () => select(MNEMONIC_PHRASE_LENGTH))
@@ -50,12 +64,13 @@ export const ImportWallet: React.FC = () => {
       return
     }
 
-    // try to import
-    const phrase = Object.values(data).join(' ')
-    importWallet(phrase)
-    // save to store
-
-    navigate(ROUTE.REGISTRATION_PASSWORD)
+    try {
+      const phrase = Object.values(data).join(' ')
+      importWallet(phrase)
+      navigate(ROUTE.REGISTRATION_PASSWORD)
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   const seed = useMemo(() => generateSeedObject(MNEMONIC_PHRASE_LENGTH), [])
@@ -90,6 +105,7 @@ export const ImportWallet: React.FC = () => {
           )
         })}
       </Box>
+      <Error text={error} />
       <Box justifyContent='center' borderStyle={selection === MNEMONIC_PHRASE_LENGTH ? 'bold' : 'single'}>
         <Button
           selectKey="return"

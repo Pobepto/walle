@@ -7,7 +7,8 @@ export const importWallet: AccountAction = (set) => (mnemonic: string) => {
     const { mnemonic: { phrase } } = wallet
 
     set({ phrase })
-  } catch {
-    console.log('Implement: validation in input')
+  } catch (err) {
+    console.log(err)
+    throw new Error('Impossible to import wallet from mnemomic')
   }
 }
