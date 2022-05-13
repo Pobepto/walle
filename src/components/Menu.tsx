@@ -9,7 +9,8 @@ interface MenuItem {
 }
 
 interface Props {
-  focused: boolean,
+  focused?: boolean,
+  looped?: boolean,
   prevKey?: keyof Key;
   nextKey?: keyof Key;
   selectKey?: keyof Key;
@@ -18,12 +19,13 @@ interface Props {
 
 export const Menu: React.FC<Props> = ({
   focused,
+  looped,
   items,
   prevKey = 'leftArrow',
   nextKey = 'rightArrow',
   selectKey = 'return'
 }) => {
-  const [selection] = useSelection(items.length, prevKey, nextKey, focused)
+  const [selection] = useSelection(items.length, prevKey, nextKey, focused, looped)
 
   return (
     <Box flexDirection='column'>

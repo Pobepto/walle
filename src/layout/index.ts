@@ -1,2 +1,2 @@
-export * from './BaseLayout'
+export * from './base/BaseLayout'
 export * from './WelcomeLayout'

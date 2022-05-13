@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { useWallet, useNativeBalance } from '../hooks'
-import { useBlockchainStore } from '../store/blockchain'
+import { useWallet, useNativeBalance } from '../../hooks'
+import { useBlockchainStore } from '../../store/blockchain'
 
 export const Header: React.FC = () => {
   const wallet = useWallet()
@@ -12,12 +12,12 @@ export const Header: React.FC = () => {
   const chain = chains.find(c => c.chainId === chainId)
 
   return (
-    <Box flexDirection="column" borderStyle="single">
+    <Box flexDirection="column" borderStyle="single" paddingLeft={1}>
       <Box>
-        <Text>{chain.name}</Text>
+        <Text bold>{chain.name}</Text>
       </Box>
       <Box flexDirection="row" justifyContent="space-between">
-        <Text>{wallet?.address}</Text>
+        <Text color='cyan'>{wallet?.address}</Text>
         <Text>{nativeBalance} {chain.currency.symbol}</Text>
       </Box>
     </Box>
