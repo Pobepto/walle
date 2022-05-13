@@ -17,7 +17,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
   useKey('tab', toggleMenu)
 
   return (
-    <Box flexDirection="column" width="90%">
+    <Box flexDirection="column">
       <Header />
       <Box flexDirection="row">
         <Box
