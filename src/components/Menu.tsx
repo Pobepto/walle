@@ -4,7 +4,7 @@ import { useSelection } from '../hooks'
 import { Button } from './Button'
 
 interface MenuItem {
-  title: string,
+  title: React.ReactNode,
   onSelect: () => void;
 }
 

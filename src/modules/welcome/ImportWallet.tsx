@@ -103,15 +103,14 @@ export const ImportWallet: React.FC = () => {
         })}
       </Box>
       <Error text={error} />
-      <Box justifyContent='center' borderStyle={selection === MNEMONIC_PHRASE_LENGTH ? 'bold' : 'single'}>
-        <Button
-          selectKey="return"
-          isFocused={selection === MNEMONIC_PHRASE_LENGTH}
-          onPress={onImport}
-        >
-          Import wallet
-        </Button>
-      </Box>
+      <Button
+        width="50%"
+        alignSelf='center'
+        isFocused={selection === MNEMONIC_PHRASE_LENGTH}
+        onPress={onImport}
+      >
+        Import wallet
+      </Button>
     </Box>
   )
 }

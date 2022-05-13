@@ -1,12 +1,11 @@
 import { Box, Text } from 'ink'
 
 import React from 'react'
-import { Button } from '../../components'
+import { Link } from '../../components/Link'
 // import { useWallet } from '../../hooks'
-import { ROUTE, useNavigate } from '../../routes'
+import { ROUTE } from '../../routes'
 
 export const Welcome: React.FC = () => {
-  const navigate = useNavigate()
   // const wallet = useWallet()
   // if (wallet) {
   //   return <Redirect to={ROUTE.ACCOUNT} />
@@ -15,9 +14,9 @@ export const Welcome: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Text>Walle - Best CLI Application ever</Text>
-      <Button selectKey="return" isFocused onPress={() => navigate(ROUTE.REGISTRATION)}>
+      <Link to={ROUTE.REGISTRATION} isFocused>
         Press &quot;Enter&quot; to continue...
-      </Button>
+      </Link>
     </Box>
   )
 }

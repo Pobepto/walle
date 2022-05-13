@@ -54,9 +54,7 @@ export const SetPassword: React.FC = () => {
         <Text color="red">{errors.repeatPassword}</Text>
       </Box>
 
-      <Box justifyContent='center' borderStyle={selection === 2 ? 'bold' : 'single'}>
-        <Button isFocused={selection === 2} onPress={onApply}>Apply</Button>
-      </Box>
+      <Button isFocused={selection === 2} onPress={onApply}>Apply</Button>
     </Box>
   )
 }
