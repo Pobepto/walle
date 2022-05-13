@@ -4,25 +4,25 @@ import { Action } from '..'
 import { getNativeBalance } from './getNativeBalance'
 
 export interface Chain {
-  chainId: number;
-  name: string;
-  rpc: string;
+  chainId: number
+  name: string
+  rpc: string
   currency: {
-    name: string;
-    symbol: string;
-    decimals: number;
-  };
-  explorer: string;
+    name: string
+    symbol: string
+    decimals: number
+  }
+  explorer: string
 }
 
 export interface BlockchainStore {
-  chainId: number;
-  chains: Chain[];
-  provider: JsonRpcProvider;
+  chainId: number
+  chains: Chain[]
+  provider: JsonRpcProvider
 
-  nativeBalance: string;
-  nativeBalanceIsLoading: boolean;
-  getNativeBalance: () => Promise<void>;
+  nativeBalance: string
+  nativeBalanceIsLoading: boolean
+  getNativeBalance: () => Promise<void>
 }
 
 export type BlockchainAction = Action<BlockchainStore>
@@ -38,11 +38,11 @@ export const useBlockchainStore = create<BlockchainStore>((set, get) => ({
       name: 'BNB Smart Chain',
       rpc: RPC_URL,
       currency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-      explorer: 'http://testnet.bscscan.com/'
-    }
+      explorer: 'http://testnet.bscscan.com/',
+    },
   ],
 
   getNativeBalance: getNativeBalance(set, get) as any,
   nativeBalance: '0',
-  nativeBalanceIsLoading: true
+  nativeBalanceIsLoading: true,
 }))

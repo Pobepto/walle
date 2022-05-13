@@ -6,5 +6,5 @@ import { Router, ROUTE } from './routes'
 render(
   <Router defaultPath={ROUTE.WELCOME}>
     <App />
-  </Router>
+  </Router>,
 )

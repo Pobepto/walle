@@ -7,7 +7,7 @@ export const Tokens: React.FC = () => {
 
   return (
     <>
-      <Box alignSelf='center'>
+      <Box alignSelf="center">
         <Text bold>Tokens</Text>
       </Box>
       <Box>

@@ -8,7 +8,9 @@ export const App: React.FC = () => {
 
   useInit()
 
-  return <Box width="95%" alignItems="center" justifyContent="center">
-    {route}
-  </Box>
+  return (
+    <Box width="95%" alignItems="center" justifyContent="center">
+      {route}
+    </Box>
+  )
 }

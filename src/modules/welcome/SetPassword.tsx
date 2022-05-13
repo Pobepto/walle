@@ -5,8 +5,8 @@ import { lengthRule, useForm, useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 
 type Inputs = {
-  password: string;
-  repeatPassword: string;
+  password: string
+  repeatPassword: string
 }
 
 export const SetPassword: React.FC = () => {
@@ -18,14 +18,20 @@ export const SetPassword: React.FC = () => {
         if (!data.password || value !== data.password) {
           return 'Passwords do not match'
         }
-      }
+      },
     },
     options: {
-      validateAction: 'never'
-    }
+      validateAction: 'never',
+    },
   })
 
-  const [selection, setSelection, prevent] = useSelection(3, 'upArrow', ['downArrow', 'return'], true, false)
+  const [selection, setSelection, prevent] = useSelection(
+    3,
+    'upArrow',
+    ['downArrow', 'return'],
+    true,
+    false,
+  )
 
   const onApply = () => {
     const [isValid] = validateAll()
@@ -50,11 +56,17 @@ export const SetPassword: React.FC = () => {
       </Box>
       <Box borderStyle="classic" flexDirection="column">
         <Text>Confirm password: </Text>
-        <Input {...register('repeatPassword')} mask="*" focus={selection === 1} />
+        <Input
+          {...register('repeatPassword')}
+          mask="*"
+          focus={selection === 1}
+        />
         <Text color="red">{errors.repeatPassword}</Text>
       </Box>
 
-      <Button isFocused={selection === 2} onPress={onApply}>Apply</Button>
+      <Button isFocused={selection === 2} onPress={onApply}>
+        Apply
+      </Button>
     </Box>
   )
 }

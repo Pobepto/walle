@@ -4,7 +4,7 @@ import { Menu } from '../../components'
 import { COLUMNS, useAppStore } from '../../store'
 
 export const Wallet: React.FC = () => {
-  const activeColumn = useAppStore(state => state.activeColumn)
+  const activeColumn = useAppStore((state) => state.activeColumn)
 
   return (
     <Box display="flex" flexDirection="column">
@@ -13,15 +13,15 @@ export const Wallet: React.FC = () => {
         items={[
           {
             title: 'Switch account',
-            onSelect: () => null
+            onSelect: () => null,
           },
           {
             title: 'Logout',
-            onSelect: () => null
-          }
+            onSelect: () => null,
+          },
         ]}
-        prevKey='upArrow'
-        nextKey='downArrow'
+        prevKey="upArrow"
+        nextKey="downArrow"
       />
     </Box>
   )

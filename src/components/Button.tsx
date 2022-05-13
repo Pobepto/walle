@@ -4,10 +4,10 @@ import { AnyFunction } from 'tsdef'
 import { useKey } from '../hooks'
 
 interface Props extends BoxProps {
-  children: React.ReactNode;
-  onPress: AnyFunction;
-  isFocused: boolean;
-  selectKey?: keyof Key;
+  children: React.ReactNode
+  onPress: AnyFunction
+  isFocused: boolean
+  selectKey?: keyof Key
 }
 
 export const Button: React.FC<Props> = (props) => {
@@ -21,11 +21,20 @@ export const Button: React.FC<Props> = (props) => {
 
   useKey(selectKey, onPress, isFocused)
 
-  const text = typeof children === 'function' ? (children as any)(props) : children
+  const text =
+    typeof children === 'function' ? (children as any)(props) : children
 
   return (
-    <Box justifyContent='center' borderStyle={isFocused ? 'bold' : 'single'} {...boxProps}>
-      {typeof text === 'string' ? <Text bold={isFocused}>{text}</Text> : children}
+    <Box
+      justifyContent="center"
+      borderStyle={isFocused ? 'bold' : 'single'}
+      {...boxProps}
+    >
+      {typeof text === 'string' ? (
+        <Text bold={isFocused}>{text}</Text>
+      ) : (
+        children
+      )}
     </Box>
   )
 }

@@ -9,7 +9,7 @@ export const useSelection = (
   prevKey: keyof Key | (keyof Key)[],
   nextKey: keyof Key | (keyof Key)[],
   isActive = true,
-  looped = true
+  looped = true,
 ): [number, React.Dispatch<React.SetStateAction<number>>, () => void] => {
   const [selection, setSelection] = useState(0)
 
@@ -17,10 +17,10 @@ export const useSelection = (
     const prevKeys = Array.isArray(prevKey) ? prevKey : [prevKey]
     const nextKeys = Array.isArray(nextKey) ? nextKey : [nextKey]
 
-    if (prevKeys.some(k => key[k])) {
-      setSelection(i => clamp(i - 1, 0, amount - 1, looped))
-    } else if (nextKeys.some(k => key[k])) {
-      setSelection(i => clamp(i + 1, 0, amount - 1, looped))
+    if (prevKeys.some((k) => key[k])) {
+      setSelection((i) => clamp(i - 1, 0, amount - 1, looped))
+    } else if (nextKeys.some((k) => key[k])) {
+      setSelection((i) => clamp(i + 1, 0, amount - 1, looped))
     }
   }, isActive)
 

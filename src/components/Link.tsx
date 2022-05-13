@@ -4,10 +4,10 @@ import { useKey } from '../hooks/useKey'
 import { ROUTE, useNavigate } from '../routes'
 
 interface Props extends TextProps {
-  children: React.ReactNode;
-  isFocused: boolean;
-  to: ROUTE;
-  selectKey?: keyof Key;
+  children: React.ReactNode
+  isFocused: boolean
+  to: ROUTE
+  selectKey?: keyof Key
 }
 
 export const Link: React.FC<Props> = ({
@@ -19,9 +19,17 @@ export const Link: React.FC<Props> = ({
 }) => {
   const navigate = useNavigate()
 
-  useKey(selectKey, () => {
-    navigate(to)
-  }, isFocused)
+  useKey(
+    selectKey,
+    () => {
+      navigate(to)
+    },
+    isFocused,
+  )
 
-  return <Text {...props} bold={isFocused}>{children}</Text>
+  return (
+    <Text {...props} bold={isFocused}>
+      {children}
+    </Text>
+  )
 }

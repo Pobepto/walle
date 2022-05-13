@@ -1,32 +1,34 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
 interface RouterValue<T> {
-  path: T,
+  path: T
   navigate: (to: T) => void
 }
 
 export type Routes = Record<number, () => JSX.Element>
 
 interface RouterProps<T> {
-  children: React.ReactNode;
-  defaultPath: T;
+  children: React.ReactNode
+  defaultPath: T
 }
 
 interface RedirectProps<T> {
-  to: T;
+  to: T
 }
 
-export const routerFactory = <T extends number, >(routes: Routes) => {
+export const routerFactory = <T extends number>(routes: Routes) => {
   const RouterContext = createContext<RouterValue<T>>(null)
 
   const Router: React.FC<RouterProps<T>> = ({ children, defaultPath }) => {
     const [path, setPath] = useState(defaultPath)
 
     return (
-      <RouterContext.Provider value={{
-        path,
-        navigate: setPath
-      }}>
+      <RouterContext.Provider
+        value={{
+          path,
+          navigate: setPath,
+        }}
+      >
         {children}
       </RouterContext.Provider>
     )
@@ -56,6 +58,6 @@ export const routerFactory = <T extends number, >(routes: Routes) => {
     Redirect,
     useNavigate,
     useLocation,
-    useRoute
+    useRoute,
   }
 }

@@ -4,10 +4,10 @@ import { AnyFunction } from 'tsdef'
 import { useKey } from '../hooks'
 
 interface Props extends TextProps {
-  children: React.ReactNode;
-  onPress: AnyFunction;
-  isFocused: boolean;
-  selectKey?: keyof Key;
+  children: React.ReactNode
+  onPress: AnyFunction
+  isFocused: boolean
+  selectKey?: keyof Key
 }
 
 export const TextButton: React.FC<Props> = ({
@@ -19,5 +19,9 @@ export const TextButton: React.FC<Props> = ({
 }) => {
   useKey(selectKey, onPress, isFocused)
 
-  return <Text {...props} bold={isFocused}>{children}</Text>
+  return (
+    <Text {...props} bold={isFocused}>
+      {children}
+    </Text>
+  )
 }

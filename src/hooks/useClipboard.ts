@@ -7,7 +7,7 @@ export const useClipboard = (callback: AnyFunction) => {
   const timeout = useRef<any>()
   useInput((key, input) => {
     if (input.length > 2) {
-      setBuffer(state => state + input)
+      setBuffer((state) => state + input)
     }
   })
 

@@ -4,17 +4,17 @@ import { useSelection } from '../hooks'
 import { TextButton } from './TextButton'
 
 interface MenuItem {
-  title: React.ReactNode,
-  onSelect: () => void;
+  title: React.ReactNode
+  onSelect: () => void
 }
 
 interface Props {
-  focused?: boolean,
-  looped?: boolean,
-  prevKey?: keyof Key;
-  nextKey?: keyof Key;
-  selectKey?: keyof Key;
-  items: MenuItem[];
+  focused?: boolean
+  looped?: boolean
+  prevKey?: keyof Key
+  nextKey?: keyof Key
+  selectKey?: keyof Key
+  items: MenuItem[]
 }
 
 export const Menu: React.FC<Props> = ({
@@ -23,12 +23,18 @@ export const Menu: React.FC<Props> = ({
   items,
   prevKey = 'leftArrow',
   nextKey = 'rightArrow',
-  selectKey = 'return'
+  selectKey = 'return',
 }) => {
-  const [selection] = useSelection(items.length, prevKey, nextKey, focused, looped)
+  const [selection] = useSelection(
+    items.length,
+    prevKey,
+    nextKey,
+    focused,
+    looped,
+  )
 
   return (
-    <Box flexDirection='column'>
+    <Box flexDirection="column">
       {items.map((item, index) => (
         <TextButton
           key={index}

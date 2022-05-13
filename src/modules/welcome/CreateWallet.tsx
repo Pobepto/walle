@@ -7,7 +7,7 @@ import { Link } from '../../components/Link'
 
 export const CreateWallet: React.FC = () => {
   const wallet = useWallet()
-  const generateWallet = useWalletStore(state => state.generateWallet)
+  const generateWallet = useWalletStore((state) => state.generateWallet)
 
   useEffect(() => {
     generateWallet()
@@ -17,7 +17,7 @@ export const CreateWallet: React.FC = () => {
     <Box flexDirection="column">
       <Text>Your wallet: {wallet?.address}</Text>
       <Link to={ROUTE.WALLET} isFocused>
-      {/* <Link to={ROUTE.REGISTRATION_PASSWORD} isFocused> */}
+        {/* <Link to={ROUTE.REGISTRATION_PASSWORD} isFocused> */}
         Press &quot;Enter&quot; to continue...
       </Link>
     </Box>

@@ -14,9 +14,15 @@ interface Props {
 const LAYOUT_COLUMNS = 3
 
 export const BaseLayout: React.FC<Props> = ({ children }) => {
-  const getNativeBalance = useBlockchainStore(store => store.getNativeBalance)
-  const setActiveColumn = useAppStore(state => state.setActiveColumn)
-  const [selection] = useSelection(LAYOUT_COLUMNS, 'leftArrow', 'rightArrow', true, false)
+  const getNativeBalance = useBlockchainStore((store) => store.getNativeBalance)
+  const setActiveColumn = useAppStore((state) => state.setActiveColumn)
+  const [selection] = useSelection(
+    LAYOUT_COLUMNS,
+    'leftArrow',
+    'rightArrow',
+    true,
+    false,
+  )
 
   useEffect(() => {
     setActiveColumn(selection)
@@ -33,7 +39,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
   return (
     <Box flexDirection="column">
       <Header />
-      <Box flexDirection="row" alignSelf='center'>
+      <Box flexDirection="row" alignSelf="center">
         <Box
           width="20%"
           flexDirection="column"

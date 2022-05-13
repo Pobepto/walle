@@ -11,13 +11,20 @@ export const Header: React.FC = () => {
   // const link = `${chain.explorer}/address/${wallet.address}`
 
   return (
-    <Box flexDirection="column" borderStyle="single" paddingLeft={1} paddingRight={1}>
+    <Box
+      flexDirection="column"
+      borderStyle="single"
+      paddingLeft={1}
+      paddingRight={1}
+    >
       <Box>
         <Text bold>{chain.name}</Text>
       </Box>
       <Box flexDirection="row" justifyContent="space-between">
-        <Text color='cyan'>{wallet?.address}</Text>
-        <Text>{nativeBalanceIsLoading ? '?' : nativeBalance} {chain.currency.symbol}</Text>
+        <Text color="cyan">{wallet?.address}</Text>
+        <Text>
+          {nativeBalanceIsLoading ? '?' : nativeBalance} {chain.currency.symbol}
+        </Text>
       </Box>
     </Box>
   )

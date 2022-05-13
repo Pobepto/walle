@@ -2,26 +2,30 @@ import { Box, Text } from 'ink'
 
 import React, { useMemo, useState } from 'react'
 import { Button, Input, Error } from '../../components'
-import { useClipboard, lengthRule, useForm, useKey, useSelection } from '../../hooks'
+import {
+  useClipboard,
+  lengthRule,
+  useForm,
+  useKey,
+  useSelection,
+} from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 import { useWalletStore } from '../../store'
 
 type Inputs = {
-  [key: number]: string;
+  [key: number]: string
 }
 
 const generateSeedObject = (wordLen: number) => {
   const wordInRow = 4
   const rows = wordLen / wordInRow
-  const result = Array<{ key: number, text: string }[]>(rows)
+  const result = Array<{ key: number; text: string }[]>(rows)
     .fill(Array(wordInRow).fill({}))
-    .map(
-      (row, rowIndex) => row.map(
-        (_, index) => ({
-          key: index + (rowIndex * wordInRow),
-          text: `${index + (rowIndex * wordInRow) + 1}.`
-        })
-      )
+    .map((row, rowIndex) =>
+      row.map((_, index) => ({
+        key: index + rowIndex * wordInRow,
+        text: `${index + rowIndex * wordInRow + 1}.`,
+      })),
     )
 
   return result
@@ -31,26 +35,35 @@ const MNEMONIC_PHRASE_LENGTH = 12
 
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
-  const importWallet = useWalletStore(state => state.importWallet)
-  const [selection, select] = useSelection(MNEMONIC_PHRASE_LENGTH + 1, 'tab', 'return')
+  const importWallet = useWalletStore((state) => state.importWallet)
+  const [selection, select] = useSelection(
+    MNEMONIC_PHRASE_LENGTH + 1,
+    'tab',
+    'return',
+  )
   const [error, setError] = useState('')
 
   const { data, register, errors, isValid, setData } = useForm<Inputs>({
     rules: Object.fromEntries(
-      Array.from(Array(MNEMONIC_PHRASE_LENGTH), (_, index) => [index, lengthRule(1, 20)])
-    )
+      Array.from(Array(MNEMONIC_PHRASE_LENGTH), (_, index) => [
+        index,
+        lengthRule(1, 20),
+      ]),
+    ),
   })
 
   useClipboard((clipboard) => {
     const words = clipboard.split(' ')
     if (words.length !== MNEMONIC_PHRASE_LENGTH) return
 
-    setData(Object.fromEntries(
-      Array.from(
-        Array(MNEMONIC_PHRASE_LENGTH),
-        (_, index) => [index, words[index]]
-      )
-    ))
+    setData(
+      Object.fromEntries(
+        Array.from(Array(MNEMONIC_PHRASE_LENGTH), (_, index) => [
+          index,
+          words[index],
+        ]),
+      ),
+    )
   })
 
   useKey('downArrow', () => select(MNEMONIC_PHRASE_LENGTH))
@@ -91,10 +104,7 @@ export const ImportWallet: React.FC = () => {
                     borderColor={errors[key] && errors[key].length && 'red'}
                   >
                     <Text>{text}</Text>
-                    <Input
-                      {...register(key)}
-                      focus={selection === key}
-                    />
+                    <Input {...register(key)} focus={selection === key} />
                   </Box>
                 )
               })}
@@ -105,7 +115,7 @@ export const ImportWallet: React.FC = () => {
       <Error text={error} />
       <Button
         width="50%"
-        alignSelf='center'
+        alignSelf="center"
         isFocused={selection === MNEMONIC_PHRASE_LENGTH}
         onPress={onImport}
       >

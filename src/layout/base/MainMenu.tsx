@@ -6,11 +6,11 @@ import { COLUMNS, useAppStore } from '../../store'
 
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()
-  const activeColumn = useAppStore(state => state.activeColumn)
+  const activeColumn = useAppStore((state) => state.activeColumn)
 
   return (
     <>
-      <Box alignSelf='center'>
+      <Box alignSelf="center">
         <Text bold>Menu</Text>
       </Box>
       <Menu
@@ -18,19 +18,19 @@ export const MainMenu: React.FC = () => {
         items={[
           {
             title: 'Wallet',
-            onSelect: () => navigate(ROUTE.WALLET)
+            onSelect: () => navigate(ROUTE.WALLET),
           },
           {
             title: 'DApps',
-            onSelect: () => console.log('DApps')
+            onSelect: () => console.log('DApps'),
           },
           {
             title: 'Settings',
-            onSelect: () => console.log('Settings')
-          }
+            onSelect: () => console.log('Settings'),
+          },
         ]}
-        prevKey='upArrow'
-        nextKey='downArrow'
+        prevKey="upArrow"
+        nextKey="downArrow"
       />
     </>
   )

@@ -6,38 +6,40 @@ type Rule<T> = (value: T[keyof T], data: Partial<T>) => string
 type Rules<T> = Record<keyof T, Rule<T>>
 
 interface InputProps {
-  onBlur: () => void;
-  onFocus: () => void;
-  onChange: (e: string) => void;
-  value: string;
+  onBlur: () => void
+  onFocus: () => void
+  onChange: (e: string) => void
+  value: string
 }
 
-type ValidateAction = 'blur' | 'focus' | 'change';
+type ValidateAction = 'blur' | 'focus' | 'change'
 
 interface FormOptions {
-  validateAction?: ValidateAction | 'never';
+  validateAction?: ValidateAction | 'never'
 }
 
 interface FormArgs<T> {
-  initialValues?: Partial<T>;
-  rules?: Partial<Rules<T>>;
-  options?: FormOptions;
+  initialValues?: Partial<T>
+  rules?: Partial<Rules<T>>
+  options?: FormOptions
 }
 
 const defaultOptions: FormOptions = {
-  validateAction: 'blur'
+  validateAction: 'blur',
 }
 
-export const useForm = <T extends Values = Values>(
-  { initialValues = {}, rules = {}, options = defaultOptions }: FormArgs<T> = {}
-) => {
+export const useForm = <T extends Values = Values>({
+  initialValues = {},
+  rules = {},
+  options = defaultOptions,
+}: FormArgs<T> = {}) => {
   const { validateAction } = options
 
   const [data, setData] = useState<Partial<T>>(initialValues)
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
   const isValid = useMemo(
-    () => !Object.values(errors).some(err => err.length),
-    [errors]
+    () => !Object.values(errors).some((err) => err.length),
+    [errors],
   )
 
   const validateAll = () => {
@@ -49,7 +51,7 @@ export const useForm = <T extends Values = Values>(
 
     setErrors(newErrors)
 
-    return [!Object.values(newErrors).some(err => err.length), newErrors]
+    return [!Object.values(newErrors).some((err) => err.length), newErrors]
   }
 
   const validateInput = (name: keyof T) => {
@@ -57,7 +59,7 @@ export const useForm = <T extends Values = Values>(
     if (rule) {
       const error = rule(data[name], data) || ''
       if (error !== errors[name]) {
-        setErrors(state => ({ ...state, [name]: error }))
+        setErrors((state) => ({ ...state, [name]: error }))
       }
     }
   }
@@ -69,7 +71,7 @@ export const useForm = <T extends Values = Values>(
   }
 
   const onChange = (value: string, name: keyof T) => {
-    setData(state => ({ ...state, [name]: value }))
+    setData((state) => ({ ...state, [name]: value }))
     // TODO: fix this
     validateInputOnAction(name, 'change')
   }
@@ -84,32 +86,36 @@ export const useForm = <T extends Values = Values>(
 
   const register = (name: keyof T): InputProps => {
     if (!(name in data)) {
-      setData(state => ({ ...state, [name]: '' }))
+      setData((state) => ({ ...state, [name]: '' }))
     }
 
     return {
       onBlur: () => onBlur(name),
       onFocus: () => onFocus(name),
       onChange: (e: string) => onChange(e, name),
-      value: data[name] ?? ''
+      value: data[name] ?? '',
     }
   }
 
   return { register, validateAll, data, errors, isValid, setData }
 }
 
-export const combineRules = <T>(...rules: Rule<T>[]) => (value: T[keyof T], data: Partial<T>) => {
-  return rules.reduce((err, rule) => {
-    return err || rule(value, data)
-  }, '')
-}
-
-export const lengthRule = (min: number, max = Infinity) => (value: string) => {
-  if (value.length < min) {
-    return `Must be at least ${min} characters`
+export const combineRules =
+  <T>(...rules: Rule<T>[]) =>
+  (value: T[keyof T], data: Partial<T>) => {
+    return rules.reduce((err, rule) => {
+      return err || rule(value, data)
+    }, '')
   }
 
-  if (value.length > max) {
-    return `Must be at most ${max} characters`
+export const lengthRule =
+  (min: number, max = Infinity) =>
+  (value: string) => {
+    if (value.length < min) {
+      return `Must be at least ${min} characters`
+    }
+
+    if (value.length > max) {
+      return `Must be at most ${max} characters`
+    }
   }
-}
