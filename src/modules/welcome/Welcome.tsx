@@ -2,7 +2,7 @@ import { Box, Text } from 'ink'
 
 import React from 'react'
 import { Button } from '../../components'
-// import { useWallet } from '../../hooks/useWallet'
+// import { useWallet } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 
 export const Welcome: React.FC = () => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Key } from 'ink'
-import { useSelection } from '../hooks/useSelection'
+import { useSelection } from '../hooks'
 import { Button } from './Button'
 
 interface MenuItem {

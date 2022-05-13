@@ -2,7 +2,7 @@ import { Box, Text } from 'ink'
 
 import React from 'react'
 import { Button } from '../../components'
-import { useSelection } from '../../hooks/useSelection'
+import { useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 
 export const Registration: React.FC = () => {

@@ -1,6 +1,6 @@
 import InkTextInput from 'ink-text-input'
 import React from 'react'
-import { useDidMountEffect } from '../hooks/useDidMountEffect'
+import { useDidMountEffect } from '../hooks'
 
 interface InkTextProps {
   placeholder?: string;

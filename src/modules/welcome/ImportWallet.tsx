@@ -2,10 +2,7 @@ import { Box, Text } from 'ink'
 
 import React, { useMemo, useState } from 'react'
 import { Button, Input, Error } from '../../components'
-import { useClipboard } from '../../hooks/useClipboard'
-import { lengthRule, useForm } from '../../hooks/useForm'
-import { useKey } from '../../hooks/useKey'
-import { useSelection } from '../../hooks/useSelection'
+import { useClipboard, lengthRule, useForm, useKey, useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 import { useAccountStore } from '../../store'
 

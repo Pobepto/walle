@@ -1,8 +1,7 @@
 import React from 'react'
 import { Box, Text } from 'ink'
 import { Button, Input } from '../../components'
-import { lengthRule, useForm } from '../../hooks/useForm'
-import { useSelection } from '../../hooks/useSelection'
+import { lengthRule, useForm, useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 
 type Inputs = {

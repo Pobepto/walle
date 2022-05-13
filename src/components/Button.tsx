@@ -1,7 +1,7 @@
 import { Text, Key, TextProps } from 'ink'
 import React from 'react'
 import { AnyFunction } from 'tsdef'
-import { useKey } from '../hooks/useKey'
+import { useKey } from '../hooks'
 
 interface Props extends TextProps {
   children: React.ReactNode;

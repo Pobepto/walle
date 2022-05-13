@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from 'ink'
-import { useInput } from '../hooks/useInput'
+import { useInput } from '../hooks'
 
 interface Props {
   children: React.ReactNode

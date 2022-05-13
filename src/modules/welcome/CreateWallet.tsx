@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
 import { useAccountStore } from '../../store'
-import { useWallet } from '../../hooks/useWallet'
+import { useWallet } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 import { Button } from '../../components'
 

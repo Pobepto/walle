@@ -3,7 +3,7 @@ import { Box, Text } from 'ink'
 import { ROUTE, useNavigate } from '../routes'
 import { useAppStore } from '../store'
 import { Menu, Header } from '../components'
-import { useKey } from '../hooks/useKey'
+import { useKey } from '../hooks'
 
 interface Props {
   children: React.ReactNode
