@@ -46,12 +46,12 @@ export const ImportWallet: React.FC = () => {
 
   useClipboard((clipboard) => {
     const words = clipboard.split(' ')
-    if (words.length !== 12) return
+    if (words.length !== MNEMONIC_PHRASE_LENGTH) return
 
     setData(Object.fromEntries(
       Array.from(
         Array(MNEMONIC_PHRASE_LENGTH),
-        (_, index) => [index, words[index] ?? '']
+        (_, index) => [index, words[index]]
       )
     ))
   })
