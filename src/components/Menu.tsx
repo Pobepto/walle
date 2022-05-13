@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Key } from 'ink'
 import { useSelection } from '../hooks'
-import { Button } from './Button'
+import { TextButton } from './TextButton'
 
 interface MenuItem {
   title: React.ReactNode,
@@ -28,14 +28,14 @@ export const Menu: React.FC<Props> = ({
   return (
     <Box flexDirection='column'>
       {items.map((item, index) => (
-        <Button
+        <TextButton
           key={index}
           selectKey={selectKey}
           isFocused={focused && index === selection}
           onPress={item.onSelect}
         >
           {item.title}
-        </Button>
+        </TextButton>
       ))}
     </Box>
   )

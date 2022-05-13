@@ -4,7 +4,7 @@ import { deriveMnemonicAddress } from './deriveMnemonicAddress'
 import { generateWallet } from './generateWallet'
 import { importWallet } from './importWallet'
 
-export interface AccountStore {
+export interface WalletStore {
   pathId: number,
   phrase: string,
   generateWallet: () => void;
@@ -12,9 +12,9 @@ export interface AccountStore {
   deriveMnemonicAddress: () => void;
 }
 
-export type AccountAction = Action<AccountStore>
+export type WalletAction = Action<WalletStore>
 
-export const useAccountStore = create<AccountStore>((set, get) => ({
+export const useWalletStore = create<WalletStore>((set, get) => ({
   pathId: 0,
   phrase: '',
   generateWallet: generateWallet(set, get),

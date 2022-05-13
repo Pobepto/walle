@@ -1,7 +1,7 @@
 import { Wallet } from '@ethersproject/wallet'
-import { AccountAction } from '.'
+import { WalletAction } from '.'
 
-export const importWallet: AccountAction = (set) => (mnemonic: string) => {
+export const importWallet: WalletAction = (set) => (mnemonic: string) => {
   try {
     const wallet = Wallet.fromMnemonic(mnemonic)
     const { mnemonic: { phrase } } = wallet

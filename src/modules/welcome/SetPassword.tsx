@@ -32,7 +32,7 @@ export const SetPassword: React.FC = () => {
 
     if (isValid) {
       // TODO: save password to store
-      navigate(ROUTE.ACCOUNT)
+      navigate(ROUTE.WALLET)
     } else {
       prevent()
       // TODO: focus on first error

@@ -8,7 +8,7 @@ import { ROUTE } from '../../routes'
 export const Welcome: React.FC = () => {
   // const wallet = useWallet()
   // if (wallet) {
-  //   return <Redirect to={ROUTE.ACCOUNT} />
+  //   return <Redirect to={ROUTE.WALLET} />
   // }
 
   return (

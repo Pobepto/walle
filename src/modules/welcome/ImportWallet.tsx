@@ -4,7 +4,7 @@ import React, { useMemo, useState } from 'react'
 import { Button, Input, Error } from '../../components'
 import { useClipboard, lengthRule, useForm, useKey, useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
-import { useAccountStore } from '../../store'
+import { useWalletStore } from '../../store'
 
 type Inputs = {
   [key: number]: string;
@@ -31,7 +31,7 @@ const MNEMONIC_PHRASE_LENGTH = 12
 
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
-  const importWallet = useAccountStore(state => state.importWallet)
+  const importWallet = useWalletStore(state => state.importWallet)
   const [selection, select] = useSelection(MNEMONIC_PHRASE_LENGTH + 1, 'tab', 'return')
   const [error, setError] = useState('')
 

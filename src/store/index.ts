@@ -5,5 +5,5 @@ export type Action<T extends object> = (
   get: GetState<T>
 ) => (...args: any[]) => void
 
-export * from './account'
+export * from './wallet'
 export * from './app'

@@ -26,19 +26,19 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
           borderColor={menuFocused ? 'red' : 'black'}
           borderStyle="bold"
         >
-          <Text bold underline>
-            Left
-          </Text>
+          <Box alignSelf='center'>
+            <Text bold>Menu</Text>
+          </Box>
           <Menu
             focused={menuFocused}
             items={[
               {
-                title: 'Account',
-                onSelect: () => navigate(ROUTE.ACCOUNT)
+                title: 'Wallet',
+                onSelect: () => navigate(ROUTE.WALLET)
               },
               {
-                title: 'DEX',
-                onSelect: () => console.log('DEX')
+                title: 'DApps',
+                onSelect: () => console.log('DApps')
               },
               {
                 title: 'Settings',
