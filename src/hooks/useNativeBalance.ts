@@ -1,19 +1,8 @@
-import { useEffect, useState } from 'react'
-import { useChain } from './useChain'
-import { useWallet } from './useWallet'
+import { useBlockchainStore } from '../store/blockchain'
 
-export const useNativeBalance = (chainId: number) => {
-  const [balance, setBalance] = useState('0')
-  const wallet = useWallet()
-  const chain = useChain(chainId)
+export const useNativeBalance = () => {
+  const balance = useBlockchainStore(store => store.nativeBalance)
+  const isLoading = useBlockchainStore(store => store.nativeBalanceIsLoading)
 
-  useEffect(() => {
-    if (wallet) {
-      chain.provider.getBalance(wallet.address).then(balance => {
-        setBalance(balance.toString())
-      })
-    }
-  }, [chain, wallet])
-
-  return balance
+  return [balance, isLoading]
 }

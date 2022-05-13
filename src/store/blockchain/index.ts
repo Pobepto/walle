@@ -1,5 +1,7 @@
+import { JsonRpcProvider } from '@ethersproject/providers'
 import create from 'zustand'
 import { Action } from '..'
+import { getNativeBalance } from './getNativeBalance'
 
 export interface Chain {
   chainId: number;
@@ -16,20 +18,31 @@ export interface Chain {
 export interface BlockchainStore {
   chainId: number;
   chains: Chain[];
+  provider: JsonRpcProvider;
+
+  nativeBalance: string;
+  nativeBalanceIsLoading: boolean;
+  getNativeBalance: () => Promise<void>;
 }
 
-export type AppAction = Action<BlockchainStore>
+export type BlockchainAction = Action<BlockchainStore>
 
-export const useBlockchainStore = create<BlockchainStore>(() => ({
+const RPC_URL = 'https://data-seed-prebsc-2-s1.binance.org:8545/'
+
+export const useBlockchainStore = create<BlockchainStore>((set, get) => ({
   chainId: 97,
+  provider: new JsonRpcProvider(RPC_URL),
   chains: [
     {
       chainId: 97,
       name: 'BNB Smart Chain',
-      rpc:
-        'https://data-seed-prebsc-2-s1.binance.org:8545/',
+      rpc: RPC_URL,
       currency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
       explorer: 'http://testnet.bscscan.com/'
     }
-  ]
+  ],
+
+  getNativeBalance: getNativeBalance(set, get) as any,
+  nativeBalance: '0',
+  nativeBalanceIsLoading: true
 }))

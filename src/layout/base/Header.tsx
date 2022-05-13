@@ -1,24 +1,23 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { useWallet, useNativeBalance } from '../../hooks'
-import { useBlockchainStore } from '../../store/blockchain'
+import { useChain, useWallet } from '../../hooks'
+import { useNativeBalance } from '../../hooks/useNativeBalance'
 
 export const Header: React.FC = () => {
   const wallet = useWallet()
-  const chainId = useBlockchainStore(store => store.chainId)
-  const chains = useBlockchainStore(store => store.chains)
-  const nativeBalance = useNativeBalance(chainId)
+  const chain = useChain()
+  const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
 
-  const chain = chains.find(c => c.chainId === chainId)
+  // const link = `${chain.explorer}/address/${wallet.address}`
 
   return (
-    <Box flexDirection="column" borderStyle="single" paddingLeft={1}>
+    <Box flexDirection="column" borderStyle="single" paddingLeft={1} paddingRight={1}>
       <Box>
         <Text bold>{chain.name}</Text>
       </Box>
       <Box flexDirection="row" justifyContent="space-between">
         <Text color='cyan'>{wallet?.address}</Text>
-        <Text>{nativeBalance} {chain.currency.symbol}</Text>
+        <Text>{nativeBalanceIsLoading ? '?' : nativeBalance} {chain.currency.symbol}</Text>
       </Box>
     </Box>
   )

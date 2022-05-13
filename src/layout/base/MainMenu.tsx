@@ -2,11 +2,11 @@ import { Box, Text } from 'ink'
 import React from 'react'
 import { Menu } from '../../components'
 import { ROUTE, useNavigate } from '../../routes'
-import { useAppStore } from '../../store'
+import { COLUMNS, useAppStore } from '../../store'
 
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()
-  const menuFocused = useAppStore(state => state.menuFocused)
+  const activeColumn = useAppStore(state => state.activeColumn)
 
   return (
     <>
@@ -14,7 +14,7 @@ export const MainMenu: React.FC = () => {
         <Text bold>Menu</Text>
       </Box>
       <Menu
-        focused={menuFocused}
+        focused={activeColumn === COLUMNS.MENU}
         items={[
           {
             title: 'Wallet',

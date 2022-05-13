@@ -8,7 +8,6 @@ export const importWallet: WalletAction = (set) => (mnemonic: string) => {
 
     set({ phrase })
   } catch (err) {
-    console.log(err)
     throw new Error('Impossible to import wallet from mnemomic')
   }
 }

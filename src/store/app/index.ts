@@ -1,14 +1,20 @@
 import create from 'zustand'
 import { Action } from '..'
 
+export enum COLUMNS {
+  MENU,
+  MAIN,
+  TOKENS
+}
+
 export interface AppStore {
-  menuFocused: boolean,
-  toggleMenu: () => void;
+  activeColumn: COLUMNS,
+  setActiveColumn: (column: COLUMNS) => void;
 }
 
 export type AppAction = Action<AppStore>
 
 export const useAppStore = create<AppStore>((set) => ({
-  menuFocused: true,
-  toggleMenu: () => set((state) => ({ menuFocused: !state.menuFocused }))
+  activeColumn: COLUMNS.MENU,
+  setActiveColumn: (column: COLUMNS) => set({ activeColumn: column })
 }))
