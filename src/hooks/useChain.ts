@@ -1,10 +1,9 @@
-import { WebSocketProvider } from '@ethersproject/providers'
+import { JsonRpcProvider } from '@ethersproject/providers'
 import { useMemo } from 'react'
 import { Chain, useBlockchainStore } from '../store/blockchain'
 
 export interface ChainWithProvider extends Chain {
-  provider: WebSocketProvider;
-  isReady: boolean;
+  provider: JsonRpcProvider;
 }
 
 export const useChain = (chainId: number): ChainWithProvider => {
@@ -12,16 +11,16 @@ export const useChain = (chainId: number): ChainWithProvider => {
 
   return useMemo(() => {
     const chain = chains.find(chain => chain.chainId === chainId)
-    const provider = new WebSocketProvider(chain.rpc)
+    // const provider = new WebSocketProvider(chain.rpc)
+    const provider = new JsonRpcProvider(chain.rpc)
 
-    provider._websocket.onerror = () => null
+    provider.on('error', () => {
+      // nothing
+    })
 
     return {
       ...chain,
-      provider,
-      get isReady () {
-        return provider._wsReady
-      }
+      provider
     }
   }, [chainId])
 }

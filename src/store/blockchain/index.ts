@@ -27,9 +27,7 @@ export const useBlockchainStore = create<BlockchainStore>(() => ({
       chainId: 97,
       name: 'BNB Smart Chain',
       rpc:
-        'wss://ws-nd-455-735-490.p2pify.com/7ca76a7ca035622220f13686ed0181fa',
-      // httpsRpc:
-      //   'https://nd-455-735-490.p2pify.com/7ca76a7ca035622220f13686ed0181fa',
+        'https://data-seed-prebsc-2-s1.binance.org:8545/',
       currency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
       explorer: 'http://testnet.bscscan.com/'
     }

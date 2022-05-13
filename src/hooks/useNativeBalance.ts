@@ -3,7 +3,7 @@ import { useChain } from './useChain'
 import { useWallet } from './useWallet'
 
 export const useNativeBalance = (chainId: number) => {
-  const [balance, setBalance] = useState('')
+  const [balance, setBalance] = useState('0')
   const wallet = useWallet()
   const chain = useChain(chainId)
 
