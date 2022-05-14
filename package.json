@@ -48,6 +48,12 @@
   "config": {
     "commitizen": {
       "path": "cz-emoji"
+    },
+    "cz-emoji": {
+      "skipQuestions": [
+        "scope",
+        "issues"
+      ]
     }
   }
 }
