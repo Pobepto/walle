@@ -18,6 +18,7 @@ specifiers:
   eslint-plugin-react: ^7.29.4
   eslint-plugin-react-hooks: ^4.5.0
   ink: ^3.2.0
+  ink-spinner: ^4.0.3
   ink-text-input: ^4.0.3
   prettier: ^2.6.2
   prettier-eslint-cli: ^6.0.1
@@ -33,6 +34,7 @@ dependencies:
   '@ethersproject/providers': 5.6.4
   '@ethersproject/wallet': 5.6.0
   ink: 3.2.0_amtsnftabiznt6ysaiblxguaim
+  ink-spinner: 4.0.3_ink@3.2.0+react@17.0.2
   ink-text-input: 4.0.3_ink@3.2.0+react@17.0.2
   react: 17.0.2
   zustand: 3.7.2_react@17.0.2
@@ -794,6 +796,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       restore-cursor: 3.1.0
+    dev: false
+
+  /cli-spinners/2.6.1:
+    resolution: {integrity: sha512-x/5fWmGMnbKQAaNwN+UZlV79qBLM9JFnJuJ03gIi5whrob0xV0ofNVHy9DhwGdsMJQc2OKv0oGmLzvaqvAVv+g==}
+    engines: {node: '>=6'}
     dev: false
 
   /cli-truncate/2.1.0:
@@ -1710,6 +1717,18 @@ packages:
 
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+
+  /ink-spinner/4.0.3_ink@3.2.0+react@17.0.2:
+    resolution: {integrity: sha512-uJ4nbH00MM9fjTJ5xdw0zzvtXMkeGb0WV6dzSWvFv2/+ks6FIhpkt+Ge/eLdh0Ah6Vjw5pLMyNfoHQpRDRVFbQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      ink: '>=3.0.5'
+      react: '>=16.8.2'
+    dependencies:
+      cli-spinners: 2.6.1
+      ink: 3.2.0_amtsnftabiznt6ysaiblxguaim
+      react: 17.0.2
+    dev: false
 
   /ink-text-input/4.0.3_ink@3.2.0+react@17.0.2:
     resolution: {integrity: sha512-eQD01ik9ltmNoHmkeQ2t8LszYkv2XwuPSUz3ie/85qer6Ll/j0QSlSaLNl6ENHZakBHdCBVZY04iOXcLLXA0PQ==}

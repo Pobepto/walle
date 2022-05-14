@@ -1,4 +1,5 @@
 import { Box, Text } from 'ink'
+import Spinner from 'ink-spinner'
 import React from 'react'
 import { useNativeBalance } from '../../hooks/useNativeBalance'
 
@@ -11,7 +12,9 @@ export const Tokens: React.FC = () => {
         <Text bold>Tokens</Text>
       </Box>
       <Box>
-        <Text>{nativeBalanceIsLoading ? '?' : nativeBalance} </Text>
+        <Text>
+          {nativeBalanceIsLoading ? <Spinner type="dots" /> : nativeBalance}{' '}
+        </Text>
         <Text bold>BNB</Text>
       </Box>
       <Box>

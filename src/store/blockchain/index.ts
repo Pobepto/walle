@@ -42,7 +42,7 @@ export const useBlockchainStore = create<BlockchainStore>((set, get) => ({
     },
   ],
 
-  getNativeBalance: getNativeBalance(set, get) as any,
+  getNativeBalance: getNativeBalance(set, get),
   nativeBalance: '0',
   nativeBalanceIsLoading: true,
 }))

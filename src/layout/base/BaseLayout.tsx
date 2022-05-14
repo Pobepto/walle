@@ -5,7 +5,7 @@ import { useSelection } from '../../hooks'
 import { Header } from './Header'
 import { MainMenu } from './MainMenu'
 import { Tokens } from './Tokens'
-import { useBlockchainStore } from '../../store/blockchain'
+// import { useBlockchainStore } from '../../store/blockchain'
 
 interface Props {
   children: React.ReactNode
@@ -14,7 +14,7 @@ interface Props {
 const LAYOUT_COLUMNS = 3
 
 export const BaseLayout: React.FC<Props> = ({ children }) => {
-  const getNativeBalance = useBlockchainStore((store) => store.getNativeBalance)
+  // const getNativeBalance = useBlockchainStore((store) => store.getNativeBalance)
   const setActiveColumn = useAppStore((state) => state.setActiveColumn)
   const [selection] = useSelection(
     LAYOUT_COLUMNS,
@@ -28,13 +28,13 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
     setActiveColumn(selection)
   }, [selection])
 
-  useEffect(() => {
-    getNativeBalance()
+  // useEffect(() => {
+  //   getNativeBalance()
 
-    setTimeout(() => {
-      getNativeBalance()
-    }, 3000)
-  }, [])
+  //   setTimeout(() => {
+  //     getNativeBalance()
+  //   }, 3000)
+  // }, [])
 
   return (
     <Box flexDirection="column">
