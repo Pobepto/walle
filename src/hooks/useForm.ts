@@ -1,3 +1,4 @@
+import { getAddress } from '@ethersproject/address'
 import { useMemo, useState } from 'react'
 import { Undefinable } from 'tsdef'
 
@@ -119,3 +120,11 @@ export const lengthRule =
       return `Must be at most ${max} characters`
     }
   }
+
+export const isAddress = () => (value: string) => {
+  try {
+    getAddress(value)
+  } catch (error) {
+    return `Address is invalid`
+  }
+}

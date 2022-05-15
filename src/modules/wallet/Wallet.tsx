@@ -2,8 +2,10 @@ import React from 'react'
 import { Box } from 'ink'
 import { Menu } from '../../components'
 import { COLUMNS, useAppStore } from '../../store'
+import { ROUTE, useNavigate } from '../../routes'
 
 export const Wallet: React.FC = () => {
+  const navigate = useNavigate()
   const activeColumn = useAppStore((state) => state.activeColumn)
 
   return (
@@ -18,6 +20,10 @@ export const Wallet: React.FC = () => {
           {
             title: 'Logout',
             onSelect: () => null,
+          },
+          {
+            title: 'Add token',
+            onSelect: () => navigate(ROUTE.TOKEN_ADD),
           },
         ]}
         prevKey="upArrow"
