@@ -16,8 +16,8 @@ export const CreateWallet: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Text>Your wallet: {wallet?.address}</Text>
-      <Link to={ROUTE.WALLET} isFocused>
-        {/* <Link to={ROUTE.REGISTRATION_PASSWORD} isFocused> */}
+      {/* <Link to={ROUTE.WALLET} isFocused> */}
+      <Link to={ROUTE.REGISTRATION_PASSWORD} isFocused>
         Press &quot;Enter&quot; to continue...
       </Link>
     </Box>

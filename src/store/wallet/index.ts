@@ -6,6 +6,8 @@ import { importWallet } from './importWallet'
 import { useBlockchainStore } from '../blockchain'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { logout } from './logout'
+import { encryptWallet } from './encryptWallet'
+import { decryptWallet } from './decryptWallet'
 
 export interface WalletStore {
   pathId: number
@@ -13,10 +15,15 @@ export interface WalletStore {
   generateWallet: () => void
   importWallet: (mnemonic: string) => void
   deriveMnemonicAddress: () => void
+  encryptWallet: (password: string) => Promise<void>
+  decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
   logout: () => void
 }
 
-export type WalletAction = Action<WalletStore>
+export type WalletAction<T extends keyof WalletStore = any> = Action<
+  WalletStore,
+  WalletStore[T]
+>
 
 export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   (set, get) => ({
@@ -25,12 +32,14 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
     generateWallet: generateWallet(set, get),
     importWallet: importWallet(set, get),
     deriveMnemonicAddress: deriveMnemonicAddress(set, get),
+    encryptWallet: encryptWallet(set, get),
+    decryptWallet: decryptWallet(set, get),
     logout: logout(set, get),
   }),
 )
 
 useWalletStore.subscribe(
-  (state) => state.phrase,
+  (state) => state.pathId,
   () => {
     useBlockchainStore.getState().getNativeBalance()
   },

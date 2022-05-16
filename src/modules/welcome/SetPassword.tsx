@@ -4,6 +4,7 @@ import { Button } from '../../components'
 import { lengthRule, useForm, useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
 import { InputBox } from '../../components/InputBox'
+import { useWalletStore } from '../../store'
 
 type Inputs = {
   password: string
@@ -12,9 +13,10 @@ type Inputs = {
 
 export const SetPassword: React.FC = () => {
   const navigate = useNavigate()
-  const { errors, register, validateAll } = useForm<Inputs>({
+  const encryptWallet = useWalletStore((state) => state.encryptWallet)
+  const { data, errors, register, validateAll } = useForm<Inputs>({
     rules: {
-      password: lengthRule(6),
+      password: lengthRule(1),
       repeatPassword: (value, data) => {
         if (!data.password || value !== data.password) {
           return 'Passwords do not match'
@@ -34,11 +36,11 @@ export const SetPassword: React.FC = () => {
     false,
   )
 
-  const onApply = () => {
+  const onApply = async () => {
     const [isValid] = validateAll()
 
     if (isValid) {
-      // TODO: save password to store
+      await encryptWallet(data.password)
       navigate(ROUTE.WALLET)
     } else {
       prevent()
