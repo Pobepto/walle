@@ -39,8 +39,10 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
 )
 
 useWalletStore.subscribe(
-  (state) => state.pathId,
-  () => {
-    useBlockchainStore.getState().getNativeBalance()
+  (state) => [state.pathId, state.phrase],
+  ([, phrase]) => {
+    if (phrase) {
+      useBlockchainStore.getState().getNativeBalance()
+    }
   },
 )
