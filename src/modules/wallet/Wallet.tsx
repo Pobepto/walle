@@ -1,12 +1,30 @@
 import React from 'react'
 import { Box } from 'ink'
 import { Menu } from '../../components'
-import { COLUMNS, useAppStore } from '../../store'
+import { COLUMNS, useAppStore, useWalletStore } from '../../store'
 import { ROUTE, useNavigate } from '../../routes'
 
 export const Wallet: React.FC = () => {
   const navigate = useNavigate()
   const activeColumn = useAppStore((state) => state.activeColumn)
+  const logout = useWalletStore((state) => state.logout)
+
+  const handleSwitchChain = () => {
+    // navigate(ROUTE.CHAINS)
+  }
+
+  const handleSwitchAccount = () => {
+    // navigate(ROUTE.ACCOUNTS)
+  }
+
+  const handleLogout = () => {
+    logout()
+    navigate(ROUTE.REGISTRATION)
+  }
+
+  const handleAddToken = () => {
+    navigate(ROUTE.TOKEN_ADD)
+  }
 
   return (
     <Box display="flex" flexDirection="column">
@@ -14,16 +32,20 @@ export const Wallet: React.FC = () => {
         focused={activeColumn === COLUMNS.MAIN}
         items={[
           {
-            title: 'Switch account',
-            onSelect: () => null,
+            title: 'Switch chain',
+            onSelect: handleSwitchChain,
           },
           {
-            title: 'Logout',
-            onSelect: () => null,
+            title: 'Switch account',
+            onSelect: handleSwitchAccount,
           },
           {
             title: 'Add token',
-            onSelect: () => navigate(ROUTE.TOKEN_ADD),
+            onSelect: handleAddToken,
+          },
+          {
+            title: 'Logout',
+            onSelect: handleLogout,
           },
         ]}
         prevKey="upArrow"

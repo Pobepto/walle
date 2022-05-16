@@ -3,6 +3,8 @@ import { Box, Text } from 'ink'
 import { Button, Input } from '../../components'
 import { isAddress, lengthRule, useForm, useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
+import { InputBox } from '../../components/InputBox'
+import { COLUMNS, useAppStore } from '../../store'
 
 type Inputs = {
   name: string
@@ -12,6 +14,7 @@ type Inputs = {
 
 export const AddToken: React.FC = () => {
   const navigate = useNavigate()
+  const activeColumn = useAppStore((state) => state.activeColumn)
   const { errors, register, validateAll } = useForm<Inputs>({
     rules: {
       name: lengthRule(3),
@@ -27,7 +30,7 @@ export const AddToken: React.FC = () => {
     4,
     'upArrow',
     ['downArrow', 'return'],
-    true,
+    activeColumn === COLUMNS.MAIN,
     false,
   )
 
@@ -46,27 +49,24 @@ export const AddToken: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Text>Add new token</Text>
-      <Box borderStyle="classic" flexDirection="column">
-        <Box>
-          <Text>Name: </Text>
-          <Input {...register('name')} focus={selection === 0} />
-        </Box>
-        <Text color="red">{errors.name}</Text>
-      </Box>
-      <Box borderStyle="classic" flexDirection="column">
-        <Box>
-          <Text>Symbol: </Text>
-          <Input {...register('symbol')} focus={selection === 1} />
-        </Box>
-        <Text color="red">{errors.symbol}</Text>
-      </Box>
-      <Box borderStyle="classic" flexDirection="column">
-        <Box>
-          <Text>Address: </Text>
-          <Input {...register('address')} focus={selection === 2} />
-        </Box>
-        <Text color="red">{errors.address}</Text>
-      </Box>
+      <InputBox
+        label="Name"
+        error={errors.name}
+        focus={selection === 0}
+        {...register('name')}
+      />
+      <InputBox
+        label="Symbol"
+        error={errors.symbol}
+        focus={selection === 1}
+        {...register('symbol')}
+      />
+      <InputBox
+        label="Address"
+        error={errors.address}
+        focus={selection === 2}
+        {...register('address')}
+      />
 
       <Button isFocused={selection === 3} onPress={onApply}>
         Add token

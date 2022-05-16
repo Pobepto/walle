@@ -13,12 +13,12 @@ interface InkTextProps {
   onSubmit?: (value: string) => void
 }
 
-interface Props extends InkTextProps {
+export interface InputProps extends InkTextProps {
   onFocus?: () => void
   onBlur?: () => void
 }
 
-export const Input: React.FC<Props> = ({ onFocus, onBlur, ...props }) => {
+export const Input: React.FC<InputProps> = ({ onFocus, onBlur, ...props }) => {
   const { focus } = props
 
   useDidMountEffect(() => {

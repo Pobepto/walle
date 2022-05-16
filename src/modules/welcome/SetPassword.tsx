@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button, Input } from '../../components'
+import { Button } from '../../components'
 import { lengthRule, useForm, useSelection } from '../../hooks'
 import { ROUTE, useNavigate } from '../../routes'
+import { InputBox } from '../../components/InputBox'
 
 type Inputs = {
   password: string
@@ -49,20 +50,20 @@ export const SetPassword: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Text>Set password to protect your wallet</Text>
-      <Box borderStyle="classic" flexDirection="column">
-        <Text>New password: </Text>
-        <Input {...register('password')} mask="*" focus={selection === 0} />
-        <Text color="red">{errors.password}</Text>
-      </Box>
-      <Box borderStyle="classic" flexDirection="column">
-        <Text>Confirm password: </Text>
-        <Input
-          {...register('repeatPassword')}
-          mask="*"
-          focus={selection === 1}
-        />
-        <Text color="red">{errors.repeatPassword}</Text>
-      </Box>
+      <InputBox
+        label="New password"
+        mask="*"
+        error={errors.password}
+        focus={selection === 0}
+        {...register('password')}
+      />
+      <InputBox
+        label="Confirm password"
+        mask="*"
+        error={errors.repeatPassword}
+        focus={selection === 1}
+        {...register('repeatPassword')}
+      />
 
       <Button isFocused={selection === 2} onPress={onApply}>
         Apply
