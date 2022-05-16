@@ -1,9 +1,9 @@
 import { GetState, SetState } from 'zustand'
 
-export type Action<T extends object> = (
-  set: SetState<T>,
-  get: GetState<T>,
-) => (...args: any[]) => any
+export type Action<TState extends object, TValue = (...args: any[]) => any> = (
+  set: SetState<TState>,
+  get: GetState<TState>,
+) => TValue
 
 export * from './wallet'
 export * from './app'
