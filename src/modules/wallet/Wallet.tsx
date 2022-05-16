@@ -10,7 +10,7 @@ export const Wallet: React.FC = () => {
   const logout = useWalletStore((state) => state.logout)
 
   const handleSwitchChain = () => {
-    // navigate(ROUTE.CHAINS)
+    navigate(ROUTE.SWITCH_CHAIN)
   }
 
   const handleSwitchAccount = () => {

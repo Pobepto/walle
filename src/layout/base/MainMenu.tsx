@@ -10,8 +10,8 @@ export const MainMenu: React.FC = () => {
 
   return (
     <>
-      <Box alignSelf="center">
-        <Text bold>Menu</Text>
+      <Box alignSelf="center" marginTop={-1}>
+        <Text bold> Menu </Text>
       </Box>
       <Menu
         focused={activeColumn === COLUMNS.MENU}

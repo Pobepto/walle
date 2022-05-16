@@ -18,8 +18,8 @@ export const Header: React.FC = () => {
       paddingLeft={1}
       paddingRight={1}
     >
-      <Box>
-        <Text bold>{chain.name}</Text>
+      <Box marginTop={-1}>
+        <Text bold> {chain.name} </Text>
       </Box>
       <Box flexDirection="row" justifyContent="space-between">
         <Text color="cyan">{wallet?.address}</Text>

@@ -2,14 +2,10 @@ import { Box, Text } from 'ink'
 
 import React from 'react'
 import { Link } from '../../components/Link'
-// import { useWallet } from '../../hooks'
-import { ROUTE } from '../../routes'
+import { Redirect, ROUTE } from '../../routes'
 
 export const Welcome: React.FC = () => {
-  // const wallet = useWallet()
-  // if (wallet) {
-  //   return <Redirect to={ROUTE.WALLET} />
-  // }
+  return <Redirect to={ROUTE.REGISTRATION_CREATE} />
 
   return (
     <Box flexDirection="column">

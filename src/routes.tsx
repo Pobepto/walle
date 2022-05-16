@@ -7,8 +7,9 @@ import {
   Registration,
   SetPassword,
   Welcome,
+  AddToken,
+  SwitchChain,
 } from './modules'
-import { AddToken } from './modules/token'
 import { routerFactory } from './Router'
 
 export enum ROUTE {
@@ -19,6 +20,7 @@ export enum ROUTE {
   REGISTRATION_PASSWORD,
   WALLET,
   TOKEN_ADD,
+  SWITCH_CHAIN,
 }
 
 const layout = (
@@ -40,6 +42,7 @@ const router = routerFactory<ROUTE>({
   [ROUTE.REGISTRATION_PASSWORD]: () => welcome(SetPassword),
   [ROUTE.WALLET]: () => base(Wallet),
   [ROUTE.TOKEN_ADD]: () => base(AddToken),
+  [ROUTE.SWITCH_CHAIN]: () => base(SwitchChain),
 })
 
 export const { Redirect, Router, useLocation, useNavigate, useRoute } = router
