@@ -19,6 +19,24 @@ export const MainMenu: React.FC = () => {
           {
             title: 'Wallet',
             onSelect: () => navigate(ROUTE.WALLET),
+            items: [
+              {
+                title: 'Switch chain',
+                onSelect: () => null,
+              },
+              {
+                title: 'Switch account',
+                onSelect: () => null,
+              },
+              {
+                title: 'Add token',
+                onSelect: () => null,
+              },
+              {
+                title: 'Logout',
+                onSelect: () => null,
+              },
+            ],
           },
           {
             title: 'DApps',
