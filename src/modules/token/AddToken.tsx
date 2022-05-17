@@ -48,7 +48,9 @@ export const AddToken: React.FC = () => {
 
   return (
     <Box flexDirection="column">
-      <Text>Add new token</Text>
+      <Box marginTop={-1}>
+        <Text> Add new token </Text>
+      </Box>
       <InputBox
         label="Name"
         error={errors.name}

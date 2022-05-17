@@ -26,8 +26,8 @@ export const Tokens: React.FC = () => {
 
   return (
     <>
-      <Box alignSelf="center">
-        <Text bold>Tokens</Text>
+      <Box alignSelf="center" marginTop={-1}>
+        <Text bold> Tokens </Text>
       </Box>
       <Box>
         <Text underline={selection === 0}>
