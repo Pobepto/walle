@@ -17,40 +17,32 @@ export const MainMenu: React.FC = () => {
         focused={activeColumn === COLUMNS.MENU}
         items={[
           {
-            id: 0,
             title: 'Wallet',
             onSelect: () => navigate(ROUTE.WALLET),
             items: [
               {
-                id: 1,
-
                 title: 'Switch chain',
-                onSelect: () => null,
+                onSelect: () => console.log('Switch chain'),
               },
               {
-                id: 2,
                 title: 'Switch account',
-                onSelect: () => null,
+                onSelect: () => console.log('Switch account'),
               },
               {
-                id: 3,
                 title: 'Add token',
-                onSelect: () => null,
+                onSelect: () => console.log('Add token'),
               },
               {
-                id: 4,
                 title: 'Logout',
-                onSelect: () => null,
+                onSelect: () => console.log('Logout'),
               },
             ],
           },
           {
-            id: 5,
             title: 'DApps',
             onSelect: () => console.log('DApps'),
           },
           {
-            id: 6,
             title: 'Settings',
             onSelect: () => console.log('Settings'),
           },

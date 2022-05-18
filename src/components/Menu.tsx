@@ -4,7 +4,6 @@ import { useKey, useSelection } from '../hooks'
 import { TextButton } from './TextButton'
 
 interface MenuItem {
-  id: number
   title: React.ReactNode
   items?: SubMenuItem[]
   onSelect: () => void
@@ -23,18 +22,23 @@ interface Props {
 
 interface PropsDrop {
   isFocused: boolean
-  children: React.ReactNode
-  openKey: keyof Key
+  items: SubMenuItem[]
+  onReturn: () => void
 }
 
-const Dropdown: React.FC<PropsDrop> = ({ isFocused, openKey, children }) => {
-  const [visible, setVisible] = useState(false)
+const Dropdown: React.FC<PropsDrop> = ({ isFocused, onReturn, items }) => {
+  useKey('escape', () => onReturn(), isFocused)
 
-  useKey(openKey, () => setVisible((state) => !state), isFocused)
-
-  if (!visible) return null
-
-  return <Box marginLeft={1}>{children}</Box>
+  return (
+    <Box marginLeft={1}>
+      <Menu
+        items={items}
+        focused={isFocused}
+        prevKey="upArrow"
+        nextKey="downArrow"
+      />
+    </Box>
+  )
 }
 
 export const Menu: React.FC<Props> = ({
@@ -45,39 +49,37 @@ export const Menu: React.FC<Props> = ({
   nextKey = 'rightArrow',
   selectKey = 'return',
 }) => {
-  const menuLength = items.reduce((total, item) => {
-    const subItems = item.items ? item.items.length : 0
-    const size = 1 + subItems
-    return total + size
-  }, 0)
-
+  const [dropdownVisible, setDropdownVisible] = useState(false)
   const [selection] = useSelection(
-    menuLength,
+    items.length,
     prevKey,
     nextKey,
-    focused,
+    focused && !dropdownVisible,
     looped,
   )
 
   return (
     <Box flexDirection="column">
-      {items.map((item) => {
-        const isFocused = focused && item.id === selection
+      {items.map((item, index) => {
+        const isFocused = focused && index === selection
 
         return (
-          <Box key={item.id} flexDirection="column">
+          <Box key={index} flexDirection="column">
             <TextButton
               selectKey={selectKey}
               isFocused={isFocused}
-              onPress={item.onSelect}
+              onPress={
+                item.items ? () => setDropdownVisible(true) : item.onSelect
+              }
             >
-              {item.title}
-              {/* {item.items && (focused ? '▼' : '▶')} */}
+              {item.title} {item.items && (dropdownVisible ? '▼' : '▶')}
             </TextButton>
-            {item.items && (
-              <Dropdown openKey={selectKey} isFocused={isFocused}>
-                <Menu items={item.items} />
-              </Dropdown>
+            {item.items && dropdownVisible && (
+              <Dropdown
+                onReturn={() => setDropdownVisible(false)}
+                isFocused={dropdownVisible}
+                items={item.items}
+              />
             )}
           </Box>
         )
