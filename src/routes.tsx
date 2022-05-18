@@ -10,10 +10,12 @@ import {
   AddToken,
   SwitchChain,
 } from './modules'
+import { Login } from './modules/welcome/Login'
 import { routerFactory } from './Router'
 
 export enum ROUTE {
   WELCOME,
+  LOGIN,
   REGISTRATION,
   REGISTRATION_IMPORT,
   REGISTRATION_CREATE,
@@ -36,6 +38,7 @@ const base = (Component: React.FC) => layout(BaseLayout, Component)
 
 const router = routerFactory<ROUTE>({
   [ROUTE.WELCOME]: () => welcome(Welcome),
+  [ROUTE.LOGIN]: () => welcome(Login),
   [ROUTE.REGISTRATION]: () => welcome(Registration),
   [ROUTE.REGISTRATION_IMPORT]: () => welcome(ImportWallet),
   [ROUTE.REGISTRATION_CREATE]: () => welcome(CreateWallet),
