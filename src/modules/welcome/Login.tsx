@@ -6,6 +6,7 @@ import { ROUTE, useNavigate } from '../../routes'
 import { InputBox } from '../../components/InputBox'
 import { useWalletStore } from '../../store'
 import { load } from '../../utils'
+import AsyncButton from '../../components/AsyncButton'
 
 type Inputs = {
   password: string
@@ -32,9 +33,14 @@ export const Login: React.FC = () => {
     const [isValid] = validateAll()
 
     if (isValid) {
-      const encrypted = await load() // TODO: Maybe load it once? 🤔
-      await decryptWallet(data.password, encrypted)
-      navigate(ROUTE.WALLET)
+      try {
+        const encrypted = await load() // TODO: Maybe load it once? 🤔
+        console.log(encrypted)
+        await decryptWallet(data.password, encrypted)
+        navigate(ROUTE.WALLET)
+      } catch (error) {
+        console.log('Oh here we go again...', error)
+      }
     } else {
       prevent()
       // TODO: focus on first error
@@ -53,9 +59,13 @@ export const Login: React.FC = () => {
         {...register('password')}
       />
 
-      <Button isFocused={selection === 1} onPress={onApply}>
+      <AsyncButton
+        isFocused={selection === 1}
+        onPress={onApply}
+        spinner="fingerDance"
+      >
         Unlock
-      </Button>
+      </AsyncButton>
     </Box>
   )
 }

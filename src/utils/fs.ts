@@ -12,3 +12,12 @@ export const load = async () => {
   const data = await fs.promises.readFile(USER_DATA, 'utf8')
   return JSON.parse(data)
 }
+
+export const isFileExist = async (): Promise<boolean> => {
+  try {
+    await fs.promises.access(USER_DATA)
+    return true
+  } catch (error) {
+    return false
+  }
+}
