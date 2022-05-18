@@ -3,18 +3,14 @@ import { Box, Key } from 'ink'
 import { useKey, useSelection } from '../hooks'
 import { TextButton } from './TextButton'
 
-interface SubMenuItem {
-  id: number
-  title: React.ReactNode
-  onSelect: () => void
-}
-
 interface MenuItem {
   id: number
   title: React.ReactNode
   items?: SubMenuItem[]
   onSelect: () => void
 }
+
+type SubMenuItem = Omit<MenuItem, 'items'>
 
 interface Props {
   focused?: boolean
@@ -54,6 +50,7 @@ export const Menu: React.FC<Props> = ({
     const size = 1 + subItems
     return total + size
   }, 0)
+
   const [selection] = useSelection(
     menuLength,
     prevKey,
@@ -65,21 +62,20 @@ export const Menu: React.FC<Props> = ({
   return (
     <Box flexDirection="column">
       {items.map((item) => {
+        const isFocused = focused && item.id === selection
+
         return (
           <Box key={item.id} flexDirection="column">
             <TextButton
               selectKey={selectKey}
-              isFocused={focused && item.id === selection}
+              isFocused={isFocused}
               onPress={item.onSelect}
             >
               {item.title}
               {/* {item.items && (focused ? '▼' : '▶')} */}
             </TextButton>
             {item.items && (
-              <Dropdown
-                openKey={selectKey}
-                isFocused={focused && item.id === selection}
-              >
+              <Dropdown openKey={selectKey} isFocused={isFocused}>
                 <Menu items={item.items} />
               </Dropdown>
             )}
