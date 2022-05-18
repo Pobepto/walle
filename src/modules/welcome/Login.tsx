@@ -49,7 +49,7 @@ export const Login: React.FC = () => {
   }
 
   return (
-    <Box flexDirection="column">
+    <Box flexDirection="column" width="30%">
       <Text>Nice to see you!</Text>
       <InputBox
         label="Password"

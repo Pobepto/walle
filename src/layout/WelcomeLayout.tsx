@@ -10,7 +10,12 @@ export const WelcomeLayout: React.FC<Props> = ({ children }) => {
   useInput(() => null)
 
   return (
-    <Box flexDirection="column" justifyContent="center" alignItems="center">
+    <Box
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      width="100%"
+    >
       {children}
     </Box>
   )

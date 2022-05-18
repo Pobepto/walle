@@ -9,7 +9,7 @@ export const App: React.FC = () => {
   useInit()
 
   return (
-    <Box width="95%" alignItems="center" justifyContent="center">
+    <Box width="95%" alignSelf="center" justifyContent="center">
       {route}
     </Box>
   )
