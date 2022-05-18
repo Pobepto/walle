@@ -2,6 +2,7 @@ import React from 'react'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
   Wallet,
+  Login,
   CreateWallet,
   ImportWallet,
   Registration,
@@ -10,7 +11,6 @@ import {
   AddToken,
   SwitchChain,
 } from './modules'
-import { Login } from './modules/welcome/Login'
 import { routerFactory } from './Router'
 
 export enum ROUTE {
