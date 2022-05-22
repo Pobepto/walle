@@ -1,9 +1,9 @@
 import { Box, Text } from 'ink'
 
 import React from 'react'
-import { Link } from '../../components/Link'
-import { useSelection } from '../../hooks'
-import { ROUTE } from '../../routes'
+import { Link } from '@components/Link'
+import { useSelection } from '@hooks'
+import { ROUTE } from '@routes'
 
 export const Registration: React.FC = () => {
   const [selection] = useSelection(2, 'leftArrow', 'rightArrow', true, false)

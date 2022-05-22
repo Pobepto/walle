@@ -1,7 +1,7 @@
 import { Wallet } from '@ethersproject/wallet'
 import { Nullable } from 'tsdef'
-import { useWalletStore } from '../store'
-import { getDerivationPath } from '../utils'
+import { useWalletStore } from '@store'
+import { getDerivationPath } from '@utils'
 
 export const useWallet = (): Nullable<Wallet> => {
   const phrase = useWalletStore((state) => state.phrase)

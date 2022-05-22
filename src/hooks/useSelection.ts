@@ -1,6 +1,6 @@
 import { Key } from 'ink'
 import React, { useEffect, useState } from 'react'
-import { clamp } from '../utils/clamp'
+import { clamp } from '@utils/clamp'
 import { useInput } from './useInput'
 
 // TODO: too many arguments, refactor

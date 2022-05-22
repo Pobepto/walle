@@ -1,9 +1,9 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Chain, useBlockchainStore } from '../../store/blockchain'
-import { useSelection } from '../../hooks'
-import { TextButton } from '../../components/TextButton'
-import { Button } from '../../components/Button'
+import { Chain, useBlockchainStore } from '@store/blockchain'
+import { useSelection } from '@hooks'
+import { TextButton } from '@components/TextButton'
+import { Button } from '@components/Button'
 
 export const SwitchChain: React.FC = () => {
   const chains = useBlockchainStore((store) => store.chains)

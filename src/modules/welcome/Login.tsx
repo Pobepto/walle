@@ -1,12 +1,12 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button } from '../../components'
-import { useForm, useSelection } from '../../hooks'
-import { ROUTE, useNavigate } from '../../routes'
-import { InputBox } from '../../components/InputBox'
-import { useWalletStore } from '../../store'
-import { load } from '../../utils'
-import AsyncButton from '../../components/AsyncButton'
+import { Button } from '@components'
+import { useForm, useSelection } from '@hooks'
+import { ROUTE, useNavigate } from '@routes'
+import { InputBox } from '@components/InputBox'
+import { useWalletStore } from '@store'
+import { load } from '@utils'
+import AsyncButton from '@components/AsyncButton'
 
 type Inputs = {
   password: string
@@ -35,7 +35,6 @@ export const Login: React.FC = () => {
     if (isValid) {
       try {
         const encrypted = await load() // TODO: Maybe load it once? 🤔
-        console.log(encrypted)
         await decryptWallet(data.password, encrypted)
         navigate(ROUTE.WALLET)
       } catch (error) {

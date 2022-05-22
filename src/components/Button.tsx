@@ -3,7 +3,7 @@ import Spinner from 'ink-spinner'
 import React from 'react'
 import { AnyFunction } from 'tsdef'
 import type { SpinnerName } from 'cli-spinners'
-import { useKey } from '../hooks'
+import { useKey } from '@hooks'
 
 export interface ButtonProps extends BoxProps {
   children: React.ReactNode

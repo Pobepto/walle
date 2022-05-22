@@ -1,6 +1,6 @@
 import { Wallet } from '@ethersproject/wallet'
 import { WalletAction } from '.'
-import { getDerivationPath } from '../../utils'
+import { getDerivationPath } from '@utils'
 
 export const deriveMnemonicAddress: WalletAction = (set, get) => () => {
   const nextPathId = get().pathId + 1

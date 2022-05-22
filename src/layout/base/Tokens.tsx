@@ -1,9 +1,9 @@
 import { Box, Text } from 'ink'
 import Spinner from 'ink-spinner'
 import React from 'react'
-import { useKey, useSelection } from '../../hooks'
-import { useNativeBalance } from '../../hooks/useNativeBalance'
-import { COLUMNS, useAppStore } from '../../store'
+import { useKey, useSelection } from '@hooks'
+import { useNativeBalance } from '@hooks/useNativeBalance'
+import { COLUMNS, useAppStore } from '@store'
 
 export const Tokens: React.FC = () => {
   const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()

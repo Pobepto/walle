@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Key } from 'ink'
-import { useKey, useSelection } from '../hooks'
+import { useKey, useSelection } from '@hooks'
 import { TextButton } from './TextButton'
 
 interface MenuItem {

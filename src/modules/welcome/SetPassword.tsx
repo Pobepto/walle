@@ -1,11 +1,11 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { lengthRule, useForm, useSelection } from '../../hooks'
-import { ROUTE, useNavigate } from '../../routes'
-import { InputBox } from '../../components/InputBox'
-import { useWalletStore } from '../../store'
-import { save } from '../../utils'
-import AsyncButton from '../../components/AsyncButton'
+import { lengthRule, useForm, useSelection } from '@hooks'
+import { ROUTE, useNavigate } from '@routes'
+import { InputBox } from '@components/InputBox'
+import { useWalletStore } from '@store'
+import { save } from '@utils'
+import AsyncButton from '@components/AsyncButton'
 
 type Inputs = {
   password: string

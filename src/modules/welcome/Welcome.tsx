@@ -1,9 +1,9 @@
 import { Box, Text } from 'ink'
 
 import React, { useEffect, useState } from 'react'
-import { Link } from '../../components/Link'
-import { ROUTE } from '../../routes'
-import { isUserDataExist } from '../../utils'
+import { Link } from '@components/Link'
+import { ROUTE } from '@routes'
+import { isUserDataExist } from '@utils'
 
 export const Welcome: React.FC = () => {
   const [link, setLink] = useState(ROUTE.REGISTRATION)
