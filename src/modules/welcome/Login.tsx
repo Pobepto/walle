@@ -15,11 +15,7 @@ type Inputs = {
 export const Login: React.FC = () => {
   const navigate = useNavigate()
   const decryptWallet = useWalletStore((state) => state.decryptWallet)
-  const { data, errors, register, validateAll } = useForm<Inputs>({
-    options: {
-      validateAction: 'never',
-    },
-  })
+  const { data, errors, register } = useForm<Inputs>()
 
   const [selection, setSelection, prevent] = useSelection(
     2,
@@ -30,19 +26,13 @@ export const Login: React.FC = () => {
   )
 
   const onApply = async () => {
-    const [isValid] = validateAll()
-
-    if (isValid) {
-      try {
-        const encrypted = await load() // TODO: Maybe load it once? 🤔
-        await decryptWallet(data.password, encrypted)
-        navigate(ROUTE.WALLET)
-      } catch (error) {
-        console.log('Oh here we go again...', error)
-      }
-    } else {
+    try {
+      const encrypted = await load() // TODO: Maybe load it once? 🤔
+      await decryptWallet(data.password || '', encrypted)
+      navigate(ROUTE.WALLET)
+    } catch (error) {
+      console.log('Oh here we go again...', error)
       prevent()
-      // TODO: focus on first error
       setSelection(0)
     }
   }

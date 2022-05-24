@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { MaybePromise } from 'tsdef'
 import { Button, ButtonProps } from '.'
 
@@ -12,15 +12,23 @@ const AsyncButton: React.FC<AsyncButtonProps> = ({
   ...props
 }) => {
   const [disabledByPromise, setDisabledByPromise] = useState(false)
+  const mounted = useRef(false)
 
   const asyncOnPress = async () => {
     setDisabledByPromise(true)
     try {
       await onPress()
     } finally {
-      setDisabledByPromise(false)
+      mounted.current && setDisabledByPromise(false)
     }
   }
+
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  })
 
   return (
     <Button

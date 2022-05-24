@@ -18,7 +18,6 @@ export const MainMenu: React.FC = () => {
         items={[
           {
             title: 'Wallet',
-            onSelect: () => navigate(ROUTE.WALLET),
             items: [
               {
                 title: 'Switch chain',
@@ -40,7 +39,20 @@ export const MainMenu: React.FC = () => {
           },
           {
             title: 'DApps',
-            onSelect: () => console.log('DApps'),
+            items: [
+              {
+                title: 'DEX',
+                onSelect: () => console.log('DEX'),
+              },
+              {
+                title: 'Bridge',
+                onSelect: () => console.log('Bridge'),
+              },
+              {
+                title: 'Mixer',
+                onSelect: () => console.log('Mixer'),
+              },
+            ],
           },
           {
             title: 'Settings',
