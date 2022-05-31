@@ -1,6 +1,6 @@
 import InkTextInput from 'ink-text-input'
 import React from 'react'
-import { useDidMountEffect } from '../hooks'
+import { useDidMountEffect } from '@hooks'
 
 interface InkTextProps {
   placeholder?: string
@@ -23,9 +23,9 @@ export const Input: React.FC<InputProps> = ({ onFocus, onBlur, ...props }) => {
 
   useDidMountEffect(() => {
     if (focus) {
-      onFocus()
+      onFocus && onFocus()
     } else {
-      onBlur()
+      onBlur && onBlur()
     }
   }, [focus])
 

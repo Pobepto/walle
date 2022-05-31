@@ -1,16 +1,10 @@
 import { Box, Text } from 'ink'
 
 import React, { useMemo, useState } from 'react'
-import { Button, Input, Error } from '../../components'
-import {
-  useClipboard,
-  lengthRule,
-  useForm,
-  useKey,
-  useSelection,
-} from '../../hooks'
-import { ROUTE, useNavigate } from '../../routes'
-import { useWalletStore } from '../../store'
+import { Button, Input, Error } from '@components'
+import { useClipboard, lengthRule, useForm, useKey, useSelection } from '@hooks'
+import { ROUTE, useNavigate } from '@routes'
+import { useWalletStore } from '@store'
 
 type Inputs = {
   [key: number]: string

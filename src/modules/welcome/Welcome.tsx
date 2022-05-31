@@ -1,16 +1,23 @@
 import { Box, Text } from 'ink'
 
-import React from 'react'
-import { Link } from '../../components/Link'
-import { Redirect, ROUTE } from '../../routes'
+import React, { useEffect, useState } from 'react'
+import { Link } from '@components/Link'
+import { ROUTE } from '@routes'
+import { isUserDataExist } from '@utils'
 
 export const Welcome: React.FC = () => {
-  return <Redirect to={ROUTE.REGISTRATION_CREATE} />
+  const [link, setLink] = useState(ROUTE.REGISTRATION)
+
+  useEffect(() => {
+    isUserDataExist().then((isExist) => {
+      isExist && setLink(ROUTE.LOGIN)
+    })
+  }, [])
 
   return (
     <Box flexDirection="column">
       <Text>Walle - Best CLI Application ever</Text>
-      <Link to={ROUTE.REGISTRATION} isFocused>
+      <Link to={link} isFocused>
         Press &quot;Enter&quot; to continue...
       </Link>
     </Box>

@@ -1,4 +1,4 @@
-import { useBlockchainStore } from '../store/blockchain'
+import { useBlockchainStore } from '@store/blockchain'
 
 export const useNativeBalance = () => {
   const balance = useBlockchainStore((store) => store.nativeBalance)

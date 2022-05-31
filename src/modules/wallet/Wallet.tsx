@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box } from 'ink'
-import { Menu } from '../../components'
-import { COLUMNS, useAppStore, useWalletStore } from '../../store'
-import { ROUTE, useNavigate } from '../../routes'
+import { Menu } from '@components'
+import { COLUMNS, useAppStore, useWalletStore } from '@store'
+import { ROUTE, useNavigate } from '@routes'
 
 export const Wallet: React.FC = () => {
   const navigate = useNavigate()

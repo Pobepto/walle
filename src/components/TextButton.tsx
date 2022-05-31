@@ -1,12 +1,12 @@
 import { Key, TextProps, Text } from 'ink'
 import React from 'react'
 import { AnyFunction } from 'tsdef'
-import { useKey } from '../hooks'
+import { useKey } from '@hooks'
 
 interface Props extends TextProps {
   children: React.ReactNode
   onPress: AnyFunction
-  isFocused: boolean
+  isFocused?: boolean
   selectKey?: keyof Key
 }
 

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
-import { useWalletStore } from '../../store'
-import { useWallet } from '../../hooks'
-import { ROUTE } from '../../routes'
-import { Link } from '../../components/Link'
+import { useWalletStore } from '@store'
+import { useWallet } from '@hooks'
+import { ROUTE } from '@routes'
+import { Link } from '@components/Link'
 
 export const CreateWallet: React.FC = () => {
   const wallet = useWallet()

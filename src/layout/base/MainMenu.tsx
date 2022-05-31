@@ -1,8 +1,8 @@
 import { Box, Text } from 'ink'
 import React from 'react'
-import { Menu } from '../../components'
-import { ROUTE, useNavigate } from '../../routes'
-import { COLUMNS, useAppStore } from '../../store'
+import { Menu } from '@components'
+import { ROUTE, useNavigate } from '@routes'
+import { COLUMNS, useAppStore } from '@store'
 
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()
@@ -18,29 +18,41 @@ export const MainMenu: React.FC = () => {
         items={[
           {
             title: 'Wallet',
-            onSelect: () => navigate(ROUTE.WALLET),
             items: [
               {
                 title: 'Switch chain',
-                onSelect: () => null,
+                onSelect: () => console.log('Switch chain'),
               },
               {
                 title: 'Switch account',
-                onSelect: () => null,
+                onSelect: () => console.log('Switch account'),
               },
               {
                 title: 'Add token',
-                onSelect: () => null,
+                onSelect: () => console.log('Add token'),
               },
               {
                 title: 'Logout',
-                onSelect: () => null,
+                onSelect: () => console.log('Logout'),
               },
             ],
           },
           {
             title: 'DApps',
-            onSelect: () => console.log('DApps'),
+            items: [
+              {
+                title: 'DEX',
+                onSelect: () => console.log('DEX'),
+              },
+              {
+                title: 'Bridge',
+                onSelect: () => console.log('Bridge'),
+              },
+              {
+                title: 'Mixer',
+                onSelect: () => console.log('Mixer'),
+              },
+            ],
           },
           {
             title: 'Settings',

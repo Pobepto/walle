@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { useChain, useWallet } from '../../hooks'
-import { useNativeBalance } from '../../hooks/useNativeBalance'
+import { useChain, useWallet } from '@hooks'
+import { useNativeBalance } from '@hooks/useNativeBalance'
 import Spinner from 'ink-spinner'
 
 export const Header: React.FC = () => {

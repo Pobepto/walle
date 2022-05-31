@@ -15,7 +15,7 @@ export interface WalletStore {
   generateWallet: () => void
   importWallet: (mnemonic: string) => void
   deriveMnemonicAddress: () => void
-  encryptWallet: (password: string) => Promise<void>
+  encryptWallet: (password: string) => Promise<string>
   decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
   logout: () => void
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
   Wallet,
+  Login,
   CreateWallet,
   ImportWallet,
   Registration,
@@ -14,6 +15,7 @@ import { routerFactory } from './Router'
 
 export enum ROUTE {
   WELCOME,
+  LOGIN,
   REGISTRATION,
   REGISTRATION_IMPORT,
   REGISTRATION_CREATE,
@@ -36,6 +38,7 @@ const base = (Component: React.FC) => layout(BaseLayout, Component)
 
 const router = routerFactory<ROUTE>({
   [ROUTE.WELCOME]: () => welcome(Welcome),
+  [ROUTE.LOGIN]: () => welcome(Login),
   [ROUTE.REGISTRATION]: () => welcome(Registration),
   [ROUTE.REGISTRATION_IMPORT]: () => welcome(ImportWallet),
   [ROUTE.REGISTRATION_CREATE]: () => welcome(CreateWallet),

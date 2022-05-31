@@ -1,4 +1,4 @@
-import { Chain, useBlockchainStore } from '../store/blockchain'
+import { Chain, useBlockchainStore } from '@store/blockchain'
 
 export const useChain = (): Chain => {
   const chainId = useBlockchainStore((store) => store.chainId)

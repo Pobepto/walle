@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button, Input } from '../../components'
-import { isAddress, lengthRule, useForm, useSelection } from '../../hooks'
-import { ROUTE, useNavigate } from '../../routes'
-import { InputBox } from '../../components/InputBox'
-import { COLUMNS, useAppStore } from '../../store'
+import { Button, Input } from '@components'
+import { isAddress, lengthRule, useForm, useSelection } from '@hooks'
+import { ROUTE, useNavigate } from '@routes'
+import { InputBox } from '@components/InputBox'
+import { COLUMNS, useAppStore } from '@store'
 
 type Inputs = {
   name: string

@@ -1,10 +1,11 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button } from '../../components'
-import { lengthRule, useForm, useSelection } from '../../hooks'
-import { ROUTE, useNavigate } from '../../routes'
-import { InputBox } from '../../components/InputBox'
-import { useWalletStore } from '../../store'
+import { lengthRule, useForm, useSelection } from '@hooks'
+import { ROUTE, useNavigate } from '@routes'
+import { InputBox } from '@components/InputBox'
+import { useWalletStore } from '@store'
+import { save } from '@utils'
+import AsyncButton from '@components/AsyncButton'
 
 type Inputs = {
   password: string
@@ -40,7 +41,8 @@ export const SetPassword: React.FC = () => {
     const [isValid] = validateAll()
 
     if (isValid) {
-      await encryptWallet(data.password)
+      const encrypted = await encryptWallet(data.password)
+      await save(encrypted)
       navigate(ROUTE.WALLET)
     } else {
       prevent()
@@ -67,9 +69,13 @@ export const SetPassword: React.FC = () => {
         {...register('repeatPassword')}
       />
 
-      <Button isFocused={selection === 2} onPress={onApply}>
+      <AsyncButton
+        isFocused={selection === 2}
+        onPress={onApply}
+        spinner="fingerDance"
+      >
         Apply
-      </Button>
+      </AsyncButton>
     </Box>
   )
 }

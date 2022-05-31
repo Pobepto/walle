@@ -1,25 +1,35 @@
 import { Key, Box, BoxProps, Text } from 'ink'
+import Spinner from 'ink-spinner'
 import React from 'react'
 import { AnyFunction } from 'tsdef'
-import { useKey } from '../hooks'
+import type { SpinnerName } from 'cli-spinners'
+import { useKey } from '@hooks'
 
-interface Props extends BoxProps {
+export interface ButtonProps extends BoxProps {
   children: React.ReactNode
   onPress: AnyFunction
   isFocused: boolean
+  isDisabled?: boolean
+  isLoading?: boolean
+  spinner?: SpinnerName
   selectKey?: keyof Key
 }
 
-export const Button: React.FC<Props> = (props) => {
+export const Button: React.FC<ButtonProps> = (props) => {
   const {
     children,
     selectKey = 'return',
     onPress,
     isFocused,
+    isDisabled,
+    isLoading,
+    spinner = 'dots',
     ...boxProps
   } = props
 
-  useKey(selectKey, onPress, isFocused)
+  const disabled = isDisabled || isLoading
+
+  useKey(selectKey, onPress, isFocused && !disabled)
 
   const text =
     typeof children === 'function' ? (children as any)(props) : children
@@ -30,7 +40,9 @@ export const Button: React.FC<Props> = (props) => {
       borderStyle={isFocused ? 'bold' : 'single'}
       {...boxProps}
     >
-      {typeof text === 'string' ? (
+      {isLoading ? (
+        <Spinner type={spinner} />
+      ) : typeof text === 'string' ? (
         <Text bold={isFocused}>{text}</Text>
       ) : (
         children
