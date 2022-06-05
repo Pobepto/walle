@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from '@ethersproject/providers'
-import create from 'zustand'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
+import { useTokensStore } from '../tokens'
 import { getNativeBalance } from './getNativeBalance'
 
 export interface Chain {
@@ -63,5 +63,6 @@ useBlockchainStore.subscribe(
   (state) => state.chainId,
   () => {
     useBlockchainStore.getState().getNativeBalance()
+    useTokensStore.getState().syncBalances()
   },
 )

@@ -1,9 +1,9 @@
 import { Key, Box, BoxProps, Text } from 'ink'
-import Spinner from 'ink-spinner'
 import React from 'react'
 import { AnyFunction } from 'tsdef'
 import type { SpinnerName } from 'cli-spinners'
 import { useKey } from '@hooks'
+import { Loader } from './Loader'
 
 export interface ButtonProps extends BoxProps {
   children: React.ReactNode
@@ -40,13 +40,13 @@ export const Button: React.FC<ButtonProps> = (props) => {
       borderStyle={isFocused ? 'bold' : 'single'}
       {...boxProps}
     >
-      {isLoading ? (
-        <Spinner type={spinner} />
-      ) : typeof text === 'string' ? (
-        <Text bold={isFocused}>{text}</Text>
-      ) : (
-        children
-      )}
+      <Loader loading={isLoading} type={spinner}>
+        {typeof text === 'string' ? (
+          <Text bold={isFocused}>{text}</Text>
+        ) : (
+          children
+        )}
+      </Loader>
     </Box>
   )
 }

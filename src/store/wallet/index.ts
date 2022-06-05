@@ -8,6 +8,7 @@ import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { logout } from './logout'
 import { encryptWallet } from './encryptWallet'
 import { decryptWallet } from './decryptWallet'
+import { useTokensStore } from '../tokens'
 
 export interface WalletStore {
   pathId: number
@@ -43,6 +44,7 @@ useWalletStore.subscribe(
   ([, phrase]) => {
     if (phrase) {
       useBlockchainStore.getState().getNativeBalance()
+      useTokensStore.getState().syncBalances()
     }
   },
 )
