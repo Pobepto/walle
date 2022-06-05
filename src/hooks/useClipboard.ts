@@ -4,7 +4,8 @@ import { useInput } from './useInput'
 
 export const useClipboard = (callback: AnyFunction) => {
   const [buffer, setBuffer] = useState('')
-  const timeout = useRef<any>()
+  const timeout = useRef<NodeJS.Timeout>()
+
   useInput((key, input) => {
     if (input.length > 2) {
       setBuffer((state) => state + input)
@@ -14,7 +15,7 @@ export const useClipboard = (callback: AnyFunction) => {
   useEffect(() => {
     if (buffer.length) {
       process.nextTick(() => callback(buffer))
-      timeout.current && clearTimeout(timeout.current)
+      clearTimeout(timeout.current)
       timeout.current = setTimeout(() => setBuffer(''), 500)
     }
   }, [buffer])

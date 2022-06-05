@@ -1,15 +1,22 @@
 import { Box, Text } from 'ink'
-import Spinner from 'ink-spinner'
 import React from 'react'
 import { useKey, useSelection } from '@hooks'
 import { useNativeBalance } from '@hooks/useNativeBalance'
-import { COLUMNS, useAppStore } from '@store'
+import { COLUMNS, useAppStore, useTokensStore } from '@store'
+import { useTokens } from '@src/hooks/useTokens'
+import { useCurrency } from '@src/hooks/useCurrency'
+import { Loader } from '@src/components/Loader'
 
 export const Tokens: React.FC = () => {
-  const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
   const activeColumn = useAppStore((state) => state.activeColumn)
+  const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
+  const balances = useTokensStore((store) => store.balances)
+  const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
+  const tokens = useTokens()
+  const currency = useCurrency()
+
   const [selection] = useSelection(
-    2,
+    tokens.length + 1,
     'upArrow',
     'downArrow',
     activeColumn === COLUMNS.TOKENS,
@@ -29,20 +36,25 @@ export const Tokens: React.FC = () => {
       <Box alignSelf="center" marginTop={-1}>
         <Text bold> Tokens </Text>
       </Box>
-      <Box>
-        <Text underline={selection === 0}>
-          <Text>
-            {nativeBalanceIsLoading ? <Spinner type="dots" /> : nativeBalance}{' '}
+      <Text underline={selection === 0}>
+        <Text>
+          <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
+        </Text>
+        <Text bold>{currency.symbol}</Text>
+      </Text>
+      {tokens.map((token, index) => {
+        const tokenId = `${token.chainId}${token.address}`
+        const balance = balances.get(tokenId)
+
+        return (
+          <Text key={tokenId} underline={selection === index + 1}>
+            <Text>
+              <Loader loading={balancesIsLoading}>{balance}</Loader>{' '}
+            </Text>
+            <Text bold>{token.symbol}</Text>
           </Text>
-          <Text bold>BNB</Text>
-        </Text>
-      </Box>
-      <Box>
-        <Text underline={selection === 1}>
-          <Text>999,999 </Text>
-          <Text bold>EYWA</Text>
-        </Text>
-      </Box>
+        )
+      })}
     </>
   )
 }

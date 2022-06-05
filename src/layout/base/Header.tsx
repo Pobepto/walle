@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Text } from 'ink'
 import { useChain, useWallet } from '@hooks'
 import { useNativeBalance } from '@hooks/useNativeBalance'
-import Spinner from 'ink-spinner'
+import { Loader } from '@src/components/Loader'
 
 export const Header: React.FC = () => {
   const wallet = useWallet()
@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
       <Box flexDirection="row" justifyContent="space-between">
         <Text color="cyan">{wallet?.address}</Text>
         <Text>
-          {nativeBalanceIsLoading ? <Spinner type="dots" /> : nativeBalance}{' '}
+          <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
           {chain.currency.symbol}
         </Text>
       </Box>
