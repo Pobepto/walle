@@ -25,7 +25,7 @@
     "@typescript-eslint/parser": "^5.21.0",
     "cli-spinners": "^2.6.1",
     "commitizen": "^4.2.4",
-    "cz-emoji": "^1.3.1",
+    "cz-simple-gitmoji": "^1.0.1",
     "esbuild": "^0.14.38",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.2",
@@ -38,7 +38,7 @@
     "prettier": "^2.6.2",
     "prettier-eslint-cli": "^6.0.1",
     "tsdef": "^0.0.14",
-    "typescript": "^4.6.3"
+    "typescript": "^4.7.3"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -48,13 +48,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "cz-emoji"
-    },
-    "cz-emoji": {
-      "skipQuestions": [
-        "scope",
-        "issues"
-      ]
+      "path": "cz-simple-gitmoji"
     }
   }
 }

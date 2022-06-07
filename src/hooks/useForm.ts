@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import { Undefinable } from 'tsdef'
 
 type Values = Record<string, Undefinable<string>>
-type Rule<T> = (value: T[keyof T], data: Partial<T>) => string
+type Rule<T> = (value: T[keyof T], data: Partial<T>) => string | undefined
 type Rules<T> = Record<keyof T, Rule<T>>
 
 interface InputProps {
@@ -29,6 +29,10 @@ const defaultOptions: FormOptions = {
   validateAction: 'blur',
 }
 
+const isDefined = <T>(argument: T | undefined): argument is T => {
+  return argument !== undefined
+}
+
 export const useForm = <T extends Values = Values>({
   initialValues = {},
   rules = {},
@@ -38,27 +42,37 @@ export const useForm = <T extends Values = Values>({
 
   const [data, setData] = useState<Partial<T>>(initialValues)
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
+
   const isValid = useMemo(
-    () => !Object.values(errors).some((err) => err.length),
+    () =>
+      !Object.values(errors)
+        .filter(isDefined)
+        .some((err) => err.length),
     [errors],
   )
 
   const validateAll = () => {
     const newErrors: Partial<Record<keyof T, string>> = {}
-    Object.entries(rules).forEach(([key, rule]: [keyof T, Rule<T>]) => {
-      const error = rule(data[key], data) || ''
-      newErrors[key] = error
-    })
+    Object.entries(rules)
+      .map((r) => r as [keyof T, Rule<T>])
+      .forEach(([key, rule]) => {
+        newErrors[key] = rule(data[key]!, data) || ''
+      })
 
     setErrors(newErrors)
 
-    return [!Object.values(newErrors).some((err) => err.length), newErrors]
+    return [
+      !Object.values(newErrors)
+        .filter(isDefined)
+        .some((err) => err.length),
+      newErrors,
+    ]
   }
 
   const validateInput = (name: keyof T) => {
     const rule = rules[name]
     if (rule) {
-      const error = rule(data[name], data) || ''
+      const error = rule(data[name]!, data) || ''
       if (error !== errors[name]) {
         setErrors((state) => ({ ...state, [name]: error }))
       }
@@ -105,7 +119,7 @@ export const combineRules =
   <T>(...rules: Rule<T>[]) =>
   (value: T[keyof T], data: Partial<T>) => {
     return rules.reduce((err, rule) => {
-      return err || rule(value, data)
+      return (err || rule(value, data)) as string
     }, '')
   }
 

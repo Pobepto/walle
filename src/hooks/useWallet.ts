@@ -7,6 +7,8 @@ export const useWallet = (): Nullable<Wallet> => {
   const phrase = useWalletStore((state) => state.phrase)
   const pathId = useWalletStore((state) => state.pathId)
 
+  if (!phrase) return null
+
   try {
     return Wallet.fromMnemonic(phrase, getDerivationPath(pathId))
   } catch {

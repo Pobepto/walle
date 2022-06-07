@@ -38,7 +38,7 @@ export const AddToken: React.FC = () => {
     const [isValid] = validateAll()
 
     if (isValid) {
-      // TODO: save token to store
+      // TODO: save token to store based on chain id
     } else {
       prevent()
       // TODO: focus on first error

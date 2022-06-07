@@ -9,16 +9,20 @@ interface PromiseResult<T> {
 export const useAsync = <T>(call: () => Promise<T>, deps?: DependencyList) => {
   const [state, setState] = useState<PromiseResult<T>>({
     isLoading: true,
-    result: null,
-    error: null,
+    result: undefined,
+    error: undefined,
   })
 
   useEffect(() => {
-    setState({ isLoading: true, result: null, error: null })
+    setState({ isLoading: true, result: undefined, error: undefined })
 
     call()
-      .then((result) => setState({ isLoading: false, result, error: null }))
-      .catch((error) => setState({ isLoading: false, result: null, error }))
+      .then((result) =>
+        setState({ isLoading: false, result, error: undefined }),
+      )
+      .catch((error) =>
+        setState({ isLoading: false, result: undefined, error }),
+      )
   }, deps)
 
   return state

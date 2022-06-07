@@ -43,11 +43,10 @@ export const Tokens: React.FC = () => {
         <Text bold>{currency.symbol}</Text>
       </Text>
       {tokens.map((token, index) => {
-        const tokenId = `${token.chainId}${token.address}`
-        const balance = balances.get(tokenId)
+        const balance = balances.get(token.address)
 
         return (
-          <Text key={tokenId} underline={selection === index + 1}>
+          <Text key={token.address} underline={selection === index + 1}>
             <Text>
               <Loader loading={balancesIsLoading}>{balance}</Loader>{' '}
             </Text>
