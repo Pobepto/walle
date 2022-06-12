@@ -10,7 +10,7 @@ export interface Token {
   chainId: number
 }
 
-type Currency = Omit<Token, 'address'>
+export type Currency = Omit<Token, 'address'>
 
 export interface TokensStore {
   currencies: Currency[]
