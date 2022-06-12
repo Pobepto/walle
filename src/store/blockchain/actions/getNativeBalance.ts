@@ -1,7 +1,7 @@
 import { Wallet } from '@ethersproject/wallet'
-import { BlockchainAction } from '.'
-import { useWalletStore } from '..'
+import { useWalletStore } from '@src/store'
 import { getDerivationPath } from '@utils'
+import { BlockchainAction } from '..'
 
 export const getNativeBalance: BlockchainAction =
   (set, get) => async (): Promise<void> => {

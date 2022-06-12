@@ -135,6 +135,25 @@ export const lengthRule =
     }
   }
 
+export const isNumber = () => (value: string) => {
+  return Number.isInteger(Number(value)) ? undefined : 'Must be a number'
+}
+
+export const numberInRange = (min: number, max: number) => (value: string) => {
+  const number = Number(value)
+  const checkResult = isNumber()(value)
+
+  if (checkResult) return checkResult
+
+  if (number < min) {
+    return `Must be bigger than ${min}`
+  }
+
+  if (number > max) {
+    return `Must be lest than ${max}`
+  }
+}
+
 export const isAddress = () => (value: string) => {
   try {
     getAddress(value)

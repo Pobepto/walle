@@ -1,4 +1,4 @@
-import { TokensAction } from '.'
+import { TokensAction } from '..'
 
 export const syncBalances: TokensAction<'syncBalances'> =
   (set, get) => async () => {

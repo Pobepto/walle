@@ -1,14 +1,16 @@
 import { Nullable } from 'tsdef'
 import { Action } from '..'
-import { deriveMnemonicAddress } from './deriveMnemonicAddress'
-import { generateWallet } from './generateWallet'
-import { importWallet } from './importWallet'
 import { useBlockchainStore } from '../blockchain'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { logout } from './logout'
-import { encryptWallet } from './encryptWallet'
-import { decryptWallet } from './decryptWallet'
 import { useTokensStore } from '../tokens'
+import {
+  decryptWallet,
+  deriveMnemonicAddress,
+  encryptWallet,
+  generateWallet,
+  importWallet,
+  logout,
+} from './actions'
 
 export interface WalletStore {
   pathId: number
@@ -39,6 +41,7 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   }),
 )
 
+// Помимо такого обновления нам нужно обновляться на смену chainId
 useWalletStore.subscribe(
   (state) => [state.pathId, state.phrase],
   ([, phrase]) => {

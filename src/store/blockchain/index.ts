@@ -2,7 +2,7 @@ import { JsonRpcProvider } from '@ethersproject/providers'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { useTokensStore } from '../tokens'
-import { getNativeBalance } from './getNativeBalance'
+import { getNativeBalance } from './actions'
 
 export interface Chain {
   chainId: number
