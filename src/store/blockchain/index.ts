@@ -2,18 +2,14 @@ import { JsonRpcProvider } from '@ethersproject/providers'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { Currency, Token, useTokensStore } from '../tokens'
-import { getNativeBalance } from './actions'
+import { addChain, getNativeBalance } from './actions'
 import { transfer } from './actions/transfer'
 
 export interface Chain {
   chainId: number
   name: string
   rpc: string
-  currency: {
-    name: string
-    symbol: string
-    decimals: number
-  }
+  currency: Omit<Currency, 'chainId'>
   explorer: string
 }
 
@@ -21,6 +17,7 @@ export interface BlockchainStore {
   chainId: number
   setChainId: (chainId: number) => void
   chains: Chain[]
+  addChain: (chain: Chain) => void
   provider: JsonRpcProvider
 
   nativeBalance: string
@@ -43,7 +40,6 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
   (set, get) => ({
     chainId: 97,
     setChainId: (chainId: number) => set({ chainId }),
-    provider: new JsonRpcProvider(RPC_URL),
     chains: [
       {
         chainId: 97,
@@ -60,6 +56,8 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
         explorer: 'https://rinkeby.etherscan.io/',
       },
     ],
+    addChain: addChain(set, get),
+    provider: new JsonRpcProvider(RPC_URL),
 
     getNativeBalance: getNativeBalance(set, get),
     nativeBalance: '0',

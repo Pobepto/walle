@@ -1,8 +1,7 @@
 import { getAddress } from '@ethersproject/address'
 import { useMemo, useState } from 'react'
-import { Undefinable } from 'tsdef'
 
-type Values = Record<string, Undefinable<string>>
+type Values = Record<string, string>
 type Rule<T> = (value: T[keyof T], data: Partial<T>) => string | undefined
 type Rules<T> = Record<keyof T, Rule<T>>
 
@@ -40,7 +39,7 @@ export const useForm = <T extends Values = Values>({
 }: FormArgs<T> = {}) => {
   const { validateAction } = options
 
-  const [data, setData] = useState<Partial<T>>(initialValues)
+  const [data, setData] = useState(initialValues as T)
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
 
   const isValid = useMemo(
@@ -56,7 +55,7 @@ export const useForm = <T extends Values = Values>({
     Object.entries(rules)
       .map((r) => r as [keyof T, Rule<T>])
       .forEach(([key, rule]) => {
-        newErrors[key] = rule(data[key]!, data) || ''
+        newErrors[key] = rule(data[key], data) || ''
       })
 
     setErrors(newErrors)
@@ -72,7 +71,7 @@ export const useForm = <T extends Values = Values>({
   const validateInput = (name: keyof T) => {
     const rule = rules[name]
     if (rule) {
-      const error = rule(data[name]!, data) || ''
+      const error = rule(data[name], data) || ''
       if (error !== errors[name]) {
         setErrors((state) => ({ ...state, [name]: error }))
       }
