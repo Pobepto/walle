@@ -4,7 +4,7 @@ import { lengthRule, useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { InputBox } from '@components/InputBox'
 import { useWalletStore } from '@store'
-import { save } from '@utils'
+import { save, USER_DATA } from '@utils'
 import AsyncButton from '@components/AsyncButton'
 
 type Inputs = {
@@ -42,7 +42,7 @@ export const SetPassword: React.FC = () => {
 
     if (isValid) {
       const encrypted = await encryptWallet(data.password)
-      await save(encrypted)
+      await save(encrypted, USER_DATA)
       navigate(ROUTE.WALLET)
     } else {
       prevent()

@@ -1,21 +1,22 @@
-import fs from 'fs'
+import fs from 'fs/promises'
 
-const USER_DATA = 'walle.data'
+export const USER_DATA = 'walle.data'
+export const USER_SETTINGS = 'walle.settings.json'
 
-export const save = async (data: string): Promise<void> => {
+export const save = async (data: string, file: string): Promise<void> => {
   // TODO: Add try catch later
-  await fs.promises.writeFile(USER_DATA, data)
+  await fs.writeFile(file, data)
 }
 
-export const load = async (): Promise<string> => {
+export const load = async (file: string): Promise<string> => {
   // TODO: Add try catch later
-  const data = await fs.promises.readFile(USER_DATA, 'utf8')
+  const data = await fs.readFile(file, 'utf8')
   return data
 }
 
-export const isUserDataExist = async (): Promise<boolean> => {
+export const isFileExist = async (file: string): Promise<boolean> => {
   try {
-    await fs.promises.access(USER_DATA)
+    await fs.access(file)
     return true
   } catch (error) {
     return false

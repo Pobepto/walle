@@ -5,7 +5,7 @@ import { useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { InputBox } from '@components/InputBox'
 import { useWalletStore } from '@store'
-import { load } from '@utils'
+import { load, USER_DATA } from '@utils'
 import AsyncButton from '@components/AsyncButton'
 
 type Inputs = {
@@ -27,7 +27,7 @@ export const Login: React.FC = () => {
 
   const onApply = async () => {
     try {
-      const encrypted = await load() // TODO: Maybe load it once? 🤔
+      const encrypted = await load(USER_DATA) // TODO: Maybe load it once? 🤔
       await decryptWallet(data.password || '', encrypted)
       navigate(ROUTE.WALLET)
     } catch (error) {
