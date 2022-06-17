@@ -5,5 +5,11 @@ export const useCurrency = () => {
   const chainId = useBlockchainStore((store) => store.chainId)
   const currencies = useTokensStore((store) => store.currencies)
 
-  return currencies.find((currency) => currency.chainId === chainId)!
+  const currency = currencies.find((currency) => currency.chainId === chainId)
+
+  if (!currency) {
+    throw new Error('useCurrency: currency not found in currencies')
+  }
+
+  return currency
 }

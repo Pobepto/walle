@@ -4,6 +4,7 @@ import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { Currency, Token, useTokensStore } from '../tokens'
 import { addChain, getNativeBalance } from './actions'
 import { transfer } from './actions/transfer'
+import { CHAINS } from './constants'
 
 export interface Chain {
   chainId: number
@@ -34,30 +35,16 @@ export type BlockchainAction<T extends keyof BlockchainStore = any> = Action<
   BlockchainStore[T]
 >
 
-const RPC_URL = 'https://data-seed-prebsc-2-s1.binance.org:8545/'
-
 export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
   (set, get) => ({
     chainId: 97,
+    // Помимо айди нужно еще и провайдер менять \ пересоздавать
     setChainId: (chainId: number) => set({ chainId }),
-    chains: [
-      {
-        chainId: 97,
-        name: 'BNB Smart Chain',
-        rpc: RPC_URL,
-        currency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-        explorer: 'http://testnet.bscscan.com/',
-      },
-      {
-        chainId: 4,
-        name: 'Ethereum Rinkeby',
-        rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-        currency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
-        explorer: 'https://rinkeby.etherscan.io/',
-      },
-    ],
+    chains: CHAINS,
     addChain: addChain(set, get),
-    provider: new JsonRpcProvider(RPC_URL),
+    provider: new JsonRpcProvider(
+      'https://data-seed-prebsc-2-s1.binance.org:8545/',
+    ),
 
     getNativeBalance: getNativeBalance(set, get),
     nativeBalance: '0',

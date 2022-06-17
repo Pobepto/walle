@@ -14,6 +14,10 @@ export const load = async (file: string): Promise<string> => {
   return data
 }
 
+export const open = async (file: string): Promise<fs.FileHandle> => {
+  return fs.open(file, 'r+')
+}
+
 export const isFileExist = async (file: string): Promise<boolean> => {
   try {
     await fs.access(file)
