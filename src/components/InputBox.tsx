@@ -7,12 +7,17 @@ interface Props extends InputProps {
   error?: string
 }
 
-export const InputBox: React.FC<Props> = ({ label, error, ...inputProps }) => {
+export const InputBox: React.FC<Props> = ({
+  label,
+  error,
+  focus = false,
+  ...inputProps
+}) => {
   return (
     <Box borderStyle="classic" flexDirection="column">
       <Box>
         {label ? <Text>{label}: </Text> : null}
-        <Input {...inputProps} />
+        <Input focus={focus} {...inputProps} />
       </Box>
       {error ? <Error text={error} /> : null}
     </Box>

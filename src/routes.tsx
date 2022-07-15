@@ -11,8 +11,11 @@ import {
   AddToken,
   SwitchChain,
   AddChain,
+  TokenActions,
+  Transfer,
 } from './modules'
 import { routerFactory } from './Router'
+import { Token } from './store'
 
 export enum ROUTE {
   WELCOME,
@@ -25,6 +28,13 @@ export enum ROUTE {
   TOKEN_ADD,
   SWITCH_CHAIN,
   ADD_CHAIN,
+  TOKEN_ACTIONS,
+  TRANSFER,
+}
+
+export interface ROUTE_DATA {
+  [ROUTE.TOKEN_ACTIONS]: Token
+  [ROUTE.TRANSFER]: Token
 }
 
 const layout = (
@@ -38,7 +48,7 @@ const layout = (
 const welcome = (Component: React.FC) => layout(WelcomeLayout, Component)
 const base = (Component: React.FC) => layout(BaseLayout, Component)
 
-const router = routerFactory<ROUTE>({
+const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.WELCOME]: () => welcome(Welcome),
   [ROUTE.LOGIN]: () => welcome(Login),
   [ROUTE.REGISTRATION]: () => welcome(Registration),
@@ -49,6 +59,9 @@ const router = routerFactory<ROUTE>({
   [ROUTE.TOKEN_ADD]: () => base(AddToken),
   [ROUTE.SWITCH_CHAIN]: () => base(SwitchChain),
   [ROUTE.ADD_CHAIN]: () => base(AddChain),
+  [ROUTE.TOKEN_ACTIONS]: () => base(TokenActions),
+  [ROUTE.TRANSFER]: () => base(Transfer),
 })
 
-export const { Redirect, Router, useLocation, useNavigate, useRoute } = router
+export const { Redirect, Router, useLocation, useNavigate, useRoute, useData } =
+  router

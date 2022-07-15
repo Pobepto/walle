@@ -61,7 +61,7 @@ export const AddChain: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Add new token </Text>
+        <Text> Add new chain </Text>
       </Box>
       <InputBox
         label="Name"

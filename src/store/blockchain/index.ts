@@ -20,6 +20,7 @@ export interface BlockchainStore {
   chains: Chain[]
   addChain: (chain: Chain) => void
   provider: JsonRpcProvider
+  setProvider: (provider: JsonRpcProvider) => void
 
   nativeBalance: string
   nativeBalanceIsLoading: boolean
@@ -45,6 +46,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     provider: new JsonRpcProvider(
       'https://data-seed-prebsc-2-s1.binance.org:8545/',
     ),
+    setProvider: (provider: JsonRpcProvider) => set({ provider }),
 
     getNativeBalance: getNativeBalance(set, get),
     nativeBalance: '0',

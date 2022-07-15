@@ -28,5 +28,6 @@ module.exports = {
   plugins: ['react', 'react-hooks', '@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
 }

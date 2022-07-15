@@ -1,32 +1,60 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { Nullable, Undefinable } from 'tsdef'
 
-interface RouterValue<T> {
-  path: T
-  navigate: (to: T) => void
+interface RouterValue<
+  Route extends number,
+  RoutesData extends Partial<Record<Route, unknown>>,
+> {
+  route: Route
+  navigate: <T extends Route>(to: T, data?: RoutesData[T]) => void
+  data?: RoutesData[Route]
 }
 
 export type Routes = Record<number, () => JSX.Element>
 
-interface RouterProps<T> {
+interface RouterProps<Route> {
   children: React.ReactNode
-  defaultPath: T
+  defaultRoute: Route
 }
 
-interface RedirectProps<T> {
-  to: T
+interface RedirectProps<
+  Route extends number,
+  RoutesData extends Partial<Record<Route, unknown>>,
+> {
+  to: Route
+  data: RoutesData[Route]
 }
 
-export const routerFactory = <T extends number>(routes: Routes) => {
-  const RouterContext = createContext<RouterValue<T>>(null)
+export const routerFactory = <
+  Route extends number,
+  RoutesData extends Partial<Record<Route, unknown>>,
+>(
+  routes: Routes,
+) => {
+  const RouterContext =
+    createContext<Nullable<RouterValue<Route, RoutesData>>>(null)
 
-  const Router: React.FC<RouterProps<T>> = ({ children, defaultPath }) => {
-    const [path, setPath] = useState(defaultPath)
+  const Router: React.FC<RouterProps<Route>> = ({ children, defaultRoute }) => {
+    const [state, setState] = useState<{
+      route: Route
+      data?: RoutesData[Route]
+    }>({
+      route: defaultRoute,
+      data: undefined,
+    })
+
+    const navigate = <T extends Route>(to: T, data?: RoutesData[T]) => {
+      setState({
+        route: to,
+        data,
+      })
+    }
 
     return (
       <RouterContext.Provider
         value={{
-          path,
-          navigate: setPath,
+          ...state,
+          navigate,
         }}
       >
         {children}
@@ -35,19 +63,24 @@ export const routerFactory = <T extends number>(routes: Routes) => {
   }
 
   const useRouterContext = () => useContext(RouterContext)
-  const useNavigate = () => useRouterContext().navigate
-  const useLocation = () => useRouterContext().path
+  const useNavigate = () => useRouterContext()!.navigate
+  const useLocation = () => useRouterContext()!.route
+  const useData = <T extends Route>() =>
+    useRouterContext()!.data as Undefinable<RoutesData[T]>
   const useRoute = () => {
     const location = useLocation()
 
     return routes[location]()
   }
 
-  const Redirect: React.FC<RedirectProps<T>> = ({ to }) => {
+  const Redirect: React.FC<RedirectProps<Route, RoutesData>> = ({
+    to,
+    data,
+  }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-      navigate(to)
+      navigate(to, data)
     })
 
     return null
@@ -59,5 +92,6 @@ export const routerFactory = <T extends number>(routes: Routes) => {
     useNavigate,
     useLocation,
     useRoute,
+    useData,
   }
 }

@@ -2,7 +2,7 @@ import { Box, Text } from 'ink'
 import React from 'react'
 import { useKey } from '@hooks'
 import { useNativeBalance } from '@hooks/useNativeBalance'
-import { COLUMNS, useTokensStore } from '@store'
+import { COLUMNS, Token, useTokensStore } from '@store'
 import { useTokens } from '@src/hooks/useTokens'
 import { useCurrency } from '@src/hooks/useCurrency'
 import { Loader } from '@src/components/Loader'
@@ -11,22 +11,23 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { ROUTE, useNavigate } from '@src/routes'
+import { TextButton } from '@src/components/TextButton'
 
 export const Tokens: React.FC = () => {
-  const { selection: parentSelection } = useSelectionZone()!
+  const { selection: parentSelection, select: parentSelect } =
+    useSelectionZone()!
+  const navigate = useNavigate()
   const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
   const balances = useTokensStore((store) => store.balances)
   const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
   const tokens = useTokens()
   const currency = useCurrency()
 
-  useKey(
-    'return',
-    () => {
-      // TODO: navigate to selected token details/actions
-    },
-    parentSelection === COLUMNS.TOKENS,
-  )
+  const handleSelectToken = (token: Token) => {
+    navigate(ROUTE.TOKEN_ACTIONS, token)
+    parentSelect(COLUMNS.MAIN)
+  }
 
   return (
     <SelectionZone
@@ -49,13 +50,16 @@ export const Tokens: React.FC = () => {
         const balance = balances.get(token.address)
 
         return (
-          <Selection key={token.address} activeProps={{ underline: true }}>
-            <Text>
+          <Selection
+            key={token.address}
+            activeProps={{ underline: true, isFocused: true }}
+          >
+            <TextButton onPress={() => handleSelectToken(token)}>
               <Text>
                 <Loader loading={balancesIsLoading}>{balance}</Loader>{' '}
               </Text>
               <Text bold>{token.symbol}</Text>
-            </Text>
+            </TextButton>
           </Selection>
         )
       })}
