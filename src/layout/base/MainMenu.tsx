@@ -2,11 +2,17 @@ import { Box, Text } from 'ink'
 import React from 'react'
 import { Menu } from '@components'
 import { ROUTE, useNavigate } from '@routes'
-import { COLUMNS, useAppStore } from '@store'
+import { COLUMNS, useAppStore, useWalletStore } from '@store'
 
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()
   const activeColumn = useAppStore((state) => state.activeColumn)
+  const logout = useWalletStore((state) => state.logout)
+
+  const handleLogout = () => {
+    logout()
+    navigate(ROUTE.REGISTRATION)
+  }
 
   return (
     <>
@@ -21,7 +27,7 @@ export const MainMenu: React.FC = () => {
             items: [
               {
                 title: 'Switch chain',
-                onSelect: () => console.log('Switch chain'),
+                onSelect: () => navigate(ROUTE.SWITCH_CHAIN),
               },
               {
                 title: 'Switch account',
@@ -29,28 +35,11 @@ export const MainMenu: React.FC = () => {
               },
               {
                 title: 'Add token',
-                onSelect: () => console.log('Add token'),
+                onSelect: () => navigate(ROUTE.TOKEN_ADD),
               },
               {
                 title: 'Logout',
-                onSelect: () => console.log('Logout'),
-              },
-            ],
-          },
-          {
-            title: 'DApps',
-            items: [
-              {
-                title: 'DEX',
-                onSelect: () => console.log('DEX'),
-              },
-              {
-                title: 'Bridge',
-                onSelect: () => console.log('Bridge'),
-              },
-              {
-                title: 'Mixer',
-                onSelect: () => console.log('Mixer'),
+                onSelect: () => handleLogout(),
               },
             ],
           },

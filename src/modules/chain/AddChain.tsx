@@ -1,34 +1,27 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button, Input } from '@components'
-import {
-  isAddress,
-  lengthRule,
-  numberInRange,
-  useForm,
-  useSelection,
-} from '@hooks'
-import { ROUTE, useNavigate } from '@routes'
+import { Button } from '@components'
+import { isNumber, lengthRule, useForm, useSelection } from '@hooks'
 import { InputBox } from '@components/InputBox'
-import { COLUMNS, useAppStore, useTokensStore } from '@store'
+import { COLUMNS, useAppStore, useBlockchainStore } from '@store'
 
 type Inputs = {
   name: string
-  symbol: string
-  decimals: string
-  address: string
+  rpc: string
+  chainId: string
+  explorer: string
 }
 
-export const AddToken: React.FC = () => {
-  const navigate = useNavigate()
+export const AddChain: React.FC = () => {
+  // const navigate = useNavigate()
   const activeColumn = useAppStore((state) => state.activeColumn)
-  const addToken = useTokensStore((state) => state.addToken)
+  const addChain = useBlockchainStore((state) => state.addChain)
   const { errors, register, validateAll, data } = useForm<Inputs>({
     rules: {
       name: lengthRule(3),
-      symbol: lengthRule(3),
-      decimals: numberInRange(0, 18),
-      address: isAddress(),
+      rpc: lengthRule(3),
+      chainId: isNumber(),
+      explorer: lengthRule(3),
     },
     options: {
       validateAction: 'never',
@@ -47,13 +40,16 @@ export const AddToken: React.FC = () => {
     const [isValid] = validateAll()
 
     if (isValid) {
-      // TODO: save token to store based on chain id
-      console.log('here')
-      addToken({
+      addChain({
         name: data.name,
-        symbol: data.symbol,
-        decimals: Number(data.decimals),
-        address: data.address,
+        rpc: data.rpc,
+        chainId: Number(data.chainId),
+        currency: {
+          name: 'Native',
+          symbol: 'NTV',
+          decimals: 18,
+        },
+        explorer: data.explorer,
       })
     } else {
       prevent()
@@ -74,26 +70,26 @@ export const AddToken: React.FC = () => {
         {...register('name')}
       />
       <InputBox
-        label="Symbol"
-        error={errors.symbol}
+        label="Rpc"
+        error={errors.rpc}
         focus={selection === 1}
-        {...register('symbol')}
+        {...register('rpc')}
       />
       <InputBox
-        label="Decimals"
-        error={errors.decimals}
+        label="Chain Id"
+        error={errors.chainId}
         focus={selection === 2}
-        {...register('decimals')}
+        {...register('chainId')}
       />
       <InputBox
-        label="Address"
-        error={errors.address}
+        label="Explorer"
+        error={errors.explorer}
         focus={selection === 3}
-        {...register('address')}
+        {...register('explorer')}
       />
 
       <Button isFocused={selection === 4} onPress={onSubmit}>
-        Add token
+        Add chain
       </Button>
     </Box>
   )

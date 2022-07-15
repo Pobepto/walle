@@ -9,5 +9,5 @@ interface Props {
 }
 
 export const Loader: React.FC<Props> = ({ loading, type, children }) => {
-  return loading ? <Spinner type={type} /> : children
+  return loading ? <Spinner type={type} /> : <>{children}</>
 }

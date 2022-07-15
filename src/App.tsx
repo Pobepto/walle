@@ -1,12 +1,11 @@
 import { Box } from 'ink'
-import React from 'react'
-import { useInit } from './hooks'
+import React, { useEffect } from 'react'
+import { useAutoSave } from './hooks/useAutoSave'
 import { useRoute } from './routes'
 
 export const App: React.FC = () => {
+  useAutoSave()
   const route = useRoute()
-
-  useInit()
 
   return (
     <Box width="95%" alignSelf="center" justifyContent="center">

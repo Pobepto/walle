@@ -1,5 +1,5 @@
 import { Wallet } from '@ethersproject/wallet'
-import { WalletAction } from '.'
+import { WalletAction } from '..'
 
 export const importWallet: WalletAction = (set) => (mnemonic: string) => {
   try {

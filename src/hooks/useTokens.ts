@@ -8,5 +8,5 @@ export const useTokens = () => {
 
   return useMemo(() => {
     return tokens.filter((token) => token.chainId === chainId)
-  }, [chainId])
+  }, [tokens, chainId])
 }

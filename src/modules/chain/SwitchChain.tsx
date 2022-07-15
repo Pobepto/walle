@@ -4,8 +4,10 @@ import { Chain, useBlockchainStore } from '@store/blockchain'
 import { useSelection } from '@hooks'
 import { TextButton } from '@components/TextButton'
 import { Button } from '@components/Button'
+import { ROUTE, useNavigate } from '@src/routes'
 
 export const SwitchChain: React.FC = () => {
+  const navigate = useNavigate()
   const chains = useBlockchainStore((store) => store.chains)
   const setChainId = useBlockchainStore((store) => store.setChainId)
   const [selection] = useSelection(chains.length + 1, 'upArrow', 'downArrow')
@@ -15,7 +17,7 @@ export const SwitchChain: React.FC = () => {
   }
 
   const handleAddChain = () => {
-    // navigate(ROUTE.ADD_CHAIN)
+    navigate(ROUTE.ADD_CHAIN)
   }
 
   return (

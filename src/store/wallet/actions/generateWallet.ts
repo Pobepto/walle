@@ -1,5 +1,5 @@
 import { Wallet } from '@ethersproject/wallet'
-import { WalletAction } from '.'
+import { WalletAction } from '..'
 
 export const generateWallet: WalletAction = (set) => () => {
   const wallet = Wallet.createRandom()

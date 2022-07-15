@@ -1,60 +1,64 @@
 import { Box, Text } from 'ink'
 import React from 'react'
-import { useKey, useSelection } from '@hooks'
+import { useKey } from '@hooks'
 import { useNativeBalance } from '@hooks/useNativeBalance'
-import { COLUMNS, useAppStore, useTokensStore } from '@store'
+import { COLUMNS, useTokensStore } from '@store'
 import { useTokens } from '@src/hooks/useTokens'
 import { useCurrency } from '@src/hooks/useCurrency'
 import { Loader } from '@src/components/Loader'
+import {
+  Selection,
+  SelectionZone,
+  useSelectionZone,
+} from '@src/components/SelectionZone'
 
 export const Tokens: React.FC = () => {
-  const activeColumn = useAppStore((state) => state.activeColumn)
+  const { selection: parentSelection } = useSelectionZone()!
   const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
   const balances = useTokensStore((store) => store.balances)
   const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
   const tokens = useTokens()
   const currency = useCurrency()
 
-  const [selection] = useSelection(
-    tokens.length + 1,
-    'upArrow',
-    'downArrow',
-    activeColumn === COLUMNS.TOKENS,
-    false,
-  )
-
   useKey(
     'return',
     () => {
       // TODO: navigate to selected token details/actions
     },
-    activeColumn === COLUMNS.TOKENS,
+    parentSelection === COLUMNS.TOKENS,
   )
 
   return (
-    <>
+    <SelectionZone
+      prevKey="upArrow"
+      nextKey="downArrow"
+      isActive={parentSelection === COLUMNS.TOKENS}
+    >
       <Box alignSelf="center" marginTop={-1}>
         <Text bold> Tokens </Text>
       </Box>
-      <Text underline={selection === 0}>
+      <Selection activeProps={{ underline: true }}>
         <Text>
-          <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
+          <Text>
+            <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
+          </Text>
+          <Text bold>{currency.symbol}</Text>
         </Text>
-        <Text bold>{currency.symbol}</Text>
-      </Text>
-      {tokens.map((token, index) => {
-        const tokenId = `${token.chainId}${token.address}`
-        const balance = balances.get(tokenId)
+      </Selection>
+      {tokens.map((token) => {
+        const balance = balances.get(token.address)
 
         return (
-          <Text key={tokenId} underline={selection === index + 1}>
+          <Selection key={token.address} activeProps={{ underline: true }}>
             <Text>
-              <Loader loading={balancesIsLoading}>{balance}</Loader>{' '}
+              <Text>
+                <Loader loading={balancesIsLoading}>{balance}</Loader>{' '}
+              </Text>
+              <Text bold>{token.symbol}</Text>
             </Text>
-            <Text bold>{token.symbol}</Text>
-          </Text>
+          </Selection>
         )
       })}
-    </>
+    </SelectionZone>
   )
 }

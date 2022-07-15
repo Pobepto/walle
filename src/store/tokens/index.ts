@@ -1,8 +1,8 @@
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { syncBalances } from './syncBalances'
+import { addToken, syncBalances } from './actions'
 
-interface Token {
+export interface Token {
   name: string
   symbol: string
   decimals: number
@@ -10,7 +10,7 @@ interface Token {
   chainId: number
 }
 
-type Currency = Omit<Token, 'address'>
+export type Currency = Omit<Token, 'address'>
 
 export interface TokensStore {
   currencies: Currency[]
@@ -18,6 +18,7 @@ export interface TokensStore {
   balances: Map<string, string>
   syncBalances: () => Promise<void>
   balancesIsLoading: boolean
+  addToken: (token: Omit<Token, 'chainId'>) => void
 }
 
 export type TokensAction<T extends keyof TokensStore = any> = Action<
@@ -74,5 +75,13 @@ export const useTokensStore = createWithSubscribeSelector<TokensStore>(
     balances: new Map(),
     syncBalances: syncBalances(set, get),
     balancesIsLoading: true,
+    addToken: addToken(set, get),
   }),
+)
+
+useTokensStore.subscribe(
+  (state) => state.tokens,
+  () => {
+    useTokensStore.getState().syncBalances()
+  },
 )

@@ -1,4 +1,4 @@
-import { TokensAction } from '.'
+import { TokensAction } from '..'
 
 export const syncBalances: TokensAction<'syncBalances'> =
   (set, get) => async () => {
@@ -11,8 +11,7 @@ export const syncBalances: TokensAction<'syncBalances'> =
     await new Promise((resolve) => setTimeout(resolve, 5000))
 
     tokens.forEach((token) => {
-      const tokenId = `${token.chainId}${token.address}`
-      balances.set(tokenId, '1000')
+      balances.set(token.address, '1000')
     })
 
     set({ balances })

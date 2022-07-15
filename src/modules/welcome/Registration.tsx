@@ -23,7 +23,7 @@ export const Registration: React.FC = () => {
           width="33%"
         >
           <Box flexGrow={1}>
-            <Text>Нет, меня уже есть секретная фраза для восстановления</Text>
+            <Text>No, I already have the secret phrase for recovery</Text>
           </Box>
           <Link to={ROUTE.REGISTRATION_IMPORT} isFocused={selection === 0}>
             Import wallet
@@ -37,7 +37,7 @@ export const Registration: React.FC = () => {
           width="33%"
         >
           <Box flexGrow={1}>
-            <Text>Да, давайте настроим!</Text>
+            <Text>Yes, let&apos;s set it up!</Text>
           </Box>
           <Link to={ROUTE.REGISTRATION_CREATE} isFocused={selection === 1}>
             Create wallet
