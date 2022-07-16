@@ -1,7 +1,14 @@
 import React from 'react'
 import { Box, Text } from 'ink'
 import { Button } from '@components'
-import { isNumber, lengthRule, useForm, useSelection } from '@hooks'
+import {
+  combine,
+  isNumber,
+  length,
+  numberInRange,
+  useForm,
+  useSelection,
+} from '@hooks'
 import { InputBox } from '@components/InputBox'
 import { COLUMNS, useAppStore, useBlockchainStore } from '@store'
 
@@ -16,12 +23,12 @@ export const AddChain: React.FC = () => {
   // const navigate = useNavigate()
   const activeColumn = useAppStore((state) => state.activeColumn)
   const addChain = useBlockchainStore((state) => state.addChain)
-  const { errors, register, validateAll, data } = useForm<Inputs>({
+  const { errors, register, validate, data } = useForm<Inputs>({
     rules: {
-      name: lengthRule(3),
-      rpc: lengthRule(3),
-      chainId: isNumber(),
-      explorer: lengthRule(3),
+      name: length(3),
+      rpc: length(3),
+      chainId: combine(isNumber(), numberInRange(0, Infinity)),
+      explorer: length(3),
     },
     options: {
       validateAction: 'never',
@@ -37,7 +44,7 @@ export const AddChain: React.FC = () => {
   )
 
   const onSubmit = () => {
-    const [isValid] = validateAll()
+    const [isValid] = validate()
 
     if (isValid) {
       addChain({

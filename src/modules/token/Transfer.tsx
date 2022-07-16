@@ -1,13 +1,12 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { ROUTE, useData, useNavigate } from '@src/routes'
+import { ROUTE, useData } from '@src/routes'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { COLUMNS } from '@src/store'
-import { TextButton } from '@src/components/TextButton'
 import { InputBox } from '@src/components/InputBox'
 import { useForm } from '@src/hooks'
 import { Button } from '@src/components'
@@ -18,7 +17,7 @@ type Inputs = {
 }
 
 export const Transfer: React.FC = () => {
-  const { selection: parentSelection } = useSelectionZone()!
+  const parentZone = useSelectionZone()!
   const token = useData<ROUTE.TOKEN_ACTIONS>()
 
   const { register } = useForm<Inputs>({})
@@ -35,7 +34,7 @@ export const Transfer: React.FC = () => {
     <SelectionZone
       prevKey="upArrow"
       nextKey="downArrow"
-      isActive={parentSelection === COLUMNS.MAIN}
+      isActive={parentZone.selection === COLUMNS.MAIN}
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>

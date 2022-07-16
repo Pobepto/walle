@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { lengthRule, useForm, useSelection } from '@hooks'
+import { length, useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { InputBox } from '@components/InputBox'
 import { useWalletStore } from '@store'
@@ -15,9 +15,9 @@ type Inputs = {
 export const SetPassword: React.FC = () => {
   const navigate = useNavigate()
   const encryptWallet = useWalletStore((state) => state.encryptWallet)
-  const { data, errors, register, validateAll } = useForm<Inputs>({
+  const { data, errors, register, validate } = useForm<Inputs>({
     rules: {
-      password: lengthRule(1),
+      password: length(1),
       repeatPassword: (value, data) => {
         if (!data.password || value !== data.password) {
           return 'Passwords do not match'
@@ -38,7 +38,7 @@ export const SetPassword: React.FC = () => {
   )
 
   const onApply = async () => {
-    const [isValid] = validateAll()
+    const [isValid] = validate()
 
     if (isValid) {
       const encrypted = await encryptWallet(data.password)

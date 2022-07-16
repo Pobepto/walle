@@ -33,3 +33,19 @@ export const Selection: React.FC<Props> = ({
 
   return <>{children}</>
 }
+
+// WIP
+export const selectionable = <T extends Record<string, any>>(
+  Component: React.ComponentType<T>,
+  activeProps?: Partial<T>,
+) => {
+  const SelectionableComponent: React.FC<T> = (props) => {
+    return (
+      <Selection activeProps={activeProps}>
+        <Component {...props} />
+      </Selection>
+    )
+  }
+
+  return SelectionableComponent
+}

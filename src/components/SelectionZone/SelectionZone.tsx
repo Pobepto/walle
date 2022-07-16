@@ -57,6 +57,8 @@ const iterateChildren = (children: React.ReactNode) => {
           children: iterateAndClone(props.children),
         })
       }
+
+      return child
     })
   }
 
@@ -69,8 +71,8 @@ export const SelectionZone: React.FC<Props> = ({
   children,
   prevKey,
   nextKey,
-  isActive = true,
-  looped = false,
+  isActive = false,
+  looped,
   onChange,
 }) => {
   const { newChildren, amount } = iterateChildren(children)

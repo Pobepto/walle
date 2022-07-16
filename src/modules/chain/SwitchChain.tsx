@@ -12,7 +12,7 @@ import {
 import { COLUMNS } from '@src/store'
 
 export const SwitchChain: React.FC = () => {
-  const { selection: parentSelection } = useSelectionZone()!
+  const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const chains = useBlockchainStore((store) => store.chains)
   const setChainId = useBlockchainStore((store) => store.setChainId)
@@ -29,7 +29,7 @@ export const SwitchChain: React.FC = () => {
     <SelectionZone
       prevKey="upArrow"
       nextKey="downArrow"
-      isActive={parentSelection === COLUMNS.MAIN}
+      isActive={parentZone.selection === COLUMNS.MAIN}
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>

@@ -50,7 +50,7 @@ export const useForm = <T extends Values = Values>({
     [errors],
   )
 
-  const validateAll = () => {
+  const validate = () => {
     const newErrors: Partial<Record<keyof T, string>> = {}
     Object.entries(rules)
       .map((r) => r as [keyof T, Rule<T>])
@@ -111,10 +111,10 @@ export const useForm = <T extends Values = Values>({
     }
   }
 
-  return { register, validateAll, data, errors, isValid, setData }
+  return { register, validate, data, errors, isValid, setData }
 }
 
-export const combineRules =
+export const combine =
   <T>(...rules: Rule<T>[]) =>
   (value: T[keyof T], data: Partial<T>) => {
     return rules.reduce((err, rule) => {
@@ -122,7 +122,7 @@ export const combineRules =
     }, '')
   }
 
-export const lengthRule =
+export const length =
   (min: number, max = Infinity) =>
   (value: string) => {
     if (value.length < min) {
@@ -135,14 +135,11 @@ export const lengthRule =
   }
 
 export const isNumber = () => (value: string) => {
-  return Number.isInteger(Number(value)) ? undefined : 'Must be a number'
+  return Number.isInteger(parseFloat(value)) ? undefined : 'Must be a number'
 }
 
 export const numberInRange = (min: number, max: number) => (value: string) => {
   const number = Number(value)
-  const checkResult = isNumber()(value)
-
-  if (checkResult) return checkResult
 
   if (number < min) {
     return `Must be bigger than ${min}`

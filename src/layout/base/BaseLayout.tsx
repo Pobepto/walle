@@ -21,6 +21,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
         <SelectionZone
           prevKey="leftArrow"
           nextKey="rightArrow"
+          isActive={true}
           onChange={setActiveColumn}
         >
           <Selection activeProps={{ borderStyle: 'doubleSingle' }}>

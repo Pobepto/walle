@@ -2,7 +2,7 @@ import { Box, Text } from 'ink'
 
 import React, { useMemo, useState } from 'react'
 import { Button, Input, Error } from '@components'
-import { useClipboard, lengthRule, useForm, useKey, useSelection } from '@hooks'
+import { useClipboard, length, useForm, useKey, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { useWalletStore } from '@store'
 
@@ -41,7 +41,7 @@ export const ImportWallet: React.FC = () => {
     rules: Object.fromEntries(
       Array.from(Array(MNEMONIC_PHRASE_LENGTH), (_, index) => [
         index,
-        lengthRule(1, 20),
+        length(1, 20),
       ]),
     ),
   })
@@ -72,8 +72,8 @@ export const ImportWallet: React.FC = () => {
       const phrase = Object.values(data).join(' ')
       importWallet(phrase)
       navigate(ROUTE.REGISTRATION_PASSWORD)
-    } catch (err) {
-      setError(err.message)
+    } catch (err: any) {
+      setError(err?.message)
     }
   }
 

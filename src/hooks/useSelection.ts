@@ -8,8 +8,8 @@ export const useSelection = (
   amount: number,
   prevKey: keyof Key | (keyof Key)[],
   nextKey: keyof Key | (keyof Key)[],
-  isActive = true,
-  looped = true,
+  isActive?: boolean,
+  looped?: boolean,
 ): [number, React.Dispatch<React.SetStateAction<number>>, () => void] => {
   const [maxAmount, setMaxAmount] = useState(amount - 1)
   const [selection, setSelection] = useState(0)
