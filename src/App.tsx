@@ -1,10 +1,8 @@
 import { Box } from 'ink'
-import React, { useEffect } from 'react'
-import { useAutoSave } from './hooks/useAutoSave'
+import React from 'react'
 import { useRoute } from './routes'
 
 export const App: React.FC = () => {
-  useAutoSave()
   const route = useRoute()
 
   return (

@@ -53,6 +53,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     transfer: transfer(set, get),
     transferInProgress: false,
   }),
+  'blockchain',
 )
 
 useBlockchainStore.subscribe(
@@ -62,3 +63,7 @@ useBlockchainStore.subscribe(
     useTokensStore.getState().syncBalances()
   },
 )
+
+useBlockchainStore.subscribe((state) => {
+  console.log('Subribe to state', state)
+})
