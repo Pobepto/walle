@@ -1,4 +1,5 @@
 import { getAddress } from '@ethersproject/address'
+import { isDefined } from '@src/utils'
 import { useMemo, useState } from 'react'
 
 type Values = Record<string, string>
@@ -28,10 +29,6 @@ const defaultOptions: FormOptions = {
   validateAction: 'blur',
 }
 
-const isDefined = <T>(argument: T | undefined): argument is T => {
-  return argument !== undefined
-}
-
 export const useForm = <T extends Values = Values>({
   initialValues = {},
   rules = {},
@@ -42,13 +39,13 @@ export const useForm = <T extends Values = Values>({
   const [data, setData] = useState(initialValues as T)
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
 
-  const isValid = useMemo(
-    () =>
-      !Object.values(errors)
-        .filter(isDefined)
-        .some((err) => err.length),
-    [errors],
-  )
+  const getIsValid = (errors: Partial<Record<keyof T, string>>) => {
+    return !Object.values(errors)
+      .filter(isDefined)
+      .some((err) => err.length)
+  }
+
+  const isValid = useMemo(() => getIsValid(errors), [errors])
 
   const validate = () => {
     const newErrors: Partial<Record<keyof T, string>> = {}
@@ -60,12 +57,7 @@ export const useForm = <T extends Values = Values>({
 
     setErrors(newErrors)
 
-    return [
-      !Object.values(newErrors)
-        .filter(isDefined)
-        .some((err) => err.length),
-      newErrors,
-    ]
+    return [getIsValid(newErrors), newErrors]
   }
 
   const validateInput = (name: keyof T) => {

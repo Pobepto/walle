@@ -6,25 +6,43 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { COLUMNS } from '@src/store'
+import { COLUMNS, useTokensStore } from '@src/store'
 import { InputBox } from '@src/components/InputBox'
-import { useForm } from '@src/hooks'
+import {
+  combine,
+  isAddress,
+  isNumber,
+  numberInRange,
+  useForm,
+} from '@src/hooks'
 import { Button } from '@src/components'
 
 type Inputs = {
-  recipient: string
+  receiver: string
   amount: string
 }
 
 export const Transfer: React.FC = () => {
   const parentZone = useSelectionZone()!
   const token = useData<ROUTE.TOKEN_ACTIONS>()
+  const balances = useTokensStore((store) => store.balances)
 
-  const { register } = useForm<Inputs>({})
-
+  // TODO: We can handle this error using ErrorBoundary in parent component
   if (!token) {
-    return <Text>Token not found</Text>
+    throw new Error('Token not found')
   }
+
+  const balance = balances.get(token.address) ?? '0'
+
+  const { register, errors } = useForm<Inputs>({
+    rules: {
+      receiver: isAddress(),
+      amount: combine(isNumber(), numberInRange(0, Number(balance))),
+    },
+    options: {
+      validateAction: 'blur',
+    },
+  })
 
   const handleTransfer = () => {
     console.log('TODO: transfer')
@@ -44,10 +62,19 @@ export const Transfer: React.FC = () => {
           </Text>
         </Box>
         <Selection activeProps={{ focus: true }}>
-          <InputBox label="Name" {...register('recipient')} />
+          <InputBox
+            label="Receiver"
+            error={errors.receiver}
+            {...register('receiver')}
+          />
         </Selection>
+        <Text>Balance: {balance}</Text>
         <Selection activeProps={{ focus: true }}>
-          <InputBox label="Amount" {...register('amount')} />
+          <InputBox
+            label="Amount"
+            error={errors.amount}
+            {...register('amount')}
+          />
         </Selection>
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={handleTransfer}>Transfer</Button>

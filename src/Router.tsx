@@ -10,7 +10,7 @@ interface RouterValue<
   data?: RoutesData[Route]
 }
 
-export type Routes = Record<number, () => JSX.Element>
+export type Routes<Route extends number> = Record<Route, () => JSX.Element>
 
 interface RouterProps<Route> {
   children: React.ReactNode
@@ -22,14 +22,14 @@ interface RedirectProps<
   RoutesData extends Partial<Record<Route, unknown>>,
 > {
   to: Route
-  data: RoutesData[Route]
+  data?: RoutesData[Route]
 }
 
 export const routerFactory = <
   Route extends number,
   RoutesData extends Partial<Record<Route, unknown>>,
 >(
-  routes: Routes,
+  routes: Routes<Route>,
 ) => {
   const RouterContext =
     createContext<Nullable<RouterValue<Route, RoutesData>>>(null)

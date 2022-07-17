@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Text } from 'ink'
+import { Box } from 'ink'
 import { Header } from './Header'
 import { MainMenu } from './MainMenu'
 import { Tokens } from './Tokens'

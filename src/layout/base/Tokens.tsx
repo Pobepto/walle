@@ -1,6 +1,5 @@
 import { Box, Text } from 'ink'
 import React from 'react'
-import { useKey } from '@hooks'
 import { useNativeBalance } from '@hooks/useNativeBalance'
 import { COLUMNS, Token, useTokensStore } from '@store'
 import { useTokens } from '@src/hooks/useTokens'
@@ -15,8 +14,7 @@ import { ROUTE, useNavigate } from '@src/routes'
 import { TextButton } from '@src/components/TextButton'
 
 export const Tokens: React.FC = () => {
-  const { selection: parentSelection, select: parentSelect } =
-    useSelectionZone()!
+  const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
   const balances = useTokensStore((store) => store.balances)
@@ -26,25 +24,31 @@ export const Tokens: React.FC = () => {
 
   const handleSelectToken = (token: Token) => {
     navigate(ROUTE.TOKEN_ACTIONS, token)
-    parentSelect(COLUMNS.MAIN)
+    parentZone.select(COLUMNS.MAIN)
+  }
+
+  const handleSelectCurrency = () => {
+    // TODO: create CURRENCY_ACTIONS route
+    // navigate(ROUTE.CURRENCY_ACTIONS, currency)
+    parentZone.select(COLUMNS.MAIN)
   }
 
   return (
     <SelectionZone
       prevKey="upArrow"
       nextKey="downArrow"
-      isActive={parentSelection === COLUMNS.TOKENS}
+      isActive={parentZone.selection === COLUMNS.TOKENS}
     >
       <Box alignSelf="center" marginTop={-1}>
         <Text bold> Tokens </Text>
       </Box>
-      <Selection activeProps={{ underline: true }}>
-        <Text>
+      <Selection activeProps={{ underline: true, isFocused: true }}>
+        <TextButton onPress={handleSelectCurrency}>
           <Text>
             <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
           </Text>
           <Text bold>{currency.symbol}</Text>
-        </Text>
+        </TextButton>
       </Selection>
       {tokens.map((token) => {
         const balance = balances.get(token.address)
