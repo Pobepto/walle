@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Text } from 'ink'
 import { Button } from '@components'
 import {
@@ -17,6 +17,9 @@ type Inputs = {
   rpc: string
   chainId: string
   explorer: string
+  currencyName: string
+  currencySymbol: string
+  currencyDecimals: string
 }
 
 export const AddChain: React.FC = () => {
@@ -29,14 +32,19 @@ export const AddChain: React.FC = () => {
       rpc: length(3),
       chainId: combine(isNumber(), numberInRange(0, Infinity)),
       explorer: length(3),
+      currencyName: length(3),
+      currencySymbol: length(3),
+      currencyDecimals: combine(isNumber(), numberInRange(0, 18)),
     },
     options: {
       validateAction: 'never',
     },
   })
 
+  const [step, setStep] = useState(0)
+
   const [selection, setSelection, prevent] = useSelection(
-    5,
+    step === 0 ? 5 : 4,
     'upArrow',
     ['downArrow', 'return'],
     activeColumn === COLUMNS.MAIN,
@@ -52,9 +60,9 @@ export const AddChain: React.FC = () => {
         rpc: data.rpc,
         chainId: Number(data.chainId),
         currency: {
-          name: 'Native',
-          symbol: 'NTV',
-          decimals: 18,
+          name: data.currencyName,
+          symbol: data.currencySymbol,
+          decimals: Number(data.currencyDecimals),
         },
         explorer: data.explorer,
       })
@@ -70,34 +78,65 @@ export const AddChain: React.FC = () => {
       <Box marginTop={-1}>
         <Text> Add new chain </Text>
       </Box>
-      <InputBox
-        label="Name"
-        error={errors.name}
-        focus={selection === 0}
-        {...register('name')}
-      />
-      <InputBox
-        label="Rpc"
-        error={errors.rpc}
-        focus={selection === 1}
-        {...register('rpc')}
-      />
-      <InputBox
-        label="Chain Id"
-        error={errors.chainId}
-        focus={selection === 2}
-        {...register('chainId')}
-      />
-      <InputBox
-        label="Explorer"
-        error={errors.explorer}
-        focus={selection === 3}
-        {...register('explorer')}
-      />
+      {step === 0 && (
+        <>
+          <InputBox
+            label="Name"
+            error={errors.name}
+            focus={selection === 0}
+            {...register('name')}
+          />
+          <InputBox
+            label="Rpc"
+            error={errors.rpc}
+            focus={selection === 1}
+            {...register('rpc')}
+          />
+          <InputBox
+            label="Chain Id"
+            error={errors.chainId}
+            focus={selection === 2}
+            {...register('chainId')}
+          />
+          <InputBox
+            label="Explorer"
+            error={errors.explorer}
+            focus={selection === 3}
+            {...register('explorer')}
+          />
 
-      <Button isFocused={selection === 4} onPress={onSubmit}>
-        Add chain
-      </Button>
+          <Button isFocused={selection === 4} onPress={() => setStep(1)}>
+            Set up currency...
+          </Button>
+        </>
+      )}
+
+      {step === 1 && (
+        <>
+          <InputBox
+            label="Currency name"
+            error={errors.currencyName}
+            focus={selection === 0}
+            {...register('currencyName')}
+          />
+          <InputBox
+            label="Currency symbol"
+            error={errors.currencySymbol}
+            focus={selection === 1}
+            {...register('currencySymbol')}
+          />
+          <InputBox
+            label="Currency decimals"
+            error={errors.currencyDecimals}
+            focus={selection === 2}
+            {...register('currencyDecimals')}
+          />
+
+          <Button isFocused={selection === 3} onPress={onSubmit}>
+            Add chain
+          </Button>
+        </>
+      )}
     </Box>
   )
 }
