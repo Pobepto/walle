@@ -13,7 +13,6 @@ export interface Token {
 export type Currency = Omit<Token, 'address'>
 
 export interface TokensStore {
-  currencies: Currency[]
   tokens: Token[]
   balances: Map<string, string>
   syncBalances: () => Promise<void>
@@ -28,20 +27,6 @@ export type TokensAction<T extends keyof TokensStore = any> = Action<
 
 export const useTokensStore = createWithSubscribeSelector<TokensStore>(
   (set, get) => ({
-    currencies: [
-      {
-        name: 'BNB',
-        symbol: 'BNB',
-        decimals: 18,
-        chainId: 97,
-      },
-      {
-        name: 'ETH',
-        symbol: 'ETH',
-        decimals: 18,
-        chainId: 4,
-      },
-    ],
     tokens: [
       {
         name: 'EYWA',

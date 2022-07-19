@@ -1,4 +1,14 @@
-export const CHAINS = [
+import { Currency } from '@src/store/tokens'
+
+export interface Chain {
+  chainId: number
+  name: string
+  rpc: string
+  currency: Omit<Currency, 'chainId'>
+  explorer: string
+}
+
+export const CHAINS: Chain[] = [
   {
     chainId: 97,
     name: 'BNB Smart Chain',

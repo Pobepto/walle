@@ -1,18 +1,10 @@
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { Currency, Token, useTokensStore } from '../tokens'
+import { Token, useTokensStore } from '../tokens'
 import { addChain, getNativeBalance } from './actions'
 import { transfer } from './actions/transfer'
-import { CHAINS } from './constants'
-
-export interface Chain {
-  chainId: number
-  name: string
-  rpc: string
-  currency: Omit<Currency, 'chainId'>
-  explorer: string
-}
+import { Chain, CHAINS } from './constants'
 
 export interface BlockchainStore {
   chainId: number
