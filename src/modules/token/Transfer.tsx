@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { ROUTE, useData } from '@src/routes'
+import { ROUTE, useData, useNavigate } from '@src/routes'
 import {
   Selection,
   SelectionZone,
@@ -16,6 +16,8 @@ import {
   useForm,
 } from '@src/hooks'
 import { Button } from '@src/components'
+import { useContract } from '@src/hooks/useContract'
+import { ERC20_ABI } from '@src/store/blockchain/contract'
 
 type Inputs = {
   receiver: string
@@ -23,6 +25,7 @@ type Inputs = {
 }
 
 export const Transfer: React.FC = () => {
+  const navigate = useNavigate()
   const parentZone = useSelectionZone()!
   const token = useData<ROUTE.TOKEN_ACTIONS>()
   const balances = useTokensStore((store) => store.balances)
@@ -32,9 +35,11 @@ export const Transfer: React.FC = () => {
     throw new Error('Token not found')
   }
 
+  const ERC20 = useContract(token.address, ERC20_ABI)
+
   const balance = balances.get(token.address) ?? '0'
 
-  const { register, errors } = useForm<Inputs>({
+  const { register, data, errors, isValid } = useForm<Inputs>({
     rules: {
       receiver: isAddress(),
       amount: combine(isNumber(), numberInRange(0, Number(balance))),
@@ -44,8 +49,15 @@ export const Transfer: React.FC = () => {
     },
   })
 
-  const handleTransfer = () => {
-    console.log('TODO: transfer')
+  const onTransfer = async () => {
+    if (isValid) {
+      const populatedTx = await ERC20.populateTransaction.transfer(
+        data.receiver,
+        data.amount,
+      )
+
+      navigate(ROUTE.CONFIRM_TRANSACTION, populatedTx)
+    }
   }
 
   return (
@@ -77,7 +89,7 @@ export const Transfer: React.FC = () => {
           />
         </Selection>
         <Selection activeProps={{ isFocused: true }}>
-          <Button onPress={handleTransfer}>Transfer</Button>
+          <Button onPress={onTransfer}>Transfer</Button>
         </Selection>
       </Box>
     </SelectionZone>

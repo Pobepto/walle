@@ -1,9 +1,10 @@
+import { PopulatedTransaction } from '@ethersproject/contracts'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { Token, useTokensStore } from '../tokens'
+import { useTokensStore } from '../tokens'
 import { addChain, getNativeBalance } from './actions'
-import { transfer } from './actions/transfer'
+import { sendTransaction } from './actions/sendTransaction'
 import { Chain, CHAINS } from './constants'
 
 export interface BlockchainStore {
@@ -19,8 +20,8 @@ export interface BlockchainStore {
   getNativeBalance: () => Promise<void>
 
   // TODO: Add Currency
-  transfer: (recipient: string, token: Token, amount: string) => Promise<void>
-  transferInProgress: boolean
+  sendTransaction: (populatedTx: PopulatedTransaction) => Promise<void>
+  txInProgress: boolean
 }
 
 export type BlockchainAction<T extends keyof BlockchainStore = any> = Action<
@@ -44,8 +45,8 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     nativeBalance: '0',
     nativeBalanceIsLoading: true,
 
-    transfer: transfer(set, get),
-    transferInProgress: false,
+    sendTransaction: sendTransaction(set, get),
+    txInProgress: false,
   }),
 )
 

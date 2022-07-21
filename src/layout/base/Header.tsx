@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
         <Text color="cyan">{wallet?.address}</Text>
         <Text>
           <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
-          {chain.currency.symbol}
+          {chain.currency}
         </Text>
       </Box>
     </Box>

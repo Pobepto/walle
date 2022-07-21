@@ -1,3 +1,4 @@
+import { PopulatedTransaction } from '@ethersproject/contracts'
 import React from 'react'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
@@ -13,6 +14,7 @@ import {
   AddChain,
   TokenActions,
   Transfer,
+  ConfirmTransaction,
 } from './modules'
 import { routerFactory } from './Router'
 import { Token } from './store'
@@ -30,11 +32,13 @@ export enum ROUTE {
   ADD_CHAIN,
   TOKEN_ACTIONS,
   TRANSFER,
+  CONFIRM_TRANSACTION,
 }
 
 export interface ROUTE_DATA {
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TRANSFER]: Token
+  [ROUTE.CONFIRM_TRANSACTION]: PopulatedTransaction
 }
 
 const layout = (
@@ -61,6 +65,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.ADD_CHAIN]: () => base(AddChain),
   [ROUTE.TOKEN_ACTIONS]: () => base(TokenActions),
   [ROUTE.TRANSFER]: () => base(Transfer),
+  [ROUTE.CONFIRM_TRANSACTION]: () => base(ConfirmTransaction),
 })
 
 export const { Redirect, Router, useLocation, useNavigate, useRoute, useData } =

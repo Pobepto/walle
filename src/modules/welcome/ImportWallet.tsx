@@ -95,7 +95,9 @@ export const ImportWallet: React.FC = () => {
                     flexDirection="row"
                     borderStyle="classic"
                     width="30"
-                    borderColor={errors[key] && errors[key].length && 'red'}
+                    borderColor={
+                      errors[key] && errors[key]!.length ? 'red' : ''
+                    }
                   >
                     <Text>{text}</Text>
                     <Input {...register(key)} focus={selection === key} />

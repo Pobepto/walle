@@ -3,7 +3,6 @@ import React from 'react'
 import { useNativeBalance } from '@hooks/useNativeBalance'
 import { COLUMNS, Token, useTokensStore } from '@store'
 import { useTokens } from '@src/hooks/useTokens'
-import { useCurrency } from '@src/hooks/useCurrency'
 import { Loader } from '@src/components/Loader'
 import {
   Selection,
@@ -12,6 +11,7 @@ import {
 } from '@src/components/SelectionZone'
 import { ROUTE, useNavigate } from '@src/routes'
 import { TextButton } from '@src/components/TextButton'
+import { useChain } from '@src/hooks'
 
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!
@@ -20,7 +20,7 @@ export const Tokens: React.FC = () => {
   const balances = useTokensStore((store) => store.balances)
   const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
   const tokens = useTokens()
-  const currency = useCurrency()
+  const chain = useChain()
 
   const handleSelectToken = (token: Token) => {
     navigate(ROUTE.TOKEN_ACTIONS, token)
@@ -47,7 +47,7 @@ export const Tokens: React.FC = () => {
           <Text>
             <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
           </Text>
-          <Text bold>{currency.symbol}</Text>
+          <Text bold>{chain.currency}</Text>
         </TextButton>
       </Selection>
       {tokens.map((token) => {

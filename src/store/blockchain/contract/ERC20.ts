@@ -1,8 +1,6 @@
-import { Signer } from '@ethersproject/abstract-signer'
-import { Contract } from '@ethersproject/contracts'
-import { Provider } from '@ethersproject/providers'
+import { ContractInterface } from '@ethersproject/contracts'
 
-const abi = [
+export const ERC20_ABI: ContractInterface = [
   // Read-Only Functions
   'function balanceOf(address owner) view returns (uint256)',
   'function decimals() view returns (uint8)',
@@ -14,6 +12,3 @@ const abi = [
   // Events
   'event Transfer(address indexed from, address indexed to, uint amount)',
 ]
-
-export const ERC20 = (address: string, signerOrProvider?: Signer | Provider) =>
-  new Contract(address, abi, signerOrProvider)

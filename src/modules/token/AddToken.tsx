@@ -38,8 +38,6 @@ export const AddToken: React.FC = () => {
 
   const onSubmit = () => {
     if (isValid) {
-      // TODO: save token to store based on chain id
-      console.log('here')
       addToken({
         name: data.name,
         symbol: data.symbol,
