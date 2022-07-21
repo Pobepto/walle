@@ -4,12 +4,11 @@ import { useWallet } from './useWallet'
 
 export const useEstimate = (populatedTx: PopulatedTransaction) => {
   const wallet = useWallet()
+  const [estimatedGas, setEstimatedGas] = useState<string>('0')
 
   if (!wallet) {
     throw new Error('Wallet is null!')
   }
-
-  const [estimatedGas, setEstimatedGas] = useState<string>('0')
 
   useEffect(() => {
     const estimate = async () => {

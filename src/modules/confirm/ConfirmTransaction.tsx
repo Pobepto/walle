@@ -1,11 +1,18 @@
-import { Button } from '@src/components'
-import { InputBox } from '@src/components/InputBox'
+import { Button } from '@components'
+import { InputBox } from '@components/InputBox'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
-} from '@src/components/SelectionZone'
-import { combine, isNumber, numberInRange, useForm } from '@src/hooks'
+} from '@components/SelectionZone'
+import {
+  combine,
+  isNumber,
+  numberInRange,
+  useEstimate,
+  useForm,
+  useGasPrice,
+} from '@hooks'
 import { ROUTE, useData, useNavigate } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 import { Box, Text } from 'ink'
@@ -25,6 +32,8 @@ export const ConfirmTransaction: React.FC = () => {
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>(Step.SET_TX_DETAILS)
   const parentZone = useSelectionZone()!
+
+  // TODO: need to get type of transaction for additional details
   const populatedTx = useData<ROUTE.CONFIRM_TRANSACTION>()
 
   if (!populatedTx) {
@@ -33,12 +42,19 @@ export const ConfirmTransaction: React.FC = () => {
 
   const estimatedGas = useEstimate(populatedTx)
   const gasPrice = useGasPrice()
-  const sendTransaction = useBlockchainStore((store) => store.sendTransaction)
+  const sendTransaction = useBlockchainStore((state) => state.sendTransaction)
+
+  // too late for form
+  console.log('current', estimatedGas, gasPrice)
 
   const { register, data, errors, isValid } = useForm<Inputs>({
     rules: {
       gasPrice: combine(isNumber(), numberInRange(0, Infinity)),
       gasLimit: combine(isNumber(), numberInRange(0, Infinity)),
+    },
+    initialValues: {
+      gasPrice,
+      gasLimit: estimatedGas,
     },
     options: {
       validateAction: 'blur',
@@ -46,8 +62,9 @@ export const ConfirmTransaction: React.FC = () => {
   })
 
   const onSendTransaction = () => {
-    //
-    console.log('success')
+    if (isValid) {
+      console.log('success')
+    }
   }
 
   const onReject = () => {
@@ -83,14 +100,10 @@ export const ConfirmTransaction: React.FC = () => {
 
           <Box flexDirection="column">
             <Selection activeProps={{ isFocused: true }}>
-              <Button onPress={onReject} width="50%">
-                Reject
-              </Button>
+              <Button onPress={onReject}>Reject</Button>
             </Selection>
             <Selection activeProps={{ isFocused: true }}>
-              <Button onPress={() => setStep(Step.SEND_TX)} width="50%">
-                Next
-              </Button>
+              <Button onPress={() => setStep(Step.SEND_TX)}>Next</Button>
             </Selection>
           </Box>
         </Box>
@@ -103,8 +116,8 @@ export const ConfirmTransaction: React.FC = () => {
       <Box marginTop={-1}>
         <Text> Confirm </Text>
       </Box>
-      <Text>Gas price: {populatedTx.gasPrice?.toString()}</Text>
-      <Text>Gas limit: {populatedTx.gasLimit?.toString()}</Text>
+      <Text>Gas price: {gasPrice}</Text>
+      <Text>Gas limit: {estimatedGas}</Text>
 
       <SelectionZone
         nextKey="downArrow"

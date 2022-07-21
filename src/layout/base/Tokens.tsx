@@ -1,8 +1,7 @@
 import { Box, Text } from 'ink'
 import React from 'react'
-import { useNativeBalance } from '@hooks/useNativeBalance'
+import { useNativeBalance, useTokens } from '@hooks'
 import { COLUMNS, Token, useTokensStore } from '@store'
-import { useTokens } from '@src/hooks/useTokens'
 import { Loader } from '@src/components/Loader'
 import {
   Selection,

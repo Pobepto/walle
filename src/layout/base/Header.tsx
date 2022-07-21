@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { useChain, useWallet } from '@hooks'
-import { useNativeBalance } from '@hooks/useNativeBalance'
+import { useChain, useWallet, useNativeBalance } from '@hooks'
 import { Loader } from '@src/components/Loader'
 
 export const Header: React.FC = () => {

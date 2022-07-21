@@ -13,10 +13,10 @@ import {
   isAddress,
   isNumber,
   numberInRange,
+  useContract,
   useForm,
 } from '@src/hooks'
 import { Button } from '@src/components'
-import { useContract } from '@src/hooks/useContract'
 import { ERC20_ABI } from '@src/store/blockchain/contract'
 
 type Inputs = {
