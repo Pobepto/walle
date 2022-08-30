@@ -1,4 +1,4 @@
-import { getAddress } from '@ethersproject/address'
+import { isDefined } from '@src/utils'
 import { useMemo, useState } from 'react'
 
 type Values = Record<string, string>
@@ -28,10 +28,6 @@ const defaultOptions: FormOptions = {
   validateAction: 'blur',
 }
 
-const isDefined = <T>(argument: T | undefined): argument is T => {
-  return argument !== undefined
-}
-
 export const useForm = <T extends Values = Values>({
   initialValues = {},
   rules = {},
@@ -42,15 +38,15 @@ export const useForm = <T extends Values = Values>({
   const [data, setData] = useState(initialValues as T)
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
 
-  const isValid = useMemo(
-    () =>
-      !Object.values(errors)
-        .filter(isDefined)
-        .some((err) => err.length),
-    [errors],
-  )
+  const getIsValid = (errors: Partial<Record<keyof T, string>>) => {
+    return !Object.values(errors)
+      .filter(isDefined)
+      .some((err) => err.length)
+  }
 
-  const validateAll = () => {
+  const isValid = useMemo(() => getIsValid(errors), [errors])
+
+  const validate = () => {
     const newErrors: Partial<Record<keyof T, string>> = {}
     Object.entries(rules)
       .map((r) => r as [keyof T, Rule<T>])
@@ -60,12 +56,7 @@ export const useForm = <T extends Values = Values>({
 
     setErrors(newErrors)
 
-    return [
-      !Object.values(newErrors)
-        .filter(isDefined)
-        .some((err) => err.length),
-      newErrors,
-    ]
+    return [getIsValid(newErrors), newErrors]
   }
 
   const validateInput = (name: keyof T) => {
@@ -111,52 +102,13 @@ export const useForm = <T extends Values = Values>({
     }
   }
 
-  return { register, validateAll, data, errors, isValid, setData }
+  return { register, validate, data, errors, isValid, setData }
 }
 
-export const combineRules =
+export const combine =
   <T>(...rules: Rule<T>[]) =>
   (value: T[keyof T], data: Partial<T>) => {
     return rules.reduce((err, rule) => {
       return (err || rule(value, data)) as string
     }, '')
   }
-
-export const lengthRule =
-  (min: number, max = Infinity) =>
-  (value: string) => {
-    if (value.length < min) {
-      return `Must be at least ${min} characters`
-    }
-
-    if (value.length > max) {
-      return `Must be at most ${max} characters`
-    }
-  }
-
-export const isNumber = () => (value: string) => {
-  return Number.isInteger(Number(value)) ? undefined : 'Must be a number'
-}
-
-export const numberInRange = (min: number, max: number) => (value: string) => {
-  const number = Number(value)
-  const checkResult = isNumber()(value)
-
-  if (checkResult) return checkResult
-
-  if (number < min) {
-    return `Must be bigger than ${min}`
-  }
-
-  if (number > max) {
-    return `Must be lest than ${max}`
-  }
-}
-
-export const isAddress = () => (value: string) => {
-  try {
-    getAddress(value)
-  } catch (error) {
-    return `Address is invalid`
-  }
-}

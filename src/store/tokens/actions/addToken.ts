@@ -1,8 +1,8 @@
 import { useBlockchainStore } from '@src/store'
-import { Token, TokensAction } from '..'
+import { TokensAction } from '..'
 
 export const addToken: TokensAction<'addToken'> =
-  (set, get) => async (token: Omit<Token, 'chainId'>) => {
+  (set, get) => async (token) => {
     const chainId = useBlockchainStore.getState().chainId
     const tokens = get().tokens.slice()
 

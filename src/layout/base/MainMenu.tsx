@@ -23,6 +23,10 @@ export const MainMenu: React.FC = () => {
         focused={activeColumn === COLUMNS.MENU}
         items={[
           {
+            title: 'Home',
+            onSelect: () => navigate(ROUTE.WALLET),
+          },
+          {
             title: 'Wallet',
             items: [
               {

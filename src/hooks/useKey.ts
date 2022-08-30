@@ -4,7 +4,7 @@ import { useInput } from './useInput'
 export const useKey = (
   key: keyof Key | (keyof Key)[],
   handler: (input: string) => void,
-  focused = true,
+  focused = false,
 ) => {
   return useInput((_keys, input) => {
     const keys = Array.isArray(key) ? key : [key]

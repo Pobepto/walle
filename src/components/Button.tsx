@@ -8,7 +8,7 @@ import { Loader } from './Loader'
 export interface ButtonProps extends BoxProps {
   children: React.ReactNode
   onPress: AnyFunction
-  isFocused: boolean
+  isFocused?: boolean
   isDisabled?: boolean
   isLoading?: boolean
   spinner?: SpinnerName

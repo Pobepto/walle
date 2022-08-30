@@ -1,16 +1,21 @@
 import React from 'react'
 import { Box, Text } from 'ink'
 import { Chain, useBlockchainStore } from '@store/blockchain'
-import { useSelection } from '@hooks'
 import { TextButton } from '@components/TextButton'
 import { Button } from '@components/Button'
 import { ROUTE, useNavigate } from '@src/routes'
+import {
+  Selection,
+  SelectionZone,
+  useSelectionZone,
+} from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/store'
 
 export const SwitchChain: React.FC = () => {
+  const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const chains = useBlockchainStore((store) => store.chains)
   const setChainId = useBlockchainStore((store) => store.setChainId)
-  const [selection] = useSelection(chains.length + 1, 'upArrow', 'downArrow')
 
   const handleSelectChain = (chain: Chain) => {
     setChainId(chain.chainId)
@@ -21,24 +26,29 @@ export const SwitchChain: React.FC = () => {
   }
 
   return (
-    <Box flexDirection="column">
-      <Box marginTop={-1}>
-        <Text> Switch chain </Text>
-      </Box>
-      <Text>Select chain or add custom</Text>
-      {chains.map((chain, index) => (
-        <Box key={chain.chainId}>
-          <TextButton
-            isFocused={selection === index}
-            onPress={() => handleSelectChain(chain)}
-          >
-            - {chain.name}
-          </TextButton>
+    <SelectionZone
+      prevKey="upArrow"
+      nextKey="downArrow"
+      isActive={parentZone.selection === COLUMNS.MAIN}
+    >
+      <Box flexDirection="column">
+        <Box marginTop={-1}>
+          <Text> Switch chain </Text>
         </Box>
-      ))}
-      <Button isFocused={selection === chains.length} onPress={handleAddChain}>
-        Add chain
-      </Button>
-    </Box>
+        <Text>Select chain or add custom</Text>
+        {chains.map((chain) => (
+          <Box key={chain.chainId}>
+            <Selection activeProps={{ isFocused: true }}>
+              <TextButton onPress={() => handleSelectChain(chain)}>
+                - {chain.name}
+              </TextButton>
+            </Selection>
+          </Box>
+        ))}
+        <Selection activeProps={{ isFocused: true }}>
+          <Button onPress={handleAddChain}>Add chain</Button>
+        </Selection>
+      </Box>
+    </SelectionZone>
   )
 }

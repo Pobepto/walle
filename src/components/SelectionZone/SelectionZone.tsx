@@ -14,6 +14,8 @@ import { Selection } from './Selection'
 const SelectionContext = createContext<
   Nullable<{
     selection: number
+    select: (value: number) => void
+    isActive: boolean
   }>
 >(null)
 
@@ -28,32 +30,60 @@ type Props = React.PropsWithChildren<{
 }>
 
 const iterateChildren = (children: React.ReactNode) => {
-  let index = 0
+  let amount = 0
 
-  const newChildren = Children.map(children, (child) => {
-    if (isValidElement(child) && child.type === Selection) {
-      return cloneElement(child, {
-        index: index++,
-      })
-    }
+  const iterateAndClone = (children: React.ReactNode): React.ReactNode => {
+    return Children.map(children, (child) => {
+      if (!isValidElement(child)) {
+        return child
+      }
 
-    return child
-  })
+      const { type, props } = child
 
-  return { newChildren, amount: index }
+      if (type === SelectionZone) {
+        return child
+      }
+
+      if (type === Selection) {
+        return cloneElement(child, {
+          ...props,
+          index: amount++,
+        })
+      }
+
+      if (props.children) {
+        return cloneElement(child, {
+          ...props,
+          children: iterateAndClone(props.children),
+        })
+      }
+
+      return child
+    })
+  }
+
+  const newChildren = iterateAndClone(children)
+
+  return { newChildren, amount }
 }
 
 export const SelectionZone: React.FC<Props> = ({
   children,
   prevKey,
   nextKey,
-  isActive = true,
-  looped = false,
+  isActive = false,
+  looped,
   onChange,
 }) => {
   const { newChildren, amount } = iterateChildren(children)
 
-  const [selection] = useSelection(amount, prevKey, nextKey, isActive, looped)
+  const [selection, select] = useSelection(
+    amount,
+    prevKey,
+    nextKey,
+    isActive,
+    looped,
+  )
 
   useEffect(() => {
     onChange && onChange(selection)
@@ -63,6 +93,8 @@ export const SelectionZone: React.FC<Props> = ({
     <SelectionContext.Provider
       value={{
         selection,
+        select,
+        isActive,
       }}
     >
       {newChildren}

@@ -1,16 +1,21 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button, Input } from '@components'
+import { Button } from '@components'
 import {
+  combine,
   isAddress,
-  lengthRule,
+  isNumber,
+  length,
   numberInRange,
   useForm,
-  useSelection,
 } from '@hooks'
-import { ROUTE, useNavigate } from '@routes'
 import { InputBox } from '@components/InputBox'
-import { COLUMNS, useAppStore, useTokensStore } from '@store'
+import { COLUMNS, useTokensStore } from '@store'
+import {
+  Selection,
+  SelectionZone,
+  useSelectionZone,
+} from '@src/components/SelectionZone'
 
 type Inputs = {
   name: string
@@ -20,81 +25,67 @@ type Inputs = {
 }
 
 export const AddToken: React.FC = () => {
-  const navigate = useNavigate()
-  const activeColumn = useAppStore((state) => state.activeColumn)
+  const parentZone = useSelectionZone()!
   const addToken = useTokensStore((state) => state.addToken)
-  const { errors, register, validateAll, data } = useForm<Inputs>({
+  const { errors, register, isValid, data } = useForm<Inputs>({
     rules: {
-      name: lengthRule(3),
-      symbol: lengthRule(3),
-      decimals: numberInRange(0, 18),
+      name: length(3),
+      symbol: length(3),
+      decimals: combine(isNumber(), numberInRange(0, 18)),
       address: isAddress(),
-    },
-    options: {
-      validateAction: 'never',
     },
   })
 
-  const [selection, setSelection, prevent] = useSelection(
-    5,
-    'upArrow',
-    ['downArrow', 'return'],
-    activeColumn === COLUMNS.MAIN,
-    false,
-  )
-
   const onSubmit = () => {
-    const [isValid] = validateAll()
-
     if (isValid) {
-      // TODO: save token to store based on chain id
-      console.log('here')
       addToken({
         name: data.name,
         symbol: data.symbol,
         decimals: Number(data.decimals),
         address: data.address,
       })
-    } else {
-      prevent()
-      // TODO: focus on first error
-      setSelection(0)
     }
   }
 
   return (
-    <Box flexDirection="column">
-      <Box marginTop={-1}>
-        <Text> Add new token </Text>
-      </Box>
-      <InputBox
-        label="Name"
-        error={errors.name}
-        focus={selection === 0}
-        {...register('name')}
-      />
-      <InputBox
-        label="Symbol"
-        error={errors.symbol}
-        focus={selection === 1}
-        {...register('symbol')}
-      />
-      <InputBox
-        label="Decimals"
-        error={errors.decimals}
-        focus={selection === 2}
-        {...register('decimals')}
-      />
-      <InputBox
-        label="Address"
-        error={errors.address}
-        focus={selection === 3}
-        {...register('address')}
-      />
+    <SelectionZone
+      prevKey="upArrow"
+      nextKey={['downArrow', 'return']}
+      isActive={parentZone.selection === COLUMNS.MAIN}
+    >
+      <Box flexDirection="column">
+        <Box marginTop={-1}>
+          <Text> Add new token </Text>
+        </Box>
+        <Selection activeProps={{ focus: true }}>
+          <InputBox
+            label="Address"
+            error={errors.address}
+            {...register('address')}
+          />
+        </Selection>
+        <Selection activeProps={{ focus: true }}>
+          <InputBox label="Name" error={errors.name} {...register('name')} />
+        </Selection>
+        <Selection activeProps={{ focus: true }}>
+          <InputBox
+            label="Symbol"
+            error={errors.symbol}
+            {...register('symbol')}
+          />
+        </Selection>
+        <Selection activeProps={{ focus: true }}>
+          <InputBox
+            label="Decimals"
+            error={errors.decimals}
+            {...register('decimals')}
+          />
+        </Selection>
 
-      <Button isFocused={selection === 4} onPress={onSubmit}>
-        Add token
-      </Button>
-    </Box>
+        <Selection activeProps={{ isFocused: true }}>
+          <Button onPress={onSubmit}>Add token</Button>
+        </Selection>
+      </Box>
+    </SelectionZone>
   )
 }

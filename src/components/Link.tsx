@@ -1,6 +1,6 @@
 import { Text, Key, TextProps } from 'ink'
 import React from 'react'
-import { useKey } from '@hooks/useKey'
+import { useKey } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 
 interface Props extends TextProps {
