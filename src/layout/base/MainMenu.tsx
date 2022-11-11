@@ -2,11 +2,12 @@ import { Box, Text } from 'ink'
 import React from 'react'
 import { Menu } from '@components'
 import { ROUTE, useNavigate } from '@routes'
-import { COLUMNS, useAppStore, useWalletStore } from '@store'
+import { COLUMNS, useWalletStore } from '@store'
+import { useSelectionZone } from '@src/components/SelectionZone'
 
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()
-  const activeColumn = useAppStore((state) => state.activeColumn)
+  const parentZone = useSelectionZone()!
   const logout = useWalletStore((state) => state.logout)
 
   const handleLogout = () => {
@@ -20,7 +21,7 @@ export const MainMenu: React.FC = () => {
         <Text bold> Menu </Text>
       </Box>
       <Menu
-        focused={activeColumn === COLUMNS.MENU}
+        focused={parentZone.selection === COLUMNS.MENU}
         items={[
           {
             title: 'Home',
@@ -31,7 +32,10 @@ export const MainMenu: React.FC = () => {
             items: [
               {
                 title: 'Switch chain',
-                onSelect: () => navigate(ROUTE.SWITCH_CHAIN),
+                onSelect: () => {
+                  navigate(ROUTE.SWITCH_CHAIN)
+                  parentZone.select(COLUMNS.MAIN)
+                },
               },
               // {
               //   title: 'Switch account',
@@ -39,7 +43,10 @@ export const MainMenu: React.FC = () => {
               // },
               {
                 title: 'Add token',
-                onSelect: () => navigate(ROUTE.TOKEN_ADD),
+                onSelect: () => {
+                  navigate(ROUTE.TOKEN_ADD)
+                  parentZone.select(COLUMNS.MAIN)
+                },
               },
               {
                 title: 'Logout',

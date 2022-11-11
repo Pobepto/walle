@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 export const useGasPrice = () => {
   const provider = useBlockchainStore((store) => store.provider)
   const [isLoading, setLoading] = useState(true)
-  const [price, setPrice] = useState<string>('0')
+  const [price, setPrice] = useState<string>('')
 
   useEffect(() => {
     const getPrice = async () => {

@@ -27,8 +27,7 @@ export const Tokens: React.FC = () => {
   }
 
   const handleSelectCurrency = () => {
-    // TODO: create CURRENCY_ACTIONS route
-    // navigate(ROUTE.CURRENCY_ACTIONS, currency)
+    navigate(ROUTE.CURRENCY_ACTIONS)
     parentZone.select(COLUMNS.MAIN)
   }
 

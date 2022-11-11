@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node build/out.js",
-    "dev": "node esbuild.config.js",
+    "watch": "node esbuild.config.js",
     "format": "prettier-eslint --write \"src/**/*.{ts,tsx}\"",
     "commit": "git-cz",
     "precommit": "lint-staged"
@@ -10,6 +10,7 @@
     "@ethersproject/abi": "^5.6.1",
     "@ethersproject/abstract-signer": "^5.6.2",
     "@ethersproject/address": "^5.6.0",
+    "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/contracts": "^5.6.0",
     "@ethersproject/providers": "^5.6.4",
     "@ethersproject/wallet": "^5.6.0",

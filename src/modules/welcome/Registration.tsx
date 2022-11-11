@@ -6,7 +6,13 @@ import { useSelection } from '@hooks'
 import { ROUTE } from '@routes'
 
 export const Registration: React.FC = () => {
-  const [selection] = useSelection(2, 'leftArrow', 'rightArrow', true, false)
+  const [selection] = useSelection({
+    amount: 2,
+    prevKey: 'leftArrow',
+    nextKey: 'rightArrow',
+    isActive: true,
+    looped: false,
+  })
 
   return (
     <Box flexDirection="column" alignItems="center">

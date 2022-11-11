@@ -4,26 +4,17 @@ import { Header } from './Header'
 import { MainMenu } from './MainMenu'
 import { Tokens } from './Tokens'
 import { Selection, SelectionZone } from '@src/components/SelectionZone'
-import { useAppStore } from '@src/store'
 
 interface Props {
   children: React.ReactNode
 }
 
 export const BaseLayout: React.FC<Props> = ({ children }) => {
-  // TODO: remove activeColumn from AppStore and replace with useSelectionZone
-  const setActiveColumn = useAppStore((state) => state.setActiveColumn)
-
   return (
     <Box flexDirection="column">
       <Header />
       <Box flexDirection="row" alignSelf="center">
-        <SelectionZone
-          prevKey="meta+leftArrow"
-          nextKey="meta+rightArrow"
-          isActive={true}
-          onChange={setActiveColumn}
-        >
+        <SelectionZone nextKey="tab" isActive looped>
           <Selection activeProps={{ borderStyle: 'doubleSingle' }}>
             <Box
               width="20%"

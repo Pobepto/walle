@@ -1,23 +1,21 @@
 import { PopulatedTransaction } from '@ethersproject/contracts'
-import { Wallet } from '@ethersproject/wallet'
-import { useWalletStore } from '@src/store/wallet'
-import { getDerivationPath } from '@src/utils'
+import { getSigner } from '@src/store/wallet'
 import { BlockchainAction } from '..'
 
 export const sendTransaction: BlockchainAction<'sendTransaction'> =
   (set) =>
   async (populatedTx: PopulatedTransaction): Promise<void> => {
-    set({ txInProgress: true })
-    const { phrase, pathId } = useWalletStore.getState()
+    const signer = getSigner()
 
-    if (!phrase) return
+    set({ txInProgress: true })
 
     try {
-      const wallet = Wallet.fromMnemonic(phrase, getDerivationPath(pathId))
-      await wallet.sendTransaction(populatedTx)
+      const tx = await signer.sendTransaction(populatedTx)
+      const result = await tx.wait()
 
       set({ txInProgress: false })
     } catch (err) {
+      console.log(err)
       set({ txInProgress: false })
     }
   }

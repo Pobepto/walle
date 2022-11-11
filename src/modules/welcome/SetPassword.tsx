@@ -29,13 +29,13 @@ export const SetPassword: React.FC = () => {
     },
   })
 
-  const [selection, setSelection, prevent] = useSelection(
-    3,
-    'upArrow',
-    ['downArrow', 'return'],
-    true,
-    false,
-  )
+  const [selection, setSelection, prevent] = useSelection({
+    amount: 3,
+    prevKey: 'upArrow',
+    nextKey: ['downArrow', 'return'],
+    isActive: true,
+    looped: false,
+  })
 
   const onApply = async () => {
     const [isValid] = validate()

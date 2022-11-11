@@ -32,15 +32,18 @@ export const TokenActions: React.FC = () => {
           </Text>
         </Box>
         <Selection activeProps={{ isFocused: true }}>
-          <TextButton onPress={() => navigate(ROUTE.TRANSFER, token)}>
+          <TextButton onPress={() => navigate(ROUTE.TOKEN_TRANSFER, token)}>
             - Transfer
           </TextButton>
         </Selection>
-        {/* <Selection activeProps={{ isFocused: true }}>
-          <TextButton onPress={() => console.log('call')}>
-            - Call method
+        <Selection activeProps={{ isFocused: true }}>
+          <TextButton onPress={() => navigate(ROUTE.TOKEN_INFO, token)}>
+            - Info
           </TextButton>
-        </Selection> */}
+        </Selection>
+        <Selection activeProps={{ isFocused: true }}>
+          <TextButton onPress={() => null}>- Call method [WIP]</TextButton>
+        </Selection>
       </Box>
     </SelectionZone>
   )

@@ -5,7 +5,7 @@ import { useWallet } from './useWallet'
 export const useGasLimit = (populatedTx: PopulatedTransaction) => {
   const wallet = useWallet()
   const [isLoading, setLoading] = useState(true)
-  const [estimatedGas, setEstimatedGas] = useState<string>('0')
+  const [estimatedGas, setEstimatedGas] = useState<string>('')
 
   if (!wallet) {
     throw new Error('Wallet is null!')

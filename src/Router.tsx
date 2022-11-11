@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { Nullable, Undefinable } from 'tsdef'
 
-interface RouterValue<
-  Route extends number,
+type AnyEnum = number | string
+
+interface RouterContextValue<
+  Route extends AnyEnum,
   RoutesData extends Partial<Record<Route, unknown>>,
 > {
   route: Route
@@ -10,7 +12,7 @@ interface RouterValue<
   data?: RoutesData[Route]
 }
 
-export type Routes<Route extends number> = Record<Route, () => JSX.Element>
+export type RoutesMap<Route extends AnyEnum> = Record<Route, () => JSX.Element>
 
 interface RouterProps<Route> {
   children: React.ReactNode
@@ -18,7 +20,7 @@ interface RouterProps<Route> {
 }
 
 interface RedirectProps<
-  Route extends number,
+  Route extends AnyEnum,
   RoutesData extends Partial<Record<Route, unknown>>,
 > {
   to: Route
@@ -26,13 +28,13 @@ interface RedirectProps<
 }
 
 export const routerFactory = <
-  Route extends number,
+  Route extends AnyEnum,
   RoutesData extends Partial<Record<Route, unknown>>,
 >(
-  routes: Routes<Route>,
+  routes: RoutesMap<Route>,
 ) => {
   const RouterContext =
-    createContext<Nullable<RouterValue<Route, RoutesData>>>(null)
+    createContext<Nullable<RouterContextValue<Route, RoutesData>>>(null)
 
   const Router: React.FC<RouterProps<Route>> = ({ children, defaultRoute }) => {
     const [state, setState] = useState<{

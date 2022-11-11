@@ -5,6 +5,7 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@components/SelectionZone'
+import { BigNumber } from '@ethersproject/bignumber'
 import {
   combine,
   isNumber,
@@ -13,6 +14,7 @@ import {
   useForm,
   useGasPrice,
 } from '@hooks'
+import { Loader } from '@src/components/Loader'
 import { ROUTE, useData, useNavigate } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 import { Box, Text } from 'ink'
@@ -20,7 +22,8 @@ import React, { useEffect, useState } from 'react'
 
 enum Step {
   SET_TX_DETAILS,
-  SEND_TX,
+  CONFIRM_TX,
+  WAITING,
 }
 
 type Inputs = {
@@ -44,6 +47,7 @@ export const ConfirmTransaction: React.FC = () => {
   const [gasPrice, gasPriceLoading] = useGasPrice()
 
   const sendTransaction = useBlockchainStore((state) => state.sendTransaction)
+  const txInProgress = useBlockchainStore((state) => state.txInProgress)
 
   const { register, change, data, errors, isValid } = useForm<Inputs>({
     rules: {
@@ -51,8 +55,8 @@ export const ConfirmTransaction: React.FC = () => {
       gasLimit: combine(isNumber(), numberInRange(0, Infinity)),
     },
     initialValues: {
-      gasPrice: '0',
-      gasLimit: '0',
+      gasPrice: '',
+      gasLimit: '',
     },
     options: {
       validateAction: 'blur',
@@ -61,7 +65,12 @@ export const ConfirmTransaction: React.FC = () => {
 
   const onSendTransaction = () => {
     if (isValid) {
+      populatedTx.gasLimit = BigNumber.from(data.gasLimit)
+      populatedTx.gasPrice = BigNumber.from(data.gasPrice)
+
       sendTransaction(populatedTx)
+
+      setStep(Step.WAITING)
     }
   }
 
@@ -80,8 +89,8 @@ export const ConfirmTransaction: React.FC = () => {
   if (step === Step.SET_TX_DETAILS) {
     return (
       <SelectionZone
-        nextKey="downArrow"
         prevKey="upArrow"
+        nextKey={['downArrow', 'return']}
         isActive={parentZone.selection === COLUMNS.MAIN}
       >
         <Box flexDirection="column">
@@ -93,7 +102,7 @@ export const ConfirmTransaction: React.FC = () => {
             <InputBox
               label="Gas price"
               error={errors.gasPrice}
-              disabled={gasPriceLoading}
+              loading={gasPriceLoading}
               {...register('gasPrice')}
             />
           </Selection>
@@ -101,51 +110,82 @@ export const ConfirmTransaction: React.FC = () => {
             <InputBox
               label="Gas limit"
               error={errors.gasLimit}
-              disabled={gasLimitLoading}
+              loading={gasLimitLoading}
               {...register('gasLimit')}
             />
           </Selection>
 
-          <Box flexDirection="column">
-            <Selection activeProps={{ isFocused: true }}>
-              <Button onPress={onReject}>Reject</Button>
-            </Selection>
-            <Selection activeProps={{ isFocused: true }}>
-              <Button
-                onPress={() => setStep(Step.SEND_TX)}
-                isLoading={gasLimitLoading || gasPriceLoading}
-              >
-                Next
-              </Button>
-            </Selection>
-          </Box>
+          <Selection activeProps={{ isActive: true }}>
+            <SelectionZone
+              prevKey="leftArrow"
+              nextKey="rightArrow"
+              defaultSelection={1}
+            >
+              <Box justifyContent="space-around">
+                <Selection activeProps={{ isFocused: true }}>
+                  <Button onPress={onReject} minWidth="20%" paddingX={1}>
+                    Reject
+                  </Button>
+                </Selection>
+                <Selection activeProps={{ isFocused: true }}>
+                  <Button
+                    onPress={() => setStep(Step.CONFIRM_TX)}
+                    minWidth="20%"
+                    paddingX={1}
+                    isLoading={gasLimitLoading || gasPriceLoading}
+                  >
+                    <Text>Next {'->'}</Text>
+                  </Button>
+                </Selection>
+              </Box>
+            </SelectionZone>
+          </Selection>
         </Box>
       </SelectionZone>
     )
   }
 
-  return (
-    <Box flexDirection="column">
-      <Box marginTop={-1}>
-        <Text> Confirm </Text>
-      </Box>
-      <Text>Gas price: {data.gasPrice}</Text>
-      <Text>Gas limit: {data.gasLimit}</Text>
-
-      <SelectionZone
-        nextKey="downArrow"
-        prevKey="upArrow"
-        isActive={parentZone.selection === COLUMNS.MAIN}
-      >
-        <Box flexDirection="column">
-          <Selection activeProps={{ isFocused: true }}>
-            <Button onPress={onReject}>Reject</Button>
-          </Selection>
-          <Selection activeProps={{ isFocused: true }}>
-            <Button onPress={onSendTransaction}>Send</Button>
-          </Selection>
+  if (step === Step.CONFIRM_TX) {
+    return (
+      <Box flexDirection="column">
+        <Box marginTop={-1}>
+          <Text> Confirm </Text>
         </Box>
-      </SelectionZone>
-    </Box>
-  )
+        <Text>Gas price: {data.gasPrice}</Text>
+        <Text>Gas limit: {data.gasLimit}</Text>
+
+        <SelectionZone
+          prevKey="leftArrow"
+          nextKey="rightArrow"
+          isActive={parentZone.selection === COLUMNS.MAIN}
+          defaultSelection={1}
+        >
+          <Box justifyContent="space-around">
+            <Selection activeProps={{ isFocused: true }}>
+              <Button onPress={onReject} minWidth="20%" paddingX={1}>
+                Reject
+              </Button>
+            </Selection>
+            <Selection activeProps={{ isFocused: true }}>
+              <Button onPress={onSendTransaction} minWidth="20%" paddingX={1}>
+                Send
+              </Button>
+            </Selection>
+          </Box>
+        </SelectionZone>
+      </Box>
+    )
+  }
+
+  if (step === Step.WAITING) {
+    return (
+      <Text>
+        <Loader loading={txInProgress}>
+          <Text>Success</Text>
+        </Loader>
+      </Text>
+    )
+  }
+
+  return null
 }
