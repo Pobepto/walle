@@ -12,7 +12,7 @@ export const useSelection = (
   nextKey: SuperKey | SuperKey[],
   isActive?: boolean,
   looped?: boolean,
-): [number, React.Dispatch<React.SetStateAction<number>>, () => void] => {
+) => {
   const [maxAmount, setMaxAmount] = useState(amount - 1)
   const [selection, setSelection] = useState(0)
 
@@ -63,5 +63,5 @@ export const useSelection = (
     }
   }, isActive)
 
-  return [selection, setSelection, prevent]
+  return [selection, setSelection, prevent] as const
 }

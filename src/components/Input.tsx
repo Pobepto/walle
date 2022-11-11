@@ -2,7 +2,7 @@ import InkTextInput from 'ink-text-input'
 import React from 'react'
 import { useDidMountEffect } from '@hooks'
 
-interface InkTextProps {
+interface InkTextInputProps {
   placeholder?: string
   focus?: boolean
   mask?: string
@@ -13,12 +13,19 @@ interface InkTextProps {
   onSubmit?: (value: string) => void
 }
 
-export interface InputProps extends InkTextProps {
+export interface InputProps extends InkTextInputProps {
   onFocus?: () => void
   onBlur?: () => void
+  disabled?: boolean
 }
 
-export const Input: React.FC<InputProps> = ({ onFocus, onBlur, ...props }) => {
+export const Input: React.FC<InputProps> = ({
+  onFocus,
+  onBlur,
+  onChange,
+  disabled,
+  ...props
+}) => {
   const { focus } = props
 
   useDidMountEffect(() => {
@@ -29,5 +36,14 @@ export const Input: React.FC<InputProps> = ({ onFocus, onBlur, ...props }) => {
     }
   }, [focus])
 
-  return <InkTextInput {...props} />
+  return (
+    <InkTextInput
+      onChange={(value) => {
+        if (!disabled) {
+          onChange(value)
+        }
+      }}
+      {...props}
+    />
+  )
 }

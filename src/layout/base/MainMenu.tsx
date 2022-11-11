@@ -33,10 +33,10 @@ export const MainMenu: React.FC = () => {
                 title: 'Switch chain',
                 onSelect: () => navigate(ROUTE.SWITCH_CHAIN),
               },
-              {
-                title: 'Switch account',
-                onSelect: () => console.log('Switch account'),
-              },
+              // {
+              //   title: 'Switch account',
+              //   onSelect: () => console.log('Switch account'),
+              // },
               {
                 title: 'Add token',
                 onSelect: () => navigate(ROUTE.TOKEN_ADD),
@@ -47,10 +47,10 @@ export const MainMenu: React.FC = () => {
               },
             ],
           },
-          {
-            title: 'Settings',
-            onSelect: () => console.log('Settings'),
-          },
+          // {
+          //   title: 'Settings',
+          //   onSelect: () => console.log('Settings'),
+          // },
         ]}
         prevKey="upArrow"
         nextKey="downArrow"
