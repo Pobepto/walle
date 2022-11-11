@@ -54,7 +54,7 @@ export const Tokens: React.FC = () => {
 
         return (
           <Selection
-            key={token.address}
+            key={`${token.name}${token.address}`}
             activeProps={{ underline: true, isFocused: true }}
           >
             <TextButton onPress={() => handleSelectToken(token)}>

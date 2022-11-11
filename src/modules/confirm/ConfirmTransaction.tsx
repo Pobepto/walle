@@ -9,14 +9,14 @@ import {
   combine,
   isNumber,
   numberInRange,
-  useEstimate,
+  useGasLimit,
   useForm,
   useGasPrice,
 } from '@hooks'
 import { ROUTE, useData, useNavigate } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 import { Box, Text } from 'ink'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 enum Step {
   SET_TX_DETAILS,
@@ -40,21 +40,19 @@ export const ConfirmTransaction: React.FC = () => {
     throw new Error('Transaction not found')
   }
 
-  const estimatedGas = useEstimate(populatedTx)
-  const gasPrice = useGasPrice()
+  const [gasLimit, gasLimitLoading] = useGasLimit(populatedTx)
+  const [gasPrice, gasPriceLoading] = useGasPrice()
+
   const sendTransaction = useBlockchainStore((state) => state.sendTransaction)
 
-  // too late for form
-  console.log('current', estimatedGas, gasPrice)
-
-  const { register, data, errors, isValid } = useForm<Inputs>({
+  const { register, change, data, errors, isValid } = useForm<Inputs>({
     rules: {
       gasPrice: combine(isNumber(), numberInRange(0, Infinity)),
       gasLimit: combine(isNumber(), numberInRange(0, Infinity)),
     },
     initialValues: {
-      gasPrice,
-      gasLimit: estimatedGas,
+      gasPrice: '0',
+      gasLimit: '0',
     },
     options: {
       validateAction: 'blur',
@@ -63,13 +61,21 @@ export const ConfirmTransaction: React.FC = () => {
 
   const onSendTransaction = () => {
     if (isValid) {
-      console.log('success')
+      sendTransaction(populatedTx)
     }
   }
 
   const onReject = () => {
     navigate(ROUTE.WALLET)
   }
+
+  useEffect(() => {
+    change('gasPrice', gasPrice)
+  }, [gasPrice])
+
+  useEffect(() => {
+    change('gasLimit', gasLimit)
+  }, [gasLimit])
 
   if (step === Step.SET_TX_DETAILS) {
     return (
@@ -87,6 +93,7 @@ export const ConfirmTransaction: React.FC = () => {
             <InputBox
               label="Gas price"
               error={errors.gasPrice}
+              disabled={gasPriceLoading}
               {...register('gasPrice')}
             />
           </Selection>
@@ -94,6 +101,7 @@ export const ConfirmTransaction: React.FC = () => {
             <InputBox
               label="Gas limit"
               error={errors.gasLimit}
+              disabled={gasLimitLoading}
               {...register('gasLimit')}
             />
           </Selection>
@@ -103,7 +111,12 @@ export const ConfirmTransaction: React.FC = () => {
               <Button onPress={onReject}>Reject</Button>
             </Selection>
             <Selection activeProps={{ isFocused: true }}>
-              <Button onPress={() => setStep(Step.SEND_TX)}>Next</Button>
+              <Button
+                onPress={() => setStep(Step.SEND_TX)}
+                isLoading={gasLimitLoading || gasPriceLoading}
+              >
+                Next
+              </Button>
             </Selection>
           </Box>
         </Box>
@@ -116,8 +129,8 @@ export const ConfirmTransaction: React.FC = () => {
       <Box marginTop={-1}>
         <Text> Confirm </Text>
       </Box>
-      <Text>Gas price: {gasPrice}</Text>
-      <Text>Gas limit: {estimatedGas}</Text>
+      <Text>Gas price: {data.gasPrice}</Text>
+      <Text>Gas limit: {data.gasLimit}</Text>
 
       <SelectionZone
         nextKey="downArrow"

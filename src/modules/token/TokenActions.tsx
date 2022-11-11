@@ -36,11 +36,11 @@ export const TokenActions: React.FC = () => {
             - Transfer
           </TextButton>
         </Selection>
-        <Selection activeProps={{ isFocused: true }}>
+        {/* <Selection activeProps={{ isFocused: true }}>
           <TextButton onPress={() => console.log('call')}>
             - Call method
           </TextButton>
-        </Selection>
+        </Selection> */}
       </Box>
     </SelectionZone>
   )

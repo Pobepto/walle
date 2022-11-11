@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node build/out.js",
-    "build:dev": "node esbuild.config.js",
+    "dev": "node esbuild.config.js",
     "format": "prettier-eslint --write \"src/**/*.{ts,tsx}\"",
     "commit": "git-cz",
     "precommit": "lint-staged"

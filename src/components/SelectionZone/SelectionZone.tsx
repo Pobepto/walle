@@ -11,13 +11,13 @@ import React, {
 import { Nullable } from 'tsdef'
 import { Selection } from './Selection'
 
-const SelectionContext = createContext<
-  Nullable<{
-    selection: number
-    select: (value: number) => void
-    isActive: boolean
-  }>
->(null)
+export interface IZone {
+  selection: number
+  select: (value: number) => void
+  isActive: boolean
+}
+
+const SelectionContext = createContext<Nullable<IZone>>(null)
 
 export const useSelectionZone = () => useContext(SelectionContext)
 

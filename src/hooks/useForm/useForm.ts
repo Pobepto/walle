@@ -1,5 +1,5 @@
 import { isDefined } from '@src/utils'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type Values = Record<string, string>
 type Rule<T> = (value: T[keyof T], data: Partial<T>) => string | undefined
@@ -75,7 +75,7 @@ export const useForm = <T extends Values = Values>({
     }
   }
 
-  const onChange = (value: string, name: keyof T) => {
+  const onChange = (name: keyof T, value: string) => {
     setData((state) => ({ ...state, [name]: value }))
     // TODO: fix this
     validateInputOnAction(name, 'change')
@@ -97,12 +97,20 @@ export const useForm = <T extends Values = Values>({
     return {
       onBlur: () => onBlur(name),
       onFocus: () => onFocus(name),
-      onChange: (e: string) => onChange(e, name),
+      onChange: (e: string) => onChange(name, e),
       value: data[name] ?? '',
     }
   }
 
-  return { register, validate, data, errors, isValid, setData }
+  return {
+    register,
+    validate,
+    data,
+    errors,
+    isValid,
+    setData,
+    change: onChange,
+  }
 }
 
 export const combine =
