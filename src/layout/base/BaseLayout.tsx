@@ -19,8 +19,8 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
       <Header />
       <Box flexDirection="row" alignSelf="center">
         <SelectionZone
-          prevKey="leftArrow"
-          nextKey="rightArrow"
+          prevKey="meta+leftArrow"
+          nextKey="meta+rightArrow"
           isActive={true}
           onChange={setActiveColumn}
         >

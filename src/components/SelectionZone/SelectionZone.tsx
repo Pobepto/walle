@@ -1,4 +1,4 @@
-import { useSelection } from '@src/hooks'
+import { SuperKey, useSelection } from '@src/hooks'
 import { Key } from 'ink'
 import React, {
   Children,
@@ -22,8 +22,8 @@ const SelectionContext = createContext<
 export const useSelectionZone = () => useContext(SelectionContext)
 
 type Props = React.PropsWithChildren<{
-  prevKey: keyof Key | (keyof Key)[]
-  nextKey: keyof Key | (keyof Key)[]
+  prevKey: SuperKey | SuperKey[]
+  nextKey: SuperKey | SuperKey[]
   isActive?: boolean
   looped?: boolean
   onChange?: (selection: number) => void
