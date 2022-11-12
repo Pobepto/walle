@@ -5,6 +5,7 @@ import {
   combine,
   isNumber,
   length,
+  link,
   numberInRange,
   useForm,
   useSelection,
@@ -24,25 +25,22 @@ type Inputs = {
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!
   const addChain = useBlockchainStore((state) => state.addChain)
+
   const { errors, register, validate, data } = useForm<Inputs>({
     rules: {
       name: length(3),
-      rpc: length(3),
-      chainId: combine(isNumber(), numberInRange(0, Infinity)),
-      explorer: length(3),
+      rpc: link(),
+      chainId: combine(isNumber(), numberInRange(1, Infinity)),
+      explorer: link(),
       currency: length(2),
-    },
-    options: {
-      validateAction: 'never',
     },
   })
 
-  const [selection, setSelection, prevent] = useSelection({
-    amount: 5,
+  const [selection, setSelection, preventInput] = useSelection({
+    amount: 6,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
     isActive: parentZone.selection === COLUMNS.MAIN,
-    looped: false,
   })
 
   const onSubmit = () => {
@@ -57,7 +55,7 @@ export const AddChain: React.FC = () => {
         explorer: data.explorer,
       })
     } else {
-      prevent()
+      preventInput()
       // TODO: focus on first error
       setSelection(0)
     }

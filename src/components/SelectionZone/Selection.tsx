@@ -1,11 +1,15 @@
 import React, { cloneElement, isValidElement } from 'react'
-import { useSelectionZone } from './SelectionContext'
+import { Nullable } from 'tsdef'
+import { IZone, useSelectionZone } from './SelectionContext'
 
-type Props = React.PropsWithChildren<{
+type Props = {
   activeProps?: Record<string, unknown>
   index?: number
-  children: React.ReactNode | React.ReactNode[] | ((isFocused: boolean) => any)
-}>
+  children:
+    | React.ReactNode
+    | React.ReactNode[]
+    | ((isFocused: boolean, zone: Nullable<IZone>) => JSX.Element)
+}
 
 export const Selection: React.FC<Props> = ({
   children,
@@ -19,7 +23,7 @@ export const Selection: React.FC<Props> = ({
 
     if (isActive) {
       if (typeof children === 'function') {
-        return children(isActive)
+        return children(isActive, zone)
       }
 
       if (isValidElement(children)) {
@@ -31,15 +35,19 @@ export const Selection: React.FC<Props> = ({
     }
   }
 
+  if (typeof children === 'function') {
+    return children(false, zone)
+  }
+
   return <>{children}</>
 }
 
 // WIP
-export const selectionable = <T extends Record<string, any>>(
-  Component: React.ComponentType<T>,
-  activeProps?: Partial<T>,
+export const selectionable = <Props extends Record<string, any>>(
+  Component: React.ComponentType<Props>,
+  activeProps?: Partial<Props>,
 ) => {
-  const SelectionableComponent: React.FC<T> = (props) => {
+  const SelectionableComponent: React.FC<Props> = (props) => {
     return (
       <Selection activeProps={activeProps}>
         <Component {...props} />

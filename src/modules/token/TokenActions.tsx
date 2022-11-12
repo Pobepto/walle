@@ -31,18 +31,32 @@ export const TokenActions: React.FC = () => {
             {token.name} ({token.symbol}){' '}
           </Text>
         </Box>
-        <Selection activeProps={{ isFocused: true }}>
-          <TextButton onPress={() => navigate(ROUTE.TOKEN_TRANSFER, token)}>
-            - Transfer
-          </TextButton>
+        <Selection>
+          {(isFocused) => (
+            <TextButton
+              isFocused={isFocused}
+              onPress={() => navigate(ROUTE.TOKEN_TRANSFER, token)}
+            >
+              {isFocused ? '->' : '-'} Transfer
+            </TextButton>
+          )}
         </Selection>
-        <Selection activeProps={{ isFocused: true }}>
-          <TextButton onPress={() => navigate(ROUTE.TOKEN_INFO, token)}>
-            - Info
-          </TextButton>
+        <Selection>
+          {(isFocused) => (
+            <TextButton
+              isFocused={isFocused}
+              onPress={() => navigate(ROUTE.TOKEN_INFO, token)}
+            >
+              {isFocused ? '->' : '-'} Info
+            </TextButton>
+          )}
         </Selection>
-        <Selection activeProps={{ isFocused: true }}>
-          <TextButton onPress={() => null}>- Call method [WIP]</TextButton>
+        <Selection>
+          {(isFocused) => (
+            <TextButton isFocused={isFocused} onPress={() => null}>
+              {isFocused ? '->' : '-'} Call method [WIP]
+            </TextButton>
+          )}
         </Selection>
       </Box>
     </SelectionZone>

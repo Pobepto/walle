@@ -35,3 +35,9 @@ export const isAddress = () => (value: string) => {
     return `Address is invalid`
   }
 }
+
+export const link = () => (value: string) => {
+  if (!value.startsWith('http')) {
+    return `Must be a url`
+  }
+}
