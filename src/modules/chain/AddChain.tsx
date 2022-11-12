@@ -10,7 +10,8 @@ import {
   useSelection,
 } from '@hooks'
 import { InputBox } from '@components/InputBox'
-import { COLUMNS, useAppStore, useBlockchainStore } from '@store'
+import { COLUMNS, useBlockchainStore } from '@store'
+import { useSelectionZone } from '@src/components/SelectionZone'
 
 type Inputs = {
   name: string
@@ -21,8 +22,7 @@ type Inputs = {
 }
 
 export const AddChain: React.FC = () => {
-  // const navigate = useNavigate()
-  const activeColumn = useAppStore((state) => state.activeColumn)
+  const parentZone = useSelectionZone()!
   const addChain = useBlockchainStore((state) => state.addChain)
   const { errors, register, validate, data } = useForm<Inputs>({
     rules: {
@@ -37,13 +37,13 @@ export const AddChain: React.FC = () => {
     },
   })
 
-  const [selection, setSelection, prevent] = useSelection(
-    5,
-    'upArrow',
-    ['downArrow', 'return'],
-    activeColumn === COLUMNS.MAIN,
-    false,
-  )
+  const [selection, setSelection, prevent] = useSelection({
+    amount: 5,
+    prevKey: 'upArrow',
+    nextKey: ['downArrow', 'return'],
+    isActive: parentZone.selection === COLUMNS.MAIN,
+    looped: false,
+  })
 
   const onSubmit = () => {
     const [isValid] = validate()

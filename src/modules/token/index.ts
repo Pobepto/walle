@@ -1,3 +1,5 @@
 export * from './AddToken'
 export * from './TokenActions'
-export * from './Transfer'
+export * from './CurrencyActions'
+export * from './TokenTransfer'
+export * from './TokenInfo'

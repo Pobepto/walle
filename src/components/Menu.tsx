@@ -57,13 +57,13 @@ export const Menu: React.FC<Props> = ({
     Boolean,
   )
 
-  const [selection] = useSelection(
-    items.length,
+  const [selection] = useSelection({
+    amount: items.length,
     prevKey,
     nextKey,
-    focused && !anyNestedMenuIsVisible,
+    isActive: focused && !anyNestedMenuIsVisible,
     looped,
-  )
+  })
 
   const openNestedMenu = (id: string) => {
     setNestedMenusVisibility({

@@ -1,5 +1,5 @@
 import React, { cloneElement, isValidElement } from 'react'
-import { useSelectionZone } from './SelectionZone'
+import { useSelectionZone } from './SelectionContext'
 
 type Props = React.PropsWithChildren<{
   activeProps?: Record<string, unknown>

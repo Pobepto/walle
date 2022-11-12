@@ -13,7 +13,9 @@ import {
   SwitchChain,
   AddChain,
   TokenActions,
-  Transfer,
+  TokenTransfer,
+  TokenInfo,
+  CurrencyActions,
   ConfirmTransaction,
 } from './modules'
 import { routerFactory } from './Router'
@@ -31,13 +33,16 @@ export enum ROUTE {
   SWITCH_CHAIN,
   ADD_CHAIN,
   TOKEN_ACTIONS,
-  TRANSFER,
+  TOKEN_TRANSFER,
+  TOKEN_INFO,
+  CURRENCY_ACTIONS,
   CONFIRM_TRANSACTION,
 }
 
 export interface ROUTE_DATA {
   [ROUTE.TOKEN_ACTIONS]: Token
-  [ROUTE.TRANSFER]: Token
+  [ROUTE.TOKEN_TRANSFER]: Token
+  [ROUTE.TOKEN_INFO]: Token
   [ROUTE.CONFIRM_TRANSACTION]: PopulatedTransaction
 }
 
@@ -60,11 +65,13 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.REGISTRATION_CREATE]: () => welcome(CreateWallet),
   [ROUTE.REGISTRATION_PASSWORD]: () => welcome(SetPassword),
   [ROUTE.WALLET]: () => base(Wallet),
-  [ROUTE.TOKEN_ADD]: () => base(AddToken),
-  [ROUTE.SWITCH_CHAIN]: () => base(SwitchChain),
   [ROUTE.ADD_CHAIN]: () => base(AddChain),
+  [ROUTE.SWITCH_CHAIN]: () => base(SwitchChain),
+  [ROUTE.TOKEN_ADD]: () => base(AddToken),
   [ROUTE.TOKEN_ACTIONS]: () => base(TokenActions),
-  [ROUTE.TRANSFER]: () => base(Transfer),
+  [ROUTE.TOKEN_TRANSFER]: () => base(TokenTransfer),
+  [ROUTE.TOKEN_INFO]: () => base(TokenInfo),
+  [ROUTE.CURRENCY_ACTIONS]: () => base(CurrencyActions),
   [ROUTE.CONFIRM_TRANSACTION]: () => base(ConfirmTransaction),
 })
 

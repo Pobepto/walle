@@ -1,33 +1,12 @@
-import { SuperKey, useSelection } from '@src/hooks'
-import { Key } from 'ink'
-import React, {
-  Children,
-  cloneElement,
-  createContext,
-  isValidElement,
-  useContext,
-  useEffect,
-} from 'react'
-import { Nullable } from 'tsdef'
+import { SelectionSettings, useSelection } from '@src/hooks'
+import React, { Children, cloneElement, isValidElement, useEffect } from 'react'
 import { Selection } from './Selection'
+import { SelectionContext } from './SelectionContext'
 
-export interface IZone {
-  selection: number
-  select: (value: number) => void
-  isActive: boolean
-}
-
-const SelectionContext = createContext<Nullable<IZone>>(null)
-
-export const useSelectionZone = () => useContext(SelectionContext)
-
-type Props = React.PropsWithChildren<{
-  prevKey: SuperKey | SuperKey[]
-  nextKey: SuperKey | SuperKey[]
-  isActive?: boolean
-  looped?: boolean
-  onChange?: (selection: number) => void
-}>
+type SelectionZoneProps = Omit<SelectionSettings, 'amount'> &
+  React.PropsWithChildren<{
+    onChange?: (selection: number) => void
+  }>
 
 const iterateChildren = (children: React.ReactNode) => {
   let amount = 0
@@ -67,8 +46,9 @@ const iterateChildren = (children: React.ReactNode) => {
   return { newChildren, amount }
 }
 
-export const SelectionZone: React.FC<Props> = ({
+export const SelectionZone: React.FC<SelectionZoneProps> = ({
   children,
+  defaultSelection,
   prevKey,
   nextKey,
   isActive = false,
@@ -77,13 +57,14 @@ export const SelectionZone: React.FC<Props> = ({
 }) => {
   const { newChildren, amount } = iterateChildren(children)
 
-  const [selection, select] = useSelection(
+  const [selection, select] = useSelection({
     amount,
-    prevKey,
+    defaultSelection,
     nextKey,
+    prevKey,
     isActive,
     looped,
-  )
+  })
 
   useEffect(() => {
     onChange && onChange(selection)

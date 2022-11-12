@@ -30,11 +30,11 @@ const MNEMONIC_PHRASE_LENGTH = 12
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
   const importWallet = useWalletStore((state) => state.importWallet)
-  const [selection, select] = useSelection(
-    MNEMONIC_PHRASE_LENGTH + 1,
-    'tab',
-    'return',
-  )
+  const [selection, select] = useSelection({
+    amount: MNEMONIC_PHRASE_LENGTH + 1,
+    prevKey: 'tab',
+    nextKey: 'return',
+  })
   const [error, setError] = useState('')
 
   const { data, register, errors, isValid, setData } = useForm<Inputs>({

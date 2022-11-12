@@ -1,20 +1,29 @@
-import { Key, useStdin } from 'ink'
-import React, { useEffect, useState } from 'react'
+import { Key } from 'ink'
+import { useEffect, useState } from 'react'
 import { clamp } from '@utils/clamp'
 import { useInput } from './useInput'
 
-export type SuperKey = `meta+${keyof Key}` | keyof Key
+export type SuperKey = `${'meta' | 'ctrl'}+${keyof Key | string}` | keyof Key
 
-// TODO: too many arguments, refactor
-export const useSelection = (
-  amount: number,
-  prevKey: SuperKey | SuperKey[],
-  nextKey: SuperKey | SuperKey[],
-  isActive?: boolean,
-  looped?: boolean,
-) => {
+export interface SelectionSettings {
+  amount: number
+  defaultSelection?: number
+  nextKey: SuperKey | SuperKey[]
+  prevKey?: SuperKey | SuperKey[]
+  isActive?: boolean
+  looped?: boolean
+}
+
+export const useSelection = ({
+  amount,
+  defaultSelection = 0,
+  prevKey,
+  nextKey,
+  isActive,
+  looped,
+}: SelectionSettings) => {
   const [maxAmount, setMaxAmount] = useState(amount - 1)
-  const [selection, setSelection] = useState(0)
+  const [selection, setSelection] = useState(defaultSelection)
 
   useEffect(() => {
     const newMaxAmount = amount - 1
@@ -24,42 +33,22 @@ export const useSelection = (
     setMaxAmount(newMaxAmount)
   }, [amount])
 
-  const { stdin } = useStdin()
-
-  stdin?.on('data', (data) => {
-    console.log('data', data.toString('hex'))
-  })
-
-  const prevent = useInput((key) => {
-    console.log(key)
-    // {
-    //   upArrow: false,
-    //   downArrow: false,
-    //   leftArrow: false,
-    //   rightArrow: false,
-    //   pageDown: false,
-    //   pageUp: false,
-    //   return: false,
-    //   escape: false,
-    //   ctrl: false,
-    //   shift: false,
-    //   tab: false,
-    //   backspace: false,
-    //   delete: false,
-    //   meta: true
-    // }
-    const prevKeys = Array.isArray(prevKey) ? prevKey : [prevKey]
-    const nextKeys = Array.isArray(nextKey) ? nextKey : [nextKey]
-
+  const prevent = useInput((key, input) => {
     const handleSuperKey = (superKey: SuperKey) => {
       const keys = superKey.split('+') as (keyof Key)[]
-      return keys.every((k) => key[k])
+      return keys.every((k) => key[k] || input === k)
     }
 
-    if (prevKeys.some(handleSuperKey)) {
-      setSelection((i) => clamp(i - 1, 0, maxAmount, looped))
-    } else if (nextKeys.some(handleSuperKey)) {
+    const nextKeys = Array.isArray(nextKey) ? nextKey : [nextKey]
+    if (nextKeys.some(handleSuperKey)) {
       setSelection((i) => clamp(i + 1, 0, maxAmount, looped))
+    }
+
+    if (prevKey) {
+      const prevKeys = Array.isArray(prevKey) ? prevKey : [prevKey]
+      if (prevKeys.some(handleSuperKey)) {
+        setSelection((i) => clamp(i - 1, 0, maxAmount, looped))
+      }
     }
   }, isActive)
 

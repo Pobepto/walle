@@ -8,13 +8,11 @@ export enum COLUMNS {
 }
 
 export interface AppStore {
-  activeColumn: COLUMNS
-  setActiveColumn: (column: COLUMNS) => void
+  empty?: any
 }
 
 export type AppAction = Action<AppStore>
 
 export const useAppStore = create<AppStore>((set) => ({
-  activeColumn: COLUMNS.MENU,
-  setActiveColumn: (column: COLUMNS) => set({ activeColumn: column }),
+  // empty
 }))

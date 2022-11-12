@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button } from '@components'
 import { useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { InputBox } from '@components/InputBox'
@@ -17,13 +16,13 @@ export const Login: React.FC = () => {
   const decryptWallet = useWalletStore((state) => state.decryptWallet)
   const { data, errors, register } = useForm<Inputs>()
 
-  const [selection, setSelection, prevent] = useSelection(
-    2,
-    'upArrow',
-    ['downArrow', 'return'],
-    true,
-    false,
-  )
+  const [selection, setSelection, prevent] = useSelection({
+    amount: 2,
+    prevKey: 'upArrow',
+    nextKey: ['downArrow', 'return'],
+    isActive: true,
+    looped: false,
+  })
 
   const onApply = async () => {
     try {

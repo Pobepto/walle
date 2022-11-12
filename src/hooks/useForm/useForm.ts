@@ -1,5 +1,5 @@
 import { isDefined } from '@src/utils'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 type Values = Record<string, string>
 type Rule<T> = (value: T[keyof T], data: Partial<T>) => string | undefined
@@ -75,10 +75,15 @@ export const useForm = <T extends Values = Values>({
     }
   }
 
-  const onChange = (name: keyof T, value: string) => {
+  const onChange = (name: keyof T, value: string, forceValidate = false) => {
     setData((state) => ({ ...state, [name]: value }))
+
     // TODO: fix this
-    validateInputOnAction(name, 'change')
+    if (forceValidate) {
+      validateInput(name)
+    } else {
+      validateInputOnAction(name, 'change')
+    }
   }
 
   const onBlur = (name: keyof T) => {

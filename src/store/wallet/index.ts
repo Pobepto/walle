@@ -1,3 +1,5 @@
+import { Wallet } from '@ethersproject/wallet'
+import { getDerivationPath } from '@src/utils'
 import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { useBlockchainStore } from '../blockchain'
@@ -40,6 +42,15 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
     logout: logout(set, get),
   }),
 )
+
+export const getSigner = () => {
+  const { phrase, pathId } = useWalletStore.getState()
+  const { provider } = useBlockchainStore.getState()
+
+  return Wallet.fromMnemonic(phrase!, getDerivationPath(pathId)).connect(
+    provider,
+  )
+}
 
 // Помимо такого обновления нам нужно обновляться на смену chainId
 useWalletStore.subscribe(

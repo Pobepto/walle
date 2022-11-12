@@ -34,10 +34,10 @@ export const useTokensStore = createWithSubscribeSelector<TokensStore>(
         chainId: 97,
       },
       {
-        name: 'BUSD',
-        symbol: 'BUSD',
+        name: 'USDT',
+        symbol: 'USDT',
         decimals: 18,
-        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        address: '0xf16eec3a587ba34768a4bb9cb9b7b1d66d250227',
         chainId: 97,
       },
       {

@@ -18,17 +18,19 @@ import {
 } from '@src/hooks'
 import { Button } from '@src/components'
 import { ERC20_ABI } from '@src/store/blockchain/contract'
+import { Loader } from '@src/components/Loader'
 
 type Inputs = {
   receiver: string
   amount: string
 }
 
-export const Transfer: React.FC = () => {
+export const TokenTransfer: React.FC = () => {
   const navigate = useNavigate()
   const parentZone = useSelectionZone()!
-  const token = useData<ROUTE.TOKEN_ACTIONS>()
+  const token = useData<ROUTE.TOKEN_TRANSFER>()
   const balances = useTokensStore((store) => store.balances)
+  const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
 
   // TODO: We can handle this error using ErrorBoundary in parent component
   if (!token) {
@@ -63,7 +65,7 @@ export const Transfer: React.FC = () => {
   return (
     <SelectionZone
       prevKey="upArrow"
-      nextKey="downArrow"
+      nextKey={['downArrow', 'return']}
       isActive={parentZone.selection === COLUMNS.MAIN}
     >
       <Box flexDirection="column">
@@ -80,16 +82,41 @@ export const Transfer: React.FC = () => {
             {...register('receiver')}
           />
         </Selection>
-        <Text>Balance: {balance}</Text>
+        <Text>
+          <Text bold>Balance:</Text>{' '}
+          <Loader loading={balancesIsLoading}>{balance}</Loader>{' '}
+        </Text>
         <Selection activeProps={{ focus: true }}>
           <InputBox
             label="Amount"
             error={errors.amount}
+            loading={balancesIsLoading}
             {...register('amount')}
           />
         </Selection>
-        <Selection activeProps={{ isFocused: true }}>
-          <Button onPress={onTransfer}>Transfer</Button>
+        <Selection activeProps={{ isActive: true }}>
+          <SelectionZone
+            prevKey="leftArrow"
+            nextKey="rightArrow"
+            defaultSelection={1}
+          >
+            <Box justifyContent="space-around">
+              <Selection activeProps={{ isFocused: true }}>
+                <Button
+                  onPress={() => navigate(ROUTE.TOKEN_ACTIONS, token)}
+                  minWidth="20%"
+                  paddingX={1}
+                >
+                  <Text>{'<-'} Back</Text>
+                </Button>
+              </Selection>
+              <Selection activeProps={{ isFocused: true }}>
+                <Button onPress={onTransfer} minWidth="20%" paddingX={1}>
+                  <Text>Transfer {'->'}</Text>
+                </Button>
+              </Selection>
+            </Box>
+          </SelectionZone>
         </Selection>
       </Box>
     </SelectionZone>

@@ -1,23 +1,35 @@
 import { Box, Text } from 'ink'
+import Spinner from 'ink-spinner'
 import React from 'react'
 import { Error, Input, InputProps } from '.'
 
 interface Props extends InputProps {
   label?: string
   error?: string
+  loading?: boolean
 }
 
 export const InputBox: React.FC<Props> = ({
   label,
   error,
   focus = false,
+  loading = false,
   ...inputProps
 }) => {
+  const disabled = inputProps.disabled || loading
+
   return (
-    <Box borderStyle="classic" flexDirection="column">
+    <Box
+      borderStyle="classic"
+      borderColor={disabled ? 'grey' : undefined}
+      flexDirection="column"
+    >
       <Box>
-        {label ? <Text>{label}: </Text> : null}
-        <Input focus={focus} {...inputProps} />
+        {label ? (
+          <Text color={disabled ? 'grey' : undefined}>{label}: </Text>
+        ) : null}
+        <Input focus={focus} disabled={disabled} {...inputProps} />
+        {loading ? <Spinner /> : null}
       </Box>
       {error ? <Error text={error} /> : null}
     </Box>
