@@ -19,8 +19,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
             <Box
               width="20%"
               flexDirection="column"
-              paddingLeft={1}
-              paddingRight={1}
+              paddingX={1}
               borderStyle="single"
             >
               <MainMenu />
@@ -31,8 +30,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
             <Box
               width="60%"
               flexDirection="column"
-              paddingLeft={1}
-              paddingRight={1}
+              paddingX={1}
               borderStyle="single"
             >
               {children}
@@ -43,8 +41,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
             <Box
               width="20%"
               flexDirection="column"
-              paddingLeft={1}
-              paddingRight={1}
+              paddingX={1}
               borderStyle="single"
             >
               <Tokens />

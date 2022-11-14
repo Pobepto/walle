@@ -21,7 +21,7 @@ export const MainMenu: React.FC = () => {
         <Text bold> Menu </Text>
       </Box>
       <Menu
-        focused={parentZone.selection === COLUMNS.MENU}
+        isActive={parentZone.selection === COLUMNS.MENU}
         items={[
           {
             title: 'Home',
@@ -37,10 +37,13 @@ export const MainMenu: React.FC = () => {
                   parentZone.select(COLUMNS.MAIN)
                 },
               },
-              // {
-              //   title: 'Switch account',
-              //   onSelect: () => console.log('Switch account'),
-              // },
+              {
+                title: 'Switch account',
+                onSelect: () => {
+                  navigate(ROUTE.SWITCH_ACCOUNT)
+                  parentZone.select(COLUMNS.MAIN)
+                },
+              },
               {
                 title: 'Add token',
                 onSelect: () => {
