@@ -54,10 +54,6 @@ export const ConfirmTransaction: React.FC = () => {
       gasPrice: combine(isNumber(), numberInRange(0, Infinity)),
       gasLimit: combine(isNumber(), numberInRange(0, Infinity)),
     },
-    initialValues: {
-      gasPrice: '',
-      gasLimit: '',
-    },
     options: {
       validateAction: 'blur',
     },

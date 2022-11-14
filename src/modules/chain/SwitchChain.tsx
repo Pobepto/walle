@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Chain, useBlockchainStore } from '@store/blockchain'
+import { useBlockchainStore } from '@store/blockchain'
+import { Chain } from '@store/blockchain/constants'
 import { TextButton } from '@components/TextButton'
 import { Button } from '@components/Button'
 import { ROUTE, useNavigate } from '@src/routes'
@@ -9,7 +10,7 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { COLUMNS } from '@src/store'
+import { COLUMNS } from '@store'
 
 export const SwitchChain: React.FC = () => {
   const parentZone = useSelectionZone()!

@@ -1,15 +1,11 @@
-import { PopulatedTransaction } from '@ethersproject/contracts'
 import { useEffect, useState } from 'react'
+import { PopulatedTransaction } from '@ethersproject/contracts'
 import { useWallet } from './useWallet'
 
 export const useGasLimit = (populatedTx: PopulatedTransaction) => {
-  const wallet = useWallet()
+  const wallet = useWallet()!
   const [isLoading, setLoading] = useState(true)
-  const [estimatedGas, setEstimatedGas] = useState<string>('')
-
-  if (!wallet) {
-    throw new Error('Wallet is null!')
-  }
+  const [gasLimit, setGasLimit] = useState('')
 
   useEffect(() => {
     const estimate = async () => {
@@ -18,11 +14,11 @@ export const useGasLimit = (populatedTx: PopulatedTransaction) => {
       setLoading(false)
       const fivePercent = gas.mul(5).div(100)
 
-      setEstimatedGas(gas.add(fivePercent).toString())
+      setGasLimit(gas.add(fivePercent).toString())
     }
 
     estimate()
   }, [populatedTx])
 
-  return [estimatedGas, isLoading] as const
+  return [gasLimit, isLoading] as const
 }
