@@ -23,9 +23,10 @@ export interface WalletStore {
   encryptWallet: (password: string) => Promise<string>
   decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
   logout: () => void
+  selectAccount: (accountIndex: number) => void
 }
 
-export type WalletAction<T extends keyof WalletStore = any> = Action<
+export type WalletAction<T extends keyof WalletStore> = Action<
   WalletStore,
   WalletStore[T]
 >
@@ -40,6 +41,9 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
     encryptWallet: encryptWallet(set, get),
     decryptWallet: decryptWallet(set, get),
     logout: logout(set, get),
+    selectAccount: (accountIndex: number) => {
+      set({ pathId: accountIndex })
+    },
   }),
 )
 

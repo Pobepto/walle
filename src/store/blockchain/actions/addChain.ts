@@ -1,7 +1,7 @@
-import { BlockchainAction, Chain } from '@src/store'
+import { BlockchainAction } from '@src/store'
 
 export const addChain: BlockchainAction<'addChain'> =
-  (set, get) => async (chain: Chain) => {
+  (set, get) => async (chain) => {
     const chains = get().chains.slice()
 
     chains.push(chain)

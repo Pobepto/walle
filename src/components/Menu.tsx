@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Box, Key } from 'ink'
-import { useKey, useSelection } from '@hooks'
+import { SelectionSettings, useKey, useSelection } from '@hooks'
 import { TextButton } from './TextButton'
+import { Selection, SelectionZone } from './SelectionZone'
 
 interface MenuItem {
   title: React.ReactNode
@@ -11,29 +12,25 @@ interface MenuItem {
 
 type SubMenuItem = Omit<MenuItem, 'items'>
 
-interface Props {
-  focused?: boolean
-  looped?: boolean
-  prevKey?: keyof Key
-  nextKey?: keyof Key
+interface MenuProps extends Omit<SelectionSettings, 'amount'> {
   selectKey?: keyof Key
   items: MenuItem[]
 }
 
 interface PropsDrop {
-  isFocused: boolean
+  isActive: boolean
   items: SubMenuItem[]
   onReturn: () => void
 }
 
-const NestedMenu: React.FC<PropsDrop> = ({ isFocused, onReturn, items }) => {
-  useKey(['escape', 'leftArrow'], onReturn, isFocused)
+const NestedMenu: React.FC<PropsDrop> = ({ isActive, onReturn, items }) => {
+  useKey(['escape', 'leftArrow'], onReturn, isActive)
 
   return (
     <Box marginLeft={1}>
       <Menu
         items={items}
-        focused={isFocused}
+        isActive={isActive}
         prevKey="upArrow"
         nextKey="downArrow"
       />
@@ -41,12 +38,12 @@ const NestedMenu: React.FC<PropsDrop> = ({ isFocused, onReturn, items }) => {
   )
 }
 
-export const Menu: React.FC<Props> = ({
-  focused = true,
-  looped,
+export const Menu: React.FC<MenuProps> = ({
+  isActive = false,
   items,
-  prevKey = 'leftArrow',
-  nextKey = 'rightArrow',
+  prevKey,
+  nextKey,
+  looped,
   selectKey = 'return',
 }) => {
   const [nestedMenusVisibility, setNestedMenusVisibility] = useState<
@@ -56,14 +53,6 @@ export const Menu: React.FC<Props> = ({
   const anyNestedMenuIsVisible = Object.values(nestedMenusVisibility).some(
     Boolean,
   )
-
-  const [selection] = useSelection({
-    amount: items.length,
-    prevKey,
-    nextKey,
-    isActive: focused && !anyNestedMenuIsVisible,
-    looped,
-  })
 
   const openNestedMenu = (id: string) => {
     setNestedMenusVisibility({
@@ -81,34 +70,44 @@ export const Menu: React.FC<Props> = ({
 
   return (
     <Box flexDirection="column">
-      {items.map((item, index) => {
-        const isFocused = focused && index === selection
-        const id = String(index)
-        const isVisible = nestedMenusVisibility[id]
+      <SelectionZone
+        prevKey={prevKey}
+        nextKey={nextKey}
+        isActive={isActive && !anyNestedMenuIsVisible}
+        looped={looped}
+      >
+        {items.map((item, index) => {
+          const id = String(index)
+          const isVisible = nestedMenusVisibility[id]
 
-        return (
-          <Box key={index} flexDirection="column">
-            <TextButton
-              selectKey={selectKey}
-              isFocused={isFocused}
-              onPress={
-                item.items
-                  ? () => openNestedMenu(id)
-                  : item.onSelect || (() => null)
-              }
-            >
-              {item.title} {item.items && (isVisible ? '▼' : '▶')}
-            </TextButton>
-            {item.items && isVisible && (
-              <NestedMenu
-                onReturn={() => closeNestedMenu(id)}
-                isFocused={isVisible && focused}
-                items={item.items}
-              />
-            )}
-          </Box>
-        )
-      })}
+          return (
+            <Box key={id} flexDirection="column">
+              <Selection>
+                {(isFocused) => (
+                  <TextButton
+                    selectKey={selectKey}
+                    isFocused={isFocused || isVisible}
+                    onPress={
+                      item.items
+                        ? () => openNestedMenu(id)
+                        : item.onSelect || (() => null)
+                    }
+                  >
+                    {item.title} {item.items && (isVisible ? '▼' : '▶')}
+                  </TextButton>
+                )}
+              </Selection>
+              {item.items && isVisible && (
+                <NestedMenu
+                  onReturn={() => closeNestedMenu(id)}
+                  isActive={isActive}
+                  items={item.items}
+                />
+              )}
+            </Box>
+          )
+        })}
+      </SelectionZone>
     </Box>
   )
 }

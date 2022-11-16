@@ -1,8 +1,9 @@
 import { getAddress } from '@ethersproject/address'
+import { Rule } from './useForm'
 
 export const length =
-  (min: number, max = Infinity) =>
-  (value: string) => {
+  <T>(min: number, max = Infinity): Rule<T> =>
+  (value) => {
     if (value.length < min) {
       return `Must be at least ${min} characters`
     }
@@ -12,32 +13,40 @@ export const length =
     }
   }
 
-export const isNumber = () => (value: string) => {
-  return Number.isInteger(parseFloat(value)) ? undefined : 'Must be a number'
-}
-
-export const numberInRange = (min: number, max: number) => (value: string) => {
-  const number = Number(value)
-
-  if (number < min) {
-    return `Must be bigger than ${min}`
+export const isNumber =
+  <T>(): Rule<T> =>
+  (value) => {
+    return Number.isInteger(parseFloat(value)) ? undefined : 'Must be a number'
   }
 
-  if (number > max) {
-    return `Must be lest than ${max}`
-  }
-}
+export const numberInRange =
+  <T>(min: number, max: number): Rule<T> =>
+  (value) => {
+    const number = Number(value)
 
-export const isAddress = () => (value: string) => {
-  try {
-    getAddress(value)
-  } catch (error) {
-    return `Address is invalid`
-  }
-}
+    if (number < min) {
+      return `Must be bigger than ${min}`
+    }
 
-export const link = () => (value: string) => {
-  if (!value.startsWith('http')) {
-    return `Must be a url`
+    if (number > max) {
+      return `Must be lest than ${max}`
+    }
   }
-}
+
+export const isAddress =
+  <T>(): Rule<T> =>
+  (value) => {
+    try {
+      getAddress(value)
+    } catch (error) {
+      return `Address is invalid`
+    }
+  }
+
+export const link =
+  <T>(): Rule<T> =>
+  (value) => {
+    if (!value.startsWith('http')) {
+      return `Must be a url`
+    }
+  }

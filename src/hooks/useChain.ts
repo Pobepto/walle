@@ -1,7 +1,6 @@
-import { Chain } from '@src/store/blockchain/constants'
 import { useBlockchainStore } from '@store/blockchain'
 
-export const useChain = (): Chain => {
+export const useChain = () => {
   const chainId = useBlockchainStore((store) => store.chainId)
   const chains = useBlockchainStore((store) => store.chains)
 
