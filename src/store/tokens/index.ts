@@ -18,7 +18,7 @@ export interface TokensStore {
   addToken: (token: Omit<Token, 'chainId'>) => void
 }
 
-export type TokensAction<T extends keyof TokensStore = any> = Action<
+export type TokensAction<T extends keyof TokensStore> = Action<
   TokensStore,
   TokensStore[T]
 >
@@ -60,11 +60,4 @@ export const useTokensStore = createWithSubscribeSelector<TokensStore>(
     balancesIsLoading: true,
     addToken: addToken(set, get),
   }),
-)
-
-useTokensStore.subscribe(
-  (state) => state.tokens,
-  () => {
-    useTokensStore.getState().syncBalances()
-  },
 )

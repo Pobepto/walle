@@ -4,7 +4,6 @@ import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { useBlockchainStore } from '../blockchain'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { useTokensStore } from '../tokens'
 import {
   decryptWallet,
   deriveMnemonicAddress,
@@ -55,14 +54,3 @@ export const getSigner = () => {
     provider,
   )
 }
-
-// Помимо такого обновления нам нужно обновляться на смену chainId
-useWalletStore.subscribe(
-  (state) => [state.pathId, state.phrase],
-  ([, phrase]) => {
-    if (phrase) {
-      useBlockchainStore.getState().getNativeBalance()
-      useTokensStore.getState().syncBalances()
-    }
-  },
-)

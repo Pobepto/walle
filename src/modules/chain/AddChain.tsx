@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
 import { Button } from '@components'
 import {
@@ -13,6 +13,7 @@ import {
 import { InputBox } from '@components/InputBox'
 import { COLUMNS, useBlockchainStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { JsonRpcProvider } from '@ethersproject/providers'
 
 type Inputs = {
   name: string
@@ -24,9 +25,10 @@ type Inputs = {
 
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!
+  const [networkIsLoading, setNetworkLoading] = useState(false)
   const addChain = useBlockchainStore((state) => state.addChain)
 
-  const { errors, register, validate, data } = useForm<Inputs>({
+  const { errors, register, data, change, isValid } = useForm<Inputs>({
     rules: {
       name: length(3),
       rpc: link(),
@@ -36,30 +38,41 @@ export const AddChain: React.FC = () => {
     },
   })
 
-  const [selection, setSelection, preventInput] = useSelection({
-    amount: 6,
+  const [selection] = useSelection({
+    amount: 5,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
   const onSubmit = () => {
-    const [isValid] = validate()
-
-    if (isValid) {
-      addChain({
-        name: data.name,
-        rpc: data.rpc,
-        chainId: Number(data.chainId),
-        currency: data.currency,
-        explorer: data.explorer,
-      })
-    } else {
-      preventInput()
-      // TODO: focus on first error
-      setSelection(0)
-    }
+    addChain({
+      name: data.name,
+      rpc: data.rpc,
+      chainId: Number(data.chainId),
+      currency: data.currency,
+      explorer: data.explorer,
+    })
   }
+
+  // experimental feature
+  useEffect(() => {
+    const check = async () => {
+      try {
+        setNetworkLoading(true)
+        const provider = new JsonRpcProvider(data.rpc, 'any')
+        const providerNetwork = await provider.getNetwork()
+
+        change('chainId', providerNetwork.chainId.toString(), true)
+      } catch {
+        //
+      } finally {
+        setNetworkLoading(false)
+      }
+    }
+
+    check()
+  }, [data.rpc])
 
   return (
     <Box flexDirection="column">
@@ -81,23 +94,28 @@ export const AddChain: React.FC = () => {
       <InputBox
         label="Chain Id"
         error={errors.chainId}
-        focus={selection === 2}
+        loading={networkIsLoading}
+        disabled
         {...register('chainId')}
       />
       <InputBox
         label="Explorer"
         error={errors.explorer}
-        focus={selection === 3}
+        focus={selection === 2}
         {...register('explorer')}
       />
       <InputBox
         label="Currency"
         error={errors.currency}
-        focus={selection === 4}
+        focus={selection === 3}
         {...register('currency')}
       />
 
-      <Button isFocused={selection === 5} onPress={onSubmit}>
+      <Button
+        isFocused={selection === 4}
+        onPress={onSubmit}
+        isDisabled={!isValid}
+      >
         Add chain
       </Button>
     </Box>
