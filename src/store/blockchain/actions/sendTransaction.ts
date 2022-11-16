@@ -1,10 +1,8 @@
-import { PopulatedTransaction } from '@ethersproject/contracts'
 import { getSigner } from '@src/store/wallet'
 import { BlockchainAction } from '..'
 
 export const sendTransaction: BlockchainAction<'sendTransaction'> =
-  (set) =>
-  async (populatedTx: PopulatedTransaction): Promise<void> => {
+  (set) => async (populatedTx) => {
     const signer = getSigner()
 
     set({ txInProgress: true })
@@ -14,6 +12,8 @@ export const sendTransaction: BlockchainAction<'sendTransaction'> =
       const result = await tx.wait()
 
       set({ txInProgress: false })
+
+      return result.transactionHash
     } catch (err) {
       console.log(err)
       set({ txInProgress: false })

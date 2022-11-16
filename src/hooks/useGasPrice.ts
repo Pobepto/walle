@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { useBlockchainStore } from '@src/store'
 import { useEffect, useState } from 'react'
 
@@ -9,7 +10,9 @@ export const useGasPrice = () => {
   useEffect(() => {
     const getPrice = async () => {
       setLoading(true)
-      const currentPrice = await provider.getGasPrice()
+      const currentPrice = await provider
+        .getGasPrice()
+        .catch(() => BigNumber.from(0))
       setLoading(false)
 
       setPrice(currentPrice.toString())

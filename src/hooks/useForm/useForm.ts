@@ -1,15 +1,20 @@
 import { isDefined } from '@src/utils'
 import { useMemo, useState } from 'react'
 
-type Values = Record<string, string>
-type Rule<T> = (value: T[keyof T], data: Partial<T>) => string | undefined
-type Rules<T> = Record<keyof T, Rule<T>>
+type Value = string
+type Values = Record<string, Value>
+export type Rule<Inputs> = (
+  value: Value,
+  data: Partial<Inputs>,
+) => string | undefined
+type Rules<Inputs> = Record<keyof Inputs, Rule<Inputs>>
+type Errors<Inputs> = Partial<Record<keyof Inputs, string>>
 
 interface InputProps {
   onBlur: () => void
   onFocus: () => void
-  onChange: (e: string) => void
-  value: string
+  onChange: (value: Value) => void
+  value: Value
 }
 
 type ValidateAction = 'blur' | 'focus' | 'change'
@@ -36,9 +41,9 @@ export const useForm = <T extends Values = Values>({
   const { validateAction } = options
 
   const [data, setData] = useState(initialValues as T)
-  const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
+  const [errors, setErrors] = useState<Errors<T>>({})
 
-  const getIsValid = (errors: Partial<Record<keyof T, string>>) => {
+  const getIsValid = (errors: Errors<T>) => {
     return !Object.values(errors)
       .filter(isDefined)
       .some((err) => err.length)
@@ -47,7 +52,7 @@ export const useForm = <T extends Values = Values>({
   const isValid = useMemo(() => getIsValid(errors), [errors])
 
   const validate = () => {
-    const newErrors: Partial<Record<keyof T, string>> = {}
+    const newErrors: Errors<T> = {}
     Object.entries(rules)
       .map((r) => r as [keyof T, Rule<T>])
       .forEach(([key, rule]) => {
@@ -56,33 +61,38 @@ export const useForm = <T extends Values = Values>({
 
     setErrors(newErrors)
 
-    return [getIsValid(newErrors), newErrors]
+    return [getIsValid(newErrors), newErrors] as const
   }
 
-  const validateInput = (name: keyof T) => {
+  const validateInput = (name: keyof T, newValue?: Value) => {
     const rule = rules[name]
     if (rule) {
-      const error = rule(data[name], data) || ''
+      const error = rule(newValue ?? data[name], data) || ''
       if (error !== errors[name]) {
         setErrors((state) => ({ ...state, [name]: error }))
       }
     }
   }
 
-  const validateInputOnAction = (name: keyof T, action: ValidateAction) => {
+  const validateInputOnAction = (
+    name: keyof T,
+    action: ValidateAction,
+    newValue?: Value,
+  ) => {
     if (validateAction === action) {
-      validateInput(name)
+      validateInput(name, newValue)
     }
   }
 
-  const onChange = (name: keyof T, value: string, forceValidate = false) => {
+  const onChange = (name: keyof T, value: Value, forceValidate = false) => {
     setData((state) => ({ ...state, [name]: value }))
 
-    // TODO: fix this
     if (forceValidate) {
-      validateInput(name)
+      if (data[name] !== value) {
+        validateInput(name, value)
+      }
     } else {
-      validateInputOnAction(name, 'change')
+      validateInputOnAction(name, 'change', value)
     }
   }
 
@@ -102,7 +112,7 @@ export const useForm = <T extends Values = Values>({
     return {
       onBlur: () => onBlur(name),
       onFocus: () => onFocus(name),
-      onChange: (e: string) => onChange(name, e),
+      onChange: (value: Value) => onChange(name, value),
       value: data[name] ?? '',
     }
   }
@@ -110,6 +120,7 @@ export const useForm = <T extends Values = Values>({
   return {
     register,
     validate,
+    validateInput,
     data,
     errors,
     isValid,
@@ -120,7 +131,7 @@ export const useForm = <T extends Values = Values>({
 
 export const combine =
   <T>(...rules: Rule<T>[]) =>
-  (value: T[keyof T], data: Partial<T>) => {
+  (value: Value, data: Partial<T>) => {
     return rules.reduce((err, rule) => {
       return (err || rule(value, data)) as string
     }, '')

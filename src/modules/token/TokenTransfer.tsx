@@ -17,7 +17,7 @@ import {
   useForm,
 } from '@src/hooks'
 import { Button } from '@src/components'
-import { ERC20_ABI } from '@src/store/blockchain/contract'
+import { ERC20_ABI } from '@src/store/blockchain/interfaces'
 import { Loader } from '@src/components/Loader'
 
 type Inputs = {
@@ -58,7 +58,10 @@ export const TokenTransfer: React.FC = () => {
         data.amount,
       )
 
-      navigate(ROUTE.CONFIRM_TRANSACTION, populatedTx)
+      navigate(ROUTE.CONFIRM_TRANSACTION, {
+        target: ERC20,
+        populatedTx,
+      })
     }
   }
 

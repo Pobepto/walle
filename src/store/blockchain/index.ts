@@ -19,12 +19,13 @@ export interface BlockchainStore {
   nativeBalanceIsLoading: boolean
   getNativeBalance: () => Promise<void>
 
-  // TODO: Add Currency
-  sendTransaction: (populatedTx: PopulatedTransaction) => Promise<void>
+  sendTransaction: (
+    populatedTx: PopulatedTransaction,
+  ) => Promise<string | undefined>
   txInProgress: boolean
 }
 
-export type BlockchainAction<T extends keyof BlockchainStore = any> = Action<
+export type BlockchainAction<T extends keyof BlockchainStore> = Action<
   BlockchainStore,
   BlockchainStore[T]
 >
@@ -38,6 +39,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     addChain: addChain(set, get),
     provider: new JsonRpcProvider(
       'https://data-seed-prebsc-2-s1.binance.org:8545/',
+      'any',
     ),
     setProvider: (provider: JsonRpcProvider) => set({ provider }),
 

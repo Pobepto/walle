@@ -47,7 +47,7 @@ export const TokenInfo: React.FC = () => {
           <Text bold>Decimals:</Text> {token.decimals}
         </Text>
         <Text>
-          <Text bold>Chain id:</Text> {token.chainId}
+          <Text bold>Chain ID:</Text> {token.chainId}
         </Text>
         <Box marginTop={1}>
           <Text>
@@ -58,7 +58,7 @@ export const TokenInfo: React.FC = () => {
         </Box>
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={() => navigate(ROUTE.TOKEN_ACTIONS, token)}>
-            <Text>Back</Text>
+            <Text>{'<- '}Back</Text>
           </Button>
         </Selection>
       </Box>

@@ -1,4 +1,4 @@
-import { PopulatedTransaction } from '@ethersproject/contracts'
+import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
 import React from 'react'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
@@ -45,7 +45,10 @@ export interface ROUTE_DATA {
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
   [ROUTE.TOKEN_INFO]: Token
-  [ROUTE.CONFIRM_TRANSACTION]: PopulatedTransaction
+  [ROUTE.CONFIRM_TRANSACTION]: {
+    target: Contract
+    populatedTx: PopulatedTransaction
+  }
 }
 
 const layout = (
