@@ -6,7 +6,13 @@ export const addToken: TokensAction<'addToken'> =
     const chainId = useBlockchainStore.getState().chainId
     const tokens = get().tokens.slice()
 
-    tokens.push({ ...token, chainId })
+    const alreadyAdded = tokens.some((t) => {
+      return t.address === token.address && t.chainId === chainId
+    })
 
-    set({ tokens })
+    if (!alreadyAdded) {
+      tokens.push({ ...token, chainId })
+
+      set({ tokens })
+    }
   }

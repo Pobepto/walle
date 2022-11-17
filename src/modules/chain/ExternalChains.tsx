@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Box, Text } from 'ink'
 import { useBlockchainStore } from '@store/blockchain'
-import { Chain } from '@store/blockchain/constants'
 import { TextButton } from '@components/TextButton'
 import { Button } from '@components/Button'
 import { ROUTE, useNavigate } from '@src/routes'
@@ -15,22 +14,33 @@ import fetch from 'node-fetch'
 import { List } from '@src/components/List'
 import { InputBox } from '@src/components/InputBox'
 
+interface ExternalChain {
+  chainId: number
+  name: string
+}
+
 export const ExternalChains: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [selection, setSelection] = useState(0)
-  const [externalChains, setExternalChains] = useState<any[]>([])
+  const [externalChains, setExternalChains] = useState<ExternalChain[]>([])
   const setChainId = useBlockchainStore((store) => store.setChainId)
 
-  const handleSelectChain = (chain: Chain) => {
+  const handleSelectChain = (chain: ExternalChain) => {
     setChainId(chain.chainId)
   }
+
+  const filteredChains = useMemo(() => {
+    return externalChains.filter((chain) =>
+      chain.name.toLowerCase().includes(search.toLowerCase()),
+    )
+  }, [search, externalChains])
 
   useEffect(() => {
     const load = async () => {
       const response = await fetch('https://chainid.network/chains.json')
-      const result = (await response.json()) as any[]
+      const result = (await response.json()) as ExternalChain[]
 
       setExternalChains(result)
     }
@@ -54,19 +64,15 @@ export const ExternalChains: React.FC = () => {
           <InputBox label="Search" value={search} onChange={setSearch} />
         </Selection>
         <List selection={selection - 1 < 0 ? 0 : selection - 1}>
-          {externalChains
-            .filter((chain) =>
-              chain.name.toLowerCase().includes(search.toLowerCase()),
-            )
-            .map((chain) => (
-              <Box key={chain.chainId}>
-                <Selection activeProps={{ isFocused: true }}>
-                  <TextButton onPress={() => handleSelectChain(chain)}>
-                    - {chain.name}
-                  </TextButton>
-                </Selection>
-              </Box>
-            ))}
+          {filteredChains.map((chain) => (
+            <Box key={chain.chainId}>
+              <Selection activeProps={{ isFocused: true }}>
+                <TextButton onPress={() => handleSelectChain(chain)}>
+                  - {chain.name}
+                </TextButton>
+              </Selection>
+            </Box>
+          ))}
         </List>
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={() => navigate(ROUTE.SWITCH_CHAIN)}>

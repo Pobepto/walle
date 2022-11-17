@@ -51,6 +51,11 @@ export const useForm = <T extends Values = Values>({
 
   const isValid = useMemo(() => getIsValid(errors), [errors])
 
+  const inputIsValid = (name: keyof T) => {
+    const rule = rules[name]
+    return rule ? !rule(data[name], data) : true
+  }
+
   const validate = () => {
     const newErrors: Errors<T> = {}
     Object.entries(rules)
@@ -121,6 +126,7 @@ export const useForm = <T extends Values = Values>({
     register,
     validate,
     validateInput,
+    inputIsValid,
     data,
     errors,
     isValid,

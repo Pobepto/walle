@@ -26,17 +26,19 @@ type Inputs = {
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!
   const [networkIsLoading, setNetworkLoading] = useState(false)
+  const [error, setError] = useState('')
   const addChain = useBlockchainStore((state) => state.addChain)
 
-  const { errors, register, data, change, isValid } = useForm<Inputs>({
-    rules: {
-      name: length(3),
-      rpc: link(),
-      chainId: combine(isNumber(), numberInRange(1, Infinity)),
-      explorer: link(),
-      currency: length(2),
-    },
-  })
+  const { errors, register, data, change, inputIsValid, isValid } =
+    useForm<Inputs>({
+      rules: {
+        name: length(3),
+        rpc: link(),
+        chainId: combine(isNumber(), numberInRange(1, Infinity)),
+        explorer: link(),
+        currency: length(2),
+      },
+    })
 
   const [selection] = useSelection({
     amount: 5,
@@ -59,19 +61,22 @@ export const AddChain: React.FC = () => {
   useEffect(() => {
     const check = async () => {
       try {
+        setError('')
         setNetworkLoading(true)
         const provider = new JsonRpcProvider(data.rpc, 'any')
         const providerNetwork = await provider.getNetwork()
 
         change('chainId', providerNetwork.chainId.toString(), true)
       } catch {
-        //
+        setError("Can't get chain id from this rpc")
       } finally {
         setNetworkLoading(false)
       }
     }
 
-    check()
+    if (inputIsValid('rpc')) {
+      check()
+    }
   }, [data.rpc])
 
   return (
@@ -79,6 +84,11 @@ export const AddChain: React.FC = () => {
       <Box marginTop={-1}>
         <Text> Add new chain </Text>
       </Box>
+      {error ? (
+        <Box borderStyle="single" borderColor="redBright" paddingX={1}>
+          <Text color="red">{error}</Text>
+        </Box>
+      ) : null}
       <InputBox
         label="Name"
         error={errors.name}

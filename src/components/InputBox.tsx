@@ -29,7 +29,11 @@ export const InputBox: React.FC<Props> = ({
           <Text color={disabled ? 'grey' : undefined}>{label}: </Text>
         ) : null}
         <Input focus={focus} disabled={disabled} {...inputProps} />
-        {loading ? <Spinner /> : null}
+        {loading ? (
+          <Box marginLeft={1}>
+            <Spinner />
+          </Box>
+        ) : null}
       </Box>
       {error ? <Error text={error} /> : null}
     </Box>
