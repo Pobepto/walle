@@ -15,7 +15,7 @@ export const Welcome: React.FC = () => {
   }, [])
 
   return (
-    <Box flexDirection="column">
+    <Box flexDirection="column" justifyContent="center" alignItems="center">
       <Text>Walle - Best CLI Application ever</Text>
       <Link to={link} isFocused>
         Press &quot;Enter&quot; to continue...

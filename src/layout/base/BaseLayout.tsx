@@ -15,7 +15,9 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
       <Header />
       <Box flexDirection="row" alignSelf="center">
         <SelectionZone nextKey="tab" isActive looped>
-          <Selection activeProps={{ borderStyle: 'doubleSingle' }}>
+          <Selection
+            activeProps={{ borderStyle: 'double', borderColor: 'cyan' }}
+          >
             <Box
               width="20%"
               flexDirection="column"
@@ -26,7 +28,9 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
             </Box>
           </Selection>
 
-          <Selection activeProps={{ borderStyle: 'doubleSingle' }}>
+          <Selection
+            activeProps={{ borderStyle: 'double', borderColor: 'cyan' }}
+          >
             <Box
               width="60%"
               flexDirection="column"
@@ -37,7 +41,9 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
             </Box>
           </Selection>
 
-          <Selection activeProps={{ borderStyle: 'doubleSingle' }}>
+          <Selection
+            activeProps={{ borderStyle: 'double', borderColor: 'cyan' }}
+          >
             <Box
               width="20%"
               flexDirection="column"

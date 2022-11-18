@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
+import { subscribe } from '@src/store/subscribers'
 // import { Divider } from '@src/components/Divider'
 // import { List } from '@src/components/List'
 // import { TextButton } from '@src/components/TextButton'

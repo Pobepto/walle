@@ -26,6 +26,10 @@ export const SwitchChain: React.FC = () => {
     navigate(ROUTE.ADD_CHAIN)
   }
 
+  const handleExternalChain = () => {
+    navigate(ROUTE.EXTERNAL_CHAINS)
+  }
+
   return (
     <SelectionZone
       prevKey="upArrow"
@@ -48,6 +52,11 @@ export const SwitchChain: React.FC = () => {
         ))}
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={handleAddChain}>Add chain</Button>
+        </Selection>
+        <Selection activeProps={{ isFocused: true }}>
+          <Button onPress={handleExternalChain}>
+            Select chain from external source
+          </Button>
         </Selection>
       </Box>
     </SelectionZone>

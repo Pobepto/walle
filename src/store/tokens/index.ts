@@ -18,7 +18,7 @@ export interface TokensStore {
   addToken: (token: Omit<Token, 'chainId'>) => void
 }
 
-export type TokensAction<T extends keyof TokensStore = any> = Action<
+export type TokensAction<T extends keyof TokensStore> = Action<
   TokensStore,
   TokensStore[T]
 >
@@ -27,25 +27,11 @@ export const useTokensStore = createWithSubscribeSelector<TokensStore>(
   (set, get) => ({
     tokens: [
       {
-        name: 'EYWA',
-        symbol: 'EYWA',
-        decimals: 18,
-        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-        chainId: 97,
-      },
-      {
         name: 'USDT',
         symbol: 'USDT',
         decimals: 18,
         address: '0xf16eec3a587ba34768a4bb9cb9b7b1d66d250227',
         chainId: 97,
-      },
-      {
-        name: 'EYWA',
-        symbol: 'EYWA',
-        decimals: 18,
-        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-        chainId: 4,
       },
       {
         name: 'USDT',
@@ -60,11 +46,4 @@ export const useTokensStore = createWithSubscribeSelector<TokensStore>(
     balancesIsLoading: true,
     addToken: addToken(set, get),
   }),
-)
-
-useTokensStore.subscribe(
-  (state) => state.tokens,
-  () => {
-    useTokensStore.getState().syncBalances()
-  },
 )

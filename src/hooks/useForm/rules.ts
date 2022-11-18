@@ -1,4 +1,6 @@
 import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
+import { parseUnits } from '@ethersproject/units'
 import { Rule } from './useForm'
 
 export const length =
@@ -13,10 +15,18 @@ export const length =
     }
   }
 
+export const isIntegerNumber =
+  <T>(): Rule<T> =>
+  (value) => {
+    return Number.isInteger(parseFloat(value))
+      ? undefined
+      : 'Must be an integer'
+  }
+
 export const isNumber =
   <T>(): Rule<T> =>
   (value) => {
-    return Number.isInteger(parseFloat(value)) ? undefined : 'Must be a number'
+    return Number.isFinite(parseFloat(value)) ? undefined : 'Must be a number'
   }
 
 export const numberInRange =
@@ -29,6 +39,20 @@ export const numberInRange =
     }
 
     if (number > max) {
+      return `Must be lest than ${max}`
+    }
+  }
+
+export const bigNumberInRange =
+  <T>(min: BigNumber, max: BigNumber, decimals: number): Rule<T> =>
+  (value) => {
+    const number = parseUnits(value, decimals)
+
+    if (number.lt(min)) {
+      return `Must be bigger than ${min}`
+    }
+
+    if (number.gt(max)) {
       return `Must be lest than ${max}`
     }
   }

@@ -4,10 +4,9 @@ import { WalletAction } from '..'
 export const importWallet: WalletAction<'importWallet'> =
   (set) => (mnemonic) => {
     try {
-      const wallet = Wallet.fromMnemonic(mnemonic)
       const {
         mnemonic: { phrase },
-      } = wallet
+      } = Wallet.fromMnemonic(mnemonic)
 
       set({ phrase })
     } catch (err) {

@@ -4,7 +4,6 @@ import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { useBlockchainStore } from '../blockchain'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { useTokensStore } from '../tokens'
 import {
   decryptWallet,
   deriveMnemonicAddress,
@@ -47,22 +46,21 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   }),
 )
 
-export const getSigner = () => {
+export const getWallet = (defaultPathId?: number) => {
   const { phrase, pathId } = useWalletStore.getState()
-  const { provider } = useBlockchainStore.getState()
 
-  return Wallet.fromMnemonic(phrase!, getDerivationPath(pathId)).connect(
-    provider,
+  if (!phrase) {
+    throw new Error('Phrase is null')
+  }
+
+  return Wallet.fromMnemonic(
+    phrase!,
+    getDerivationPath(defaultPathId ?? pathId),
   )
 }
 
-// Помимо такого обновления нам нужно обновляться на смену chainId
-useWalletStore.subscribe(
-  (state) => [state.pathId, state.phrase],
-  ([, phrase]) => {
-    if (phrase) {
-      useBlockchainStore.getState().getNativeBalance()
-      useTokensStore.getState().syncBalances()
-    }
-  },
-)
+export const getSigner = () => {
+  const { provider } = useBlockchainStore.getState()
+
+  return getWallet().connect(provider)
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { useNavigate } from '@src/routes'
+import { ROUTE, useNavigate } from '@src/routes'
 import {
   Selection,
   SelectionZone,
@@ -11,6 +11,7 @@ import { TextButton } from '@src/components/TextButton'
 import { useChain } from '@src/hooks'
 
 export const CurrencyActions: React.FC = () => {
+  const navigate = useNavigate()
   const parentZone = useSelectionZone()!
   const chain = useChain()
 
@@ -22,10 +23,12 @@ export const CurrencyActions: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> {chain.currency} [WIP] </Text>
+          <Text> {chain.currency} </Text>
         </Box>
         <Selection activeProps={{ isFocused: true }}>
-          <TextButton onPress={() => null}>- Send [WIP]</TextButton>
+          <TextButton onPress={() => navigate(ROUTE.CURRENCY_TRANSFER)}>
+            - Send
+          </TextButton>
         </Selection>
       </Box>
     </SelectionZone>
