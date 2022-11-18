@@ -44,7 +44,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     chains: CHAINS,
     addChain: addChain(set, get),
     provider: new JsonRpcProvider(
-      'https://data-seed-prebsc-2-s1.binance.org:8545/',
+      'https://data-seed-prebsc-1-s3.binance.org:8545',
       'any',
     ),
     setProvider: (provider: JsonRpcProvider) => set({ provider }),

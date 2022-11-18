@@ -7,11 +7,13 @@ specifiers:
   '@ethersproject/bignumber': ^5.7.0
   '@ethersproject/contracts': ^5.6.0
   '@ethersproject/providers': ^5.6.4
+  '@ethersproject/units': ^5.7.0
   '@ethersproject/wallet': ^5.6.0
   '@types/node': ^17.0.32
   '@types/react': ^18.0.8
   '@typescript-eslint/eslint-plugin': ^5.21.0
   '@typescript-eslint/parser': ^5.21.0
+  bignumber.js: ^9.1.0
   cli-spinners: ^2.6.1
   commitizen: ^4.2.4
   cz-simple-gitmoji: ^1.0.1
@@ -42,7 +44,9 @@ dependencies:
   '@ethersproject/bignumber': 5.7.0
   '@ethersproject/contracts': 5.6.0
   '@ethersproject/providers': 5.6.4
+  '@ethersproject/units': 5.7.0
   '@ethersproject/wallet': 5.6.0
+  bignumber.js: 9.1.0
   ink: 3.2.0_amtsnftabiznt6ysaiblxguaim
   ink-spinner: 4.0.3_ink@3.2.0+react@17.0.2
   ink-text-input: 4.0.3_ink@3.2.0+react@17.0.2
@@ -300,6 +304,12 @@ packages:
       '@ethersproject/bignumber': 5.7.0
     dev: false
 
+  /@ethersproject/constants/5.7.0:
+    resolution: {integrity: sha512-DHI+y5dBNvkpYUMiRQyxRBYBefZkJfo70VUkUAsRjcPs47muV9evftfZ0PJVCXYbAiCgght0DtcF9srFQmIgWA==}
+    dependencies:
+      '@ethersproject/bignumber': 5.7.0
+    dev: false
+
   /@ethersproject/contracts/5.6.0:
     resolution: {integrity: sha512-74Ge7iqTDom0NX+mux8KbRUeJgu1eHZ3iv6utv++sLJG80FVuU9HnHeKVPfjd9s3woFhaFoQGf3B3iH/FrQmgw==}
     dependencies:
@@ -530,6 +540,14 @@ packages:
       '@ethersproject/properties': 5.6.0
       '@ethersproject/rlp': 5.6.1
       '@ethersproject/signing-key': 5.6.2
+    dev: false
+
+  /@ethersproject/units/5.7.0:
+    resolution: {integrity: sha512-pD3xLMy3SJu9kG5xDGI7+xhTEmGXlEqXU4OfNapmfnxLVY4EMSSRp7j1k7eezutBPH7RBN/7QPnwR7hzNlEFeg==}
+    dependencies:
+      '@ethersproject/bignumber': 5.7.0
+      '@ethersproject/constants': 5.7.0
+      '@ethersproject/logger': 5.7.0
     dev: false
 
   /@ethersproject/wallet/5.6.0:
@@ -966,6 +984,10 @@ packages:
 
   /bech32/1.1.4:
     resolution: {integrity: sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==}
+    dev: false
+
+  /bignumber.js/9.1.0:
+    resolution: {integrity: sha512-4LwHK4nfDOraBCtst+wOWIHbu1vhvAPJK8g8nROd4iuc3PSEjWif/qwbkh8jwCJz6yDBvtU4KPynETgrfh7y3A==}
     dev: false
 
   /bl/4.1.0:

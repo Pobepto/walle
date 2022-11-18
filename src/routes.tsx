@@ -18,6 +18,7 @@ import {
   TokenTransfer,
   TokenInfo,
   CurrencyActions,
+  CurrencyTransfer,
   ConfirmTransaction,
 } from './modules'
 import { routerFactory } from './Router'
@@ -40,6 +41,7 @@ export enum ROUTE {
   TOKEN_TRANSFER,
   TOKEN_INFO,
   CURRENCY_ACTIONS,
+  CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
 }
 
@@ -48,7 +50,7 @@ export interface ROUTE_DATA {
   [ROUTE.TOKEN_TRANSFER]: Token
   [ROUTE.TOKEN_INFO]: Token
   [ROUTE.CONFIRM_TRANSACTION]: {
-    target: Contract
+    target?: Contract
     populatedTx: PopulatedTransaction
   }
 }
@@ -81,6 +83,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.TOKEN_TRANSFER]: () => base(TokenTransfer),
   [ROUTE.TOKEN_INFO]: () => base(TokenInfo),
   [ROUTE.CURRENCY_ACTIONS]: () => base(CurrencyActions),
+  [ROUTE.CURRENCY_TRANSFER]: () => base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: () => base(ConfirmTransaction),
 })
 

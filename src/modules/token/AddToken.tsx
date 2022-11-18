@@ -4,7 +4,7 @@ import { Button } from '@components'
 import {
   combine,
   isAddress,
-  isNumber,
+  isIntegerNumber,
   length,
   numberInRange,
   useForm,
@@ -38,7 +38,7 @@ export const AddToken: React.FC = () => {
       rules: {
         name: length(1),
         symbol: length(1),
-        decimals: combine(isNumber(), numberInRange(0, 18)),
+        decimals: combine(isIntegerNumber(), numberInRange(0, 18)),
         address: isAddress(),
       },
     })

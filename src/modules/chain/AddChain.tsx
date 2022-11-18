@@ -3,7 +3,7 @@ import { Box, Text } from 'ink'
 import { Button } from '@components'
 import {
   combine,
-  isNumber,
+  isIntegerNumber,
   length,
   link,
   numberInRange,
@@ -34,7 +34,7 @@ export const AddChain: React.FC = () => {
       rules: {
         name: length(3),
         rpc: link(),
-        chainId: combine(isNumber(), numberInRange(1, Infinity)),
+        chainId: combine(isIntegerNumber(), numberInRange(1, Infinity)),
         explorer: link(),
         currency: length(2),
       },

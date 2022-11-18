@@ -9,11 +9,12 @@ import { FormatTypes, Result } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import {
   combine,
-  isNumber,
+  isIntegerNumber,
   numberInRange,
   useGasLimit,
   useForm,
   useGasPrice,
+  useChain,
 } from '@hooks'
 import { Divider } from '@src/components/Divider'
 import { Loader } from '@src/components/Loader'
@@ -37,6 +38,7 @@ export const ConfirmTransaction: React.FC = () => {
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>(Step.EDIT_TX)
   const [txHash, setTxHash] = useState<string>()
+  const chain = useChain()
   const parentZone = useSelectionZone()!
 
   const confirmData = useData<ROUTE.CONFIRM_TRANSACTION>()
@@ -55,8 +57,8 @@ export const ConfirmTransaction: React.FC = () => {
 
   const { register, change, data, errors, isValid } = useForm<Inputs>({
     rules: {
-      gasPrice: combine(isNumber(), numberInRange(1, Infinity)),
-      gasLimit: combine(isNumber(), numberInRange(21000, Infinity)),
+      gasPrice: combine(isIntegerNumber(), numberInRange(1, Infinity)),
+      gasLimit: combine(isIntegerNumber(), numberInRange(21000, Infinity)),
     },
     options: {
       validateAction: 'blur',
@@ -146,40 +148,67 @@ export const ConfirmTransaction: React.FC = () => {
   }
 
   if (step === Step.CONFIRM_TX) {
-    const calldata = populatedTx.data!
-    const sighash = calldata.slice(0, 10)
-    const method = target.interface.getFunction(sighash)
-    const signature = `${method.name}(${method.inputs
-      .map((input) => input.format(FormatTypes.full))
-      .join(', ')})`
-    const params: Result = target.interface.decodeFunctionData(method, calldata)
-    const keys = Object.keys(params).filter((key) => isNaN(Number(key)))
+    let callInfo: {
+      method: string
+      keys: string[]
+      params: Result
+    } | null = null
+
+    if (target) {
+      const calldata = populatedTx.data!
+      const sighash = calldata.slice(0, 10)
+      const method = target.interface.getFunction(sighash)
+      const signature = `${method.name}(${method.inputs
+        .map((input) => input.format(FormatTypes.full))
+        .join(', ')})`
+      const params: Result = target.interface.decodeFunctionData(
+        method,
+        calldata,
+      )
+      const keys = Object.keys(params).filter((key) => isNaN(Number(key)))
+
+      callInfo = {
+        method: signature,
+        keys,
+        params,
+      }
+    }
 
     return (
       <Box flexDirection="column">
         <Box marginTop={-1}>
           <Text> Confirm </Text>
         </Box>
-        <Text>Call {signature} with params:</Text>
-        <Box
-          flexDirection="column"
-          borderStyle="single"
-          borderColor="green"
-          marginY={1}
-        >
-          <Box marginTop={-1}>
-            <Text bold> {signature} </Text>
-          </Box>
-          {keys.map((key) => {
-            const value = params[key]
 
-            return (
-              <Text key={key}>
-                <Text bold>{key}:</Text> {value.toString()}
-              </Text>
-            )
-          })}
-        </Box>
+        {callInfo ? (
+          <>
+            <Text>Call {callInfo.method} with params:</Text>
+            <Box
+              flexDirection="column"
+              borderStyle="single"
+              borderColor="green"
+              marginY={1}
+            >
+              <Box marginTop={-1}>
+                <Text bold> {callInfo.method} </Text>
+              </Box>
+              {callInfo.keys.map((key) => {
+                const value = callInfo!.params[key]
+
+                return (
+                  <Text key={key}>
+                    <Text bold>{key}:</Text> {value.toString()}
+                  </Text>
+                )
+              })}
+            </Box>
+          </>
+        ) : (
+          <Text>
+            Send {(populatedTx.value ?? BigNumber.from(0)).toString()}{' '}
+            {chain.currency} to {populatedTx.to}
+          </Text>
+        )}
 
         <Text>Gas price: {data.gasPrice}</Text>
         <Text>Gas limit: {data.gasLimit}</Text>

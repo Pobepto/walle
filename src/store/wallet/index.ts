@@ -46,11 +46,21 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   }),
 )
 
-export const getSigner = () => {
+export const getWallet = (defaultPathId?: number) => {
   const { phrase, pathId } = useWalletStore.getState()
+
+  if (!phrase) {
+    throw new Error('Phrase is null')
+  }
+
+  return Wallet.fromMnemonic(
+    phrase!,
+    getDerivationPath(defaultPathId ?? pathId),
+  )
+}
+
+export const getSigner = () => {
   const { provider } = useBlockchainStore.getState()
 
-  return Wallet.fromMnemonic(phrase!, getDerivationPath(pathId)).connect(
-    provider,
-  )
+  return getWallet().connect(provider)
 }

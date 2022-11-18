@@ -11,6 +11,7 @@ import {
 import { ROUTE, useNavigate } from '@src/routes'
 import { TextButton } from '@src/components/TextButton'
 import { useChain } from '@src/hooks'
+import { formatNumber } from '@src/utils/formatNumber'
 
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!
@@ -43,13 +44,18 @@ export const Tokens: React.FC = () => {
       <Selection activeProps={{ underline: true, isFocused: true }}>
         <TextButton onPress={handleSelectCurrency}>
           <Text>
-            <Loader loading={nativeBalanceIsLoading}>{nativeBalance}</Loader>{' '}
+            <Loader loading={nativeBalanceIsLoading}>
+              {formatNumber(nativeBalance)}
+            </Loader>{' '}
           </Text>
           <Text bold>{chain.currency}</Text>
         </TextButton>
       </Selection>
       {tokens.map((token) => {
         const balance = balances.get(token.address)
+        const formattedBalance = balance
+          ? formatNumber(balance, token.decimals)
+          : ''
 
         return (
           <Selection
@@ -58,7 +64,7 @@ export const Tokens: React.FC = () => {
           >
             <TextButton onPress={() => handleSelectToken(token)}>
               <Text>
-                <Loader loading={balancesIsLoading}>{balance}</Loader>{' '}
+                <Loader loading={balancesIsLoading}>{formattedBalance}</Loader>{' '}
               </Text>
               <Text bold>{token.symbol}</Text>
             </TextButton>
