@@ -2,8 +2,8 @@ import React, { cloneElement, isValidElement } from 'react'
 import { Nullable } from 'tsdef'
 import { IZone, useSelectionZone } from './SelectionContext'
 
-type Props = {
-  activeProps?: Record<string, unknown>
+type Props<ChildProps> = {
+  activeProps?: Partial<ChildProps>
   index?: number
   children:
     | React.ReactNode
@@ -11,11 +11,11 @@ type Props = {
     | ((isFocused: boolean, zone: Nullable<IZone>) => JSX.Element)
 }
 
-export const Selection: React.FC<Props> = ({
+export const Selection = <ChildProps extends Record<string, any>>({
   children,
   index,
   activeProps,
-}) => {
+}: Props<ChildProps>) => {
   const zone = useSelectionZone()
 
   if (zone) {

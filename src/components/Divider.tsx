@@ -7,14 +7,14 @@ export const Divider: React.FC<{ symbol?: string }> = ({ symbol = '-' }) => {
 
   useEffect(() => {
     if (box.current) {
-      const width = box.current.yogaNode!.getComputedWidth()
+      const width = box.current.yogaNode!.getComputedWidth() - 1
 
       setValue(symbol.repeat(width))
     }
   }, [box])
 
   return (
-    <Box ref={box}>
+    <Box ref={box} alignItems="center">
       <Text>{value}</Text>
     </Box>
   )

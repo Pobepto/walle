@@ -37,7 +37,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
   return (
     <Box
       justifyContent="center"
-      borderStyle={isFocused ? 'bold' : 'single'}
+      borderStyle={isFocused ? 'bold' : 'round'}
       {...boxProps}
     >
       <Loader loading={isLoading} type={spinner}>

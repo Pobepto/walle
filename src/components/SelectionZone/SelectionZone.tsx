@@ -3,7 +3,7 @@ import React, { Children, cloneElement, isValidElement, useEffect } from 'react'
 import { Selection } from './Selection'
 import { SelectionContext } from './SelectionContext'
 
-type SelectionZoneProps = Omit<SelectionSettings, 'amount'> &
+export type SelectionZoneProps = Omit<SelectionSettings, 'amount'> &
   React.PropsWithChildren<{
     onChange?: (selection: number) => void
   }>

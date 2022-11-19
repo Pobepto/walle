@@ -19,9 +19,9 @@ export const syncBalances: TokensAction<'syncBalances'> =
         .filter((token) => token.chainId === chainId)
         .map(async (token) => {
           const contract = new Contract(token.address, ERC20_ABI, provider)
-          const balance: BigNumber = await contract.callStatic.balanceOf(
-            wallet.address,
-          )
+          const balance: BigNumber = await contract.callStatic
+            .balanceOf(wallet.address)
+            .catch(() => '🤔')
 
           balances.set(token.address, balance.toString())
         }),
