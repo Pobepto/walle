@@ -51,11 +51,11 @@ export const MainMenu: React.FC = () => {
                   parentZone.select(COLUMNS.MAIN)
                 },
               },
-              {
-                title: 'Logout',
-                onSelect: () => handleLogout(),
-              },
             ],
+          },
+          {
+            title: 'Logout',
+            onSelect: () => handleLogout(),
           },
           // {
           //   title: 'Settings',
