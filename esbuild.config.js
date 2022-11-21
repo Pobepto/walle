@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const esbuild = require('esbuild')
 
+// TODO: Maybe migrate to vite?
+
 esbuild.build({
   entryPoints: ['src/index.tsx'],
   platform: 'node',

@@ -15,6 +15,7 @@ export const WelcomeLayout: React.FC<Props> = ({ children }) => {
       justifyContent="center"
       alignItems="center"
       width="100%"
+      minHeight={20}
     >
       {children}
     </Box>
