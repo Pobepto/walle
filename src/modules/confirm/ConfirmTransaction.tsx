@@ -214,10 +214,20 @@ export const ConfirmTransaction: React.FC = () => {
             </Box>
           </>
         ) : (
-          <Text>
-            Send {(populatedTx.value ?? BigNumber.from(0)).toString()}{' '}
-            {chain.currency} to {populatedTx.to}
-          </Text>
+          <Box
+            flexDirection="column"
+            borderStyle="single"
+            borderColor="green"
+            marginY={1}
+          >
+            <Text>
+              Send {formatUnits(populatedTx.value ?? '0', 18).toString()}{' '}
+              {chain.currency}
+            </Text>
+            <Text>
+              To <Text bold>{populatedTx.to}</Text>
+            </Text>
+          </Box>
         )}
 
         <Text>

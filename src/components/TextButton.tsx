@@ -3,14 +3,14 @@ import React from 'react'
 import { AnyFunction } from 'tsdef'
 import { useKey } from '@hooks'
 
-interface Props extends TextProps {
+export interface TextButtonProps extends TextProps {
   children: React.ReactNode
   onPress: AnyFunction
   isFocused?: boolean
   selectKey?: keyof Key
 }
 
-export const TextButton: React.FC<Props> = ({
+export const TextButton: React.FC<TextButtonProps> = ({
   children,
   selectKey = 'return',
   onPress,

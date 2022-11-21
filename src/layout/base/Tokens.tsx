@@ -1,5 +1,5 @@
 import { Box, Text } from 'ink'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNativeBalance, useTokens } from '@hooks'
 import { COLUMNS, Token, useTokensStore } from '@store'
 import { Loader } from '@src/components/Loader'
@@ -12,10 +12,12 @@ import { ROUTE, useNavigate } from '@src/routes'
 import { TextButton } from '@src/components/TextButton'
 import { useChain } from '@src/hooks'
 import { formatNumber } from '@src/utils/formatNumber'
+import { List } from '@src/components/List'
 
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
+  const [selection, setSelection] = useState(0)
   const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
   const balances = useTokensStore((store) => store.balances)
   const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
@@ -37,40 +39,45 @@ export const Tokens: React.FC = () => {
       prevKey="upArrow"
       nextKey="downArrow"
       isActive={parentZone.selection === COLUMNS.TOKENS}
+      onChange={setSelection}
     >
       <Box alignSelf="center" marginTop={-1}>
         <Text bold> Tokens </Text>
       </Box>
-      <Selection activeProps={{ underline: true, isFocused: true }}>
-        <TextButton onPress={handleSelectCurrency}>
-          <Text>
-            <Loader loading={nativeBalanceIsLoading}>
-              {formatNumber(nativeBalance)}
-            </Loader>{' '}
-          </Text>
-          <Text bold>{chain.currency}</Text>
-        </TextButton>
-      </Selection>
-      {tokens.map((token) => {
-        const balance = balances.get(token.address)
-        const formattedBalance = balance
-          ? formatNumber(balance, token.decimals)
-          : ''
+      <List viewport={5} selection={selection}>
+        <Selection activeProps={{ underline: true, isFocused: true }}>
+          <TextButton onPress={handleSelectCurrency}>
+            <Text>
+              <Loader loading={nativeBalanceIsLoading}>
+                {formatNumber(nativeBalance)}
+              </Loader>{' '}
+            </Text>
+            <Text bold>{chain.currency}</Text>
+          </TextButton>
+        </Selection>
+        {tokens.map((token) => {
+          const balance = balances.get(token.address)
+          const formattedBalance = balance
+            ? formatNumber(balance, token.decimals)
+            : ''
 
-        return (
-          <Selection
-            key={`${token.chainId}${token.address}`}
-            activeProps={{ underline: true, isFocused: true }}
-          >
-            <TextButton onPress={() => handleSelectToken(token)}>
-              <Text>
-                <Loader loading={balancesIsLoading}>{formattedBalance}</Loader>{' '}
-              </Text>
-              <Text bold>{token.symbol}</Text>
-            </TextButton>
-          </Selection>
-        )
-      })}
+          return (
+            <Selection
+              key={`${token.chainId}${token.address}`}
+              activeProps={{ underline: true, isFocused: true }}
+            >
+              <TextButton onPress={() => handleSelectToken(token)}>
+                <Text>
+                  <Loader loading={balancesIsLoading}>
+                    {formattedBalance}
+                  </Loader>{' '}
+                </Text>
+                <Text bold>{token.symbol}</Text>
+              </TextButton>
+            </Selection>
+          )
+        })}
+      </List>
     </SelectionZone>
   )
 }

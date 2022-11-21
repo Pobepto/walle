@@ -14,7 +14,7 @@ export const BaseLayout: React.FC<Props> = ({ children }) => {
   return (
     <Box flexDirection="column">
       <Header />
-      <Box flexDirection="row" alignSelf="center">
+      <Box flexDirection="row" alignSelf="center" minHeight={20}>
         <SelectionZone nextKey="tab" isActive looped>
           <Selection
             activeProps={{ borderStyle: 'double', borderColor: 'cyan' }}

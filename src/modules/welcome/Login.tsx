@@ -7,6 +7,7 @@ import { useWalletStore } from '@store'
 import { load, USER_DATA } from '@utils'
 import AsyncButton from '@components/AsyncButton'
 import { Button } from '@src/components'
+import { TextButton } from '@src/components/TextButton'
 
 type Inputs = {
   password: string
@@ -41,7 +42,8 @@ export const Login: React.FC = () => {
     }
   }
 
-  const monkey = data.password?.length > 0 ? '🙈' : '🐵'
+  const monkey =
+    data.password?.length > 0 ? '┬┴┬┴┬┴┬┴┬┴┬┴┬┴┬┴' : '┬┴┬┴┤( ͡° ͜ʖ├┬┴┬┴'
 
   return (
     <Box flexDirection="column" width="50%">
@@ -55,25 +57,24 @@ export const Login: React.FC = () => {
         focus={selection === 0}
         {...register('password')}
       />
-      <Box flexDirection="row" justifyContent="space-between">
-        <AsyncButton
-          isFocused={selection === 1}
-          onPress={onApply}
-          spinner="fingerDance"
-          minWidth={isLoading ? '100%' : '40%'}
-        >
-          Unlock
-        </AsyncButton>
-        {!isLoading && (
-          <Button
+      <AsyncButton
+        isFocused={selection === 1}
+        onPress={onApply}
+        spinner="fingerDance"
+      >
+        Unlock
+      </AsyncButton>
+      {!isLoading && (
+        <Box alignItems="center" justifyContent="center">
+          <TextButton
             isFocused={selection === 2}
-            onPress={() => console.log('reset')}
-            minWidth="40%"
+            onPress={() => console.log('WIP')}
+            color={selection === 2 ? 'red' : undefined}
           >
-            Reset
-          </Button>
-        )}
-      </Box>
+            Forgot password?
+          </TextButton>
+        </Box>
+      )}
     </Box>
   )
 }
