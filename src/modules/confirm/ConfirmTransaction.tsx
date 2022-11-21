@@ -1,12 +1,14 @@
-import { Button } from '@components'
-import { InputBox } from '@components/InputBox'
+import { Button, ButtonProps } from '@components'
+import { InputBox, InputBoxProps } from '@components/InputBox'
 import {
   Selection,
   SelectionZone,
+  SelectionZoneProps,
   useSelectionZone,
 } from '@components/SelectionZone'
 import { FormatTypes, Result } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 import {
   combine,
   isIntegerNumber,
@@ -15,6 +17,7 @@ import {
   useForm,
   useGasPrice,
   useChain,
+  isNumber,
 } from '@hooks'
 import { Divider } from '@src/components/Divider'
 import { Loader } from '@src/components/Loader'
@@ -33,6 +36,8 @@ type Inputs = {
   gasPrice: string
   gasLimit: string
 }
+
+const GasPriceUnit = 'gwei'
 
 export const ConfirmTransaction: React.FC = () => {
   const navigate = useNavigate()
@@ -57,7 +62,7 @@ export const ConfirmTransaction: React.FC = () => {
 
   const { register, change, data, errors, isValid } = useForm<Inputs>({
     rules: {
-      gasPrice: combine(isIntegerNumber(), numberInRange(1, Infinity)),
+      gasPrice: combine(isNumber()),
       gasLimit: combine(isIntegerNumber(), numberInRange(21000, Infinity)),
     },
     options: {
@@ -68,7 +73,7 @@ export const ConfirmTransaction: React.FC = () => {
   const onSendTransaction = () => {
     if (isValid) {
       populatedTx.gasLimit = BigNumber.from(data.gasLimit)
-      populatedTx.gasPrice = BigNumber.from(data.gasPrice)
+      populatedTx.gasPrice = parseUnits(data.gasPrice, GasPriceUnit)
 
       sendTransaction(populatedTx).then((txHash) => setTxHash(txHash))
 
@@ -81,11 +86,15 @@ export const ConfirmTransaction: React.FC = () => {
   }
 
   useEffect(() => {
-    change('gasPrice', gasPrice, true)
+    if (gasPrice) {
+      change('gasPrice', formatUnits(gasPrice, GasPriceUnit).toString(), true)
+    }
   }, [gasPrice])
 
   useEffect(() => {
-    change('gasLimit', gasLimit, true)
+    if (gasLimit) {
+      change('gasLimit', gasLimit, true)
+    }
   }, [gasLimit])
 
   if (step === Step.EDIT_TX) {
@@ -100,15 +109,16 @@ export const ConfirmTransaction: React.FC = () => {
             <Text> Edit </Text>
           </Box>
 
-          <Selection activeProps={{ focus: true }}>
+          <Selection<InputBoxProps> activeProps={{ focus: true }}>
             <InputBox
               label="Gas price"
               error={errors.gasPrice}
               loading={gasPriceLoading}
+              postfix={` ${GasPriceUnit}`}
               {...register('gasPrice')}
             />
           </Selection>
-          <Selection activeProps={{ focus: true }}>
+          <Selection<InputBoxProps> activeProps={{ focus: true }}>
             <InputBox
               label="Gas limit"
               error={errors.gasLimit}
@@ -117,19 +127,19 @@ export const ConfirmTransaction: React.FC = () => {
             />
           </Selection>
 
-          <Selection activeProps={{ isActive: true }}>
+          <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
             <SelectionZone
               prevKey="leftArrow"
               nextKey="rightArrow"
               defaultSelection={1}
             >
               <Box justifyContent="space-around">
-                <Selection activeProps={{ isFocused: true }}>
+                <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                   <Button onPress={onReject} minWidth="20%" paddingX={1}>
                     Reject
                   </Button>
                 </Selection>
-                <Selection activeProps={{ isFocused: true }}>
+                <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                   <Button
                     onPress={() => isValid && setStep(Step.CONFIRM_TX)}
                     minWidth="20%"
@@ -210,7 +220,9 @@ export const ConfirmTransaction: React.FC = () => {
           </Text>
         )}
 
-        <Text>Gas price: {data.gasPrice}</Text>
+        <Text>
+          Gas price: {data.gasPrice} {GasPriceUnit}
+        </Text>
         <Text>Gas limit: {data.gasLimit}</Text>
 
         <Divider />
@@ -222,12 +234,12 @@ export const ConfirmTransaction: React.FC = () => {
           defaultSelection={2}
         >
           <Box justifyContent="space-around">
-            <Selection activeProps={{ isFocused: true }}>
+            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
               <Button onPress={onReject} minWidth="20%" paddingX={1}>
                 Reject
               </Button>
             </Selection>
-            <Selection activeProps={{ isFocused: true }}>
+            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
               <Button
                 onPress={() => setStep(Step.EDIT_TX)}
                 minWidth="20%"
@@ -236,7 +248,7 @@ export const ConfirmTransaction: React.FC = () => {
                 Edit
               </Button>
             </Selection>
-            <Selection activeProps={{ isFocused: true }}>
+            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
               <Button onPress={onSendTransaction} minWidth="20%" paddingX={1}>
                 Send
               </Button>

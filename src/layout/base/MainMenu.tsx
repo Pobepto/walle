@@ -45,6 +45,13 @@ export const MainMenu: React.FC = () => {
                 },
               },
               {
+                title: 'Security',
+                onSelect: () => {
+                  navigate(ROUTE.SECURITY)
+                  parentZone.select(COLUMNS.MAIN)
+                },
+              },
+              {
                 title: 'Add token',
                 onSelect: () => {
                   navigate(ROUTE.TOKEN_ADD)

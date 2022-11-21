@@ -20,6 +20,7 @@ import {
   CurrencyActions,
   CurrencyTransfer,
   ConfirmTransaction,
+  Security,
 } from './modules'
 import { routerFactory } from './Router'
 import { Token } from './store'
@@ -43,6 +44,7 @@ export enum ROUTE {
   CURRENCY_ACTIONS,
   CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
+  SECURITY,
 }
 
 export interface ROUTE_DATA {
@@ -85,6 +87,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.CURRENCY_ACTIONS]: () => base(CurrencyActions),
   [ROUTE.CURRENCY_TRANSFER]: () => base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: () => base(ConfirmTransaction),
+  [ROUTE.SECURITY]: () => base(Security),
 })
 
 export const { Redirect, Router, useLocation, useNavigate, useRoute, useData } =

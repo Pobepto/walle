@@ -2,6 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits, commify } from '@ethersproject/units'
 
 export const formatNumber = (v: string, decimals = 18, visibleDecimals = 5) => {
+  if (v === '🤔') return v
+
   const bv = BigNumber.from(v)
 
   if (bv.eq(BigNumber.from(0))) {

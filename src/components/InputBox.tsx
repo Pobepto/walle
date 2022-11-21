@@ -3,19 +3,21 @@ import Spinner from 'ink-spinner'
 import React from 'react'
 import { Error, Input, InputProps } from '.'
 
-interface Props extends InputProps {
+export interface InputBoxProps extends InputProps {
   label?: string
   type?: 'text' | 'number'
   error?: string
   loading?: boolean
+  postfix?: string
 }
 
-export const InputBox: React.FC<Props> = ({
+export const InputBox: React.FC<InputBoxProps> = ({
   label,
   error,
   type = 'text',
   focus = false,
   loading = false,
+  postfix = '',
   onChange,
   ...inputProps
 }) => {
@@ -50,6 +52,7 @@ export const InputBox: React.FC<Props> = ({
             <Spinner />
           </Box>
         ) : null}
+        {!loading && postfix ? <Text>{postfix}</Text> : null}
       </Box>
       {error ? <Error text={error} /> : null}
     </Box>

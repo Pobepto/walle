@@ -4,8 +4,6 @@ import { useTokensStore } from '@src/store'
 import { useContract } from '@src/hooks'
 import { ERC20_ABI } from '@src/store/blockchain/interfaces'
 import { TransferForm, TransferInputs } from './TransferForm'
-import { formatNumber } from '@src/utils/formatNumber'
-import { BigNumber } from '@ethersproject/bignumber'
 import { parseUnits } from '@ethersproject/units'
 
 export const TokenTransfer: React.FC = () => {
@@ -21,11 +19,10 @@ export const TokenTransfer: React.FC = () => {
 
   const ERC20 = useContract(token.address, ERC20_ABI)
 
-  const balance = balances.get(token.address) ?? '0'
+  const balance = balances.get(token.address) ?? '🤔'
 
   const onTransfer = async (data: TransferInputs) => {
     const amount = parseUnits(data.amount, token.decimals)
-    console.log('amount', amount.toString())
     const populatedTx = await ERC20.populateTransaction.transfer(
       data.receiver,
       amount.toString(),
