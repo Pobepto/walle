@@ -1,15 +1,14 @@
-import { Key } from 'ink'
 import { useInput } from './useInput'
+import { checkSuperKey, SuperKey } from './useSelection'
 
 export const useKey = (
-  key: keyof Key | (keyof Key)[],
+  key: SuperKey | SuperKey[],
   handler: (input: string) => void,
   focused = false,
 ) => {
-  return useInput((_keys, input) => {
-    const keys = Array.isArray(key) ? key : [key]
-    if (keys.some((k) => _keys[k])) {
-      handler(input)
+  return useInput((input) => {
+    if (checkSuperKey(input, key)) {
+      handler(input.raw)
     }
   }, focused)
 }

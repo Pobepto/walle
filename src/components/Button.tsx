@@ -1,8 +1,8 @@
-import { Key, Box, BoxProps, Text } from 'ink'
+import { Box, BoxProps, Text } from 'ink'
 import React from 'react'
 import { AnyFunction } from 'tsdef'
 import type { SpinnerName } from 'cli-spinners'
-import { useKey } from '@hooks'
+import { SuperKey, useKey } from '@hooks'
 import { Loader } from './Loader'
 
 export interface ButtonProps extends BoxProps {
@@ -12,7 +12,7 @@ export interface ButtonProps extends BoxProps {
   isDisabled?: boolean
   isLoading?: boolean
   spinner?: SpinnerName
-  selectKey?: keyof Key
+  selectKey?: SuperKey | SuperKey[]
 }
 
 export const Button: React.FC<ButtonProps> = (props) => {

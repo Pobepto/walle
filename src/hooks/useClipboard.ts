@@ -6,9 +6,9 @@ export const useClipboard = (callback: AnyFunction) => {
   const [buffer, setBuffer] = useState('')
   const timeout = useRef<NodeJS.Timeout>()
 
-  useInput((key, input) => {
-    if (input.length > 2) {
-      setBuffer((state) => state + input)
+  useInput(({ raw }) => {
+    if (raw.length > 2) {
+      setBuffer((state) => state + raw)
     }
   })
 

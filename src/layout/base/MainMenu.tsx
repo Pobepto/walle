@@ -39,13 +39,6 @@ export const MainMenu: React.FC = () => {
           },
         },
         {
-          title: 'Security',
-          onSelect: () => {
-            navigate(ROUTE.SECURITY)
-            parentZone.select(COLUMNS.MAIN)
-          },
-        },
-        {
           title: 'Add token',
           onSelect: () => {
             navigate(ROUTE.TOKEN_ADD)
@@ -55,17 +48,24 @@ export const MainMenu: React.FC = () => {
       ],
     },
     {
+      title: 'Security',
+      onSelect: () => {
+        navigate(ROUTE.SECURITY)
+        parentZone.select(COLUMNS.MAIN)
+      },
+    },
+    {
       title: 'Logout',
       onSelect: () => handleLogout(),
+    },
+    {
+      title: 'Lock',
+      onSelect: () => navigate(ROUTE.LOGIN),
     },
     {
       title: 'FAQ',
       onSelect: () => console.log('WIP'),
     },
-    // {
-    //   title: 'Settings',
-    //   onSelect: () => console.log('Settings'),
-    // },
   ]
 
   return (

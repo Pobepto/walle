@@ -1,9 +1,28 @@
 import { Key } from 'ink'
 import { useEffect, useState } from 'react'
 import { clamp } from '@utils/clamp'
-import { useInput } from './useInput'
+import { useInput, UserInput } from './useInput'
 
-export type SuperKey = `${'meta' | 'ctrl'}+${keyof Key | string}` | keyof Key
+export type SuperKey =
+  | `${'meta' | 'ctrl'}+${keyof Key | string}`
+  | keyof Key
+  | 'any'
+
+export const checkSuperKey = (
+  input: UserInput,
+  superKey: SuperKey | SuperKey[],
+) => {
+  const superKeys = Array.isArray(superKey) ? superKey : [superKey]
+
+  return superKeys.some((superKey) => {
+    if (superKey === 'any') {
+      return true
+    }
+
+    const keys = superKey.split('+') as (keyof Key)[]
+    return keys.every((k) => input.key[k] || input.raw === k)
+  })
+}
 
 export interface SelectionSettings {
   amount: number
@@ -33,22 +52,13 @@ export const useSelection = ({
     setMaxAmount(newMaxAmount)
   }, [amount])
 
-  const prevent = useInput((key, input) => {
-    const handleSuperKey = (superKey: SuperKey) => {
-      const keys = superKey.split('+') as (keyof Key)[]
-      return keys.every((k) => key[k] || input === k)
-    }
-
-    const nextKeys = Array.isArray(nextKey) ? nextKey : [nextKey]
-    if (nextKeys.some(handleSuperKey)) {
+  const prevent = useInput((input) => {
+    if (checkSuperKey(input, nextKey)) {
       setSelection((i) => clamp(i + 1, 0, maxAmount, looped))
     }
 
-    if (prevKey) {
-      const prevKeys = Array.isArray(prevKey) ? prevKey : [prevKey]
-      if (prevKeys.some(handleSuperKey)) {
-        setSelection((i) => clamp(i - 1, 0, maxAmount, looped))
-      }
+    if (prevKey && checkSuperKey(input, prevKey)) {
+      setSelection((i) => clamp(i - 1, 0, maxAmount, looped))
     }
   }, isActive)
 

@@ -1,13 +1,13 @@
-import { Text, Key, TextProps } from 'ink'
+import { Text, TextProps } from 'ink'
 import React from 'react'
-import { useKey } from '@hooks'
+import { SuperKey, useKey } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 
 interface Props extends TextProps {
   children: React.ReactNode
   isFocused: boolean
   to: ROUTE
-  selectKey?: keyof Key
+  selectKey?: SuperKey | SuperKey[]
 }
 
 export const Link: React.FC<Props> = ({
@@ -19,13 +19,7 @@ export const Link: React.FC<Props> = ({
 }) => {
   const navigate = useNavigate()
 
-  useKey(
-    selectKey,
-    () => {
-      navigate(to)
-    },
-    isFocused,
-  )
+  useKey(selectKey, () => navigate(to), isFocused)
 
   return (
     <Text {...props} bold={isFocused}>

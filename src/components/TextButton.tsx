@@ -1,13 +1,13 @@
-import { Key, TextProps, Text } from 'ink'
+import { TextProps, Text } from 'ink'
 import React from 'react'
 import { AnyFunction } from 'tsdef'
-import { useKey } from '@hooks'
+import { SuperKey, useKey } from '@hooks'
 
 export interface TextButtonProps extends TextProps {
   children: React.ReactNode
   onPress: AnyFunction
   isFocused?: boolean
-  selectKey?: keyof Key
+  selectKey?: SuperKey | SuperKey[]
 }
 
 export const TextButton: React.FC<TextButtonProps> = ({

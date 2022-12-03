@@ -6,7 +6,6 @@ import { InputBox } from '@components/InputBox'
 import { useWalletStore } from '@store'
 import { load, USER_DATA } from '@utils'
 import AsyncButton from '@components/AsyncButton'
-import { Button } from '@src/components'
 import { TextButton } from '@src/components/TextButton'
 
 type Inputs = {
