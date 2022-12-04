@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Box, Text } from 'ink'
 import { useBlockchainStore } from '@store/blockchain'
 import { TextButton, TextButtonProps } from '@components/TextButton'
-import { Button } from '@components/Button'
+import { Button, ButtonProps } from '@components/Button'
 import { ROUTE, useNavigate } from '@src/routes'
 import {
   FocusZone,
@@ -14,7 +14,7 @@ import {
 import { COLUMNS } from '@store'
 import fetch from 'node-fetch'
 import { List } from '@src/components/List'
-import { InputBox } from '@src/components/InputBox'
+import { InputBox, InputBoxProps } from '@src/components/InputBox'
 import { useInput, useSelection } from '@src/hooks'
 
 interface ExternalChain {
@@ -29,13 +29,12 @@ enum FocusZones {
 export const ExternalChains: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
-  const [amount, setAmount] = useState(1)
+  const [amount, setAmount] = useState(0)
   const [selection, select] = useSelection({
     amount,
     prevKey: 'upArrow',
     nextKey: 'downArrow',
     isActive: parentZone.selection === COLUMNS.MAIN,
-    looped: true,
   })
   const [search, setSearch] = useState('')
   const [focusZone, setFocusZone] = useState<FocusZoneInfo>()
@@ -92,7 +91,7 @@ export const ExternalChains: React.FC = () => {
           <Text> Switch chain </Text>
         </Box>
         <Text>Select chain from external source</Text>
-        <Selection activeProps={{ focus: true }}>
+        <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox label="Search" value={search} onChange={setSearch} />
         </Selection>
         <FocusZone id={FocusZones.CHAINS_LIST}>
@@ -109,7 +108,7 @@ export const ExternalChains: React.FC = () => {
             ))}
           </List>
         </FocusZone>
-        <Selection activeProps={{ isFocused: true }}>
+        <Selection<ButtonProps> activeProps={{ isFocused: true }}>
           <Button onPress={() => navigate(ROUTE.SWITCH_CHAIN)}>
             <Text>{'<- '}Back</Text>
           </Button>

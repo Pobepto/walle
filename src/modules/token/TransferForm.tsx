@@ -1,14 +1,15 @@
 import React from 'react'
-import { InputBox } from '@src/components/InputBox'
+import { InputBox, InputBoxProps } from '@src/components/InputBox'
 import {
   Selection,
   SelectionZone,
+  SelectionZoneProps,
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { Box, Text } from 'ink'
 import { COLUMNS } from '@src/store'
 import { Loader } from '@src/components/Loader'
-import { Button } from '@src/components'
+import { Button, ButtonProps } from '@src/components'
 import {
   balanceIsZero,
   bigNumberInRange,
@@ -68,7 +69,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
         <Box marginTop={-1}>
           <Text> {title} </Text>
         </Box>
-        <Selection activeProps={{ focus: true }}>
+        <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox
             label="Receiver"
             error={errors.receiver}
@@ -81,7 +82,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
             {formatNumber(balance, decimals, decimals)}
           </Loader>{' '}
         </Text>
-        <Selection activeProps={{ focus: true }}>
+        <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox
             type="number"
             label="Amount"
@@ -90,19 +91,19 @@ export const TransferForm: React.FC<TransferFormProps> = ({
             {...register('amount')}
           />
         </Selection>
-        <Selection activeProps={{ isActive: true }}>
+        <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
           <SelectionZone
             prevKey="leftArrow"
             nextKey="rightArrow"
             defaultSelection={1}
           >
             <Box justifyContent="space-around">
-              <Selection activeProps={{ isFocused: true }}>
+              <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                 <Button onPress={onBack} minWidth="20%" paddingX={1}>
                   <Text>{'<-'} Back</Text>
                 </Button>
               </Selection>
-              <Selection activeProps={{ isFocused: true }}>
+              <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                 <Button
                   onPress={() => onTransfer(data)}
                   minWidth="20%"

@@ -18,12 +18,11 @@ export const Login: React.FC = () => {
   const { data, errors, register } = useForm<Inputs>()
   const [isLoading, setLoading] = useState(false)
 
-  const [selection, setSelection, prevent] = useSelection({
+  const [selection, select, preventInput] = useSelection({
     amount: 3,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
     isActive: true,
-    looped: false,
   })
 
   const onApply = async () => {
@@ -34,8 +33,8 @@ export const Login: React.FC = () => {
       navigate(ROUTE.WALLET)
     } catch (error) {
       console.log('Oh here we go again...', error)
-      prevent()
-      setSelection(0)
+      preventInput()
+      select(0)
     } finally {
       setLoading(false)
     }

@@ -41,24 +41,22 @@ export const useSelection = ({
   isActive,
   looped,
 }: SelectionSettings) => {
-  const [maxAmount, setMaxAmount] = useState(amount - 1)
   const [selection, setSelection] = useState(defaultSelection)
+  const maxSelection = amount - 1
 
   useEffect(() => {
-    const newMaxAmount = amount - 1
-    if (selection > newMaxAmount) {
-      setSelection(newMaxAmount)
+    if (amount !== 0 && selection > maxSelection) {
+      setSelection(maxSelection)
     }
-    setMaxAmount(newMaxAmount)
   }, [amount])
 
   const prevent = useInput((input) => {
     if (checkSuperKey(input, nextKey)) {
-      setSelection((i) => clamp(i + 1, 0, maxAmount, looped))
+      setSelection((i) => clamp(i + 1, 0, maxSelection, looped))
     }
 
     if (prevKey && checkSuperKey(input, prevKey)) {
-      setSelection((i) => clamp(i - 1, 0, maxAmount, looped))
+      setSelection((i) => clamp(i - 1, 0, maxSelection, looped))
     }
   }, isActive)
 

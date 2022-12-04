@@ -10,11 +10,13 @@ import { FocusZone } from './FocusZone'
 import { Selection } from './Selection'
 import { SelectionContext } from './SelectionContext'
 
-export type SelectionZoneProps = Omit<SelectionSettings, 'amount'> &
-  React.PropsWithChildren<{
-    onChange?: (selection: number) => void
-    onChangeFocusZone?: (focusZone?: FocusZoneInfo) => void
-  }>
+export type SelectionZoneProps = Omit<SelectionSettings, 'amount'> & {
+  onChangeFocusZone?: (focusZone?: FocusZoneInfo) => void
+  children:
+    | React.ReactNode
+    | React.ReactNode[]
+    | ((selection: number) => JSX.Element)
+}
 
 export type UncontrolledSelectionZoneProps = React.PropsWithChildren<{
   selection: number
@@ -131,7 +133,7 @@ export const SelectionZone: React.FC<SelectionZoneProps> = ({
   looped,
   onChangeFocusZone,
 }) => {
-  const [amount, setAmount] = useState(1)
+  const [amount, setAmount] = useState(0)
   const [selection, select] = useSelection({
     amount,
     defaultSelection,
@@ -149,7 +151,7 @@ export const SelectionZone: React.FC<SelectionZoneProps> = ({
       onChangeAmount={setAmount}
       onChangeFocusZone={onChangeFocusZone}
     >
-      {children}
+      {typeof children === 'function' ? children(selection) : children}
     </UncontrolledSelectionZone>
   )
 }
