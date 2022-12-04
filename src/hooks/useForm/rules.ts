@@ -29,6 +29,14 @@ export const isNumber =
     return Number.isFinite(parseFloat(value)) ? undefined : 'Must be a number'
   }
 
+export const balanceIsZero =
+  <T>(balance: BigNumber): Rule<T> =>
+  () => {
+    if (balance.eq(0)) {
+      return 'Balance is empty'
+    }
+  }
+
 export const numberInRange =
   <T>(min: number, max: number): Rule<T> =>
   (value) => {
@@ -39,7 +47,7 @@ export const numberInRange =
     }
 
     if (number > max) {
-      return `Must be lest than ${max}`
+      return `Must be less than ${max}`
     }
   }
 
@@ -53,7 +61,7 @@ export const bigNumberInRange =
     }
 
     if (number.gt(max)) {
-      return `Must be lest than ${max}`
+      return `Must be less than ${max}`
     }
   }
 

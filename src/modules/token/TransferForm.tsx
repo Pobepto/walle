@@ -10,6 +10,7 @@ import { COLUMNS } from '@src/store'
 import { Loader } from '@src/components/Loader'
 import { Button } from '@src/components'
 import {
+  balanceIsZero,
   bigNumberInRange,
   combine,
   isAddress,
@@ -48,6 +49,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
       receiver: isAddress(),
       amount: combine(
         isNumber(),
+        balanceIsZero(BigNumber.from(balance)),
         bigNumberInRange(BigNumber.from(0), BigNumber.from(balance), decimals),
       ),
     },
