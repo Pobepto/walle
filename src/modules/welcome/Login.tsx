@@ -65,7 +65,7 @@ export const Login: React.FC = () => {
         <Box alignItems="center" justifyContent="center">
           <TextButton
             isFocused={selection === 2}
-            onPress={() => console.log('WIP')}
+            onPress={() => navigate(ROUTE.FORGOT_PASSWORD)}
             color={selection === 2 ? 'red' : undefined}
           >
             Forgot password?
