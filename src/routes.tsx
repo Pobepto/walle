@@ -21,8 +21,8 @@ import {
   CurrencyTransfer,
   ConfirmTransaction,
   Security,
+  ForgotPassword,
 } from './modules'
-import { ForgotPassword } from './modules/welcome/ForgotPassword'
 import { routerFactory } from './Router'
 import { Token } from './store'
 
