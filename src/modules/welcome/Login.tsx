@@ -40,13 +40,12 @@ export const Login: React.FC = () => {
     }
   }
 
-  const monkey =
-    data.password?.length > 0 ? '┬┴┬┴┬┴┬┴┬┴┬┴┬┴┬┴' : '┬┴┬┴┤( ͡° ͜ʖ├┬┴┬┴'
+  const bear = data.password?.length > 0 ? '┬┴┬┴┬┴┬┴┬┴┬┴┬┴' : '┬┴┬┴┤ʕ•ᴥ├┬┴┬┴'
 
   return (
     <Box flexDirection="column" width="50%">
       <Box justifyContent="center" marginBottom={1}>
-        <Text>{monkey}</Text>
+        <Text>{bear}</Text>
       </Box>
       <InputBox
         label="Password"
