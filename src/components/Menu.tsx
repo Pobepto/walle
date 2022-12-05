@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Key } from 'ink'
-import { SelectionSettings, useKey, useSelection } from '@hooks'
+import { Box } from 'ink'
+import { SelectionSettings, SuperKey, useKey } from '@hooks'
 import { TextButton } from './TextButton'
 import { Selection, SelectionZone } from './SelectionZone'
 
@@ -13,7 +13,7 @@ interface MenuItem {
 type SubMenuItem = Omit<MenuItem, 'items'>
 
 interface MenuProps extends Omit<SelectionSettings, 'amount'> {
-  selectKey?: keyof Key
+  selectKey?: SuperKey | SuperKey[]
   items: MenuItem[]
 }
 

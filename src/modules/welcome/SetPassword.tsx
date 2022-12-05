@@ -29,7 +29,7 @@ export const SetPassword: React.FC = () => {
     },
   })
 
-  const [selection, setSelection, prevent] = useSelection({
+  const [selection, select, preventInput] = useSelection({
     amount: 3,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
@@ -45,9 +45,9 @@ export const SetPassword: React.FC = () => {
       await save(encrypted, USER_DATA)
       navigate(ROUTE.WALLET)
     } else {
-      prevent()
+      preventInput()
       // TODO: focus on first error
-      setSelection(0)
+      select(0)
     }
   }
 
