@@ -94,3 +94,11 @@ export const link =
       return `Must be a url`
     }
   }
+
+export const walletConnectLink =
+  <T>(): Rule<T> =>
+  (value) => {
+    if (!value.startsWith('wc:')) {
+      return `Must be a WalletConnect URL`
+    }
+  }

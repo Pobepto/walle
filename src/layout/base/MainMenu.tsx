@@ -63,6 +63,13 @@ export const MainMenu: React.FC = () => {
       onSelect: () => navigate(ROUTE.LOGIN),
     },
     {
+      title: 'Connect',
+      onSelect: () => {
+        navigate(ROUTE.WALLET_CONNECT)
+        parentZone.select(COLUMNS.MAIN)
+      },
+    },
+    {
       title: 'FAQ',
       onSelect: () => console.log('WIP'),
     },
