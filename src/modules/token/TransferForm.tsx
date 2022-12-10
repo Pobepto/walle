@@ -18,7 +18,6 @@ import {
   isNumber,
   useForm,
 } from '@src/hooks'
-import { BigNumber } from '@ethersproject/bignumber'
 import { formatNumber } from '@src/utils/formatNumber'
 
 export type TransferInputs = {
@@ -50,8 +49,8 @@ export const TransferForm: React.FC<TransferFormProps> = ({
       receiver: isAddress(),
       amount: combine(
         isNumber(),
-        balanceIsZero(BigNumber.from(balance)),
-        bigNumberInRange(BigNumber.from(0), BigNumber.from(balance), decimals),
+        balanceIsZero(balance),
+        bigNumberInRange(0, balance, decimals),
       ),
     },
     options: {

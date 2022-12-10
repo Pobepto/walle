@@ -14,6 +14,7 @@ import { InputBox } from '@components/InputBox'
 import { COLUMNS, useBlockchainStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
 import { JsonRpcProvider } from '@ethersproject/providers'
+import { ROUTE, useNavigate } from '@src/routes'
 
 type Inputs = {
   name: string
@@ -25,18 +26,19 @@ type Inputs = {
 
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!
+  const navigate = useNavigate()
   const [networkIsLoading, setNetworkLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [rpcError, setRpcError] = useState('')
   const addChain = useBlockchainStore((state) => state.addChain)
 
-  const { errors, register, data, change, inputIsValid, isValid } =
+  const { errors, data, isValid, register, change, inputIsValid } =
     useForm<Inputs>({
       rules: {
-        name: length(3),
+        name: length(1),
         rpc: link(),
         chainId: combine(isIntegerNumber(), numberInRange(1, Infinity)),
         explorer: link(),
-        currency: length(2),
+        currency: length(1),
       },
     })
 
@@ -47,32 +49,34 @@ export const AddChain: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const onSubmit = () => {
-    addChain({
+  const onSubmit = async () => {
+    await addChain({
       name: data.name,
       rpc: data.rpc,
       chainId: Number(data.chainId),
       currency: data.currency,
       explorer: data.explorer,
     })
+    navigate(ROUTE.SWITCH_CHAIN)
   }
 
-  // experimental feature
   useEffect(() => {
     const check = async () => {
       try {
-        setError('')
         setNetworkLoading(true)
         const provider = new JsonRpcProvider(data.rpc, 'any')
         const providerNetwork = await provider.getNetwork()
 
         change('chainId', providerNetwork.chainId.toString(), true)
       } catch {
-        setError("Can't get chain id from this rpc")
+        setRpcError("Can't get chain id from this rpc")
+        change('chainId', '', true)
       } finally {
         setNetworkLoading(false)
       }
     }
+
+    setRpcError('')
 
     if (inputIsValid('rpc')) {
       check()
@@ -84,11 +88,6 @@ export const AddChain: React.FC = () => {
       <Box marginTop={-1}>
         <Text> Add new chain </Text>
       </Box>
-      {error ? (
-        <Box borderStyle="single" borderColor="redBright" paddingX={1}>
-          <Text color="red">{error}</Text>
-        </Box>
-      ) : null}
       <InputBox
         label="Name"
         error={errors.name}
@@ -97,7 +96,7 @@ export const AddChain: React.FC = () => {
       />
       <InputBox
         label="Rpc"
-        error={errors.rpc}
+        error={rpcError || errors.rpc}
         focus={selection === 1}
         {...register('rpc')}
       />

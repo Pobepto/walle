@@ -10,7 +10,7 @@ export interface BlockchainStore {
   chainId: number
   setChainId: (chainId: number) => void
   chains: Chain[]
-  addChain: (chain: Chain) => void
+  addChain: (chain: Chain) => Promise<void>
   provider: JsonRpcProvider
   setProvider: (provider: JsonRpcProvider) => void
 

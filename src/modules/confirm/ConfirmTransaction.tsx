@@ -21,7 +21,7 @@ import {
 } from '@hooks'
 import { Divider } from '@src/components/Divider'
 import { Loader } from '@src/components/Loader'
-import { ROUTE, useData, useNavigate } from '@src/routes'
+import { ROUTE, useRouteData, useNavigate } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 import { Box, Text } from 'ink'
 import React, { useEffect, useState } from 'react'
@@ -45,12 +45,7 @@ export const ConfirmTransaction: React.FC = () => {
   const [txHash, setTxHash] = useState<string>()
   const chain = useChain()
   const parentZone = useSelectionZone()!
-
-  const confirmData = useData<ROUTE.CONFIRM_TRANSACTION>()
-
-  if (!confirmData) {
-    throw new Error('Transaction not found')
-  }
+  const confirmData = useRouteData<ROUTE.CONFIRM_TRANSACTION>()
 
   const { populatedTx, target } = confirmData
 

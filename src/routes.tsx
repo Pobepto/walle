@@ -49,7 +49,7 @@ export enum ROUTE {
   SECURITY,
 }
 
-export interface ROUTE_DATA {
+interface ROUTE_DATA {
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
   [ROUTE.TOKEN_INFO]: Token
@@ -67,31 +67,31 @@ const layout = (
     <Component />
   </Layout>
 )
-const welcome = (Component: React.FC) => layout(WelcomeLayout, Component)
-const base = (Component: React.FC) => layout(BaseLayout, Component)
+const welcome = (Component: React.FC) => () => layout(WelcomeLayout, Component)
+const base = (Component: React.FC) => () => layout(BaseLayout, Component)
 
 const router = routerFactory<ROUTE, ROUTE_DATA>({
-  [ROUTE.WELCOME]: () => welcome(Welcome),
-  [ROUTE.LOGIN]: () => welcome(Login),
-  [ROUTE.REGISTRATION]: () => welcome(Registration),
-  [ROUTE.REGISTRATION_IMPORT]: () => welcome(ImportWallet),
-  [ROUTE.REGISTRATION_CREATE]: () => welcome(CreateWallet),
-  [ROUTE.REGISTRATION_PASSWORD]: () => welcome(SetPassword),
-  [ROUTE.FORGOT_PASSWORD]: () => welcome(ForgotPassword),
-  [ROUTE.WALLET]: () => base(Wallet),
-  [ROUTE.SWITCH_ACCOUNT]: () => base(SwitchAccount),
-  [ROUTE.ADD_CHAIN]: () => base(AddChain),
-  [ROUTE.SWITCH_CHAIN]: () => base(SwitchChain),
-  [ROUTE.EXTERNAL_CHAINS]: () => base(ExternalChains),
-  [ROUTE.TOKEN_ADD]: () => base(AddToken),
-  [ROUTE.TOKEN_ACTIONS]: () => base(TokenActions),
-  [ROUTE.TOKEN_TRANSFER]: () => base(TokenTransfer),
-  [ROUTE.TOKEN_INFO]: () => base(TokenInfo),
-  [ROUTE.CURRENCY_ACTIONS]: () => base(CurrencyActions),
-  [ROUTE.CURRENCY_TRANSFER]: () => base(CurrencyTransfer),
-  [ROUTE.CONFIRM_TRANSACTION]: () => base(ConfirmTransaction),
-  [ROUTE.SECURITY]: () => base(Security),
+  [ROUTE.WELCOME]: welcome(Welcome),
+  [ROUTE.LOGIN]: welcome(Login),
+  [ROUTE.REGISTRATION]: welcome(Registration),
+  [ROUTE.REGISTRATION_IMPORT]: welcome(ImportWallet),
+  [ROUTE.REGISTRATION_CREATE]: welcome(CreateWallet),
+  [ROUTE.REGISTRATION_PASSWORD]: welcome(SetPassword),
+  [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
+  [ROUTE.WALLET]: base(Wallet),
+  [ROUTE.SWITCH_ACCOUNT]: base(SwitchAccount),
+  [ROUTE.ADD_CHAIN]: base(AddChain),
+  [ROUTE.SWITCH_CHAIN]: base(SwitchChain),
+  [ROUTE.EXTERNAL_CHAINS]: base(ExternalChains),
+  [ROUTE.TOKEN_ADD]: base(AddToken),
+  [ROUTE.TOKEN_ACTIONS]: base(TokenActions),
+  [ROUTE.TOKEN_TRANSFER]: base(TokenTransfer),
+  [ROUTE.TOKEN_INFO]: base(TokenInfo),
+  [ROUTE.CURRENCY_ACTIONS]: base(CurrencyActions),
+  [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
+  [ROUTE.CONFIRM_TRANSACTION]: base(ConfirmTransaction),
+  [ROUTE.SECURITY]: base(Security),
 })
 
-export const { Redirect, Router, useLocation, useNavigate, useRoute, useData } =
+export const { Router, useLocation, useNavigate, useRoute, useRouteData } =
   router

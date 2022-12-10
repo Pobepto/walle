@@ -10,53 +10,47 @@ interface Props {
   children: React.ReactNode
 }
 
-export const BaseLayout: React.FC<Props> = ({ children }) => {
-  return (
-    <Box flexDirection="column">
-      <Header />
-      <Box flexDirection="row" alignSelf="center" minHeight={20}>
-        <SelectionZone nextKey="tab" isActive looped>
-          <Selection
-            activeProps={{ borderStyle: 'double', borderColor: 'cyan' }}
-          >
-            <Box
-              width="20%"
-              flexDirection="column"
-              paddingX={1}
-              borderStyle="single"
-            >
-              <MainMenu />
-            </Box>
-          </Selection>
+const activeBoxProps = { borderStyle: 'double', borderColor: 'cyan' }
 
-          <Selection
-            activeProps={{ borderStyle: 'double', borderColor: 'cyan' }}
+export const BaseLayout: React.FC<Props> = ({ children }) => (
+  <Box flexDirection="column">
+    <Header />
+    <Box flexDirection="row" alignSelf="center" minHeight={20}>
+      <SelectionZone nextKey="tab" isActive looped>
+        <Selection activeProps={activeBoxProps}>
+          <Box
+            width="20%"
+            flexDirection="column"
+            paddingX={1}
+            borderStyle="single"
           >
-            <Box
-              width="60%"
-              flexDirection="column"
-              paddingX={1}
-              borderStyle="single"
-            >
-              {children}
-            </Box>
-          </Selection>
+            <MainMenu />
+          </Box>
+        </Selection>
 
-          <Selection
-            activeProps={{ borderStyle: 'double', borderColor: 'cyan' }}
+        <Selection activeProps={activeBoxProps}>
+          <Box
+            width="60%"
+            flexDirection="column"
+            paddingX={1}
+            borderStyle="single"
           >
-            <Box
-              width="20%"
-              flexDirection="column"
-              paddingX={1}
-              borderStyle="single"
-            >
-              <Tokens />
-            </Box>
-          </Selection>
-        </SelectionZone>
-      </Box>
-      <Footer />
+            {children}
+          </Box>
+        </Selection>
+
+        <Selection activeProps={activeBoxProps}>
+          <Box
+            width="20%"
+            flexDirection="column"
+            paddingX={1}
+            borderStyle="single"
+          >
+            <Tokens />
+          </Box>
+        </Selection>
+      </SelectionZone>
     </Box>
-  )
-}
+    <Footer />
+  </Box>
+)
