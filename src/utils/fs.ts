@@ -18,6 +18,11 @@ export const open = async (file: string): Promise<fs.FileHandle> => {
   return fs.open(file, 'r+')
 }
 
+export const remove = async (file: string): Promise<void> => {
+  // TODO: Add try catch later
+  return fs.unlink(file)
+}
+
 export const isFileExist = async (file: string): Promise<boolean> => {
   try {
     await fs.access(file)

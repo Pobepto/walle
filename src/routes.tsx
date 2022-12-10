@@ -21,6 +21,7 @@ import {
   CurrencyTransfer,
   ConfirmTransaction,
   Security,
+  ForgotPassword,
 } from './modules'
 import { routerFactory } from './Router'
 import { Token } from './store'
@@ -32,6 +33,7 @@ export enum ROUTE {
   REGISTRATION_IMPORT,
   REGISTRATION_CREATE,
   REGISTRATION_PASSWORD,
+  FORGOT_PASSWORD,
   WALLET,
   SWITCH_ACCOUNT,
   TOKEN_ADD,
@@ -75,6 +77,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.REGISTRATION_IMPORT]: welcome(ImportWallet),
   [ROUTE.REGISTRATION_CREATE]: welcome(CreateWallet),
   [ROUTE.REGISTRATION_PASSWORD]: welcome(SetPassword),
+  [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
   [ROUTE.WALLET]: base(Wallet),
   [ROUTE.SWITCH_ACCOUNT]: base(SwitchAccount),
   [ROUTE.ADD_CHAIN]: base(AddChain),

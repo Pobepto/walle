@@ -40,13 +40,12 @@ export const Login: React.FC = () => {
     }
   }
 
-  const monkey =
-    data.password?.length > 0 ? '┬┴┬┴┬┴┬┴┬┴┬┴┬┴┬┴' : '┬┴┬┴┤( ͡° ͜ʖ├┬┴┬┴'
+  const bear = data.password?.length > 0 ? '┬┴┬┴┬┴┬┴┬┴┬┴┬┴' : '┬┴┬┴┤ʕ•ᴥ├┬┴┬┴'
 
   return (
     <Box flexDirection="column" width="50%">
       <Box justifyContent="center" marginBottom={1}>
-        <Text>{monkey}</Text>
+        <Text>{bear}</Text>
       </Box>
       <InputBox
         label="Password"
@@ -66,7 +65,7 @@ export const Login: React.FC = () => {
         <Box alignItems="center" justifyContent="center">
           <TextButton
             isFocused={selection === 2}
-            onPress={() => console.log('WIP')}
+            onPress={() => navigate(ROUTE.FORGOT_PASSWORD)}
             color={selection === 2 ? 'red' : undefined}
           >
             Forgot password?

@@ -79,6 +79,14 @@ export const isAddress =
     }
   }
 
+export const isEqualToString =
+  <T>(required: string): Rule<T> =>
+  (value) => {
+    if (value !== required) {
+      return `Please enter ${required} to continue`
+    }
+  }
+
 export const link =
   <T>(): Rule<T> =>
   (value) => {
