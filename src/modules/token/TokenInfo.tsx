@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text, Newline } from 'ink'
-import { ROUTE, useData, useNavigate } from '@src/routes'
+import { ROUTE, useRouteData, useNavigate } from '@src/routes'
 import {
   Selection,
   SelectionZone,
@@ -14,12 +14,7 @@ export const TokenInfo: React.FC = () => {
   const navigate = useNavigate()
   const parentZone = useSelectionZone()!
   const chain = useChain()
-  const token = useData<ROUTE.TOKEN_INFO>()
-
-  // TODO: We can handle this error using ErrorBoundary in parent component
-  if (!token) {
-    throw new Error('Token not found')
-  }
+  const token = useRouteData<ROUTE.TOKEN_INFO>()
 
   return (
     <SelectionZone

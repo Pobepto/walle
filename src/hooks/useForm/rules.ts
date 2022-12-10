@@ -3,6 +3,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { parseUnits } from '@ethersproject/units'
 import { Rule } from './useForm'
 
+type AnyNumber = BigNumber | string | number
+
 export const length =
   <T>(min: number, max = Infinity): Rule<T> =>
   (value) => {
@@ -30,9 +32,11 @@ export const isNumber =
   }
 
 export const balanceIsZero =
-  <T>(balance: BigNumber): Rule<T> =>
+  <T>(balance: AnyNumber): Rule<T> =>
   () => {
-    if (balance.eq(0)) {
+    const bn = BigNumber.from(balance)
+
+    if (bn.eq(0)) {
       return 'Balance is empty'
     }
   }
@@ -52,16 +56,16 @@ export const numberInRange =
   }
 
 export const bigNumberInRange =
-  <T>(min: BigNumber, max: BigNumber, decimals: number): Rule<T> =>
+  <T>(min: AnyNumber, max: AnyNumber, decimals: number): Rule<T> =>
   (value) => {
     const number = parseUnits(value, decimals)
 
     if (number.lt(min)) {
-      return `Must be bigger than ${min}`
+      return `Must be bigger than ${min.toString()}`
     }
 
     if (number.gt(max)) {
-      return `Must be less than ${max}`
+      return `Must be less than ${max.toString()}`
     }
   }
 

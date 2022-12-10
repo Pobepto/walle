@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { ROUTE, useData, useNavigate } from '@src/routes'
+import { ROUTE, useRouteData, useNavigate } from '@src/routes'
 import {
   Selection,
   SelectionZone,
@@ -12,11 +12,7 @@ import { TextButton } from '@src/components/TextButton'
 export const TokenActions: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
-  const token = useData<ROUTE.TOKEN_ACTIONS>()
-
-  if (!token) {
-    return <Text>Token not found</Text>
-  }
+  const token = useRouteData<ROUTE.TOKEN_ACTIONS>()
 
   return (
     <SelectionZone

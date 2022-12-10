@@ -11,8 +11,9 @@ export const useWallet = (): Nullable<Wallet> => {
   if (!phrase) return null
 
   try {
-    const wallet = Wallet.fromMnemonic(phrase, getDerivationPath(pathId))
-    return wallet.connect(provider)
+    return Wallet.fromMnemonic(phrase, getDerivationPath(pathId)).connect(
+      provider,
+    )
   } catch {
     return null
   }

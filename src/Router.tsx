@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import { Nullable, Undefinable } from 'tsdef'
+import React, { createContext, useContext, useState } from 'react'
+import { Nullable, IsUnknown } from 'tsdef'
 
 type AnyEnum = number | string
 
@@ -8,23 +8,18 @@ interface RouterContextValue<
   RoutesData extends Partial<Record<Route, unknown>>,
 > {
   route: Route
-  navigate: <T extends Route>(to: T, data?: RoutesData[T]) => void
+  navigate: <T extends Route>(
+    to: T,
+    ...[arg]: IsUnknown<RoutesData[T], [], [data: RoutesData[T]]>
+  ) => void
   data?: RoutesData[Route]
 }
 
 export type RoutesMap<Route extends AnyEnum> = Record<Route, () => JSX.Element>
 
 interface RouterProps<Route> {
-  children: React.ReactNode
+  children: React.ReactNode | React.ReactNode[]
   defaultRoute: Route
-}
-
-interface RedirectProps<
-  Route extends AnyEnum,
-  RoutesData extends Partial<Record<Route, unknown>>,
-> {
-  to: Route
-  data?: RoutesData[Route]
 }
 
 export const routerFactory = <
@@ -64,36 +59,31 @@ export const routerFactory = <
     )
   }
 
-  const useRouterContext = () => useContext(RouterContext)
-  const useNavigate = () => useRouterContext()!.navigate
-  const useLocation = () => useRouterContext()!.route
-  const useData = <T extends Route>() =>
-    useRouterContext()!.data as Undefinable<RoutesData[T]>
+  const useRouterContext = () => {
+    const ctx = useContext(RouterContext)
+
+    if (!ctx) {
+      throw new Error('RouterContext.Provider not found')
+    }
+
+    return ctx
+  }
+
+  const useNavigate = () => useRouterContext().navigate
+  const useLocation = () => useRouterContext().route
+  const useRouteData = <T extends Route>() =>
+    useRouterContext().data as RoutesData[T]
   const useRoute = () => {
     const location = useLocation()
 
     return routes[location]()
   }
 
-  const Redirect: React.FC<RedirectProps<Route, RoutesData>> = ({
-    to,
-    data,
-  }) => {
-    const navigate = useNavigate()
-
-    useEffect(() => {
-      navigate(to, data)
-    })
-
-    return null
-  }
-
   return {
     Router,
-    Redirect,
     useNavigate,
     useLocation,
     useRoute,
-    useData,
+    useRouteData,
   }
 }

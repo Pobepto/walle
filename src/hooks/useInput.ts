@@ -5,7 +5,7 @@ export type UserInput = { key: Key; raw: string }
 
 export const useInput = (
   handler: (input: UserInput) => void,
-  focused = true,
+  isActive = true,
 ) => {
   const prevented = useRef(false)
 
@@ -18,7 +18,7 @@ export const useInput = (
 
       handler({ key, raw })
     },
-    { isActive: focused },
+    { isActive },
   )
 
   const prevent = () => {
