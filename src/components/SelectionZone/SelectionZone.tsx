@@ -2,6 +2,7 @@ import { SelectionSettings, useSelection } from '@src/hooks'
 import React, {
   Children,
   cloneElement,
+  createElement,
   isValidElement,
   useEffect,
   useState,
@@ -53,6 +54,21 @@ const iterateChildren = (children: React.ReactNode) => {
           ...props,
           index: amount++,
         })
+      }
+
+      // WIP
+      if ((type as any).selectionable) {
+        return createElement(
+          Selection,
+          {
+            index: amount++,
+            activeProps: {
+              ...(type as any).defaultFocusedProps,
+              ...props.focusedProps,
+            },
+          },
+          child,
+        )
       }
 
       if (props.children) {
