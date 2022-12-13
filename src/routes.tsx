@@ -23,6 +23,8 @@ import {
   Security,
   ForgotPassword,
   WalletConnect,
+  ShowPrivateKey,
+  ShowSeedPhrase,
 } from './modules'
 import { routerFactory } from './Router'
 import { Token } from './store'
@@ -48,6 +50,8 @@ export enum ROUTE {
   CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
   SECURITY,
+  SECURITY_SHOW_PRIVATE_KEY,
+  SECURITY_SHOW_MNEMONIC,
   WALLET_CONNECT,
 }
 
@@ -93,6 +97,8 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: base(ConfirmTransaction),
   [ROUTE.SECURITY]: base(Security),
+  [ROUTE.SECURITY_SHOW_PRIVATE_KEY]: base(ShowPrivateKey),
+  [ROUTE.SECURITY_SHOW_MNEMONIC]: base(ShowSeedPhrase),
   [ROUTE.WALLET_CONNECT]: base(WalletConnect),
 })
 
