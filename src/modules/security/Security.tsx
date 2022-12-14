@@ -1,5 +1,4 @@
 import { Button, ButtonProps } from '@src/components'
-import { ButtonLink } from '@src/components/ButtonLink'
 import {
   Selection,
   SelectionZone,
@@ -30,13 +29,15 @@ export const Security: React.FC = () => {
           <Text bold>Password</Text>
           <Text>Change your wallet login password</Text>
           <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-            <ButtonLink
+            <Button
               alignSelf="center"
               width="50%"
-              to={ROUTE.SECURITY_CHANGE_PASSWORD}
+              onPress={() =>
+                navigate(ROUTE.PASSWORD_GUARD, ROUTE.SECURITY_CHANGE_PASSWORD)
+              }
             >
               Update password
-            </ButtonLink>
+            </Button>
           </Selection>
         </Box>
 
@@ -50,7 +51,9 @@ export const Security: React.FC = () => {
             <Button
               alignSelf="center"
               width="50%"
-              onPress={() => navigate(ROUTE.SECURITY_SHOW_MNEMONIC)}
+              onPress={() =>
+                navigate(ROUTE.PASSWORD_GUARD, ROUTE.SECURITY_SHOW_MNEMONIC)
+              }
             >
               Show the Phrases
             </Button>
@@ -67,7 +70,9 @@ export const Security: React.FC = () => {
             <Button
               alignSelf="center"
               width="50%"
-              onPress={() => navigate(ROUTE.SECURITY_SHOW_PRIVATE_KEY)}
+              onPress={() =>
+                navigate(ROUTE.PASSWORD_GUARD, ROUTE.SECURITY_SHOW_PRIVATE_KEY)
+              }
             >
               Show the Private key
             </Button>

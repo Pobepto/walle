@@ -14,7 +14,6 @@ import {
 } from './actions'
 
 export interface WalletStore {
-  password: string // 🤔💩
   pathId: number
   phrase: Nullable<string>
   generateWallet: () => void

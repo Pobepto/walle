@@ -14,7 +14,6 @@ import { save, USER_DATA } from '@src/utils'
 import { ButtonLink } from '@src/components/ButtonLink'
 
 type Inputs = {
-  oldPassword: string
   password: string
   repeatPassword: string
 }
@@ -22,16 +21,10 @@ type Inputs = {
 export const ChangePassword: React.FC = () => {
   const navigate = useNavigate()
   const parentZone = useSelectionZone()!
-  const currentPassword = useWalletStore((store) => store.password)
   const encryptWallet = useWalletStore((store) => store.encryptWallet)
 
   const { data, errors, register, isValid } = useForm<Inputs>({
     rules: {
-      oldPassword: (value) => {
-        if (value !== currentPassword) {
-          return 'Incorrect password'
-        }
-      },
       password: length(1),
       repeatPassword: (value, data) => {
         if (!data.password || value !== data.password) {
@@ -62,16 +55,8 @@ export const ChangePassword: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Private Key </Text>
+          <Text> Change Password </Text>
         </Box>
-        <Selection<InputBoxProps> activeProps={{ focus: true }}>
-          <InputBox
-            label="Old password"
-            mask="*"
-            error={errors.oldPassword}
-            {...register('oldPassword')}
-          />
-        </Selection>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox
             label="New password"
