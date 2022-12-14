@@ -14,6 +14,7 @@ import {
 } from './actions'
 
 export interface WalletStore {
+  password: string // 🤔💩
   pathId: number
   phrase: Nullable<string>
   generateWallet: () => void
@@ -32,6 +33,7 @@ export type WalletAction<T extends keyof WalletStore> = Action<
 
 export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   (set, get) => ({
+    password: '',
     pathId: 0,
     phrase: null,
     generateWallet: generateWallet(set, get),

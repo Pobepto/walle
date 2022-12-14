@@ -1,4 +1,5 @@
 import { Button, ButtonProps } from '@src/components'
+import { ButtonLink } from '@src/components/ButtonLink'
 import {
   Selection,
   SelectionZone,
@@ -29,9 +30,13 @@ export const Security: React.FC = () => {
           <Text bold>Password</Text>
           <Text>Change your wallet login password</Text>
           <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-            <Button alignSelf="center" width="50%" onPress={() => null}>
+            <ButtonLink
+              alignSelf="center"
+              width="50%"
+              to={ROUTE.SECURITY_CHANGE_PASSWORD}
+            >
               Update password
-            </Button>
+            </ButtonLink>
           </Selection>
         </Box>
 

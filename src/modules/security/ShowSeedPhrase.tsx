@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Text } from 'ink'
 import { Button } from '@components'
 import { InputBox } from '@components/InputBox'
@@ -9,6 +9,8 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { useWallet } from '@src/hooks'
+import { ROUTE } from '@src/routes'
+import { ButtonLink } from '@src/components/ButtonLink'
 
 export const ShowSeedPhrase: React.FC = () => {
   const wallet = useWallet()!
@@ -48,6 +50,9 @@ export const ShowSeedPhrase: React.FC = () => {
         </Box>
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={onCopy}>Copy to buffer</Button>
+        </Selection>
+        <Selection activeProps={{ isFocused: true }}>
+          <ButtonLink to={ROUTE.SECURITY}>Back</ButtonLink>
         </Selection>
       </Box>
     </SelectionZone>
