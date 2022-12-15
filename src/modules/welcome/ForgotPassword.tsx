@@ -6,6 +6,7 @@ import { isEqualToString, useForm, useSelection } from '@src/hooks'
 import { InputBox } from '@src/components/InputBox'
 import AsyncButton from '@src/components/AsyncButton'
 import { remove, USER_DATA } from '@src/utils'
+import { TextButton } from '@src/components/TextButton'
 
 type Inputs = {
   agreement: string
@@ -84,6 +85,14 @@ export const ForgotPassword: React.FC = () => {
         >
           <Text color="red">DELETE MY ACCOUNT</Text>
         </AsyncButton>
+        <Box alignItems="center" justifyContent="center">
+          <TextButton
+            isFocused={selection === 2}
+            onPress={() => navigate(ROUTE.LOGIN)}
+          >
+            Back
+          </TextButton>
+        </Box>
       </Box>
     </Box>
   )

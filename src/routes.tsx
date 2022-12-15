@@ -21,8 +21,12 @@ import {
   CurrencyTransfer,
   ConfirmTransaction,
   Security,
+  ShowPrivateKey,
+  ShowSeedPhrase,
+  ChangePassword,
   ForgotPassword,
   WalletConnect,
+  PasswordGuard,
 } from './modules'
 import { routerFactory } from './Router'
 import { Token } from './store'
@@ -48,7 +52,11 @@ export enum ROUTE {
   CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
   SECURITY,
+  SECURITY_SHOW_PRIVATE_KEY,
+  SECURITY_SHOW_MNEMONIC,
+  SECURITY_CHANGE_PASSWORD,
   WALLET_CONNECT,
+  PASSWORD_GUARD,
 }
 
 interface ROUTE_DATA {
@@ -59,6 +67,7 @@ interface ROUTE_DATA {
     target?: Contract
     populatedTx: PopulatedTransaction
   }
+  [ROUTE.PASSWORD_GUARD]: ROUTE
 }
 
 const layout = (
@@ -93,7 +102,11 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: base(ConfirmTransaction),
   [ROUTE.SECURITY]: base(Security),
+  [ROUTE.SECURITY_SHOW_PRIVATE_KEY]: base(ShowPrivateKey),
+  [ROUTE.SECURITY_SHOW_MNEMONIC]: base(ShowSeedPhrase),
+  [ROUTE.SECURITY_CHANGE_PASSWORD]: base(ChangePassword),
   [ROUTE.WALLET_CONNECT]: base(WalletConnect),
+  [ROUTE.PASSWORD_GUARD]: base(PasswordGuard),
 })
 
 export const { Router, useLocation, useNavigate, useRoute, useRouteData } =
