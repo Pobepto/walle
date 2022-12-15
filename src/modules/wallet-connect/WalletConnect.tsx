@@ -3,38 +3,22 @@ import { Box, Text } from 'ink'
 import { Button } from '@components'
 import { useForm, useSelection, walletConnectLink, useWallet } from '@hooks'
 import { InputBox } from '@components/InputBox'
-import { COLUMNS } from '@store'
+import { COLUMNS, useWalletConnectStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
 import { useNavigate } from '@src/routes'
-
-import { parseUri } from '@walletconnect/utils'
-import SignClient from '@walletconnect/sign-client'
-import { CoreTypes, SessionTypes } from '@walletconnect/types'
+import { disconnect } from 'process'
 
 type Inputs = {
   uri: string
 }
 
-const createSignClient = () => {
-  return SignClient.init({
-    logger: 'debug',
-    projectId: '83bd22fbdde53e66f042e2c6fc181fc3',
-    relayUrl: 'wss://relay.walletconnect.com',
-    metadata: {
-      name: 'Walle Wallet',
-      description: 'Walle Wallet for WalletConnect',
-      url: 'https://walletconnect.com/',
-      icons: ['https://avatars.githubusercontent.com/u/37784886'],
-    },
-  })
-}
-
 export const WalletConnect: React.FC = () => {
   const parentZone = useSelectionZone()!
-  const navigate = useNavigate()
-  const wallet = useWallet()
-
-  const [connection, setConnection] = useState<CoreTypes.Metadata>()
+  const signClient = useWalletConnectStore((store) => store.signClient)
+  const connect = useWalletConnectStore((store) => store.connect)
+  const approve = useWalletConnectStore((store) => store.approve)
+  const disconnect = useWalletConnectStore((store) => store.disconnect)
+  const proposal = useWalletConnectStore((store) => store.proposal)
 
   const { errors, data, isValid, register } = useForm<Inputs>({
     rules: {
@@ -42,7 +26,7 @@ export const WalletConnect: React.FC = () => {
     },
   })
 
-  const [selection] = useSelection({
+  const [selection, select] = useSelection({
     amount: 2,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
@@ -50,54 +34,12 @@ export const WalletConnect: React.FC = () => {
   })
 
   const onConnect = async () => {
-    const signClient = await createSignClient()
-
-    const { version } = parseUri(data.uri)
-
-    if (version === 1) {
-      throw new Error('Not supported')
-    }
-
-    await signClient.pair({ uri: data.uri })
-
-    signClient.on('session_proposal', async (proposal) => {
-      const {
-        params: { id, requiredNamespaces, relays, proposer },
-      } = proposal
-
-      const selectedAccounts: Record<string, string[]> = {}
-      Object.keys(requiredNamespaces).forEach((key) => {
-        selectedAccounts[key] = ['DQbCUByEu8t8WpqB5UAm7guiR27NjQnaD5G2NrTLWkAj'] // [wallet!.address]
-      })
-
-      const namespaces: SessionTypes.Namespaces = {}
-      Object.keys(requiredNamespaces).forEach((key) => {
-        const accounts: string[] = []
-        requiredNamespaces[key].chains.map((chain) => {
-          selectedAccounts[key].map((acc) => accounts.push(`${chain}:${acc}`))
-        })
-        namespaces[key] = {
-          accounts,
-          methods: requiredNamespaces[key].methods,
-          events: requiredNamespaces[key].events,
-        }
-      })
-
-      const { acknowledged } = await signClient.approve({
-        id,
-        relayProtocol: relays[0].protocol,
-        namespaces,
-      })
-      await acknowledged()
-
-      setConnection(proposer.metadata)
-    })
-
-    signClient.on('session_request', (data) => console.log('request', data))
-    signClient.on('session_ping', (data) => console.log('ping', data))
-    signClient.on('session_event', (data) => console.log('event', data))
-    signClient.on('session_update', (data) => console.log('update', data))
-    signClient.on('session_delete', (data) => console.log('delete', data))
+    await connect(data.uri)
+    select(0)
+    // signClient.on('session_request', (data) => console.log('request', data))
+    // signClient.on('session_ping', (data) => console.log('ping', data))
+    // signClient.on('session_event', (data) => console.log('event', data))
+    // signClient.on('session_update', (data) => console.log('update', data))
   }
 
   return (
@@ -105,26 +47,36 @@ export const WalletConnect: React.FC = () => {
       <Box marginTop={-1}>
         <Text> Connect to WalletConnect </Text>
       </Box>
-      {connection ? (
-        <Text>
-          {connection.name} {connection.url}
-        </Text>
+      {proposal ? (
+        <>
+          <Text>
+            {proposal.params.proposer.metadata.name}{' '}
+            {proposal.params.proposer.metadata.url}
+          </Text>
+          <Button isFocused={selection === 0} onPress={disconnect}>
+            No
+          </Button>
+          <Button isFocused={selection === 1} onPress={approve}>
+            Yes
+          </Button>
+        </>
       ) : (
-        <InputBox
-          label="WalletConnect URI"
-          error={errors.uri}
-          focus={selection === 0}
-          {...register('uri')}
-        />
+        <>
+          <InputBox
+            label="WalletConnect URI"
+            error={errors.uri}
+            focus={selection === 0}
+            {...register('uri')}
+          />
+          <Button
+            isFocused={selection === 1}
+            onPress={onConnect}
+            isDisabled={!isValid}
+          >
+            Connect
+          </Button>
+        </>
       )}
-
-      <Button
-        isFocused={selection === 1}
-        onPress={onConnect}
-        isDisabled={!isValid}
-      >
-        Connect
-      </Button>
     </Box>
   )
 }

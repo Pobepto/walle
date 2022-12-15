@@ -3,6 +3,7 @@ import { Nullable } from 'tsdef'
 import { useBlockchainStore, useWalletStore } from '@store'
 import { getDerivationPath } from '@utils'
 
+// TODO: Think about removing it
 export const useWallet = (): Nullable<Wallet> => {
   const phrase = useWalletStore((state) => state.phrase)
   const pathId = useWalletStore((state) => state.pathId)
