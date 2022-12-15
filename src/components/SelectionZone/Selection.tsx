@@ -5,7 +5,7 @@ import { IZone, useSelectionZone } from './SelectionContext'
 type Props<ChildProps> = {
   activeProps?: Partial<ChildProps>
   index?: number
-  children:
+  children?:
     | React.ReactNode
     | React.ReactNode[]
     | ((isFocused: boolean, zone: Nullable<IZone>) => JSX.Element)
@@ -45,15 +45,16 @@ export const Selection = <ChildProps extends Record<string, any>>({
 // WIP
 export const selectionable = <Props extends Record<string, any>>(
   Component: React.ComponentType<Props>,
-  activeProps?: Partial<Props>,
+  defaultFocusedProps: Partial<Props> = {},
 ) => {
-  const SelectionableComponent: React.FC<Props> = (props) => {
-    return (
-      <Selection activeProps={activeProps}>
-        <Component {...props} />
-      </Selection>
-    )
+  const SelectionableComponent: React.FC<
+    Props & { focusedProps?: Partial<Props> }
+  > = (props) => {
+    return <Component {...props} />
   }
+
+  ;(SelectionableComponent as any).selectionable = true
+  ;(SelectionableComponent as any).defaultFocusedProps = defaultFocusedProps
 
   return SelectionableComponent
 }

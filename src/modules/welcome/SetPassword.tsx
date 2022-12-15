@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
+import zxcvbn, { ZXCVBNResult } from 'zxcvbn'
 import { length, useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { InputBox } from '@components/InputBox'
@@ -14,6 +15,7 @@ type Inputs = {
 
 export const SetPassword: React.FC = () => {
   const navigate = useNavigate()
+  const [passwordStrength, setPasswordStrength] = useState<ZXCVBNResult>()
   const encryptWallet = useWalletStore((state) => state.encryptWallet)
   const { data, errors, register, validate } = useForm<Inputs>({
     rules: {
@@ -51,6 +53,13 @@ export const SetPassword: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    if (data.password) {
+      const res = zxcvbn(data.password)
+      setPasswordStrength(res)
+    }
+  }, [data.password])
+
   return (
     <Box flexDirection="column">
       <Text>Set password to protect your wallet</Text>
@@ -61,6 +70,16 @@ export const SetPassword: React.FC = () => {
         focus={selection === 0}
         {...register('password')}
       />
+      {passwordStrength?.feedback.warning ? (
+        <Text color="yellow">- {passwordStrength.feedback.warning}</Text>
+      ) : null}
+      {passwordStrength?.feedback.suggestions.map((suggestion) => {
+        return (
+          <Text color="red" key={suggestion}>
+            - {suggestion}
+          </Text>
+        )
+      })}
       <InputBox
         label="Confirm password"
         mask="*"

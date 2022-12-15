@@ -1,10 +1,15 @@
 import { Box, Text } from 'ink'
 
 import React, { useMemo, useState } from 'react'
-import { Button, Input, Error } from '@components'
-import { useClipboard, length, useForm, useKey, useSelection } from '@hooks'
+import { Button, Input, Error, ButtonProps, InputProps } from '@components'
+import { useClipboard, length, useForm } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { useWalletStore } from '@store'
+import {
+  Selection,
+  SelectionZone,
+  SelectionZoneProps,
+} from '@src/components/SelectionZone'
 
 type Inputs = {
   [key: number]: string
@@ -25,49 +30,70 @@ const generateSeedObject = (wordLen: number) => {
   return result
 }
 
-const MNEMONIC_PHRASE_LENGTH = 12
+const MNEMONIC_LENGTHS = [12, 16, 24]
 
 export const ImportWallet: React.FC = () => {
+  const [phraseLength, setPhraseLength] = useState(0)
+
+  if (phraseLength === 0) {
+    return (
+      <Box
+        flexDirection="column"
+        width="100%"
+        borderStyle="single"
+        paddingX={1}
+      >
+        <Box>
+          <Text>Import</Text>
+        </Box>
+        <SelectionZone prevKey="leftArrow" nextKey="rightArrow" isActive>
+          <Box justifyContent="center">
+            {MNEMONIC_LENGTHS.map((length) => (
+              <Selection<ButtonProps>
+                key={length}
+                activeProps={{ isFocused: true }}
+              >
+                <Button width="20%" onPress={() => setPhraseLength(length)}>
+                  <Text>{length}</Text>
+                </Button>
+              </Selection>
+            ))}
+          </Box>
+        </SelectionZone>
+      </Box>
+    )
+  }
+
+  return <ImportWalletPhrase phraseLength={phraseLength} />
+}
+
+const ImportWalletPhrase: React.FC<{ phraseLength: number }> = ({
+  phraseLength,
+}) => {
   const navigate = useNavigate()
   const importWallet = useWalletStore((state) => state.importWallet)
-  const [selection, select] = useSelection({
-    amount: MNEMONIC_PHRASE_LENGTH + 1,
-    prevKey: 'tab',
-    nextKey: 'return',
-  })
   const [error, setError] = useState('')
 
   const { data, register, errors, isValid, setData } = useForm<Inputs>({
     rules: Object.fromEntries(
-      Array.from(Array(MNEMONIC_PHRASE_LENGTH), (_, index) => [
-        index,
-        length(1, 20),
-      ]),
+      Array.from(Array(phraseLength), (_, index) => [index, length(1, 20)]),
     ),
   })
 
   useClipboard((clipboard) => {
     const words = clipboard.split(' ')
-    if (words.length !== MNEMONIC_PHRASE_LENGTH) return
 
     setData(
       Object.fromEntries(
-        Array.from(Array(MNEMONIC_PHRASE_LENGTH), (_, index) => [
+        Array.from(Array(phraseLength), (_, index) => [
           index,
-          words[index],
+          words[index] ?? '',
         ]),
       ),
     )
   })
 
-  useKey('downArrow', () => select(MNEMONIC_PHRASE_LENGTH))
-  useKey('upArrow', () => select(0), selection === MNEMONIC_PHRASE_LENGTH)
-
   const onImport = () => {
-    if (!isValid) {
-      return
-    }
-
     try {
       const phrase = Object.values(data).join(' ')
       importWallet(phrase)
@@ -77,46 +103,60 @@ export const ImportWallet: React.FC = () => {
     }
   }
 
-  const seed = useMemo(() => generateSeedObject(MNEMONIC_PHRASE_LENGTH), [])
+  const seed = useMemo(() => generateSeedObject(phraseLength), [])
 
   return (
-    <Box flexDirection="column" width="100%">
+    <Box flexDirection="column" width="100%" borderStyle="single" paddingX={1}>
       <Box>
         <Text>Import</Text>
       </Box>
-      <Box flexDirection="column">
-        {seed.map((row, index) => {
-          return (
-            <Box key={`row-${index}`} flexDirection="row" alignItems="center">
-              {row.map(({ key, text }) => {
+      <SelectionZone prevKey="upArrow" nextKey="downArrow" isActive>
+        <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
+          <SelectionZone prevKey="tab" nextKey="return">
+            <Box flexDirection="column">
+              {seed.map((row, index) => {
                 return (
                   <Box
-                    key={key}
+                    key={`row-${index}`}
                     flexDirection="row"
-                    borderStyle="classic"
-                    width="30"
-                    borderColor={
-                      errors[key] && errors[key]!.length ? 'red' : ''
-                    }
+                    alignItems="center"
                   >
-                    <Text>{text}</Text>
-                    <Input {...register(key)} focus={selection === key} />
+                    {row.map(({ key, text }) => {
+                      return (
+                        <Box
+                          key={key}
+                          flexDirection="row"
+                          borderStyle="classic"
+                          width="30"
+                          borderColor={
+                            errors[key] && errors[key]!.length ? 'red' : ''
+                          }
+                        >
+                          <Text>{text}</Text>
+                          <Selection<InputProps> activeProps={{ focus: true }}>
+                            <Input {...register(key)} focus={false} />
+                          </Selection>
+                        </Box>
+                      )
+                    })}
                   </Box>
                 )
               })}
             </Box>
-          )
-        })}
-      </Box>
-      <Error text={error} />
-      <Button
-        width="50%"
-        alignSelf="center"
-        isFocused={selection === MNEMONIC_PHRASE_LENGTH}
-        onPress={onImport}
-      >
-        Import wallet
-      </Button>
+            <Error text={error} />
+          </SelectionZone>
+        </Selection>
+        <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+          <Button
+            width="50%"
+            alignSelf="center"
+            isDisabled={!isValid}
+            onPress={onImport}
+          >
+            Import wallet
+          </Button>
+        </Selection>
+      </SelectionZone>
     </Box>
   )
 }
