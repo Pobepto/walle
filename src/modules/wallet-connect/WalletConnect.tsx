@@ -35,20 +35,24 @@ export const WalletConnect: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const onConnect = async () => {
+  const safeCall = async (call: () => Promise<any>) => {
     try {
       setLoading(true)
-      await connect(data.uri)
-      select(0)
-    } catch (err: any) {
-      setError(err.toString())
+      await call()
+    } catch (err: unknown) {
+      setError(err?.toString() ?? 'Unknown error')
     } finally {
       setLoading(false)
     }
   }
 
-  if (connected && proposal) {
-    const { proposer } = proposal.params
+  const onConnect = async () => {
+    await connect(data.uri)
+    select(0)
+  }
+
+  if (connected) {
+    const { proposer } = proposal!.params
 
     return (
       <Box flexDirection="column">
@@ -64,6 +68,11 @@ export const WalletConnect: React.FC = () => {
         >
           Disconnect
         </Button>
+        <Box justifyContent="center">
+          <Loader loading={isLoading}>
+            <Error text={error} />
+          </Loader>
+        </Box>
       </Box>
     )
   }
@@ -79,23 +88,52 @@ export const WalletConnect: React.FC = () => {
         <Text>
           {proposer.metadata.name} {proposer.metadata.url}
         </Text>
-        {Object.entries(requiredNamespaces).map(([chainKey, namespace]) => {
+        <Box marginTop={1}>
+          <Text bold>Review permissions</Text>
+        </Box>
+        {Object.entries(requiredNamespaces).map(([chain, namespace]) => {
           const { chains, events, methods } = namespace
           return (
-            <Box marginY={1} key={chainKey} flexDirection="column">
-              <Text bold>{chainKey}</Text>
-              <Text>Chains: {chains.join(', ')}</Text>
-              <Text>Events: {events.join(', ')}</Text>
+            <Box
+              marginY={1}
+              key={chain}
+              flexDirection="column"
+              paddingX={1}
+              borderStyle="classic"
+            >
+              <Box marginTop={-1}>
+                <Text bold>{chain}</Text>
+              </Box>
+              <Text>
+                Chains:{' '}
+                {chains
+                  .map((chainId) => chainId.replace(`${chain}:`, ''))
+                  .join(', ')}
+              </Text>
+              {events.length ? <Text>Events: {events.join(', ')}</Text> : null}
               <Text>Methods: {methods.join(', ')}</Text>
             </Box>
           )
         })}
-        <Button isFocused={selection === 0} onPress={disconnect}>
+        <Button
+          isFocused={selection === 0}
+          isDisabled={isLoading}
+          onPress={() => safeCall(disconnect)}
+        >
           Reject
         </Button>
-        <Button isFocused={selection === 1} onPress={approve}>
+        <Button
+          isFocused={selection === 1}
+          isDisabled={isLoading}
+          onPress={() => safeCall(approve)}
+        >
           Approve
         </Button>
+        <Box justifyContent="center">
+          <Loader loading={isLoading}>
+            <Error text={error} />
+          </Loader>
+        </Box>
       </Box>
     )
   }
@@ -106,15 +144,16 @@ export const WalletConnect: React.FC = () => {
         <Text> Connect to WalletConnect </Text>
       </Box>
       <InputBox
-        label="WalletConnect URI"
+        label="WalletConnect v2 URI"
         error={errors.uri}
         focus={selection === 0}
         disabled={isLoading}
+        placeholder="e.g. wc:48585f62..."
         {...register('uri')}
       />
       <Button
         isFocused={selection === 1}
-        onPress={onConnect}
+        onPress={() => safeCall(onConnect)}
         isDisabled={!isValid}
       >
         Connect

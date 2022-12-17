@@ -6,7 +6,7 @@ export const approve: WalletConnectAction<'approve'> =
     const { signClient, proposal } = get()
     const wallet = getWallet()
 
-    if (!signClient || !proposal) {
+    if (!signClient) {
       throw new Error('There is no sign client')
     }
 
@@ -17,15 +17,15 @@ export const approve: WalletConnectAction<'approve'> =
     const selectedAccounts = [wallet.address]
     const namespaces: SessionTypes.Namespaces = {}
 
-    Object.entries(requiredNamespaces).forEach(([key, namespace]) => {
+    Object.entries(requiredNamespaces).forEach(([chain, namespace]) => {
       const { chains, methods, events } = namespace
       const accounts = chains
-        .map((chain) => {
-          return selectedAccounts.map((account) => `${chain}:${account}`)
+        .map((chainId) => {
+          return selectedAccounts.map((account) => `${chainId}:${account}`)
         })
         .flat()
 
-      namespaces[key] = {
+      namespaces[chain] = {
         accounts,
         methods,
         events,

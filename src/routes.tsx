@@ -27,6 +27,7 @@ import {
   ForgotPassword,
   WalletConnect,
   WalletConnectRequests,
+  WalletConnectPairings,
   PasswordGuard,
 } from './modules'
 import { routerFactory } from './Router'
@@ -58,6 +59,7 @@ export enum ROUTE {
   SECURITY_CHANGE_PASSWORD,
   WALLET_CONNECT,
   WALLET_CONNECT_REQUESTS,
+  WALLET_CONNECT_PAIRINGS,
   PASSWORD_GUARD,
 }
 
@@ -109,6 +111,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.SECURITY_CHANGE_PASSWORD]: base(ChangePassword),
   [ROUTE.WALLET_CONNECT]: base(WalletConnect),
   [ROUTE.WALLET_CONNECT_REQUESTS]: base(WalletConnectRequests),
+  [ROUTE.WALLET_CONNECT_PAIRINGS]: base(WalletConnectPairings),
   [ROUTE.PASSWORD_GUARD]: base(PasswordGuard),
 })
 

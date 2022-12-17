@@ -1,5 +1,4 @@
 import SignClient from '@walletconnect/sign-client'
-import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import {
@@ -10,16 +9,24 @@ import {
   SessionRequest,
 } from './actions'
 
-export interface WalletConnectStore {
-  signClient: Nullable<SignClient>
-  proposal: Nullable<SessionProposal>
-  connected: boolean
+export type WalletConnectStore = {
   requests: SessionRequest[]
 
   connect: (uri: string) => Promise<void>
   disconnect: () => Promise<void>
   approve: () => Promise<void>
-}
+} & (
+  | {
+      connected: true
+      signClient: SignClient
+      proposal: SessionProposal
+    }
+  | {
+      connected: false
+      signClient: null
+      proposal: null
+    }
+)
 
 export type WalletConnectAction<T extends keyof WalletConnectStore> = Action<
   WalletConnectStore,
@@ -28,9 +35,9 @@ export type WalletConnectAction<T extends keyof WalletConnectStore> = Action<
 
 export const useWalletConnectStore =
   createWithSubscribeSelector<WalletConnectStore>((set, get) => ({
+    connected: false,
     signClient: null,
     proposal: null,
-    connected: false,
     requests: [],
     connect: connect(set, get),
     disconnect: disconnect(set, get),

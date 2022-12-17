@@ -21,4 +21,11 @@ export const CHAINS: Chain[] = [
     currency: 'ETH',
     explorer: 'https://rinkeby.etherscan.io/',
   },
+  {
+    chainId: 80001,
+    name: 'Polygon Mumbai',
+    rpc: 'https://rpc-mumbai.maticvigil.com',
+    currency: 'Matic',
+    explorer: 'https://mumbai.polygonscan.com/',
+  },
 ]

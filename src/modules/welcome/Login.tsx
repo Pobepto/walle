@@ -15,10 +15,12 @@ type Inputs = {
 export const Login: React.FC = () => {
   const navigate = useNavigate()
   const decryptWallet = useWalletStore((state) => state.decryptWallet)
-  const { data, errors, register } = useForm<Inputs>()
+  const { data, register } = useForm<Inputs>()
+
+  const [error, setError] = useState('')
   const [isLoading, setLoading] = useState(false)
 
-  const [selection, select, preventInput] = useSelection({
+  const [selection, select] = useSelection({
     amount: 3,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
@@ -28,12 +30,12 @@ export const Login: React.FC = () => {
   const onApply = async () => {
     try {
       setLoading(true)
-      const encrypted = await load(USER_DATA) // TODO: Maybe load it once? 🤔
-      await decryptWallet(data.password || '', encrypted)
+      setError('')
+      const encrypted = await load(USER_DATA)
+      await decryptWallet(data.password, encrypted)
       navigate(ROUTE.WALLET)
-    } catch (error) {
-      console.log('Oh here we go again...', error)
-      preventInput()
+    } catch (err: unknown) {
+      setError(err?.toString() ?? '')
       select(0)
     } finally {
       setLoading(false)
@@ -50,7 +52,7 @@ export const Login: React.FC = () => {
       <InputBox
         label="Password"
         mask="*"
-        error={errors.password}
+        error={error}
         focus={selection === 0}
         {...register('password')}
       />

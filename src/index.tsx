@@ -5,7 +5,7 @@ import { Router, ROUTE } from './routes'
 
 render(
   <Router defaultRoute={ROUTE.WELCOME}>
-    {/* <Router defaultRoute={ROUTE.REGISTRATION_IMPORT}> */}
+    {/* <Router defaultRoute={ROUTE.WALLET_CONNECT_REQUESTS}> */}
     <App />
   </Router>,
 )

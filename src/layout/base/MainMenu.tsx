@@ -70,9 +70,16 @@ export const MainMenu: React.FC = () => {
           title: 'WalletConnect',
           items: [
             {
-              title: 'Session',
+              title: 'Active session',
               onSelect: () => {
                 navigate(ROUTE.WALLET_CONNECT)
+                parentZone.select(COLUMNS.MAIN)
+              },
+            },
+            {
+              title: 'Pairings',
+              onSelect: () => {
+                navigate(ROUTE.WALLET_CONNECT_PAIRINGS)
                 parentZone.select(COLUMNS.MAIN)
               },
             },
