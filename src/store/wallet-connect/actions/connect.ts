@@ -2,12 +2,14 @@ import SignClient from '@walletconnect/sign-client'
 import { ProposalTypes, SignClientTypes } from '@walletconnect/types'
 import { parseUri } from '@walletconnect/utils'
 import { WalletConnectAction } from '@src/store'
-import { SIGN_CLIENT_OPTIONS } from '../constants'
+import { EIP155_SIGNING_METHODS, SIGN_CLIENT_OPTIONS } from '../constants'
 
 export type SessionProposal = Omit<
   SignClientTypes.BaseEventArgs<ProposalTypes.Struct>,
   'topic'
 >
+
+export type SessionRequest = SignClientTypes.EventArguments['session_request']
 
 const createSignClient = () => {
   return SignClient.init(SIGN_CLIENT_OPTIONS)
@@ -15,8 +17,9 @@ const createSignClient = () => {
 
 export const connect: WalletConnectAction<'connect'> =
   (set, get) => async (uri) => {
+    const { disconnect, requests } = get()
+
     const signClient = await createSignClient()
-    const { disconnect } = get()
     set({ signClient })
 
     const { version } = parseUri(uri)
@@ -28,47 +31,33 @@ export const connect: WalletConnectAction<'connect'> =
     await signClient.pair({ uri })
 
     signClient.on('session_delete', disconnect)
-    signClient.on(
-      'session_request',
-      async (
-        requestEvent: SignClientTypes.EventArguments['session_request'],
-      ) => {
-        const {
-          topic,
-          params: { request },
-        } = requestEvent
-        const requestSession = signClient.session.get(topic)
+    signClient.on('session_request', (requestEvent) => {
+      const {
+        params: { request },
+      } = requestEvent
 
-        // switch (request.method) {
-        //   case EIP155_SIGNING_METHODS.ETH_SIGN:
-        //   case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
-        //     return ModalStore.open('SessionSignModal', {
-        //       requestEvent,
-        //       requestSession,
-        //     })
+      switch (request.method) {
+        case EIP155_SIGNING_METHODS.ETH_SIGN:
+        case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
+          throw new Error(`${request.method} not supported`)
 
-        //   case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
-        //   case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
-        //   case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
-        //     return ModalStore.open('SessionSignTypedDataModal', {
-        //       requestEvent,
-        //       requestSession,
-        //     })
+        case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
+        case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
+        case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
+          throw new Error(`${request.method} not supported`)
 
-        //   case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
-        //   case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
-        //     return ModalStore.open('SessionSendTransactionModal', {
-        //       requestEvent,
-        //       requestSession,
-        //     })
-        //   default:
-        //     return ModalStore.open('SessionUnsuportedMethodModal', {
-        //       requestEvent,
-        //       requestSession,
-        //     })
-        // }
-      },
-    )
+        case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
+        case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
+          return set({ requests: [...requests, requestEvent] })
+        default:
+          return set({ requests: [...requests, requestEvent] })
+        // throw new Error(`${request.method} not supported`)
+      }
+    })
+
+    // signClient.on('session_ping', (data) => console.log('ping', data))
+    // signClient.on('session_event', (data) => console.log('event', data))
+    // signClient.on('session_update', (data) => console.log('update', data))
 
     await new Promise<void>((resolve) => {
       signClient.on('session_proposal', (proposal) => {

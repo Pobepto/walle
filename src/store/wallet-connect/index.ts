@@ -2,12 +2,19 @@ import SignClient from '@walletconnect/sign-client'
 import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { approve, connect, disconnect, SessionProposal } from './actions'
+import {
+  approve,
+  connect,
+  disconnect,
+  SessionProposal,
+  SessionRequest,
+} from './actions'
 
 export interface WalletConnectStore {
   signClient: Nullable<SignClient>
   proposal: Nullable<SessionProposal>
   connected: boolean
+  requests: SessionRequest[]
 
   connect: (uri: string) => Promise<void>
   disconnect: () => Promise<void>
@@ -24,8 +31,8 @@ export const useWalletConnectStore =
     signClient: null,
     proposal: null,
     connected: false,
+    requests: [],
     connect: connect(set, get),
     disconnect: disconnect(set, get),
-
     approve: approve(set, get),
   }))

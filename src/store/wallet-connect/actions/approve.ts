@@ -14,21 +14,21 @@ export const approve: WalletConnectAction<'approve'> =
       params: { id, requiredNamespaces, relays },
     } = proposal
 
-    const selectedAccounts: Record<string, string[]> = {}
-    Object.keys(requiredNamespaces).forEach((key) => {
-      selectedAccounts[key] = [wallet.address]
-    })
-
+    const selectedAccounts = [wallet.address]
     const namespaces: SessionTypes.Namespaces = {}
-    Object.keys(requiredNamespaces).forEach((key) => {
-      const accounts: string[] = []
-      requiredNamespaces[key].chains.map((chain) => {
-        selectedAccounts[key].map((acc) => accounts.push(`${chain}:${acc}`))
-      })
+
+    Object.entries(requiredNamespaces).forEach(([key, namespace]) => {
+      const { chains, methods, events } = namespace
+      const accounts = chains
+        .map((chain) => {
+          return selectedAccounts.map((account) => `${chain}:${account}`)
+        })
+        .flat()
+
       namespaces[key] = {
         accounts,
-        methods: requiredNamespaces[key].methods,
-        events: requiredNamespaces[key].events,
+        methods,
+        events,
       }
     })
 

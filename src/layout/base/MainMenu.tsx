@@ -1,25 +1,25 @@
 import { Box, Text } from 'ink'
 import React from 'react'
-import { Menu } from '@components'
+import { Menu, MenuItem } from '@components'
 import { ROUTE, useNavigate } from '@routes'
-import { COLUMNS, useWalletStore } from '@store'
+import { COLUMNS, useWalletConnectStore, useWalletStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
 
-// TO
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()
   const parentZone = useSelectionZone()!
   const logout = useWalletStore((state) => state.logout)
+  const disconnect = useWalletConnectStore((store) => store.disconnect)
+  const pendingRequests = useWalletConnectStore((store) => store.requests)
+  const connected = useWalletConnectStore((store) => store.connected)
 
-  const handleLogout = () => {
-    logout()
-    navigate(ROUTE.REGISTRATION)
-  }
-
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     {
       title: 'Home',
-      onSelect: () => navigate(ROUTE.WALLET),
+      onSelect: () => {
+        navigate(ROUTE.WALLET)
+        parentZone.select(COLUMNS.MAIN)
+      },
     },
     {
       title: 'Wallet',
@@ -56,19 +56,48 @@ export const MainMenu: React.FC = () => {
     },
     {
       title: 'Logout',
-      onSelect: () => handleLogout(),
+      onSelect: () => {
+        logout()
+        navigate(ROUTE.REGISTRATION)
+      },
     },
     {
       title: 'Lock',
       onSelect: () => navigate(ROUTE.LOGIN),
     },
-    {
-      title: 'Connect',
-      onSelect: () => {
-        navigate(ROUTE.WALLET_CONNECT)
-        parentZone.select(COLUMNS.MAIN)
-      },
-    },
+    connected
+      ? {
+          title: 'WalletConnect',
+          items: [
+            {
+              title: 'Session',
+              onSelect: () => {
+                navigate(ROUTE.WALLET_CONNECT)
+                parentZone.select(COLUMNS.MAIN)
+              },
+            },
+            {
+              title: pendingRequests.length
+                ? `Pending requests (${pendingRequests.length})`
+                : 'Pending requests',
+              onSelect: () => {
+                navigate(ROUTE.WALLET_CONNECT_REQUESTS)
+                parentZone.select(COLUMNS.MAIN)
+              },
+            },
+            {
+              title: 'Disconnect',
+              onSelect: disconnect,
+            },
+          ],
+        }
+      : {
+          title: 'WalletConnect',
+          onSelect: () => {
+            navigate(ROUTE.WALLET_CONNECT)
+            parentZone.select(COLUMNS.MAIN)
+          },
+        },
     {
       title: 'FAQ',
       onSelect: () => console.log('WIP'),

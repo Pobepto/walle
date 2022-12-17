@@ -4,7 +4,7 @@ import { SelectionSettings, SuperKey, useKey } from '@hooks'
 import { TextButton } from './TextButton'
 import { Selection, SelectionZone } from './SelectionZone'
 
-interface MenuItem {
+export interface MenuItem {
   title: React.ReactNode
   items?: SubMenuItem[]
   onSelect?: () => void
