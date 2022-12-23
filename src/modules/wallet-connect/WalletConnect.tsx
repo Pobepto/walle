@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
 import { Button, Error } from '@components'
 import { useForm, useSelection, walletConnectLink } from '@hooks'
@@ -6,6 +6,7 @@ import { InputBox } from '@components/InputBox'
 import { COLUMNS, useWalletConnectStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
 import { Loader } from '@src/components/Loader'
+import { ROUTE, useRouteData } from '@src/routes'
 
 type Inputs = {
   uri: string
@@ -19,10 +20,15 @@ export const WalletConnect: React.FC = () => {
   const proposal = useWalletConnectStore((store) => store.proposal)
   const connected = useWalletConnectStore((store) => store.connected)
 
+  const { uri } = useRouteData<ROUTE.WALLET_CONNECT>() ?? {}
+
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const { errors, data, isValid, register } = useForm<Inputs>({
+    initialValues: {
+      uri: uri ?? '',
+    },
     rules: {
       uri: walletConnectLink(),
     },
@@ -50,6 +56,12 @@ export const WalletConnect: React.FC = () => {
     await connect(data.uri)
     select(0)
   }
+
+  useEffect(() => {
+    if (uri) {
+      safeCall(onConnect)
+    }
+  }, [])
 
   if (connected) {
     const { proposer } = proposal!.params

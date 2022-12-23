@@ -1,10 +1,10 @@
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
+import { Chain, DEFAULT_CHAINS } from '@src/constants'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { addChain, getNativeBalance } from './actions'
 import { sendTransaction } from './actions/sendTransaction'
-import { Chain, CHAINS } from './constants'
 
 export interface BlockchainStore {
   chainId: number
@@ -41,7 +41,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
         set({ chainId, provider })
       }
     },
-    chains: CHAINS,
+    chains: DEFAULT_CHAINS,
     addChain: addChain(set, get),
     provider: new JsonRpcProvider(
       'https://data-seed-prebsc-1-s3.binance.org:8545',

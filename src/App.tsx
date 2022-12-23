@@ -2,6 +2,7 @@ import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
 import { getSdkError } from '@walletconnect/utils'
 import { Box } from 'ink'
 import React, { useEffect } from 'react'
+import { useClipboard } from './hooks'
 import { useAutoSave } from './hooks/useAutoSave'
 import { usePrevious } from './hooks/usePrevious'
 import { ROUTE, useNavigate, useRoute } from './routes'
@@ -19,12 +20,13 @@ export const App: React.FC = () => {
   const navigate = useNavigate()
   const pendingRequests = useWalletConnectStore((store) => store.requests)
   const signClient = useWalletConnectStore((store) => store.signClient)
+  const connected = useWalletConnectStore((store) => store.connected)
   const requestsCount = pendingRequests.length
   const previousRequestsCount = usePrevious(requestsCount) ?? 0
 
   useEffect(() => {
     if (requestsCount > previousRequestsCount) {
-      const lastRequestEvent = pendingRequests.at(-1)
+      const lastRequestEvent = pendingRequests[0]
 
       if (lastRequestEvent) {
         const {
@@ -33,11 +35,43 @@ export const App: React.FC = () => {
           params: { request },
         } = lastRequestEvent
 
+        const rejectRequest = () =>
+          signClient!.respond({
+            topic,
+            response: formatJsonRpcError(
+              id,
+              getSdkError('USER_REJECTED_METHODS').message,
+            ),
+          })
+
+        console.log(lastRequestEvent.params)
+
         switch (request.method) {
           case EIP155_SIGNING_METHODS.ETH_SIGN:
-          case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
+            navigate(ROUTE.SIGN_MESSAGE, {
+              message: request.params[1],
+              warning: true,
+              onReject: rejectRequest,
+              onSign: async (signedMessage) => {
+                await signClient!.respond({
+                  topic,
+                  response: formatJsonRpcResult(id, signedMessage),
+                })
+              },
+            })
             break
-          // throw new Error(`${request.method} not supported`)
+          case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
+            navigate(ROUTE.SIGN_MESSAGE, {
+              message: request.params[0],
+              onReject: rejectRequest,
+              onSign: async (signedMessage) => {
+                await signClient!.respond({
+                  topic,
+                  response: formatJsonRpcResult(id, signedMessage),
+                })
+              },
+            })
+            break
 
           case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
           case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
@@ -49,15 +83,7 @@ export const App: React.FC = () => {
           case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
             navigate(ROUTE.CONFIRM_TRANSACTION, {
               populatedTx: request.params[0],
-              onRejectTx: async () => {
-                await signClient!.respond({
-                  topic,
-                  response: formatJsonRpcError(
-                    id,
-                    getSdkError('USER_REJECTED_METHODS').message,
-                  ),
-                })
-              },
+              onRejectTx: rejectRequest,
               onApproveTx: async (hash) => {
                 await signClient!.respond({
                   topic,
@@ -73,6 +99,14 @@ export const App: React.FC = () => {
       }
     }
   }, [requestsCount])
+
+  useClipboard((clipboard) => {
+    if (!connected && clipboard.startsWith('wc:')) {
+      navigate(ROUTE.WALLET_CONNECT, {
+        uri: clipboard,
+      })
+    }
+  })
 
   return (
     <Box width="95%" alignSelf="center" justifyContent="center">

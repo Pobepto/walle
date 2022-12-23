@@ -5,8 +5,10 @@ specifiers:
   '@ethersproject/abstract-signer': ^5.6.2
   '@ethersproject/address': ^5.6.0
   '@ethersproject/bignumber': ^5.7.0
+  '@ethersproject/bytes': ^5.7.0
   '@ethersproject/contracts': ^5.6.0
   '@ethersproject/providers': ^5.6.4
+  '@ethersproject/strings': ^5.7.0
   '@ethersproject/units': ^5.7.0
   '@ethersproject/wallet': ^5.6.0
   '@json-rpc-tools/utils': ^1.7.6
@@ -49,8 +51,10 @@ dependencies:
   '@ethersproject/abstract-signer': 5.6.2
   '@ethersproject/address': 5.6.0
   '@ethersproject/bignumber': 5.7.0
+  '@ethersproject/bytes': 5.7.0
   '@ethersproject/contracts': 5.6.0
   '@ethersproject/providers': 5.6.4
+  '@ethersproject/strings': 5.7.0
   '@ethersproject/units': 5.7.0
   '@ethersproject/wallet': 5.6.0
   '@json-rpc-tools/utils': 1.7.6
@@ -210,13 +214,13 @@ packages:
     dependencies:
       '@ethersproject/address': 5.6.0
       '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.6.1
+      '@ethersproject/bytes': 5.7.0
       '@ethersproject/constants': 5.6.0
       '@ethersproject/hash': 5.6.0
-      '@ethersproject/keccak256': 5.6.0
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.6.0
       '@ethersproject/properties': 5.6.0
-      '@ethersproject/strings': 5.6.0
+      '@ethersproject/strings': 5.7.0
     dev: false
 
   /@ethersproject/abstract-provider/5.6.0:
@@ -248,7 +252,7 @@ packages:
     dependencies:
       '@ethersproject/abstract-provider': 5.6.1
       '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.6.1
+      '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.6.0
       '@ethersproject/properties': 5.6.0
     dev: false
@@ -257,8 +261,8 @@ packages:
     resolution: {integrity: sha512-6nvhYXjbXsHPS+30sHZ+U4VMagFC/9zAk6Gd/h3S21YW4+yfb0WfRtaAIZ4kfM4rrVwqiy284LP0GtL5HXGLxQ==}
     dependencies:
       '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.6.1
-      '@ethersproject/keccak256': 5.6.0
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.6.0
       '@ethersproject/rlp': 5.6.0
     dev: false
@@ -268,7 +272,7 @@ packages:
     dependencies:
       '@ethersproject/bignumber': 5.7.0
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/keccak256': 5.6.1
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/rlp': 5.6.1
     dev: false
@@ -294,12 +298,6 @@ packages:
       bn.js: 5.2.1
     dev: false
 
-  /@ethersproject/bytes/5.6.1:
-    resolution: {integrity: sha512-NwQt7cKn5+ZE4uDn+X5RAXLp46E1chXoaMmrxAyA0rblpxz8t58lVkrHXoRIn0lz1joQElQ8410GqhTqMOwc6g==}
-    dependencies:
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
   /@ethersproject/bytes/5.7.0:
     resolution: {integrity: sha512-nsbxwgFXWh9NyYWo+U8atvmMsSdKJprTcICAkvbBffT75qDocbuggBU0SJiVK2MuTrp0q+xvLkTnGMPK1+uA9A==}
     dependencies:
@@ -308,12 +306,6 @@ packages:
 
   /@ethersproject/constants/5.6.0:
     resolution: {integrity: sha512-SrdaJx2bK0WQl23nSpV/b1aq293Lh0sUaZT/yYKPDKn4tlAbkH96SPJwIhwSwTsoQQZxuh1jnqsKwyymoiBdWA==}
-    dependencies:
-      '@ethersproject/bignumber': 5.7.0
-    dev: false
-
-  /@ethersproject/constants/5.6.1:
-    resolution: {integrity: sha512-QSq9WVnZbxXYFftrjSjZDUshp6/eKp6qrtdBtUCm0QxCV5z1fG/w3kdlcsjMCQuQHUnAclKoK7XpXMezhRDOLg==}
     dependencies:
       '@ethersproject/bignumber': 5.7.0
     dev: false
@@ -332,7 +324,7 @@ packages:
       '@ethersproject/abstract-signer': 5.6.2
       '@ethersproject/address': 5.6.0
       '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.6.1
+      '@ethersproject/bytes': 5.7.0
       '@ethersproject/constants': 5.6.0
       '@ethersproject/logger': 5.6.0
       '@ethersproject/properties': 5.6.0
@@ -346,10 +338,10 @@ packages:
       '@ethersproject/address': 5.6.0
       '@ethersproject/bignumber': 5.7.0
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/keccak256': 5.6.0
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.6.0
-      '@ethersproject/strings': 5.6.1
+      '@ethersproject/strings': 5.7.0
     dev: false
 
   /@ethersproject/hdnode/5.6.0:
@@ -364,7 +356,7 @@ packages:
       '@ethersproject/properties': 5.6.0
       '@ethersproject/sha2': 5.6.0
       '@ethersproject/signing-key': 5.6.0
-      '@ethersproject/strings': 5.6.1
+      '@ethersproject/strings': 5.7.0
       '@ethersproject/transactions': 5.6.2
       '@ethersproject/wordlists': 5.6.0
     dev: false
@@ -376,26 +368,19 @@ packages:
       '@ethersproject/address': 5.6.0
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/hdnode': 5.6.0
-      '@ethersproject/keccak256': 5.6.0
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/pbkdf2': 5.6.0
       '@ethersproject/properties': 5.6.0
       '@ethersproject/random': 5.6.0
-      '@ethersproject/strings': 5.6.1
+      '@ethersproject/strings': 5.7.0
       '@ethersproject/transactions': 5.6.2
       aes-js: 3.0.0
       scrypt-js: 3.0.1
     dev: false
 
-  /@ethersproject/keccak256/5.6.0:
-    resolution: {integrity: sha512-tk56BJ96mdj/ksi7HWZVWGjCq0WVl/QvfhFQNeL8fxhBlGoP+L80uDCiQcpJPd+2XxkivS3lwRm3E0CXTfol0w==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      js-sha3: 0.8.0
-    dev: false
-
-  /@ethersproject/keccak256/5.6.1:
-    resolution: {integrity: sha512-bB7DQHCTRDooZZdL3lk9wpL0+XuG3XLGHLh3cePnybsO3V0rdCAOQGpn/0R3aODmnTOOkCATJiD2hnL+5bwthA==}
+  /@ethersproject/keccak256/5.7.0:
+    resolution: {integrity: sha512-2UcPboeL/iW+pSg6vZ6ydF8tCnv3Iu/8tUmLLzWWGzxWKFFqOBQFLo6uLUv6BDrLgCDfN28RJ/wtByx+jZ4KBg==}
     dependencies:
       '@ethersproject/bytes': 5.7.0
       js-sha3: 0.8.0
@@ -442,7 +427,7 @@ packages:
       '@ethersproject/address': 5.6.0
       '@ethersproject/basex': 5.6.0
       '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.6.1
+      '@ethersproject/bytes': 5.7.0
       '@ethersproject/constants': 5.6.0
       '@ethersproject/hash': 5.6.0
       '@ethersproject/logger': 5.6.0
@@ -451,7 +436,7 @@ packages:
       '@ethersproject/random': 5.6.0
       '@ethersproject/rlp': 5.6.0
       '@ethersproject/sha2': 5.6.0
-      '@ethersproject/strings': 5.6.0
+      '@ethersproject/strings': 5.7.0
       '@ethersproject/transactions': 5.6.0
       '@ethersproject/web': 5.6.0
       bech32: 1.1.4
@@ -512,19 +497,11 @@ packages:
       hash.js: 1.1.7
     dev: false
 
-  /@ethersproject/strings/5.6.0:
-    resolution: {integrity: sha512-uv10vTtLTZqrJuqBZR862ZQjTIa724wGPWQqZrofaPI/kUsf53TBG0I0D+hQ1qyNtllbNzaW+PDPHHUI6/65Mg==}
+  /@ethersproject/strings/5.7.0:
+    resolution: {integrity: sha512-/9nu+lj0YswRNSH0NXYqrh8775XNyEdUQAuf3f+SmOrnVewcJ5SBNAjF7lpgehKi4abvNNXyf+HX86czCdJ8Mg==}
     dependencies:
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/constants': 5.6.1
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/strings/5.6.1:
-    resolution: {integrity: sha512-2X1Lgk6Jyfg26MUnsHiT456U9ijxKUybz8IM1Vih+NJxYtXhmvKBcHOmvGqpFSVJ0nQ4ZCoIViR8XlRw1v/+Cw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/constants': 5.6.1
+      '@ethersproject/constants': 5.7.0
       '@ethersproject/logger': 5.7.0
     dev: false
 
@@ -534,8 +511,8 @@ packages:
       '@ethersproject/address': 5.6.0
       '@ethersproject/bignumber': 5.7.0
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/constants': 5.6.1
-      '@ethersproject/keccak256': 5.6.0
+      '@ethersproject/constants': 5.7.0
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.6.0
       '@ethersproject/rlp': 5.6.0
@@ -548,8 +525,8 @@ packages:
       '@ethersproject/address': 5.6.1
       '@ethersproject/bignumber': 5.7.0
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/constants': 5.6.1
-      '@ethersproject/keccak256': 5.6.1
+      '@ethersproject/constants': 5.7.0
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.6.0
       '@ethersproject/rlp': 5.6.1
@@ -571,11 +548,11 @@ packages:
       '@ethersproject/abstract-signer': 5.6.2
       '@ethersproject/address': 5.6.0
       '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.6.1
+      '@ethersproject/bytes': 5.7.0
       '@ethersproject/hash': 5.6.0
       '@ethersproject/hdnode': 5.6.0
       '@ethersproject/json-wallets': 5.6.0
-      '@ethersproject/keccak256': 5.6.0
+      '@ethersproject/keccak256': 5.7.0
       '@ethersproject/logger': 5.6.0
       '@ethersproject/properties': 5.6.0
       '@ethersproject/random': 5.6.0
@@ -591,7 +568,7 @@ packages:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.6.0
-      '@ethersproject/strings': 5.6.1
+      '@ethersproject/strings': 5.7.0
     dev: false
 
   /@ethersproject/web/5.6.1:
@@ -601,7 +578,7 @@ packages:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.6.0
-      '@ethersproject/strings': 5.6.1
+      '@ethersproject/strings': 5.7.0
     dev: false
 
   /@ethersproject/wordlists/5.6.0:
@@ -611,7 +588,7 @@ packages:
       '@ethersproject/hash': 5.6.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.6.0
-      '@ethersproject/strings': 5.6.1
+      '@ethersproject/strings': 5.7.0
     dev: false
 
   /@humanwhocodes/config-array/0.9.5:
