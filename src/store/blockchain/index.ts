@@ -1,5 +1,5 @@
 import { PopulatedTransaction } from '@ethersproject/contracts'
-import { JsonRpcProvider } from '@ethersproject/providers'
+import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { addChain, getNativeBalance } from './actions'
@@ -20,7 +20,7 @@ export interface BlockchainStore {
 
   sendTransaction: (
     populatedTx: PopulatedTransaction,
-  ) => Promise<string | undefined>
+  ) => Promise<TransactionReceipt | undefined>
   txInProgress: boolean
 }
 

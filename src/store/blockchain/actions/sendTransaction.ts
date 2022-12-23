@@ -13,7 +13,7 @@ export const sendTransaction: BlockchainAction<'sendTransaction'> =
 
       set({ txInProgress: false })
 
-      return result.transactionHash
+      return result
     } catch (err) {
       console.log(err)
       set({ txInProgress: false })

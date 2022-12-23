@@ -1,3 +1,5 @@
+import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
+import { getSdkError } from '@walletconnect/utils'
 import { Box } from 'ink'
 import React, { useEffect } from 'react'
 import { useAutoSave } from './hooks/useAutoSave'
@@ -16,6 +18,7 @@ export const App: React.FC = () => {
   const route = useRoute()
   const navigate = useNavigate()
   const pendingRequests = useWalletConnectStore((store) => store.requests)
+  const signClient = useWalletConnectStore((store) => store.signClient)
   const requestsCount = pendingRequests.length
   const previousRequestsCount = usePrevious(requestsCount) ?? 0
 
@@ -25,6 +28,8 @@ export const App: React.FC = () => {
 
       if (lastRequestEvent) {
         const {
+          id,
+          topic,
           params: { request },
         } = lastRequestEvent
 
@@ -43,7 +48,22 @@ export const App: React.FC = () => {
           case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
           case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
             navigate(ROUTE.CONFIRM_TRANSACTION, {
-              populatedTx: request.params,
+              populatedTx: request.params[0],
+              onRejectTx: async () => {
+                await signClient!.respond({
+                  topic,
+                  response: formatJsonRpcError(
+                    id,
+                    getSdkError('USER_REJECTED_METHODS').message,
+                  ),
+                })
+              },
+              onApproveTx: async (hash) => {
+                await signClient!.respond({
+                  topic,
+                  response: formatJsonRpcResult(id, hash),
+                })
+              },
             })
             break
 

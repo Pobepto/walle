@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@components'
+import { Button, ButtonProps, Error } from '@components'
 import { InputBox, InputBoxProps } from '@components/InputBox'
 import {
   Selection,
@@ -6,28 +6,28 @@ import {
   SelectionZoneProps,
   useSelectionZone,
 } from '@components/SelectionZone'
-import { FormatTypes, Result } from '@ethersproject/abi'
+import { FormatTypes } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import {
   combine,
   isIntegerNumber,
   numberInRange,
-  useGasLimit,
   useForm,
   useGasPrice,
   useChain,
   isNumber,
+  useEstimate,
 } from '@hooks'
 import { Divider } from '@src/components/Divider'
 import { Loader } from '@src/components/Loader'
+import { TextButton, TextButtonProps } from '@src/components/TextButton'
 import { ROUTE, useRouteData, useNavigate } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 import { Box, Text } from 'ink'
 import React, { useEffect, useState } from 'react'
 
 enum Step {
-  EDIT_TX,
   CONFIRM_TX,
   WAITING,
 }
@@ -41,16 +41,18 @@ const GasPriceUnit = 'gwei'
 
 export const ConfirmTransaction: React.FC = () => {
   const navigate = useNavigate()
-  const [step, setStep] = useState<Step>(Step.EDIT_TX)
+  const [step, setStep] = useState<Step>(Step.CONFIRM_TX)
   const [txHash, setTxHash] = useState<string>()
   const chain = useChain()
   const parentZone = useSelectionZone()!
   const confirmData = useRouteData<ROUTE.CONFIRM_TRANSACTION>()
 
-  const { populatedTx, target } = confirmData
+  const { populatedTx, target, onRejectTx, onApproveTx } = confirmData
 
-  const [gasLimit, gasLimitLoading] = useGasLimit(populatedTx)
+  const estimate = useEstimate(populatedTx)
   const [gasPrice, gasPriceLoading] = useGasPrice()
+
+  const [showFullData, setShowFullData] = useState(false)
 
   const sendTransaction = useBlockchainStore((state) => state.sendTransaction)
   const txInProgress = useBlockchainStore((state) => state.txInProgress)
@@ -65,19 +67,23 @@ export const ConfirmTransaction: React.FC = () => {
     },
   })
 
-  const onSendTransaction = () => {
-    if (isValid) {
-      populatedTx.gasLimit = BigNumber.from(data.gasLimit)
-      populatedTx.gasPrice = parseUnits(data.gasPrice, GasPriceUnit)
+  const onSendTransaction = async () => {
+    populatedTx.gasLimit = BigNumber.from(data.gasLimit)
+    populatedTx.gasPrice = parseUnits(data.gasPrice, GasPriceUnit)
 
-      sendTransaction(populatedTx).then((txHash) => setTxHash(txHash))
+    setStep(Step.WAITING)
 
-      setStep(Step.WAITING)
+    const receipt = await sendTransaction(populatedTx)
+
+    if (receipt) {
+      setTxHash(receipt.transactionHash)
+      onApproveTx && onApproveTx(receipt.transactionHash)
     }
   }
 
   const onReject = () => {
     navigate(ROUTE.WALLET)
+    onRejectTx && onRejectTx()
   }
 
   useEffect(() => {
@@ -87,24 +93,127 @@ export const ConfirmTransaction: React.FC = () => {
   }, [gasPrice])
 
   useEffect(() => {
-    if (gasLimit) {
-      change('gasLimit', gasLimit, true)
+    if (estimate.gasLimit) {
+      change('gasLimit', estimate.gasLimit, true)
     }
-  }, [gasLimit])
+  }, [estimate.gasLimit])
 
-  if (step === Step.EDIT_TX) {
-    return (
-      <SelectionZone
-        prevKey="upArrow"
-        nextKey={['downArrow', 'return']}
-        isActive={parentZone.selection === COLUMNS.MAIN}
-      >
-        <Box flexDirection="column">
-          <Box marginTop={-1}>
-            <Text> Edit </Text>
+  const renderTransactionData = () => {
+    const { data, value, to } = populatedTx
+
+    if (target) {
+      const calldata = data ?? '0x'
+      const sighash = calldata.slice(0, 10)
+      const fragment = target.interface.getFunction(sighash)
+      const signature = `${fragment.name}(${fragment.inputs
+        .map((input) => input.format(FormatTypes.full))
+        .join(', ')})`
+      const params = target.interface.decodeFunctionData(fragment, calldata)
+      const onlyStringArgs = Object.keys(params).filter((key) =>
+        isNaN(Number(key)),
+      )
+
+      return (
+        <>
+          <Text>Call {signature} with params:</Text>
+          <Box
+            flexDirection="column"
+            borderStyle="single"
+            borderColor="green"
+            marginY={1}
+            paddingX={1}
+          >
+            <Box marginTop={-1}>
+              <Text bold> {signature} </Text>
+            </Box>
+            {onlyStringArgs.map((arg) => {
+              const value = params[arg]
+
+              return (
+                <Text key={arg}>
+                  <Text bold>{arg}:</Text> {value.toString()}
+                </Text>
+              )
+            })}
           </Box>
+          {value && value.gt(0) ? (
+            <Text>
+              And send {formatUnits(value).toString()} {chain.currency}
+            </Text>
+          ) : null}
+        </>
+      )
+    }
 
-          <Selection<InputBoxProps> activeProps={{ focus: true }}>
+    if (!data || data === '0x') {
+      return (
+        <Box
+          flexDirection="column"
+          borderStyle="single"
+          borderColor="green"
+          marginY={1}
+          paddingX={1}
+        >
+          <Text>
+            Send {formatUnits(value ?? '0').toString()} {chain.currency}
+          </Text>
+          <Text>
+            To <Text bold>{to}</Text>
+          </Text>
+        </Box>
+      )
+    }
+
+    console.log('populatedTx', populatedTx)
+
+    const displayData = showFullData ? data : `${data.slice(0, 256)}...`
+
+    return (
+      <>
+        <Text>Call contract</Text>
+        <Text bold>{to}</Text>
+
+        <Box marginTop={1}>
+          <Text>with data:</Text>
+        </Box>
+        <Box borderStyle="single" borderColor="green" paddingX={1}>
+          <Text>{displayData}</Text>
+        </Box>
+        <Box justifyContent="center" marginBottom={1}>
+          <Selection<TextButtonProps> activeProps={{ isFocused: true }}>
+            <TextButton onPress={() => setShowFullData((v) => !v)}>
+              {displayData.length < data.length
+                ? '🔽 Show full data 🔽'
+                : '🔼 Show less data 🔼'}
+            </TextButton>
+          </Selection>
+        </Box>
+      </>
+    )
+  }
+
+  if (step === Step.CONFIRM_TX) {
+    const gasFee = BigNumber.from(
+      parseUnits(data.gasPrice || '0', GasPriceUnit),
+    ).mul(data.gasLimit || '0')
+    const total = gasFee.add(populatedTx.value ?? '0')
+
+    return (
+      <Box flexDirection="column">
+        <Box marginTop={-1}>
+          <Text> Confirm </Text>
+        </Box>
+        <SelectionZone
+          prevKey="upArrow"
+          nextKey={['downArrow', 'return']}
+          isActive={parentZone.selection === COLUMNS.MAIN}
+        >
+          {renderTransactionData()}
+
+          <Selection<InputBoxProps>
+            activeProps={{ focus: true }}
+            selectedByDefault
+          >
             <InputBox
               label="Gas price"
               error={errors.gasPrice}
@@ -117,16 +226,34 @@ export const ConfirmTransaction: React.FC = () => {
             <InputBox
               label="Gas limit"
               error={errors.gasLimit}
-              loading={gasLimitLoading}
+              loading={estimate.loading}
               {...register('gasLimit')}
             />
           </Selection>
+
+          {estimate.error ? (
+            <Box justifyContent="center">
+              <Error text={estimate.error} />
+            </Box>
+          ) : null}
+
+          <Text>
+            Gas fee:{' '}
+            <Loader loading={gasPriceLoading || estimate.loading}>
+              {formatUnits(gasFee)} {chain.currency}
+            </Loader>
+          </Text>
+          <Text>
+            Total: {formatUnits(total)} {chain.currency}
+          </Text>
+
+          <Divider symbol="—" />
 
           <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
             <SelectionZone
               prevKey="leftArrow"
               nextKey="rightArrow"
-              defaultSelection={1}
+              defaultSelection={2}
             >
               <Box justifyContent="space-around">
                 <Selection<ButtonProps> activeProps={{ isFocused: true }}>
@@ -136,129 +263,17 @@ export const ConfirmTransaction: React.FC = () => {
                 </Selection>
                 <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                   <Button
-                    onPress={() => isValid && setStep(Step.CONFIRM_TX)}
+                    onPress={onSendTransaction}
+                    isDisabled={!isValid}
                     minWidth="20%"
                     paddingX={1}
-                    isLoading={gasLimitLoading || gasPriceLoading}
                   >
-                    <Text>Next {'->'}</Text>
+                    Send
                   </Button>
                 </Selection>
               </Box>
             </SelectionZone>
           </Selection>
-        </Box>
-      </SelectionZone>
-    )
-  }
-
-  if (step === Step.CONFIRM_TX) {
-    let callInfo: {
-      method: string
-      keys: string[]
-      params: Result
-    } | null = null
-
-    if (target) {
-      const calldata = populatedTx.data!
-      const sighash = calldata.slice(0, 10)
-      const method = target.interface.getFunction(sighash)
-      const signature = `${method.name}(${method.inputs
-        .map((input) => input.format(FormatTypes.full))
-        .join(', ')})`
-      const params: Result = target.interface.decodeFunctionData(
-        method,
-        calldata,
-      )
-      const keys = Object.keys(params).filter((key) => isNaN(Number(key)))
-
-      callInfo = {
-        method: signature,
-        keys,
-        params,
-      }
-    }
-
-    return (
-      <Box flexDirection="column">
-        <Box marginTop={-1}>
-          <Text> Confirm </Text>
-        </Box>
-
-        {callInfo ? (
-          <>
-            <Text>Call {callInfo.method} with params:</Text>
-            <Box
-              flexDirection="column"
-              borderStyle="single"
-              borderColor="green"
-              marginY={1}
-            >
-              <Box marginTop={-1}>
-                <Text bold> {callInfo.method} </Text>
-              </Box>
-              {callInfo.keys.map((key) => {
-                const value = callInfo!.params[key]
-
-                return (
-                  <Text key={key}>
-                    <Text bold>{key}:</Text> {value.toString()}
-                  </Text>
-                )
-              })}
-            </Box>
-          </>
-        ) : (
-          <Box
-            flexDirection="column"
-            borderStyle="single"
-            borderColor="green"
-            marginY={1}
-          >
-            <Text>
-              Send {formatUnits(populatedTx.value ?? '0', 18).toString()}{' '}
-              {chain.currency}
-            </Text>
-            <Text>
-              To <Text bold>{populatedTx.to}</Text>
-            </Text>
-          </Box>
-        )}
-
-        <Text>
-          Gas price: {data.gasPrice} {GasPriceUnit}
-        </Text>
-        <Text>Gas limit: {data.gasLimit}</Text>
-
-        <Divider />
-
-        <SelectionZone
-          prevKey="leftArrow"
-          nextKey="rightArrow"
-          isActive={parentZone.selection === COLUMNS.MAIN}
-          defaultSelection={2}
-        >
-          <Box justifyContent="space-around">
-            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-              <Button onPress={onReject} minWidth="20%" paddingX={1}>
-                Reject
-              </Button>
-            </Selection>
-            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-              <Button
-                onPress={() => setStep(Step.EDIT_TX)}
-                minWidth="20%"
-                paddingX={1}
-              >
-                Edit
-              </Button>
-            </Selection>
-            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-              <Button onPress={onSendTransaction} minWidth="20%" paddingX={1}>
-                Send
-              </Button>
-            </Selection>
-          </Box>
         </SelectionZone>
       </Box>
     )

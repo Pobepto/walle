@@ -70,6 +70,8 @@ interface ROUTE_DATA {
   [ROUTE.CONFIRM_TRANSACTION]: {
     target?: Contract
     populatedTx: PopulatedTransaction
+    onRejectTx?: () => void
+    onApproveTx?: (hash: string) => void
   }
   [ROUTE.PASSWORD_GUARD]: ROUTE
 }

@@ -1,10 +1,11 @@
-import React, { cloneElement, isValidElement } from 'react'
+import React, { cloneElement, isValidElement, useEffect } from 'react'
 import { Nullable } from 'tsdef'
 import { IZone, useSelectionZone } from './SelectionContext'
 
 type Props<ChildProps> = {
   activeProps?: Partial<ChildProps>
   index?: number
+  selectedByDefault?: boolean
   children?:
     | React.ReactNode
     | React.ReactNode[]
@@ -15,8 +16,15 @@ export const Selection = <ChildProps extends Record<string, any>>({
   children,
   index,
   activeProps,
+  selectedByDefault,
 }: Props<ChildProps>) => {
   const zone = useSelectionZone()
+
+  useEffect(() => {
+    if (selectedByDefault && index) {
+      zone?.select(index)
+    }
+  }, [])
 
   if (zone) {
     const isActive = zone.isActive && zone.selection === index
