@@ -3,8 +3,10 @@ import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import {
   approve,
+  approveRequest,
   connect,
   disconnect,
+  rejectRequest,
   SessionProposal,
   SessionRequest,
 } from './actions'
@@ -15,6 +17,8 @@ export type WalletConnectStore = {
   connect: (uri: string) => Promise<void>
   disconnect: () => Promise<void>
   approve: () => Promise<void>
+  approveRequest: (request: SessionRequest, result: any) => Promise<void>
+  rejectRequest: (request: SessionRequest) => Promise<void>
 } & (
   | {
       connected: true
@@ -42,4 +46,6 @@ export const useWalletConnectStore =
     connect: connect(set, get),
     disconnect: disconnect(set, get),
     approve: approve(set, get),
+    approveRequest: approveRequest(set, get),
+    rejectRequest: rejectRequest(set, get),
   }))

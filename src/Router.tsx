@@ -91,10 +91,10 @@ export const routerFactory = <
     to,
     data,
   }: RedirectProps<T, RoutesData>) => {
-    const navigate = useNavigate()
+    const navigate: any = useNavigate()
 
     useEffect(() => {
-      ;(navigate as any)(to, data)
+      navigate(to, data)
     }, [])
 
     return null

@@ -29,6 +29,7 @@ import {
   WalletConnectRequests,
   WalletConnectPairings,
   PasswordGuard,
+  SignMessage,
 } from './modules'
 import { routerFactory } from './Router'
 import { Token } from './store'
@@ -53,6 +54,7 @@ export enum ROUTE {
   CURRENCY_ACTIONS,
   CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
+  SIGN_MESSAGE,
   SECURITY,
   SECURITY_SHOW_PRIVATE_KEY,
   SECURITY_SHOW_MNEMONIC,
@@ -74,6 +76,15 @@ interface ROUTE_DATA {
     onApproveTx?: (hash: string) => void
   }
   [ROUTE.PASSWORD_GUARD]: ROUTE
+  [ROUTE.SIGN_MESSAGE]: {
+    message: string
+    warning?: boolean
+    onReject: () => void
+    onSign: (signedData: string) => void
+  }
+  [ROUTE.WALLET_CONNECT]: {
+    uri?: string
+  }
 }
 
 const layout = (
@@ -107,6 +118,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.CURRENCY_ACTIONS]: base(CurrencyActions),
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: base(ConfirmTransaction),
+  [ROUTE.SIGN_MESSAGE]: base(SignMessage),
   [ROUTE.SECURITY]: base(Security),
   [ROUTE.SECURITY_SHOW_PRIVATE_KEY]: base(ShowPrivateKey),
   [ROUTE.SECURITY_SHOW_MNEMONIC]: base(ShowSeedPhrase),

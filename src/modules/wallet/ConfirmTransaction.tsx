@@ -22,6 +22,7 @@ import {
 import { Divider } from '@src/components/Divider'
 import { Loader } from '@src/components/Loader'
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
+import { GasPriceUnit } from '@src/constants'
 import { ROUTE, useRouteData, useNavigate } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 import { Box, Text } from 'ink'
@@ -37,17 +38,14 @@ type Inputs = {
   gasLimit: string
 }
 
-const GasPriceUnit = 'gwei'
-
 export const ConfirmTransaction: React.FC = () => {
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>(Step.CONFIRM_TX)
   const [txHash, setTxHash] = useState<string>()
   const chain = useChain()
   const parentZone = useSelectionZone()!
-  const confirmData = useRouteData<ROUTE.CONFIRM_TRANSACTION>()
-
-  const { populatedTx, target, onRejectTx, onApproveTx } = confirmData
+  const { populatedTx, target, onRejectTx, onApproveTx } =
+    useRouteData<ROUTE.CONFIRM_TRANSACTION>()
 
   const estimate = useEstimate(populatedTx)
   const [gasPrice, gasPriceLoading] = useGasPrice()
@@ -163,8 +161,6 @@ export const ConfirmTransaction: React.FC = () => {
         </Box>
       )
     }
-
-    console.log('populatedTx', populatedTx)
 
     const displayData = showFullData ? data : `${data.slice(0, 256)}...`
 
