@@ -128,14 +128,14 @@ export const WalletConnect: React.FC = () => {
           )
         })}
         <Button
-          isFocused={selection === 0}
+          isFocused={parentZone.selection === COLUMNS.MAIN && selection === 0}
           isDisabled={isLoading}
           onPress={() => safeCall(disconnect)}
         >
           Reject
         </Button>
         <Button
-          isFocused={selection === 1}
+          isFocused={parentZone.selection === COLUMNS.MAIN && selection === 1}
           isDisabled={isLoading}
           onPress={() => safeCall(approve)}
         >
@@ -158,13 +158,13 @@ export const WalletConnect: React.FC = () => {
       <InputBox
         label="WalletConnect v2 URI"
         error={errors.uri}
-        focus={selection === 0}
+        focus={parentZone.selection === COLUMNS.MAIN && selection === 0}
         disabled={isLoading}
         placeholder="e.g. wc:48585f62..."
         {...register('uri')}
       />
       <Button
-        isFocused={selection === 1}
+        isFocused={parentZone.selection === COLUMNS.MAIN && selection === 1}
         onPress={() => safeCall(onConnect)}
         isDisabled={!isValid}
       >
