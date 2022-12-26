@@ -29,7 +29,7 @@ export const connect: WalletConnectAction<'connect'> =
     signClient.on('session_delete', disconnect)
     signClient.on('session_request', (requestEvent) => {
       const { requests } = get()
-      set({ requests: [...requests, requestEvent] })
+      set({ requests: [requestEvent, ...requests] })
     })
 
     // signClient.on('session_ping', (data) => console.log('ping', data))
