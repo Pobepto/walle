@@ -1,3 +1,5 @@
 export * from './connect'
 export * from './disconnect'
 export * from './approve'
+export * from './approveRequest'
+export * from './rejectRequest'

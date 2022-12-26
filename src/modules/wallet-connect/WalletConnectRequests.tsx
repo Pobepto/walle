@@ -7,7 +7,12 @@ import {
   UncontrolledSelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { SuperKey, useKey, useSelection } from '@src/hooks'
+import {
+  SuperKey,
+  useKey,
+  useSelection,
+  useWalletConnectRequestHandler,
+} from '@src/hooks'
 import { SessionRequest } from '@src/store/wallet-connect/actions'
 import { ButtonProps } from '@src/components'
 import { TextButton } from '@src/components/TextButton'
@@ -82,9 +87,11 @@ const RequestItem: React.FC<RequestItemProps> = ({
 
 export const WalletConnectRequests: React.FC = () => {
   const parentZone = useSelectionZone()!
+  const handleRequest = useWalletConnectRequestHandler()
   const pendingRequests = useWalletConnectStore((store) => store.requests)
   const proposal = useWalletConnectStore((store) => store.proposal)
   const connected = useWalletConnectStore((store) => store.connected)
+  const rejectRequest = useWalletConnectStore((store) => store.rejectRequest)
 
   const [amount, setAmount] = useState(0)
   const [selection, select] = useSelection({
@@ -96,14 +103,6 @@ export const WalletConnectRequests: React.FC = () => {
 
   if (!connected) {
     return <Redirect to={ROUTE.WALLET_CONNECT} />
-  }
-
-  const onApprove = (request: SessionRequest) => {
-    console.log('approve', request.id)
-  }
-
-  const onReject = (request: SessionRequest) => {
-    console.log('reject', request.id)
   }
 
   const { proposer } = proposal!.params
@@ -128,8 +127,8 @@ export const WalletConnectRequests: React.FC = () => {
               <RequestItem
                 request={request}
                 pressKey="return"
-                onApprove={onApprove}
-                onReject={onReject}
+                onApprove={handleRequest}
+                onReject={rejectRequest}
               />
             </Selection>
           ))}
