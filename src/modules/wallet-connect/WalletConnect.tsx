@@ -6,7 +6,7 @@ import { InputBox } from '@components/InputBox'
 import { COLUMNS, useWalletConnectStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
 import { Loader } from '@src/components/Loader'
-import { ROUTE, useRouteData } from '@src/routes'
+import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 
 type Inputs = {
   uri: string
@@ -14,6 +14,7 @@ type Inputs = {
 
 export const WalletConnect: React.FC = () => {
   const parentZone = useSelectionZone()!
+  const navigate = useNavigate()
   const connect = useWalletConnectStore((store) => store.connect)
   const approve = useWalletConnectStore((store) => store.approve)
   const disconnect = useWalletConnectStore((store) => store.disconnect)
@@ -57,6 +58,11 @@ export const WalletConnect: React.FC = () => {
     select(0)
   }
 
+  const onDisconnect = () => {
+    disconnect()
+    navigate(ROUTE.WALLET)
+  }
+
   useEffect(() => {
     if (uri) {
       safeCall(onConnect)
@@ -71,12 +77,17 @@ export const WalletConnect: React.FC = () => {
         <Box marginTop={-1}>
           <Text> Active session </Text>
         </Box>
-        <Text>
-          Connected to {proposer.metadata.name} {proposer.metadata.url}
-        </Text>
+        <Box flexDirection="column" borderStyle="classic" paddingX={1}>
+          <Box marginTop={-1}>
+            <Text> Connected to </Text>
+          </Box>
+          <Text bold>{proposer.metadata.name}</Text>
+          <Text color="cyan">{proposer.metadata.url}</Text>
+          <Text>{proposer.metadata.description}</Text>
+        </Box>
         <Button
           isFocused={parentZone.selection === COLUMNS.MAIN}
-          onPress={disconnect}
+          onPress={onDisconnect}
         >
           Disconnect
         </Button>

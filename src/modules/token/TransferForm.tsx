@@ -19,6 +19,7 @@ import {
   useForm,
 } from '@src/hooks'
 import { formatNumber } from '@src/utils/formatNumber'
+import { Nullable } from 'tsdef'
 
 export type TransferInputs = {
   receiver: string
@@ -26,7 +27,7 @@ export type TransferInputs = {
 }
 
 interface TransferFormProps {
-  balance: string
+  balance: Nullable<string>
   decimals: number
   balanceIsLoading: boolean
   title: string
@@ -49,14 +50,18 @@ export const TransferForm: React.FC<TransferFormProps> = ({
       receiver: isAddress(),
       amount: combine(
         isNumber(),
-        balanceIsZero(balance),
-        bigNumberInRange(0, balance, decimals),
+        balanceIsZero(balance ?? 0),
+        bigNumberInRange(0, balance ?? 0, decimals),
       ),
     },
     options: {
       validateAction: 'blur',
     },
   })
+
+  const formattedBalance = balance
+    ? formatNumber(balance, decimals, decimals)
+    : '🤔'
 
   return (
     <SelectionZone
@@ -77,9 +82,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
         </Selection>
         <Text>
           <Text bold>Balance:</Text>{' '}
-          <Loader loading={balanceIsLoading}>
-            {formatNumber(balance, decimals, decimals)}
-          </Loader>{' '}
+          <Loader loading={balanceIsLoading}>{formattedBalance}</Loader>{' '}
         </Text>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox

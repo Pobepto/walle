@@ -1,6 +1,7 @@
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
 import { Chain, DEFAULT_CHAINS } from '@src/constants'
+import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { addChain, getNativeBalance } from './actions'
@@ -14,7 +15,7 @@ export interface BlockchainStore {
   provider: JsonRpcProvider
   setProvider: (provider: JsonRpcProvider) => void
 
-  nativeBalance: string
+  nativeBalance: Nullable<string>
   nativeBalanceIsLoading: boolean
   getNativeBalance: () => Promise<void>
 

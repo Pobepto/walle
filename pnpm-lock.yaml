@@ -17,10 +17,9 @@ specifiers:
   '@types/zxcvbn': ^4.4.1
   '@typescript-eslint/eslint-plugin': ^5.21.0
   '@typescript-eslint/parser': ^5.21.0
-  '@walletconnect/sign-client': ^2.1.4
-  '@walletconnect/types': ^2.1.4
-  '@walletconnect/utils': ^2.1.4
-  bignumber.js: ^9.1.0
+  '@walletconnect/sign-client': ^2.1.5
+  '@walletconnect/types': ^2.1.5
+  '@walletconnect/utils': ^2.1.5
   cli-spinners: ^2.6.1
   commitizen: ^4.2.4
   cz-simple-gitmoji: ^1.0.1
@@ -58,10 +57,9 @@ dependencies:
   '@ethersproject/units': 5.7.0
   '@ethersproject/wallet': 5.6.0
   '@json-rpc-tools/utils': 1.7.6
-  '@walletconnect/sign-client': 2.1.4_lokijs@1.5.12
-  '@walletconnect/types': 2.1.4_lokijs@1.5.12
-  '@walletconnect/utils': 2.1.4_lokijs@1.5.12
-  bignumber.js: 9.1.0
+  '@walletconnect/sign-client': 2.1.5_lokijs@1.5.12
+  '@walletconnect/types': 2.1.5_lokijs@1.5.12
+  '@walletconnect/utils': 2.1.5_lokijs@1.5.12
   ink: 3.2.0_amtsnftabiznt6ysaiblxguaim
   ink-spinner: 4.0.3_ink@3.2.0+react@17.0.2
   ink-text-input: 4.0.3_ink@3.2.0+react@17.0.2
@@ -946,21 +944,21 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@walletconnect/core/2.1.4_lokijs@1.5.12:
-    resolution: {integrity: sha512-pEGTbysRwxJJhOYoRmBy8WQ2z7iYrNYsKvdGN/BNoXGuOT9PqKNqiRtVs2E4W79Nwq7ZoM1zohh5VLgbKguSUQ==}
+  /@walletconnect/core/2.1.5_lokijs@1.5.12:
+    resolution: {integrity: sha512-UjQRIVNTJfUDwR0NATgJf2qQEjyX053JdG0PAZs1YxhpNevGuhAzAlOvWHf4hq9zV8uj9mUPkkkWXSY331uQig==}
     dependencies:
       '@walletconnect/heartbeat': 1.0.1
       '@walletconnect/jsonrpc-provider': 1.0.6
       '@walletconnect/jsonrpc-utils': 1.0.4
-      '@walletconnect/jsonrpc-ws-connection': 1.0.5
+      '@walletconnect/jsonrpc-ws-connection': 1.0.6
       '@walletconnect/keyvaluestorage': 1.0.2_lokijs@1.5.12
       '@walletconnect/logger': 2.0.1
       '@walletconnect/relay-api': 1.0.7
       '@walletconnect/relay-auth': 1.0.4
       '@walletconnect/safe-json': 1.0.1
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.1.4_lokijs@1.5.12
-      '@walletconnect/utils': 2.1.4_lokijs@1.5.12
+      '@walletconnect/types': 2.1.5_lokijs@1.5.12
+      '@walletconnect/utils': 2.1.5_lokijs@1.5.12
       events: 3.3.0
       lodash.isequal: 4.5.0
       pino: 7.11.0
@@ -1016,11 +1014,12 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@walletconnect/jsonrpc-ws-connection/1.0.5:
-    resolution: {integrity: sha512-M8a7nPmJbY3itLVdkq6d+EjZUsDDwyNpK1rYlhT1xcD07oXqFSqzkSCvFXylUaPlOsBVIhJ8l7I8oOYkb6K5XQ==}
+  /@walletconnect/jsonrpc-ws-connection/1.0.6:
+    resolution: {integrity: sha512-WFu8uTXbIDgxFfyax9uNcqFYtexUq/OdCA3SBsOqIipsnJFbjXK8OaR8WCoec4tkJbDRQO9mrr1KpA0ZlIcnCQ==}
     dependencies:
       '@walletconnect/jsonrpc-utils': 1.0.4
       '@walletconnect/safe-json': 1.0.1
+      events: 3.3.0
       tslib: 1.14.1
       ws: 7.5.7
     transitivePeerDependencies:
@@ -1075,18 +1074,18 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@walletconnect/sign-client/2.1.4_lokijs@1.5.12:
-    resolution: {integrity: sha512-40fnyRUVNT+6AYQElQA/rUPHH9fdlbAd4hacpBFny2TbjGeGD/P+n4enhF5m0AQWwuF8zS8c7/qERvbWnaYnEg==}
+  /@walletconnect/sign-client/2.1.5_lokijs@1.5.12:
+    resolution: {integrity: sha512-lEcP9Kk+2aKswWcJPBnTpZ+2V8r7mTLitA9F9cteFD0606k9xVGHoWEIt19YlVrB7sTKfXCdF/FWjmVTbHOBEw==}
     dependencies:
-      '@walletconnect/core': 2.1.4_lokijs@1.5.12
+      '@walletconnect/core': 2.1.5_lokijs@1.5.12
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.0.1
       '@walletconnect/jsonrpc-provider': 1.0.6
       '@walletconnect/jsonrpc-utils': 1.0.4
       '@walletconnect/logger': 2.0.1
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.1.4_lokijs@1.5.12
-      '@walletconnect/utils': 2.1.4_lokijs@1.5.12
+      '@walletconnect/types': 2.1.5_lokijs@1.5.12
+      '@walletconnect/utils': 2.1.5_lokijs@1.5.12
       events: 3.3.0
       pino: 7.11.0
     transitivePeerDependencies:
@@ -1102,8 +1101,8 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@walletconnect/types/2.1.4_lokijs@1.5.12:
-    resolution: {integrity: sha512-n9fIk0z2fiGFlPgQcpurQ8WH7XF/blYaDIpr2ai3qdoo1N10yCsX1vj65L8t3zJAmSeHFoVJI9YVrSDj5eWjWw==}
+  /@walletconnect/types/2.1.5_lokijs@1.5.12:
+    resolution: {integrity: sha512-KhJ+/Och+0W2i6gfSBLjn7yqu2496MXGPOHm9yosQ1t1X6i9j3FjA4yiyLCbmIdVOXvtU1JOdn15ATOhSUxc3Q==}
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.0.1
@@ -1116,8 +1115,8 @@ packages:
       - lokijs
     dev: false
 
-  /@walletconnect/utils/2.1.4_lokijs@1.5.12:
-    resolution: {integrity: sha512-g3XRGAgETQbwbZleQS1f4ZFl8X6jb+CaWVNM+vtVO9EvIUJAzE8TLq3H70v+KawRMaLXjgRc0z0W7Wg6bvct7g==}
+  /@walletconnect/utils/2.1.5_lokijs@1.5.12:
+    resolution: {integrity: sha512-ZJNS/3oXjyDxjQXfXCl4GtnNnnVKaLRYwbhSw6ECDaZHo3WdAGWKrg14eB0XYw9RxTM4bCgb5z21NtaeP3ck4A==}
     dependencies:
       '@stablelib/chacha20poly1305': 1.0.1
       '@stablelib/hkdf': 1.0.1
@@ -1128,7 +1127,7 @@ packages:
       '@walletconnect/relay-api': 1.0.7
       '@walletconnect/safe-json': 1.0.1
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.1.4_lokijs@1.5.12
+      '@walletconnect/types': 2.1.5_lokijs@1.5.12
       '@walletconnect/window-getters': 1.0.1
       '@walletconnect/window-metadata': 1.0.1
       detect-browser: 5.3.0
@@ -1325,10 +1324,6 @@ packages:
 
   /bech32/1.1.4:
     resolution: {integrity: sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==}
-    dev: false
-
-  /bignumber.js/9.1.0:
-    resolution: {integrity: sha512-4LwHK4nfDOraBCtst+wOWIHbu1vhvAPJK8g8nROd4iuc3PSEjWif/qwbkh8jwCJz6yDBvtU4KPynETgrfh7y3A==}
     dev: false
 
   /bl/4.1.0:
@@ -3274,7 +3269,7 @@ packages:
     dev: true
 
   /lodash.isequal/4.5.0:
-    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    resolution: {integrity: sha1-QVxEePK8wwEgwizhDtMib30+GOA=}
     dev: false
 
   /lodash.isfunction/3.0.9:
@@ -4487,7 +4482,7 @@ packages:
     dev: true
 
   /util-deprecate/1.0.2:
-    resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
+    resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
   /v8-compile-cache-lib/3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}

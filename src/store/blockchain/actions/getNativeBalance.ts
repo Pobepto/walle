@@ -12,6 +12,6 @@ export const getNativeBalance: BlockchainAction<'getNativeBalance'> =
 
       set({ nativeBalance: balance.toString(), nativeBalanceIsLoading: false })
     } catch (err) {
-      set({ nativeBalance: '🤔', nativeBalanceIsLoading: false })
+      set({ nativeBalance: null, nativeBalanceIsLoading: false })
     }
   }

@@ -72,17 +72,17 @@ export const MainMenu: React.FC = () => {
             {
               title: 'Active session',
               onSelect: () => {
-                navigate(ROUTE.WALLET_CONNECT)
+                navigate(ROUTE.WALLET_CONNECT, {})
                 parentZone.select(COLUMNS.MAIN)
               },
             },
-            {
-              title: 'Pairings',
-              onSelect: () => {
-                navigate(ROUTE.WALLET_CONNECT_PAIRINGS)
-                parentZone.select(COLUMNS.MAIN)
-              },
-            },
+            // {
+            //   title: 'Pairings',
+            //   onSelect: () => {
+            //     navigate(ROUTE.WALLET_CONNECT_PAIRINGS)
+            //     parentZone.select(COLUMNS.MAIN)
+            //   },
+            // },
             {
               title: pendingRequests.length
                 ? `Pending requests (${pendingRequests.length})`
@@ -101,7 +101,7 @@ export const MainMenu: React.FC = () => {
       : {
           title: 'WalletConnect',
           onSelect: () => {
-            navigate(ROUTE.WALLET_CONNECT)
+            navigate(ROUTE.WALLET_CONNECT, {})
             parentZone.select(COLUMNS.MAIN)
           },
         },

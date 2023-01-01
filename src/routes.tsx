@@ -1,5 +1,6 @@
 import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
 import React from 'react'
+import { Token } from './constants'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
   Wallet,
@@ -32,7 +33,6 @@ import {
   SignMessage,
 } from './modules'
 import { routerFactory } from './Router'
-import { Token } from './store'
 
 export enum ROUTE {
   WELCOME,
@@ -82,7 +82,7 @@ interface ROUTE_DATA {
     onReject: () => void
     onSign: (signedData: string) => void
   }
-  [ROUTE.WALLET_CONNECT]: {
+  [ROUTE.WALLET_CONNECT]?: {
     uri?: string
   }
 }

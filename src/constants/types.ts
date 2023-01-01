@@ -5,3 +5,11 @@ export interface Chain {
   currency: string
   explorer: string
 }
+
+export interface Token {
+  name: string
+  symbol: string
+  decimals: number
+  address: string
+  chainId: number
+}
