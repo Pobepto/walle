@@ -5,6 +5,7 @@ import { MainMenu } from './MainMenu'
 import { Tokens } from './Tokens'
 import { Selection, SelectionZone } from '@src/components/SelectionZone'
 import { Footer } from './Footer'
+import { WalletConnectRequestsHandler } from '../WalletConnectRequestsHandler'
 
 interface Props {
   children: React.ReactNode
@@ -17,6 +18,8 @@ export const BaseLayout: React.FC<Props> = ({ children }) => (
     <Header />
     <Box flexDirection="row" alignSelf="center" minHeight={20}>
       <SelectionZone nextKey="tab" isActive looped>
+        <WalletConnectRequestsHandler />
+
         <Selection activeProps={activeBoxProps}>
           <Box
             width="20%"

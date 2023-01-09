@@ -13,7 +13,7 @@ export const TokenTransfer: React.FC = () => {
   const token = useRouteData<ROUTE.TOKEN_TRANSFER>()
   const ERC20 = useContract(token.address, ERC20_ABI)
 
-  const balance = balances.get(token.address) ?? '🤔'
+  const balance = balances.get(token.address) ?? null
 
   const onTransfer = async (data: TransferInputs) => {
     const amount = parseUnits(data.amount, token.decimals)

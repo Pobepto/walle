@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { Nullable, IsUnknown } from 'tsdef'
 
 type AnyEnum = number | string
@@ -20,6 +20,14 @@ export type RoutesMap<Route extends AnyEnum> = Record<Route, () => JSX.Element>
 interface RouterProps<Route> {
   children: React.ReactNode | React.ReactNode[]
   defaultRoute: Route
+}
+
+interface RedirectProps<
+  Route extends AnyEnum,
+  RoutesData extends Partial<Record<Route, unknown>>,
+> {
+  to: Route
+  data?: RoutesData[Route]
 }
 
 export const routerFactory = <
@@ -79,8 +87,22 @@ export const routerFactory = <
     return routes[location]()
   }
 
+  const Redirect = <T extends Route>({
+    to,
+    data,
+  }: RedirectProps<T, RoutesData>) => {
+    const navigate: any = useNavigate()
+
+    useEffect(() => {
+      navigate(to, data)
+    }, [])
+
+    return null
+  }
+
   return {
     Router,
+    Redirect,
     useNavigate,
     useLocation,
     useRoute,

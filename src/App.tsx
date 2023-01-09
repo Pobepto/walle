@@ -1,6 +1,5 @@
+import React from 'react'
 import { Box } from 'ink'
-import React, { useEffect } from 'react'
-import { useAutoSave } from './hooks/useAutoSave'
 import { useRoute } from './routes'
 import { subscribe } from './store/subscribers'
 

@@ -12,6 +12,9 @@ export const Header: React.FC = () => {
   const pathId = useWalletStore((state) => state.pathId)
 
   // const link = `${chain.explorer}/address/${wallet.address}`
+  const formattedBalance = nativeBalance
+    ? formatNumber(nativeBalance, 18, 18)
+    : '🤔'
 
   return (
     <Box flexDirection="column" borderStyle="single" paddingX={1}>
@@ -22,9 +25,7 @@ export const Header: React.FC = () => {
       <Box flexDirection="row" justifyContent="space-between">
         <Text color="cyan">{wallet?.address}</Text>
         <Text>
-          <Loader loading={nativeBalanceIsLoading}>
-            {formatNumber(nativeBalance, 18, 18)}
-          </Loader>{' '}
+          <Loader loading={nativeBalanceIsLoading}>{formattedBalance}</Loader>{' '}
           {chain.currency}
         </Text>
       </Box>

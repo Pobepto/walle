@@ -129,7 +129,7 @@ export const useForm = <Values extends DefaultValues = DefaultValues>({
       onBlur: () => onBlur(name),
       onFocus: () => onFocus(name),
       onChange: (value: Value) => onChange(name, value),
-      value: data[name] ?? '',
+      value: data[name]?.toString() ?? '',
     }
   }
 

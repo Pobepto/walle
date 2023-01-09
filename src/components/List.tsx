@@ -1,4 +1,4 @@
-import { Text } from 'ink'
+import { Box, Text } from 'ink'
 import React from 'react'
 
 interface ListProps {
@@ -22,7 +22,11 @@ export const List: React.FC<ListProps> = ({
 
   return (
     <>
-      {selection > viewport && <Text>{upArrow}</Text>}
+      {selection > viewport && (
+        <Box justifyContent="center">
+          <Text>{upArrow}</Text>
+        </Box>
+      )}
       {children.map((child, index) => {
         let isRender = false
 
@@ -43,7 +47,11 @@ export const List: React.FC<ListProps> = ({
 
         return isRender ? child : null
       })}
-      {selection < childrenLength - viewport && <Text>{downArrow}</Text>}
+      {selection < childrenLength - viewport && (
+        <Box justifyContent="center">
+          <Text>{downArrow}</Text>
+        </Box>
+      )}
     </>
   )
 }

@@ -4,8 +4,9 @@ import React from 'react'
 import { ROUTE, useNavigate } from '@routes'
 import { isEqualToString, useForm, useSelection } from '@src/hooks'
 import { InputBox } from '@src/components/InputBox'
-import AsyncButton from '@src/components/AsyncButton'
 import { remove, USER_DATA } from '@src/utils'
+import { TextButton } from '@src/components/TextButton'
+import { Button } from '@src/components'
 
 type Inputs = {
   agreement: string
@@ -40,7 +41,6 @@ export const ForgotPassword: React.FC = () => {
       navigate(ROUTE.WELCOME)
     } else {
       preventInput()
-      // TODO: focus on first error
       select(0)
     }
   }
@@ -76,14 +76,22 @@ export const ForgotPassword: React.FC = () => {
           focus={selection === 0}
           {...register('agreement')}
         />
-        <AsyncButton
+        <Button
           isFocused={selection === 1}
           onPress={onApply}
           spinner="fingerDance"
           borderColor="red"
         >
           <Text color="red">DELETE MY ACCOUNT</Text>
-        </AsyncButton>
+        </Button>
+        <Box alignItems="center" justifyContent="center">
+          <TextButton
+            isFocused={selection === 2}
+            onPress={() => navigate(ROUTE.LOGIN)}
+          >
+            Back
+          </TextButton>
+        </Box>
       </Box>
     </Box>
   )

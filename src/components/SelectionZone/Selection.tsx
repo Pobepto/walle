@@ -1,11 +1,12 @@
-import React, { cloneElement, isValidElement } from 'react'
+import React, { cloneElement, isValidElement, useEffect } from 'react'
 import { Nullable } from 'tsdef'
 import { IZone, useSelectionZone } from './SelectionContext'
 
 type Props<ChildProps> = {
   activeProps?: Partial<ChildProps>
   index?: number
-  children:
+  selectedByDefault?: boolean
+  children?:
     | React.ReactNode
     | React.ReactNode[]
     | ((isFocused: boolean, zone: Nullable<IZone>) => JSX.Element)
@@ -15,8 +16,15 @@ export const Selection = <ChildProps extends Record<string, any>>({
   children,
   index,
   activeProps,
+  selectedByDefault,
 }: Props<ChildProps>) => {
   const zone = useSelectionZone()
+
+  useEffect(() => {
+    if (selectedByDefault && index) {
+      zone?.select(index)
+    }
+  }, [])
 
   if (zone) {
     const isActive = zone.isActive && zone.selection === index
@@ -45,15 +53,16 @@ export const Selection = <ChildProps extends Record<string, any>>({
 // WIP
 export const selectionable = <Props extends Record<string, any>>(
   Component: React.ComponentType<Props>,
-  activeProps?: Partial<Props>,
+  defaultFocusedProps: Partial<Props> = {},
 ) => {
-  const SelectionableComponent: React.FC<Props> = (props) => {
-    return (
-      <Selection activeProps={activeProps}>
-        <Component {...props} />
-      </Selection>
-    )
+  const SelectionableComponent: React.FC<
+    Props & { focusedProps?: Partial<Props> }
+  > = (props) => {
+    return <Component {...props} />
   }
+
+  ;(SelectionableComponent as any).selectionable = true
+  ;(SelectionableComponent as any).defaultFocusedProps = defaultFocusedProps
 
   return SelectionableComponent
 }

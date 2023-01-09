@@ -15,18 +15,18 @@ export const TokenActions: React.FC = () => {
   const token = useRouteData<ROUTE.TOKEN_ACTIONS>()
 
   return (
-    <SelectionZone
-      prevKey="upArrow"
-      nextKey="downArrow"
-      isActive={parentZone.selection === COLUMNS.MAIN}
-    >
-      <Box flexDirection="column">
-        <Box marginTop={-1}>
-          <Text>
-            {' '}
-            {token.name} ({token.symbol}){' '}
-          </Text>
-        </Box>
+    <Box flexDirection="column">
+      <Box marginTop={-1}>
+        <Text>
+          {' '}
+          {token.name} ({token.symbol}){' '}
+        </Text>
+      </Box>
+      <SelectionZone
+        prevKey="upArrow"
+        nextKey="downArrow"
+        isActive={parentZone.selection === COLUMNS.MAIN}
+      >
         <Selection>
           {(isFocused) => (
             <TextButton
@@ -47,14 +47,14 @@ export const TokenActions: React.FC = () => {
             </TextButton>
           )}
         </Selection>
-        <Selection>
+        {/* <Selection>
           {(isFocused) => (
             <TextButton isFocused={isFocused} onPress={() => null}>
               {isFocused ? '->' : '-'} Call method [WIP]
             </TextButton>
           )}
-        </Selection>
-      </Box>
-    </SelectionZone>
+        </Selection> */}
+      </SelectionZone>
+    </Box>
   )
 }

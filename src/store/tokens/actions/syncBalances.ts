@@ -3,6 +3,7 @@ import { Contract } from '@ethersproject/contracts'
 import { useBlockchainStore } from '@src/store/blockchain'
 import { ERC20_ABI } from '@src/store/blockchain/interfaces'
 import { getWallet } from '@src/store/wallet'
+import { Nullable } from 'tsdef'
 import { TokensAction } from '..'
 
 export const syncBalances: TokensAction<'syncBalances'> =
@@ -19,11 +20,13 @@ export const syncBalances: TokensAction<'syncBalances'> =
         .filter((token) => token.chainId === chainId)
         .map(async (token) => {
           const contract = new Contract(token.address, ERC20_ABI, provider)
-          const balance: BigNumber = await contract.callStatic
+          const balance: Nullable<BigNumber> = await contract.callStatic
             .balanceOf(wallet.address)
-            .catch(() => '🤔')
+            .catch(() => null)
 
-          balances.set(token.address, balance.toString())
+          if (balance) {
+            balances.set(token.address, balance.toString())
+          }
         }),
     )
 

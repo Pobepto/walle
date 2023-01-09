@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink'
 import React from 'react'
 import { useNativeBalance, useTokens } from '@hooks'
-import { COLUMNS, Token, useTokensStore } from '@store'
+import { COLUMNS, useTokensStore } from '@store'
 import { Loader } from '@src/components/Loader'
 import {
   Selection,
@@ -13,6 +13,7 @@ import { TextButton, TextButtonProps } from '@src/components/TextButton'
 import { useChain } from '@src/hooks'
 import { formatNumber } from '@src/utils/formatNumber'
 import { List } from '@src/components/List'
+import { Token } from '@src/constants'
 
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!
@@ -33,6 +34,10 @@ export const Tokens: React.FC = () => {
     parentZone.select(COLUMNS.MAIN)
   }
 
+  const formattedNativeBalance = nativeBalance
+    ? formatNumber(nativeBalance)
+    : '🤔'
+
   return (
     <SelectionZone
       prevKey="upArrow"
@@ -50,7 +55,7 @@ export const Tokens: React.FC = () => {
             >
               <TextButton onPress={handleSelectCurrency}>
                 <Loader loading={nativeBalanceIsLoading}>
-                  {formatNumber(nativeBalance)}
+                  {formattedNativeBalance}
                 </Loader>{' '}
                 <Text bold>{chain.currency}</Text>
               </TextButton>
@@ -59,7 +64,7 @@ export const Tokens: React.FC = () => {
               const balance = balances.get(token.address)
               const formattedBalance = balance
                 ? formatNumber(balance, token.decimals)
-                : ''
+                : '🤔'
 
               return (
                 <Selection<TextButtonProps>
