@@ -1,6 +1,7 @@
 import SignClient from '@walletconnect/sign-client'
 import { ProposalTypes, SignClientTypes } from '@walletconnect/types'
 import { parseUri } from '@walletconnect/utils'
+import type { IKeyValueStorage } from '@walletconnect/keyvaluestorage'
 import { WalletConnectAction } from '@src/store'
 import { SIGN_CLIENT_OPTIONS } from '../constants'
 
@@ -21,7 +22,41 @@ export const connect: WalletConnectAction<'connect'> =
       throw new Error(`WalletConnect v${version} not supported`)
     }
 
-    const signClient = await SignClient.init(SIGN_CLIENT_OPTIONS)
+    const storage: IKeyValueStorage = {
+      setItem: (key, value) => {
+        const { store } = get()
+        set({
+          store: {
+            ...store,
+            [key]: value,
+          },
+        })
+        return Promise.resolve()
+      },
+      getItem: (key) => {
+        const { store } = get()
+        return Promise.resolve(store[key])
+      },
+      removeItem: (key) => {
+        const store = { ...get().store }
+        delete store[key]
+        set({ store })
+        return Promise.resolve()
+      },
+      getKeys: () => {
+        const { store } = get()
+        return Promise.resolve(Object.keys(store))
+      },
+      getEntries: () => {
+        const { store } = get()
+        return Promise.resolve(Object.entries(store))
+      },
+    }
+
+    const signClient = await SignClient.init({
+      ...SIGN_CLIENT_OPTIONS,
+      storage,
+    })
     set({ signClient })
 
     await signClient.pair({ uri })

@@ -13,6 +13,7 @@ import {
 
 export type WalletConnectStore = {
   requests: SessionRequest[]
+  store: Record<string, any>
 
   connect: (uri: string) => Promise<void>
   disconnect: () => Promise<void>
@@ -43,6 +44,7 @@ export const useWalletConnectStore =
     signClient: null,
     proposal: null,
     requests: [],
+    store: {},
     connect: connect(set, get),
     disconnect: disconnect(set, get),
     approve: approve(set, get),
