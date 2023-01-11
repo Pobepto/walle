@@ -4,14 +4,16 @@ import { Menu, MenuItem } from '@components'
 import { ROUTE, useNavigate } from '@routes'
 import { COLUMNS, useWalletConnectStore, useWalletStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { signClient } from '@src/wallet-connect'
 
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()
   const parentZone = useSelectionZone()!
+
   const logout = useWalletStore((state) => state.logout)
   const disconnect = useWalletConnectStore((store) => store.disconnect)
   const pendingRequests = useWalletConnectStore((store) => store.requests)
-  const connected = useWalletConnectStore((store) => store.connected)
+  const connected = useWalletConnectStore((store) => store.connected())
 
   const menuItems: MenuItem[] = [
     {
@@ -76,13 +78,13 @@ export const MainMenu: React.FC = () => {
                 parentZone.select(COLUMNS.MAIN)
               },
             },
-            // {
-            //   title: 'Pairings',
-            //   onSelect: () => {
-            //     navigate(ROUTE.WALLET_CONNECT_PAIRINGS)
-            //     parentZone.select(COLUMNS.MAIN)
-            //   },
-            // },
+            {
+              title: 'Pairings',
+              onSelect: () => {
+                navigate(ROUTE.WALLET_CONNECT_PAIRINGS)
+                parentZone.select(COLUMNS.MAIN)
+              },
+            },
             {
               title: pendingRequests.length
                 ? `Pending requests (${pendingRequests.length})`
@@ -94,7 +96,10 @@ export const MainMenu: React.FC = () => {
             },
             {
               title: 'Disconnect',
-              onSelect: disconnect,
+              onSelect: () => {
+                const session = signClient.session.values[0]
+                disconnect(session.topic)
+              },
             },
           ],
         }

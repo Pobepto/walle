@@ -1,23 +1,17 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { COLUMNS, useWalletConnectStore } from '@store'
+import { COLUMNS } from '@store'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { Redirect, ROUTE } from '@src/routes'
+import { signClient } from '@src/wallet-connect'
 
 export const WalletConnectPairings: React.FC = () => {
   const parentZone = useSelectionZone()!
-  const connected = useWalletConnectStore((store) => store.connected)
-  const signClient = useWalletConnectStore((store) => store.signClient)
 
-  if (!connected) {
-    return <Redirect to={ROUTE.WALLET_CONNECT} />
-  }
-
-  const pairings = signClient!.pairing.values
+  const pairings = signClient.pairing.values
 
   return (
     <Box flexDirection="column">

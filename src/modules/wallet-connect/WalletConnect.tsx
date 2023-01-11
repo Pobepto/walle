@@ -7,6 +7,7 @@ import { COLUMNS, useWalletConnectStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
 import { Loader } from '@src/components/Loader'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
+import { signClient } from '@src/wallet-connect'
 
 type Inputs = {
   uri: string
@@ -15,11 +16,10 @@ type Inputs = {
 export const WalletConnect: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
+
   const connect = useWalletConnectStore((store) => store.connect)
-  const approve = useWalletConnectStore((store) => store.approve)
   const disconnect = useWalletConnectStore((store) => store.disconnect)
-  const proposal = useWalletConnectStore((store) => store.proposal)
-  const connected = useWalletConnectStore((store) => store.connected)
+  const connected = useWalletConnectStore((store) => store.connected())
 
   const { uri } = useRouteData<ROUTE.WALLET_CONNECT>() ?? {}
 
@@ -58,8 +58,8 @@ export const WalletConnect: React.FC = () => {
     select(0)
   }
 
-  const onDisconnect = () => {
-    disconnect()
+  const onDisconnect = async (topic: string) => {
+    await disconnect(topic)
     navigate(ROUTE.WALLET)
   }
 
@@ -70,7 +70,11 @@ export const WalletConnect: React.FC = () => {
   }, [])
 
   if (connected) {
-    const { proposer } = proposal!.params
+    const session = signClient.session.values[0]
+    const {
+      topic,
+      peer: { metadata },
+    } = session
 
     return (
       <Box flexDirection="column">
@@ -81,76 +85,15 @@ export const WalletConnect: React.FC = () => {
           <Box marginTop={-1}>
             <Text> Connected to </Text>
           </Box>
-          <Text bold>{proposer.metadata.name}</Text>
-          <Text color="cyan">{proposer.metadata.url}</Text>
-          <Text>{proposer.metadata.description}</Text>
+          <Text bold>{metadata.name}</Text>
+          <Text color="cyan">{metadata.url}</Text>
+          <Text>{metadata.description}</Text>
         </Box>
         <Button
           isFocused={parentZone.selection === COLUMNS.MAIN}
-          onPress={onDisconnect}
+          onPress={() => safeCall(() => onDisconnect(topic))}
         >
           Disconnect
-        </Button>
-        <Box justifyContent="center">
-          <Loader loading={isLoading}>
-            <Error text={error} />
-          </Loader>
-        </Box>
-      </Box>
-    )
-  }
-
-  if (proposal) {
-    const { proposer, requiredNamespaces } = proposal.params
-
-    return (
-      <Box flexDirection="column">
-        <Box marginTop={-1}>
-          <Text> Connect to WalletConnect </Text>
-        </Box>
-        <Text>
-          {proposer.metadata.name} {proposer.metadata.url}
-        </Text>
-        <Box marginTop={1}>
-          <Text bold>Review permissions</Text>
-        </Box>
-        {Object.entries(requiredNamespaces).map(([chain, namespace]) => {
-          const { chains, events, methods } = namespace
-          return (
-            <Box
-              marginY={1}
-              key={chain}
-              flexDirection="column"
-              paddingX={1}
-              borderStyle="classic"
-            >
-              <Box marginTop={-1}>
-                <Text bold>{chain}</Text>
-              </Box>
-              <Text>
-                Chains:{' '}
-                {chains
-                  .map((chainId) => chainId.replace(`${chain}:`, ''))
-                  .join(', ')}
-              </Text>
-              {events.length ? <Text>Events: {events.join(', ')}</Text> : null}
-              <Text>Methods: {methods.join(', ')}</Text>
-            </Box>
-          )
-        })}
-        <Button
-          isFocused={parentZone.selection === COLUMNS.MAIN && selection === 0}
-          isDisabled={isLoading}
-          onPress={() => safeCall(disconnect)}
-        >
-          Reject
-        </Button>
-        <Button
-          isFocused={parentZone.selection === COLUMNS.MAIN && selection === 1}
-          isDisabled={isLoading}
-          onPress={() => safeCall(approve)}
-        >
-          Approve
         </Button>
         <Box justifyContent="center">
           <Loader loading={isLoading}>
