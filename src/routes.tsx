@@ -1,6 +1,6 @@
 import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
 import React from 'react'
-import { Token } from './constants'
+import { Chain, Token } from './constants'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
   Wallet,
@@ -31,8 +31,10 @@ import {
   WalletConnectPairings,
   PasswordGuard,
   SignMessage,
+  WalletConnectProposal,
 } from './modules'
 import { routerFactory } from './Router'
+import { SessionProposal } from './store/wallet-connect/actions'
 
 export enum ROUTE {
   WELCOME,
@@ -60,12 +62,16 @@ export enum ROUTE {
   SECURITY_SHOW_MNEMONIC,
   SECURITY_CHANGE_PASSWORD,
   WALLET_CONNECT,
+  WALLET_CONNECT_PROPOSAL,
   WALLET_CONNECT_REQUESTS,
   WALLET_CONNECT_PAIRINGS,
   PASSWORD_GUARD,
 }
 
 interface ROUTE_DATA {
+  [ROUTE.ADD_CHAIN]?: {
+    chain?: Partial<Chain>
+  }
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
   [ROUTE.TOKEN_INFO]: Token
@@ -84,6 +90,9 @@ interface ROUTE_DATA {
   }
   [ROUTE.WALLET_CONNECT]?: {
     uri?: string
+  }
+  [ROUTE.WALLET_CONNECT_PROPOSAL]: {
+    proposal: SessionProposal
   }
 }
 
@@ -124,6 +133,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.SECURITY_SHOW_MNEMONIC]: base(ShowSeedPhrase),
   [ROUTE.SECURITY_CHANGE_PASSWORD]: base(ChangePassword),
   [ROUTE.WALLET_CONNECT]: base(WalletConnect),
+  [ROUTE.WALLET_CONNECT_PROPOSAL]: base(WalletConnectProposal),
   [ROUTE.WALLET_CONNECT_REQUESTS]: base(WalletConnectRequests),
   [ROUTE.WALLET_CONNECT_PAIRINGS]: base(WalletConnectPairings),
   [ROUTE.PASSWORD_GUARD]: base(PasswordGuard),

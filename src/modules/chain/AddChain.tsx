@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
-import { Button } from '@components'
+import { Button, ButtonProps, Error } from '@components'
 import {
   combine,
   isIntegerNumber,
@@ -12,9 +12,14 @@ import {
 } from '@hooks'
 import { InputBox } from '@components/InputBox'
 import { COLUMNS, useBlockchainStore } from '@store'
-import { useSelectionZone } from '@src/components/SelectionZone'
+import {
+  Selection,
+  SelectionZone,
+  useSelectionZone,
+} from '@src/components/SelectionZone'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { ROUTE, useNavigate } from '@src/routes'
+import { ROUTE, useNavigate, useRouteData } from '@src/routes'
+import { ButtonLink } from '@src/components/ButtonLink'
 
 type Inputs = {
   name: string
@@ -29,10 +34,20 @@ export const AddChain: React.FC = () => {
   const navigate = useNavigate()
   const [networkIsLoading, setNetworkLoading] = useState(false)
   const [rpcError, setRpcError] = useState('')
+
+  const { chain } = useRouteData<ROUTE.ADD_CHAIN>() ?? {}
+
   const addChain = useBlockchainStore((state) => state.addChain)
 
   const { errors, data, isValid, register, change, inputIsValid } =
     useForm<Inputs>({
+      initialValues: {
+        name: chain?.name ?? '',
+        rpc: chain?.rpc ?? '',
+        chainId: String(chain?.chainId ?? ''),
+        explorer: chain?.explorer ?? '',
+        currency: chain?.currency ?? '',
+      },
       rules: {
         name: length(1),
         rpc: link(),
@@ -42,7 +57,7 @@ export const AddChain: React.FC = () => {
       },
     })
 
-  const [selection] = useSelection({
+  const { selection } = useSelection({
     amount: 5,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
@@ -88,6 +103,11 @@ export const AddChain: React.FC = () => {
       <Box marginTop={-1}>
         <Text> Add new chain </Text>
       </Box>
+      {!!chain && (
+        <Box borderStyle="single" borderColor="red" alignItems="center">
+          <Error text="Данные о сети были получены из внешнего источника, пожалуйста убедитесь в их надежности, прежде чем добавлять эту сеть" />
+        </Box>
+      )}
       <InputBox
         label="Name"
         error={errors.name}
@@ -120,13 +140,30 @@ export const AddChain: React.FC = () => {
         {...register('currency')}
       />
 
-      <Button
-        isFocused={selection === 4}
-        onPress={onSubmit}
-        isDisabled={!isValid}
+      <SelectionZone
+        prevKey="leftArrow"
+        nextKey="rightArrow"
+        defaultSelection={1}
+        isActive={selection === 4}
       >
-        Add chain
-      </Button>
+        <Box justifyContent="space-around">
+          <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+            <ButtonLink to={ROUTE.SWITCH_CHAIN} minWidth="20%" paddingX={1}>
+              Cancel
+            </ButtonLink>
+          </Selection>
+          <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+            <Button
+              onPress={onSubmit}
+              minWidth="20%"
+              paddingX={1}
+              isDisabled={!isValid}
+            >
+              Add chain
+            </Button>
+          </Selection>
+        </Box>
+      </SelectionZone>
     </Box>
   )
 }
