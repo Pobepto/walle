@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Text } from 'ink'
 import { useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
@@ -7,6 +7,7 @@ import { useWalletStore } from '@store'
 import { load, USER_DATA } from '@utils'
 import AsyncButton from '@components/AsyncButton'
 import { TextButton } from '@src/components/TextButton'
+import { useAsync } from '@src/hooks/useAsync'
 
 type Inputs = {
   password: string
@@ -17,29 +18,23 @@ export const Login: React.FC = () => {
   const decryptWallet = useWalletStore((state) => state.decryptWallet)
   const { data, register } = useForm<Inputs>()
 
-  const [error, setError] = useState('')
-  const [isLoading, setLoading] = useState(false)
-
-  const [selection, select] = useSelection({
+  const { selection, select } = useSelection({
     amount: 3,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
     isActive: true,
   })
 
-  const onApply = async () => {
-    try {
-      setLoading(true)
-      setError('')
-      const encrypted = await load(USER_DATA)
-      await decryptWallet(data.password, encrypted)
-      navigate(ROUTE.WALLET)
-    } catch (err: unknown) {
-      setError(err?.toString() ?? '')
+  const { execute, isLoading, error } = useAsync(async () => {
+    const encrypted = await load(USER_DATA)
+    await decryptWallet(data.password, encrypted)
+    navigate(ROUTE.WALLET)
+  })
+
+  const login = () => {
+    return execute().catch(() => {
       select(0)
-    } finally {
-      setLoading(false)
-    }
+    })
   }
 
   const bear = data.password?.length > 0 ? '┬┴┬┴┬┴┬┴┬┴┬┴┬┴' : '┬┴┬┴┤ʕ•ᴥ├┬┴┬┴'
@@ -58,7 +53,7 @@ export const Login: React.FC = () => {
       />
       <AsyncButton
         isFocused={selection === 1}
-        onPress={onApply}
+        onPress={login}
         spinner="fingerDance"
       >
         Unlock

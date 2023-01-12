@@ -1,17 +1,14 @@
 import { SessionTypes } from '@walletconnect/types'
 import { getWallet, WalletConnectAction } from '@src/store'
+import { signClient } from '@src/wallet-connect'
 
 export const approve: WalletConnectAction<'approve'> =
-  (set, get) => async () => {
-    const { signClient, proposal } = get()
+  () => async (proposal) => {
     const wallet = getWallet()
 
-    if (!signClient) {
-      throw new Error('There is no sign client')
-    }
-
     const {
-      params: { id, requiredNamespaces, relays },
+      id,
+      params: { requiredNamespaces, relays },
     } = proposal
 
     const selectedAccounts = [wallet.address]
@@ -39,6 +36,4 @@ export const approve: WalletConnectAction<'approve'> =
     })
 
     await acknowledged()
-
-    set({ connected: true })
   }
