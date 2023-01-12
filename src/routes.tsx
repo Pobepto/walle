@@ -1,6 +1,6 @@
 import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
 import React from 'react'
-import { Token } from './constants'
+import { Chain, Token } from './constants'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
   Wallet,
@@ -69,6 +69,9 @@ export enum ROUTE {
 }
 
 interface ROUTE_DATA {
+  [ROUTE.ADD_CHAIN]?: {
+    chain?: Partial<Chain>
+  }
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
   [ROUTE.TOKEN_INFO]: Token

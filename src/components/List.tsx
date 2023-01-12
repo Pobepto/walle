@@ -1,4 +1,5 @@
 import { Box, Text } from 'ink'
+import Spinner from 'ink-spinner'
 import React from 'react'
 
 interface ListProps {
@@ -7,6 +8,7 @@ interface ListProps {
   viewport: number
   upArrow?: string
   downArrow?: string
+  isLoading?: boolean
 }
 
 export const List: React.FC<ListProps> = ({
@@ -15,10 +17,19 @@ export const List: React.FC<ListProps> = ({
   viewport,
   upArrow = '▲',
   downArrow = '▼',
+  isLoading = false,
 }) => {
   const children = React.Children.toArray(_children)
   const doubleViewport = viewport * 2
   const childrenLength = children.length - 1
+
+  if (isLoading) {
+    return (
+      <Box justifyContent="center" alignItems="center" height={5}>
+        <Spinner />
+      </Box>
+    )
+  }
 
   return (
     <>

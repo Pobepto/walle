@@ -36,7 +36,7 @@ export const initSignClient = async () => {
     },
   }
 
-  signClient = await SignClient.init({
+  const opts = {
     projectId: '83bd22fbdde53e66f042e2c6fc181fc3',
     relayUrl: 'wss://relay.walletconnect.com',
     metadata: {
@@ -47,5 +47,11 @@ export const initSignClient = async () => {
     },
     storage,
     // logger: 'silent',
-  })
+  }
+
+  try {
+    signClient = await SignClient.init(opts)
+  } catch {
+    signClient = new SignClient(opts)
+  }
 }

@@ -1,24 +1,20 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { useBlockchainStore } from '@src/store'
 import { useEffect, useState } from 'react'
+import { useAsync } from './useAsync'
 
 export const useGasPrice = () => {
   const provider = useBlockchainStore((store) => store.provider)
-  const [isLoading, setLoading] = useState(true)
   const [price, setPrice] = useState('')
 
+  const { execute, isLoading } = useAsync(() => {
+    return provider
+      .getGasPrice()
+      .then((gasPrice) => gasPrice.toString())
+      .catch(() => '0')
+  })
+
   useEffect(() => {
-    const getPrice = async () => {
-      setLoading(true)
-      const currentPrice = await provider
-        .getGasPrice()
-        .catch(() => BigNumber.from(0))
-      setLoading(false)
-
-      setPrice(currentPrice.toString())
-    }
-
-    getPrice()
+    execute().then(setPrice)
   }, [])
 
   return [price, isLoading] as const

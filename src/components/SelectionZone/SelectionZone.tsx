@@ -5,7 +5,6 @@ import React, {
   createElement,
   isValidElement,
   useEffect,
-  useState,
 } from 'react'
 import { FocusZone } from './FocusZone'
 import { Selection } from './Selection'
@@ -149,9 +148,7 @@ export const SelectionZone: React.FC<SelectionZoneProps> = ({
   looped,
   onChangeFocusZone,
 }) => {
-  const [amount, setAmount] = useState(0)
-  const [selection, select] = useSelection({
-    amount,
+  const { selection, select, setAmount } = useSelection({
     defaultSelection,
     nextKey,
     prevKey,

@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Text } from 'ink'
 import { Button, Error } from '@components'
 import { useSelection } from '@hooks'
-import { COLUMNS, useWalletConnectStore } from '@store'
+import { COLUMNS, useBlockchainStore, useWalletConnectStore } from '@store'
 import { useSelectionZone } from '@src/components/SelectionZone'
 import { Loader } from '@src/components/Loader'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { MaybePromise } from 'tsdef'
+import { useAsync } from '@src/hooks/useAsync'
 
 export const WalletConnectProposal: React.FC = () => {
   const parentZone = useSelectionZone()!
@@ -14,6 +14,7 @@ export const WalletConnectProposal: React.FC = () => {
 
   const approve = useWalletConnectStore((store) => store.approve)
   const reject = useWalletConnectStore((store) => store.reject)
+  const addedChains = useBlockchainStore((store) => store.chains)
 
   const { proposal } = useRouteData<ROUTE.WALLET_CONNECT_PROPOSAL>()
   const {
@@ -21,26 +22,16 @@ export const WalletConnectProposal: React.FC = () => {
   } = proposal
   const { metadata } = proposer
 
-  const [isLoading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const { execute, isLoading, error } = useAsync((call: () => Promise<any>) =>
+    call(),
+  )
 
-  const [selection] = useSelection({
+  const { selection } = useSelection({
     amount: 2,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
-
-  const safeCall = async (call: () => MaybePromise<any>) => {
-    try {
-      setLoading(true)
-      await call()
-    } catch (err: unknown) {
-      setError(err?.toString() ?? 'Unknown error')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const onReject = async () => {
     await reject(proposal)
@@ -79,7 +70,14 @@ export const WalletConnectProposal: React.FC = () => {
             <Text>
               Chains:{' '}
               {chains
-                .map((chainId) => chainId.replace(`${chain}:`, ''))
+                .map((chainWithId) => {
+                  const [, chainId] = chainWithId.split(':')
+                  const chainInfo = addedChains.find(
+                    (c) => c.chainId === parseInt(chainId),
+                  )
+
+                  return chainInfo ? chainInfo.name : chainId
+                })
                 .join(', ')}
             </Text>
             {events.length ? <Text>Events: {events.join(', ')}</Text> : null}
@@ -90,14 +88,14 @@ export const WalletConnectProposal: React.FC = () => {
       <Button
         isFocused={parentZone.selection === COLUMNS.MAIN && selection === 0}
         isDisabled={isLoading}
-        onPress={() => safeCall(onReject)}
+        onPress={() => execute(onReject)}
       >
         Reject
       </Button>
       <Button
         isFocused={parentZone.selection === COLUMNS.MAIN && selection === 1}
         isDisabled={isLoading}
-        onPress={() => safeCall(onApprove)}
+        onPress={() => execute(onApprove)}
       >
         Approve
       </Button>

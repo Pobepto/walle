@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
 import { Button, Error } from '@components'
 import { useForm, useSelection, walletConnectLink } from '@hooks'
@@ -8,6 +8,7 @@ import { useSelectionZone } from '@src/components/SelectionZone'
 import { Loader } from '@src/components/Loader'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { signClient } from '@src/wallet-connect'
+import { useAsync } from '@src/hooks/useAsync'
 
 type Inputs = {
   uri: string
@@ -23,9 +24,6 @@ export const WalletConnect: React.FC = () => {
 
   const { uri } = useRouteData<ROUTE.WALLET_CONNECT>() ?? {}
 
-  const [isLoading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
   const { errors, data, isValid, register } = useForm<Inputs>({
     initialValues: {
       uri: uri ?? '',
@@ -35,23 +33,16 @@ export const WalletConnect: React.FC = () => {
     },
   })
 
-  const [selection, select] = useSelection({
+  const { selection, select } = useSelection({
     amount: 2,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const safeCall = async (call: () => Promise<any>) => {
-    try {
-      setLoading(true)
-      await call()
-    } catch (err: unknown) {
-      setError(err?.toString() ?? 'Unknown error')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { execute, isLoading, error } = useAsync((call: () => Promise<any>) =>
+    call(),
+  )
 
   const onConnect = async () => {
     await connect(data.uri)
@@ -65,7 +56,7 @@ export const WalletConnect: React.FC = () => {
 
   useEffect(() => {
     if (uri) {
-      safeCall(onConnect)
+      execute(onConnect)
     }
   }, [])
 
@@ -91,7 +82,7 @@ export const WalletConnect: React.FC = () => {
         </Box>
         <Button
           isFocused={parentZone.selection === COLUMNS.MAIN}
-          onPress={() => safeCall(() => onDisconnect(topic))}
+          onPress={() => execute(() => onDisconnect(topic))}
         >
           Disconnect
         </Button>
@@ -119,7 +110,7 @@ export const WalletConnect: React.FC = () => {
       />
       <Button
         isFocused={parentZone.selection === COLUMNS.MAIN && selection === 1}
-        onPress={() => safeCall(onConnect)}
+        onPress={() => execute(onConnect)}
         isDisabled={!isValid}
       >
         Connect

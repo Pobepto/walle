@@ -1,17 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Text } from 'ink'
 import { COLUMNS, useWalletConnectStore } from '@store'
 import {
   Selection,
-  UncontrolledSelectionZone,
+  SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import {
-  SuperKey,
-  useKey,
-  useSelection,
-  useWalletConnectRequestHandler,
-} from '@src/hooks'
+import { SuperKey, useKey, useWalletConnectRequestHandler } from '@src/hooks'
 import { SessionRequest } from '@src/store/wallet-connect/actions'
 import { List } from '@src/components/List'
 
@@ -51,40 +46,33 @@ export const WalletConnectRequests: React.FC = () => {
   const handleRequest = useWalletConnectRequestHandler()
   const pendingRequests = useWalletConnectStore((store) => store.requests)
 
-  const [amount, setAmount] = useState(0)
-  const [selection, select] = useSelection({
-    amount,
-    prevKey: 'upArrow',
-    nextKey: 'downArrow',
-    isActive: parentZone.selection === COLUMNS.MAIN,
-  })
-
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
         <Text> Pending requests </Text>
       </Box>
-      <UncontrolledSelectionZone
-        select={select}
-        selection={selection}
+      <SelectionZone
+        prevKey="upArrow"
+        nextKey="downArrow"
         isActive={parentZone.selection === COLUMNS.MAIN}
-        onChangeAmount={setAmount}
       >
-        <List viewport={1} selection={selection}>
-          {pendingRequests.map((request) => (
-            <Selection<RequestItemProps>
-              key={request.id}
-              activeProps={{ isActive: true }}
-            >
-              <RequestItem
-                request={request}
-                pressKey="return"
-                onApprove={handleRequest}
-              />
-            </Selection>
-          ))}
-        </List>
-      </UncontrolledSelectionZone>
+        {(selection) => (
+          <List viewport={1} selection={selection}>
+            {pendingRequests.map((request) => (
+              <Selection<RequestItemProps>
+                key={request.id}
+                activeProps={{ isActive: true }}
+              >
+                <RequestItem
+                  request={request}
+                  pressKey="return"
+                  onApprove={handleRequest}
+                />
+              </Selection>
+            ))}
+          </List>
+        )}
+      </SelectionZone>
     </Box>
   )
 }
