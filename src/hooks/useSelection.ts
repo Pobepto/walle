@@ -25,7 +25,7 @@ export const checkSuperKey = (
 }
 
 export interface SelectionSettings {
-  amount: number
+  amount?: number
   defaultSelection?: number
   nextKey: SuperKey | SuperKey[]
   prevKey?: SuperKey | SuperKey[]
@@ -34,7 +34,7 @@ export interface SelectionSettings {
 }
 
 export const useSelection = ({
-  amount,
+  amount: _amount = 0,
   defaultSelection = 0,
   prevKey,
   nextKey,
@@ -42,6 +42,7 @@ export const useSelection = ({
   looped,
 }: SelectionSettings) => {
   const [selection, setSelection] = useState(defaultSelection)
+  const [amount, setAmount] = useState(_amount)
   const maxSelection = amount - 1
 
   useEffect(() => {
@@ -60,5 +61,11 @@ export const useSelection = ({
     }
   }, isActive)
 
-  return [selection, setSelection, prevent] as const
+  return {
+    selection,
+    select: setSelection,
+    prevent,
+    isActive,
+    setAmount,
+  }
 }

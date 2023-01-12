@@ -99,6 +99,7 @@ export const MainMenu: React.FC = () => {
               onSelect: () => {
                 const session = signClient.session.values[0]
                 disconnect(session.topic)
+                parentZone.select(COLUMNS.MAIN)
               },
             },
           ],

@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
-    initSignClient().then(() => {
+    initSignClient().finally(() => {
       setInitialized(true)
     })
   }, [])

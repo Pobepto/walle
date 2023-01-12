@@ -31,7 +31,11 @@ export const SetPassword: React.FC = () => {
     },
   })
 
-  const [selection, select, preventInput] = useSelection({
+  const {
+    selection,
+    select,
+    prevent: preventInput,
+  } = useSelection({
     amount: 3,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],

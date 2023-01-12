@@ -18,7 +18,6 @@ export const subscribe = () => {
     },
   )
 
-  // Помимо такого обновления нам нужно обновляться на смену chainId
   useWalletStore.subscribe(
     (state) => [state.pathId, state.phrase],
     ([, phrase]) => {
