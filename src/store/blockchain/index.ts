@@ -1,6 +1,6 @@
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
-import { Chain, DEFAULT_CHAINS } from '@src/constants'
+import { Chain, DEFAULT_CHAIN, DEFAULT_CHAINS } from '@src/constants'
 import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
@@ -13,7 +13,7 @@ export interface BlockchainStore {
   chains: Chain[]
   addChain: (chain: Chain) => Promise<void>
   provider: JsonRpcProvider
-  setProvider: (provider: JsonRpcProvider) => void
+  updateProvider: () => void
 
   nativeBalance: Nullable<string>
   nativeBalanceIsLoading: boolean
@@ -32,23 +32,21 @@ export type BlockchainAction<T extends keyof BlockchainStore> = Action<
 
 export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
   (set, get) => ({
-    chainId: 97,
+    chainId: DEFAULT_CHAIN.chainId,
     setChainId: (chainId: number) => {
-      const chain = get().chains.find((chain) => chain.chainId === chainId)
-
-      if (chain) {
-        const provider = new JsonRpcProvider(chain.rpc, 'any')
-
-        set({ chainId, provider })
-      }
+      set({ chainId })
     },
     chains: DEFAULT_CHAINS,
     addChain: addChain(set, get),
-    provider: new JsonRpcProvider(
-      'https://data-seed-prebsc-1-s3.binance.org:8545',
-      'any',
-    ),
-    setProvider: (provider: JsonRpcProvider) => set({ provider }),
+    provider: new JsonRpcProvider(DEFAULT_CHAIN.rpc, 'any'),
+    updateProvider: () => {
+      const { chainId, chains } = get()
+      const chain = chains.find((chain) => chain.chainId === chainId)
+      if (chain) {
+        const provider = new JsonRpcProvider(chain.rpc, 'any')
+        set({ provider })
+      }
+    },
 
     getNativeBalance: getNativeBalance(set, get),
     nativeBalance: '0',

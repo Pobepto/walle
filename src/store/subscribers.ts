@@ -6,6 +6,7 @@ export const subscribe = () => {
   useBlockchainStore.subscribe(
     (state) => state.chainId,
     () => {
+      useBlockchainStore.getState().updateProvider()
       useBlockchainStore.getState().getNativeBalance()
       useTokensStore.getState().syncBalances()
     },

@@ -4,10 +4,17 @@ import { useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 import { InputBox } from '@components/InputBox'
 import { useWalletStore } from '@store'
-import { load, USER_DATA } from '@utils'
+import {
+  deserialize,
+  isFileExist,
+  load,
+  USER_DATA,
+  USER_SETTINGS,
+} from '@utils'
 import AsyncButton from '@components/AsyncButton'
 import { TextButton } from '@src/components/TextButton'
 import { useAsync } from '@src/hooks/useAsync'
+import { initSignClient } from '@src/wallet-connect'
 
 type Inputs = {
   password: string
@@ -28,6 +35,14 @@ export const Login: React.FC = () => {
   const { execute, isLoading, error } = useAsync(async () => {
     const encrypted = await load(USER_DATA)
     await decryptWallet(data.password, encrypted)
+
+    const isExist = await isFileExist(USER_SETTINGS)
+    if (isExist) {
+      const store = await load(USER_SETTINGS)
+      deserialize(JSON.parse(store))
+      await initSignClient()
+    }
+
     navigate(ROUTE.WALLET)
   })
 

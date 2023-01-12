@@ -28,6 +28,8 @@ export const DEFAULT_CHAINS: Chain[] = [
   },
 ]
 
+export const DEFAULT_CHAIN = DEFAULT_CHAINS[0]
+
 export const DEFAULT_TOKENS: Token[] = [
   {
     name: 'USDT',

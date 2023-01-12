@@ -2,22 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { Box } from 'ink'
 import { useRoute } from './routes'
 import { subscribe } from './store/subscribers'
-import { initSignClient } from './wallet-connect'
+import { saveUserSettings } from './utils'
 
 // 🤔
 subscribe()
 
 export const App: React.FC = () => {
-  // Temporary disable auto save
-  // useAutoSave()
   const route = useRoute()
 
   const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
-    initSignClient().finally(() => {
-      setInitialized(true)
-    })
+    saveUserSettings()
+    setInitialized(true)
   }, [])
 
   if (!initialized) {
