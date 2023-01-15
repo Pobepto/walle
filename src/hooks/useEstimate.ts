@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { useWallet } from './useWallet'
+import { BigNumber } from '@ethersproject/bignumber'
 
 interface Estimate {
   loading: boolean
   error?: string
-  gasLimit: string
+  gasLimit: BigNumber
 }
 
 export const useEstimate = (populatedTx: PopulatedTransaction) => {
   const wallet = useWallet()!
   const [estimate, setEstimate] = useState<Estimate>({
-    loading: true,
-    gasLimit: populatedTx.gasLimit?.toString() ?? '',
+    loading: false,
+    gasLimit: BigNumber.from(populatedTx.gasLimit ?? 0),
   })
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export const useEstimate = (populatedTx: PopulatedTransaction) => {
 
         setEstimate({
           loading: false,
-          gasLimit: estimate.gasLimit || gasLimit.toString(),
+          gasLimit: estimate.gasLimit || gasLimit,
         })
       } catch (err: any) {
         setEstimate({
@@ -40,7 +41,9 @@ export const useEstimate = (populatedTx: PopulatedTransaction) => {
       }
     }
 
-    call()
+    if (estimate.gasLimit.eq(0)) {
+      call()
+    }
   }, [populatedTx])
 
   return estimate

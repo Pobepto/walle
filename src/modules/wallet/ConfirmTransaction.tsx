@@ -48,7 +48,7 @@ export const ConfirmTransaction: React.FC = () => {
     useRouteData<ROUTE.CONFIRM_TRANSACTION>()
 
   const estimate = useEstimate(populatedTx)
-  const [gasPrice, gasPriceLoading] = useGasPrice()
+  const [gasPrice, gasPriceLoading] = useGasPrice(populatedTx.gasPrice)
 
   const [showFullData, setShowFullData] = useState(false)
 
@@ -92,7 +92,7 @@ export const ConfirmTransaction: React.FC = () => {
 
   useEffect(() => {
     if (estimate.gasLimit) {
-      change('gasLimit', estimate.gasLimit, true)
+      change('gasLimit', estimate.gasLimit.toString(), true)
     }
   }, [estimate.gasLimit])
 

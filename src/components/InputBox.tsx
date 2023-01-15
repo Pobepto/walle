@@ -1,3 +1,4 @@
+import { useInput } from '@src/hooks'
 import { Box, Text } from 'ink'
 import Spinner from 'ink-spinner'
 import React from 'react'
@@ -30,6 +31,12 @@ export const InputBox: React.FC<InputBoxProps> = ({
 
     onChange(value)
   }
+
+  useInput(({ key }) => {
+    if (key.ctrl && (key.backspace || key.delete)) {
+      process.nextTick(() => onChange(''))
+    }
+  }, focus)
 
   return (
     <Box

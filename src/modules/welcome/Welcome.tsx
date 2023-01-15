@@ -16,14 +16,11 @@ const WALLE_LOGO = `
 export const Welcome: React.FC = () => {
   const navigate = useNavigate()
 
-  const onEnter = () => {
-    isFileExist(USER_DATA).then((isExist) => {
-      if (isExist) {
-        navigate(ROUTE.LOGIN)
-      } else {
-        navigate(ROUTE.REGISTRATION)
-      }
-    })
+  const onEnter = async () => {
+    const isExist = await isFileExist(USER_DATA)
+    const route = isExist ? ROUTE.LOGIN : ROUTE.REGISTRATION
+
+    navigate(route)
   }
 
   return (
