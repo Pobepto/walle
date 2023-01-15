@@ -11,7 +11,6 @@ export const Registration: React.FC = () => {
     prevKey: 'leftArrow',
     nextKey: 'rightArrow',
     isActive: true,
-    looped: false,
   })
 
   return (

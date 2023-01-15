@@ -15,6 +15,7 @@ import AsyncButton from '@components/AsyncButton'
 import { TextButton } from '@src/components/TextButton'
 import { useAsync } from '@src/hooks/useAsync'
 import { initSignClient } from '@src/wallet-connect'
+import { initSubscribers } from '@src/store/initSubscribers'
 
 type Inputs = {
   password: string
@@ -40,8 +41,10 @@ export const Login: React.FC = () => {
     if (isExist) {
       const store = await load(USER_SETTINGS)
       deserialize(JSON.parse(store))
-      await initSignClient()
     }
+
+    initSubscribers()
+    await initSignClient()
 
     navigate(ROUTE.WALLET)
   })

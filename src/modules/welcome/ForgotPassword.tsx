@@ -25,12 +25,15 @@ export const ForgotPassword: React.FC = () => {
     },
   })
 
-  const [selection, select, preventInput] = useSelection({
+  const {
+    selection,
+    select,
+    prevent: preventInput,
+  } = useSelection({
     amount: 3,
     prevKey: 'upArrow',
     nextKey: ['downArrow', 'return'],
     isActive: true,
-    looped: false,
   })
 
   const onApply = () => {

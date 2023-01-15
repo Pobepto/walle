@@ -1,4 +1,5 @@
 import { signClient } from '@src/wallet-connect'
+import { PairingTypes } from '@walletconnect/types'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import {
@@ -15,6 +16,7 @@ import {
 export type WalletConnectStore = {
   connected: () => boolean
   requests: SessionRequest[]
+  pairings: () => PairingTypes.Struct[]
   store: Record<string, any>
 
   connect: (uri: string) => Promise<void>
@@ -34,6 +36,7 @@ export const useWalletConnectStore =
   createWithSubscribeSelector<WalletConnectStore>((set, get) => ({
     connected: () => signClient.session.values[0]?.acknowledged,
     requests: [],
+    pairings: () => signClient.pairing.values,
     store: {},
     connect: connect(set, get),
     disconnect: disconnect(set, get),

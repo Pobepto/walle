@@ -67,10 +67,10 @@ export const MainMenu: React.FC = () => {
       title: 'Lock',
       onSelect: () => navigate(ROUTE.LOGIN),
     },
-    connected
-      ? {
-          title: 'WalletConnect',
-          items: [
+    {
+      title: 'WalletConnect',
+      items: connected
+        ? [
             {
               title: 'Active session',
               onSelect: () => {
@@ -102,15 +102,24 @@ export const MainMenu: React.FC = () => {
                 parentZone.select(COLUMNS.MAIN)
               },
             },
+          ]
+        : [
+            {
+              title: 'Connect',
+              onSelect: () => {
+                navigate(ROUTE.WALLET_CONNECT, {})
+                parentZone.select(COLUMNS.MAIN)
+              },
+            },
+            {
+              title: 'Pairings',
+              onSelect: () => {
+                navigate(ROUTE.WALLET_CONNECT_PAIRINGS)
+                parentZone.select(COLUMNS.MAIN)
+              },
+            },
           ],
-        }
-      : {
-          title: 'WalletConnect',
-          onSelect: () => {
-            navigate(ROUTE.WALLET_CONNECT, {})
-            parentZone.select(COLUMNS.MAIN)
-          },
-        },
+    },
     {
       title: 'FAQ',
       onSelect: () => console.log('WIP'),

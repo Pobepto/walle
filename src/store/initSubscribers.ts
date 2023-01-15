@@ -2,13 +2,16 @@ import { useBlockchainStore } from './blockchain'
 import { useTokensStore } from './tokens'
 import { useWalletStore } from './wallet'
 
-export const subscribe = () => {
+export const initSubscribers = () => {
   useBlockchainStore.subscribe(
     (state) => state.chainId,
     () => {
       useBlockchainStore.getState().updateProvider()
       useBlockchainStore.getState().getNativeBalance()
       useTokensStore.getState().syncBalances()
+    },
+    {
+      fireImmediately: true,
     },
   )
 

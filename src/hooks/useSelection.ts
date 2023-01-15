@@ -39,7 +39,7 @@ export const useSelection = ({
   prevKey,
   nextKey,
   isActive,
-  looped,
+  looped = false,
 }: SelectionSettings) => {
   const [selection, setSelection] = useState(defaultSelection)
   const [amount, setAmount] = useState(_amount)

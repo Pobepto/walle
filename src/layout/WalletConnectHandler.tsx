@@ -20,7 +20,7 @@ export const WalletConnectHandler: React.FC = () => {
       .on('session_request', (requestEvent) => {
         const { requests } = useWalletConnectStore.getState()
         useWalletConnectStore.setState({
-          requests: [requestEvent, ...requests],
+          requests: [...requests, requestEvent],
         })
         handleRequest(requestEvent)
       })
