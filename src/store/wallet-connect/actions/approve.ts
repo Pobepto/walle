@@ -1,9 +1,10 @@
 import { SessionTypes } from '@walletconnect/types'
-import { getWallet, WalletConnectAction } from '@src/store'
+import { useWalletStore, WalletConnectAction } from '@src/store'
 import { signClient } from '@src/wallet-connect'
 
 export const approve: WalletConnectAction<'approve'> =
   () => async (proposal) => {
+    const { getWallet } = useWalletStore.getState()
     const wallet = getWallet()
 
     const {

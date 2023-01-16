@@ -38,10 +38,18 @@ type Inputs = {
   gasLimit: string
 }
 
+enum DisplayMode {
+  PARSED,
+  RAW,
+}
+
 export const ConfirmTransaction: React.FC = () => {
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>(Step.CONFIRM_TX)
   const [txHash, setTxHash] = useState<string>()
+  const [displayMode, setDisplayMode] = useState<DisplayMode>(
+    DisplayMode.PARSED,
+  )
   const chain = useChain()
   const parentZone = useSelectionZone()!
   const { populatedTx, target, onRejectTx, onApproveTx } =
@@ -96,10 +104,35 @@ export const ConfirmTransaction: React.FC = () => {
     }
   }, [estimate.gasLimit])
 
-  const renderTransactionData = () => {
+  const renderRawTransaction = () => {
+    const tx = Object.fromEntries(
+      Object.entries(populatedTx).map(([key, value]) => {
+        return [key, value?.toString() ?? value]
+      }),
+    )
+
+    const stringified = JSON.stringify(tx, null, 2)
+
+    return (
+      <Box
+        flexDirection="column"
+        borderStyle="single"
+        borderColor="green"
+        paddingX={1}
+      >
+        <Text>{stringified}</Text>
+      </Box>
+    )
+  }
+
+  const renderTransaction = () => {
     const { data, value, to } = populatedTx
 
     if (target) {
+      if (displayMode === DisplayMode.RAW) {
+        return renderRawTransaction()
+      }
+
       const calldata = data ?? '0x'
       const sighash = calldata.slice(0, 10)
       const fragment = target.interface.getFunction(sighash)
@@ -112,13 +145,13 @@ export const ConfirmTransaction: React.FC = () => {
       )
 
       return (
-        <>
+        <Box marginTop={1} flexDirection="column">
           <Text>Call {signature} with params:</Text>
           <Box
             flexDirection="column"
             borderStyle="single"
             borderColor="green"
-            marginY={1}
+            marginTop={1}
             paddingX={1}
           >
             <Box marginTop={-1}>
@@ -139,19 +172,25 @@ export const ConfirmTransaction: React.FC = () => {
               And send {formatUnits(value).toString()} {chain.currency}
             </Text>
           ) : null}
-        </>
+        </Box>
       )
     }
 
     if (!data || data === '0x') {
+      if (displayMode === DisplayMode.RAW) {
+        return renderRawTransaction()
+      }
+
       return (
         <Box
           flexDirection="column"
           borderStyle="single"
           borderColor="green"
-          marginY={1}
           paddingX={1}
         >
+          <Box marginTop={-1}>
+            <Text bold> Send {chain.currency} </Text>
+          </Box>
           <Text>
             Send {formatUnits(value ?? '0').toString()} {chain.currency}
           </Text>
@@ -165,7 +204,7 @@ export const ConfirmTransaction: React.FC = () => {
     const displayData = showFullData ? data : `${data.slice(0, 256)}...`
 
     return (
-      <>
+      <Box marginTop={1} flexDirection="column">
         <Text>Call contract</Text>
         <Text bold>{to}</Text>
 
@@ -184,7 +223,7 @@ export const ConfirmTransaction: React.FC = () => {
             </TextButton>
           </Selection>
         </Box>
-      </>
+      </Box>
     )
   }
 
@@ -204,8 +243,38 @@ export const ConfirmTransaction: React.FC = () => {
           nextKey={['downArrow', 'return']}
           isActive={parentZone.selection === COLUMNS.MAIN}
         >
-          {renderTransactionData()}
+          {renderTransaction()}
 
+          <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
+            <SelectionZone prevKey="leftArrow" nextKey="rightArrow">
+              <Box justifyContent="space-around">
+                <Selection<TextButtonProps> activeProps={{ isFocused: true }}>
+                  <TextButton
+                    onPress={() => setDisplayMode(DisplayMode.PARSED)}
+                    underline={displayMode === DisplayMode.PARSED}
+                  >
+                    Parsed
+                  </TextButton>
+                </Selection>
+                <Selection<TextButtonProps> activeProps={{ isFocused: true }}>
+                  <TextButton
+                    onPress={() => setDisplayMode(DisplayMode.RAW)}
+                    underline={displayMode === DisplayMode.RAW}
+                  >
+                    Raw
+                  </TextButton>
+                </Selection>
+              </Box>
+            </SelectionZone>
+          </Selection>
+
+          {/* {populatedTx.gasPrice ? (
+            <Text>
+              Suggested gas price{' '}
+              {formatUnits(populatedTx.gasPrice, GasPriceUnit).toString()}
+              {' '}{GasPriceUnit}
+            </Text>
+          ) : null} */}
           <Selection<InputBoxProps>
             activeProps={{ focus: true }}
             selectedByDefault
@@ -218,6 +287,12 @@ export const ConfirmTransaction: React.FC = () => {
               {...register('gasPrice')}
             />
           </Selection>
+          {/* {populatedTx.gasPrice ? (
+            <Text>
+              Suggested gas limit{' '}
+              {BigNumber.from(populatedTx.gasLimit).toString()}
+            </Text>
+          ) : null} */}
           <Selection<InputBoxProps> activeProps={{ focus: true }}>
             <InputBox
               label="Gas limit"
@@ -232,6 +307,8 @@ export const ConfirmTransaction: React.FC = () => {
               <Error text={estimate.error} />
             </Box>
           ) : null}
+
+          <Divider symbol="—" />
 
           <Text>
             Gas fee:{' '}

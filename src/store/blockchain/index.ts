@@ -1,8 +1,9 @@
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
+import { Wallet } from '@ethersproject/wallet'
 import { Chain, DEFAULT_CHAIN, DEFAULT_CHAINS } from '@src/constants'
 import { Nullable } from 'tsdef'
-import { Action } from '..'
+import { Action, useWalletStore } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { addChain, getNativeBalance } from './actions'
 import { sendTransaction } from './actions/sendTransaction'
@@ -13,6 +14,7 @@ export interface BlockchainStore {
   chains: Chain[]
   addChain: (chain: Chain) => Promise<void>
   provider: JsonRpcProvider
+  getSigner: () => Wallet
   updateProvider: () => void
 
   nativeBalance: Nullable<string>
@@ -39,6 +41,12 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     chains: DEFAULT_CHAINS,
     addChain: addChain(set, get),
     provider: new JsonRpcProvider(DEFAULT_CHAIN.rpc, 'any'),
+    getSigner() {
+      const { provider } = get()
+      const { getWallet } = useWalletStore.getState()
+
+      return getWallet().connect(provider)
+    },
     updateProvider: () => {
       const { chainId, chains } = get()
       const chain = chains.find((chain) => chain.chainId === chainId)

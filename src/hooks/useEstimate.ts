@@ -30,7 +30,7 @@ export const useEstimate = (populatedTx: PopulatedTransaction) => {
 
         setEstimate({
           loading: false,
-          gasLimit: estimate.gasLimit || gasLimit,
+          gasLimit,
         })
       } catch (err: any) {
         setEstimate({

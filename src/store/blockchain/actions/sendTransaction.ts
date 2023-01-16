@@ -1,8 +1,8 @@
-import { getSigner } from '@src/store/wallet'
 import { BlockchainAction } from '..'
 
 export const sendTransaction: BlockchainAction<'sendTransaction'> =
-  (set) => async (populatedTx) => {
+  (set, get) => async (populatedTx) => {
+    const { getSigner } = get()
     const signer = getSigner()
 
     set({ txInProgress: true })

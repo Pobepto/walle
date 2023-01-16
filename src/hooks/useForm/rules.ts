@@ -74,9 +74,11 @@ export const isAddress =
   (value) => {
     try {
       getAddress(value)
-    } catch (error) {
-      return `Address is invalid`
+    } catch {
+      // return `Address is invalid`
     }
+
+    return undefined
   }
 
 export const isEqualToString =

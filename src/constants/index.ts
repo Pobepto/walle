@@ -13,11 +13,11 @@ export const DEFAULT_CHAINS: Chain[] = [
     explorer: 'http://testnet.bscscan.com/',
   },
   {
-    chainId: 4,
-    name: 'Ethereum Rinkeby',
-    rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+    chainId: 5,
+    name: 'Ethereum Goerli',
+    rpc: 'https://eth-goerli.public.blastapi.io',
     currency: 'ETH',
-    explorer: 'https://rinkeby.etherscan.io/',
+    explorer: 'https://goerli.etherscan.io/',
   },
   {
     chainId: 80001,
