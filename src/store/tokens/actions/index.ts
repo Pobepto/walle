@@ -1,2 +1,2 @@
 export * from './addToken'
-export * from './syncBalances'
+export * from './loadBalances'

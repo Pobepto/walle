@@ -6,31 +6,51 @@ import { useWalletStore } from '@src/store/wallet'
 import { Nullable } from 'tsdef'
 import { TokensAction } from '..'
 
-export const syncBalances: TokensAction<'syncBalances'> =
+export const loadBalances: TokensAction<'loadBalances'> =
   (set, get) => async () => {
     const { provider, chainId } = useBlockchainStore.getState()
     const { getWallet } = useWalletStore.getState()
-    const { tokens } = get()
+    const { tokens, balances } = get()
 
     const wallet = getWallet()
-    const balances = new Map()
 
-    set({ balancesIsLoading: true })
+    const newBalances = new Map(balances)
 
     await Promise.all(
       tokens
         .filter((token) => token.chainId === chainId)
         .map(async (token) => {
+          const currentBalance = newBalances.get(token.address)
+          if (currentBalance) {
+            newBalances.set(token.address, {
+              ...currentBalance,
+              isLoading: true,
+            })
+          }
+
           const contract = new Contract(token.address, ERC20_ABI, provider)
           const balance: Nullable<BigNumber> = await contract.callStatic
             .balanceOf(wallet.address)
             .catch(() => null)
 
           if (balance) {
-            balances.set(token.address, balance.toString())
+            newBalances.set(token.address, {
+              value: balance.toString(),
+              isLoading: false,
+            })
+          } else if (currentBalance) {
+            newBalances.set(token.address, {
+              ...currentBalance,
+              isLoading: false,
+            })
+          } else {
+            newBalances.set(token.address, {
+              value: null,
+              isLoading: false,
+            })
           }
+
+          set({ balances: new Map(newBalances) })
         }),
     )
-
-    set({ balances, balancesIsLoading: false })
   }

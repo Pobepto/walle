@@ -39,6 +39,27 @@ export const DEFAULT_TOKENS: Token[] = [
     chainId: 97,
   },
   {
+    name: 'Test ZKasino Dollar',
+    symbol: 'TZKUSD',
+    decimals: 18,
+    address: '0x921B9Ce5433C9389dd87814cbF0D8d7d91e1eF2C',
+    chainId: 97,
+  },
+  {
+    name: 'Level Loyalty Token',
+    symbol: 'lyLVL',
+    decimals: 18,
+    address: '0x2ddE960D7eeaaAAFE8059b2b814F00080064e997',
+    chainId: 97,
+  },
+  {
+    name: 'Uniwhale USD',
+    symbol: 'tUSD',
+    decimals: 18,
+    address: '0x4ADC54d7B50bc18b12c940F9E3A63BC44A357989',
+    chainId: 97,
+  },
+  {
     name: 'USDT',
     symbol: 'USDT',
     decimals: 18,

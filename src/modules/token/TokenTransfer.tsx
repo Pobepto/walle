@@ -9,7 +9,6 @@ import { parseUnits } from '@ethersproject/units'
 export const TokenTransfer: React.FC = () => {
   const navigate = useNavigate()
   const balances = useTokensStore((store) => store.balances)
-  const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
   const token = useRouteData<ROUTE.TOKEN_TRANSFER>()
   const ERC20 = useContract(token.address, ERC20_ABI)
 
@@ -31,9 +30,9 @@ export const TokenTransfer: React.FC = () => {
   return (
     <TransferForm
       title={`${token.name} (${token.symbol})`}
-      balance={balance}
+      balance={balance?.value ?? null}
       decimals={token.decimals}
-      balanceIsLoading={balancesIsLoading}
+      balanceIsLoading={balance?.isLoading ?? true}
       onTransfer={onTransfer}
       onBack={() => navigate(ROUTE.TOKEN_ACTIONS, token)}
     />

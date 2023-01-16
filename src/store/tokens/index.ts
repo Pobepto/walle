@@ -1,13 +1,12 @@
-import { DEFAULT_TOKENS, Token } from '@src/constants'
+import { DEFAULT_TOKENS, Token, TokenBalance } from '@src/constants'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
-import { addToken, syncBalances } from './actions'
+import { addToken, loadBalances } from './actions'
 
 export interface TokensStore {
   tokens: Token[]
-  balances: Map<string, string>
-  syncBalances: () => Promise<void>
-  balancesIsLoading: boolean
+  balances: Map<string, TokenBalance>
+  loadBalances: () => Promise<void>
   addToken: (token: Omit<Token, 'chainId'>) => void
 }
 
@@ -20,8 +19,7 @@ export const useTokensStore = createWithSubscribeSelector<TokensStore>(
   (set, get) => ({
     tokens: DEFAULT_TOKENS,
     balances: new Map(),
-    syncBalances: syncBalances(set, get),
-    balancesIsLoading: true,
+    loadBalances: loadBalances(set, get),
     addToken: addToken(set, get),
   }),
 )

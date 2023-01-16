@@ -1,3 +1,5 @@
+import { Nullable } from 'tsdef'
+
 export interface Chain {
   chainId: number
   name: string
@@ -28,4 +30,9 @@ export interface Token {
   decimals: number
   address: string
   chainId: number
+}
+
+export interface TokenBalance {
+  value: Nullable<string>
+  isLoading: boolean
 }

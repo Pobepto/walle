@@ -8,7 +8,7 @@ export const initSubscribers = () => {
     () => {
       useBlockchainStore.getState().updateProvider()
       useBlockchainStore.getState().getNativeBalance()
-      useTokensStore.getState().syncBalances()
+      useTokensStore.getState().loadBalances()
     },
     {
       fireImmediately: true,
@@ -18,7 +18,7 @@ export const initSubscribers = () => {
   useTokensStore.subscribe(
     (state) => state.tokens,
     () => {
-      useTokensStore.getState().syncBalances()
+      useTokensStore.getState().loadBalances()
     },
   )
 
@@ -27,7 +27,7 @@ export const initSubscribers = () => {
     ([, phrase]) => {
       if (phrase) {
         useBlockchainStore.getState().getNativeBalance()
-        useTokensStore.getState().syncBalances()
+        useTokensStore.getState().loadBalances()
       }
     },
   )

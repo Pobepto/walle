@@ -20,7 +20,6 @@ export const Tokens: React.FC = () => {
   const navigate = useNavigate()
   const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
   const balances = useTokensStore((store) => store.balances)
-  const balancesIsLoading = useTokensStore((store) => store.balancesIsLoading)
   const tokens = useTokens()
   const chain = useChain()
 
@@ -62,8 +61,8 @@ export const Tokens: React.FC = () => {
             </Selection>
             {tokens.map((token) => {
               const balance = balances.get(token.address)
-              const formattedBalance = balance
-                ? formatNumber(balance, token.decimals)
+              const formattedBalance = balance?.value
+                ? formatNumber(balance.value, token.decimals)
                 : '🤔'
 
               return (
@@ -72,7 +71,7 @@ export const Tokens: React.FC = () => {
                   activeProps={{ underline: true, isFocused: true }}
                 >
                   <TextButton onPress={() => handleSelectToken(token)}>
-                    <Loader loading={balancesIsLoading}>
+                    <Loader loading={balance?.isLoading ?? true}>
                       {formattedBalance}
                     </Loader>{' '}
                     <Text bold>{token.symbol}</Text>
