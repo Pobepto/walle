@@ -16,9 +16,10 @@ export const ShowPrivateKey: React.FC = () => {
   const wallet = useWallet()!
   const parentZone = useSelectionZone()!
 
-  const onCopy = () => {
-    console.log(wallet.privateKey)
-  }
+  // TODO: Figure out how to copy text to the clipboard
+  // const onCopy = () => {
+  //   console.log(wallet.privateKey)
+  // }
 
   return (
     <SelectionZone
@@ -48,9 +49,9 @@ export const ShowPrivateKey: React.FC = () => {
             unauthorized transactions on your behalf.
           </Text>
         </Box>
-        <Selection activeProps={{ isFocused: true }}>
+        {/* <Selection activeProps={{ isFocused: true }}>
           <Button onPress={onCopy}>Copy to buffer</Button>
-        </Selection>
+        </Selection> */}
         <Selection activeProps={{ isFocused: true }}>
           <ButtonLink to={ROUTE.SECURITY}>Back</ButtonLink>
         </Selection>

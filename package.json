@@ -4,6 +4,7 @@
     "start": "node build/out.js",
     "watch": "node esbuild.config.js",
     "format": "prettier-eslint --write \"src/**/*.{ts,tsx}\"",
+    "check": "tsc -noEmit",
     "commit": "git-cz",
     "precommit": "lint-staged"
   },
@@ -34,7 +35,7 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.32",
-    "@types/react": "^18.0.8",
+    "@types/react": "^17.0.52",
     "@types/zxcvbn": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",

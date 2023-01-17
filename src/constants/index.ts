@@ -8,7 +8,7 @@ export const DEFAULT_CHAINS: Chain[] = [
   {
     chainId: 97,
     name: 'BNB Smart Chain Testnet',
-    rpc: 'https://data-seed-prebsc-2-s1.binance.org:8545/',
+    rpc: 'https://data-seed-prebsc-2-s3.binance.org:8545',
     currency: 'BNB',
     explorer: 'http://testnet.bscscan.com/',
   },

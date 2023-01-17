@@ -85,7 +85,7 @@ export const Menu: React.FC<MenuProps> = ({
               <Selection>
                 {(isFocused) => (
                   <TextButton
-                    selectKey={selectKey}
+                    selectKey={item.items ? 'rightArrow' : selectKey}
                     isFocused={isFocused || isVisible}
                     onPress={
                       item.items

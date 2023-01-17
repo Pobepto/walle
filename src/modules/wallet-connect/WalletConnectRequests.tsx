@@ -33,10 +33,12 @@ const RequestItem: React.FC<RequestItemProps> = ({
       borderStyle={isActive ? 'double' : 'classic'}
       paddingX={1}
     >
-      <Text>
-        [{params.chainId}] {params.request.method}
-      </Text>
-      <Text>{JSON.stringify(params.request.params, null, 2)}</Text>
+      <Box marginTop={-1}>
+        <Text bold>
+          [{params.chainId}] {params.request.method}
+        </Text>
+      </Box>
+      <Text>{JSON.stringify(params.request.params[0], null, 2)}</Text>
     </Box>
   )
 }

@@ -31,8 +31,3 @@ export interface Token {
   address: string
   chainId: number
 }
-
-export interface TokenBalance {
-  value: Nullable<string>
-  isLoading: boolean
-}

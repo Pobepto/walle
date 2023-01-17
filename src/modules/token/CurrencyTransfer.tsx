@@ -1,14 +1,15 @@
 import React from 'react'
 import { ROUTE, useNavigate } from '@src/routes'
-import { useChain, useNativeBalance } from '@src/hooks'
+import { useChain } from '@src/hooks'
 import { TransferForm, TransferInputs } from './TransferForm'
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { parseUnits } from '@ethersproject/units'
+import { useBlockchainStore } from '@src/store'
 
 export const CurrencyTransfer: React.FC = () => {
   const navigate = useNavigate()
   const chain = useChain()
-  const [balance, balanceIsLoading] = useNativeBalance()
+  const nativeBalance = useBlockchainStore((store) => store.nativeBalance)
 
   const onTransfer = async (data: TransferInputs) => {
     const value = parseUnits(data.amount, 18)
@@ -26,9 +27,9 @@ export const CurrencyTransfer: React.FC = () => {
   return (
     <TransferForm
       title={`${chain.currency}`}
-      balance={balance}
+      balance={nativeBalance}
       decimals={18}
-      balanceIsLoading={balanceIsLoading}
+      balanceIsLoading={!nativeBalance}
       onTransfer={onTransfer}
       onBack={() => navigate(ROUTE.CURRENCY_ACTIONS)}
     />

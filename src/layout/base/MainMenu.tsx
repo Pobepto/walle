@@ -47,25 +47,14 @@ export const MainMenu: React.FC = () => {
             parentZone.select(COLUMNS.MAIN)
           },
         },
+        {
+          title: 'Logout',
+          onSelect: () => {
+            logout()
+            navigate(ROUTE.REGISTRATION)
+          },
+        },
       ],
-    },
-    {
-      title: 'Security',
-      onSelect: () => {
-        navigate(ROUTE.SECURITY)
-        parentZone.select(COLUMNS.MAIN)
-      },
-    },
-    {
-      title: 'Logout',
-      onSelect: () => {
-        logout()
-        navigate(ROUTE.REGISTRATION)
-      },
-    },
-    {
-      title: 'Lock',
-      onSelect: () => navigate(ROUTE.LOGIN),
     },
     {
       title: 'WalletConnect',
@@ -121,8 +110,15 @@ export const MainMenu: React.FC = () => {
           ],
     },
     {
-      title: 'FAQ',
-      onSelect: () => console.log('WIP'),
+      title: 'Security',
+      onSelect: () => {
+        navigate(ROUTE.SECURITY)
+        parentZone.select(COLUMNS.MAIN)
+      },
+    },
+    {
+      title: 'Lock',
+      onSelect: () => navigate(ROUTE.LOGIN),
     },
   ]
 

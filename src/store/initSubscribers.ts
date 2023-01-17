@@ -2,7 +2,18 @@ import { useBlockchainStore } from './blockchain'
 import { useTokensStore } from './tokens'
 import { useWalletStore } from './wallet'
 
+const updateBalance = async () => {
+  await Promise.all([
+    useBlockchainStore.getState().getNativeBalance(),
+    useTokensStore.getState().loadBalances(),
+  ])
+
+  setTimeout(updateBalance, 5_000)
+}
+
 export const initSubscribers = () => {
+  setTimeout(updateBalance, 5_000)
+
   useBlockchainStore.subscribe(
     (state) => state.chainId,
     () => {

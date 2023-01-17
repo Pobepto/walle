@@ -75,7 +75,7 @@ export const isAddress =
     try {
       getAddress(value)
     } catch {
-      // return `Address is invalid`
+      return `Address is invalid`
     }
 
     return undefined

@@ -15,7 +15,6 @@ export const sendTransaction: BlockchainAction<'sendTransaction'> =
 
       return result
     } catch (err) {
-      console.log(err)
       set({ txInProgress: false })
     }
   }

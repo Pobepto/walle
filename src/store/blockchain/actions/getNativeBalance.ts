@@ -3,7 +3,6 @@ import { BlockchainAction } from '..'
 
 export const getNativeBalance: BlockchainAction<'getNativeBalance'> =
   (set, get) => async () => {
-    set({ nativeBalanceIsLoading: true })
     const { provider } = get()
     const { getWallet } = useWalletStore.getState()
 
@@ -11,8 +10,8 @@ export const getNativeBalance: BlockchainAction<'getNativeBalance'> =
       const wallet = getWallet()
       const balance = await provider.getBalance(wallet.address)
 
-      set({ nativeBalance: balance.toString(), nativeBalanceIsLoading: false })
+      set({ nativeBalance: balance.toString() })
     } catch (err) {
-      set({ nativeBalance: null, nativeBalanceIsLoading: false })
+      set({ nativeBalance: null })
     }
   }

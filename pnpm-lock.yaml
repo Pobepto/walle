@@ -13,7 +13,7 @@ specifiers:
   '@ethersproject/wallet': ^5.7.0
   '@json-rpc-tools/utils': ^1.7.6
   '@types/node': ^17.0.32
-  '@types/react': ^18.0.8
+  '@types/react': ^17.0.52
   '@types/zxcvbn': ^4.4.1
   '@typescript-eslint/eslint-plugin': ^5.21.0
   '@typescript-eslint/parser': ^5.21.0
@@ -63,7 +63,7 @@ dependencies:
   '@walletconnect/sign-client': 2.2.1_lokijs@1.5.12
   '@walletconnect/types': 2.2.1_lokijs@1.5.12
   '@walletconnect/utils': 2.2.1_lokijs@1.5.12
-  ink: 3.2.0_amtsnftabiznt6ysaiblxguaim
+  ink: 3.2.0_q5o373oqrklnndq2vhekyuzhxi
   ink-spinner: 4.0.3_ink@3.2.0+react@17.0.2
   ink-text-input: 4.0.3_ink@3.2.0+react@17.0.2
   lokijs: 1.5.12
@@ -74,7 +74,7 @@ dependencies:
 
 devDependencies:
   '@types/node': 17.0.32
-  '@types/react': 18.0.8
+  '@types/react': 17.0.52
   '@types/zxcvbn': 4.4.1
   '@typescript-eslint/eslint-plugin': 5.21.0_3pkyrc4fw5t5novybddanxmrai
   '@typescript-eslint/parser': 5.21.0_bu5nx2ceh465k42g5d76k2cgzu
@@ -726,8 +726,8 @@ packages:
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
 
-  /@types/react/18.0.8:
-    resolution: {integrity: sha512-+j2hk9BzCOrrOSJASi5XiOyBbERk9jG5O73Ya4M0env5Ixi6vUNli4qy994AINcEF+1IEHISYFfIT4zwr++LKw==}
+  /@types/react/17.0.52:
+    resolution: {integrity: sha512-vwk8QqVODi0VaZZpDXQCmEmiOuyjEFPY7Ttaw5vjM112LOq37yz1CDJGrRJwA1fYEq4Iitd5rnjd1yWAc/bT+A==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
@@ -2756,7 +2756,7 @@ packages:
       react: '>=16.8.2'
     dependencies:
       cli-spinners: 2.6.1
-      ink: 3.2.0_amtsnftabiznt6ysaiblxguaim
+      ink: 3.2.0_q5o373oqrklnndq2vhekyuzhxi
       react: 17.0.2
     dev: false
 
@@ -2768,12 +2768,12 @@ packages:
       react: ^16.5.2 || ^17.0.0
     dependencies:
       chalk: 4.1.2
-      ink: 3.2.0_amtsnftabiznt6ysaiblxguaim
+      ink: 3.2.0_q5o373oqrklnndq2vhekyuzhxi
       react: 17.0.2
       type-fest: 0.15.1
     dev: false
 
-  /ink/3.2.0_amtsnftabiznt6ysaiblxguaim:
+  /ink/3.2.0_q5o373oqrklnndq2vhekyuzhxi:
     resolution: {integrity: sha512-firNp1q3xxTzoItj/eOOSZQnYSlyrWks5llCTVX37nJ59K3eXbQ8PtzCguqo8YI19EELo5QxaKnJd4VxzhU8tg==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -2783,7 +2783,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.8
+      '@types/react': 17.0.52
       ansi-escapes: 4.3.2
       auto-bind: 4.0.0
       chalk: 4.1.2

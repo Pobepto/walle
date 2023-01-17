@@ -18,7 +18,6 @@ export interface BlockchainStore {
   updateProvider: () => void
 
   nativeBalance: Nullable<string>
-  nativeBalanceIsLoading: boolean
   getNativeBalance: () => Promise<void>
 
   sendTransaction: (
@@ -57,8 +56,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     },
 
     getNativeBalance: getNativeBalance(set, get),
-    nativeBalance: '0',
-    nativeBalanceIsLoading: true,
+    nativeBalance: null,
 
     sendTransaction: sendTransaction(set, get),
     txInProgress: false,

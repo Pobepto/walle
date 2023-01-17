@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink'
 import React from 'react'
-import { useNativeBalance, useTokens } from '@hooks'
-import { COLUMNS, useTokensStore } from '@store'
+import { useTokens } from '@hooks'
+import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
 import { Loader } from '@src/components/Loader'
 import {
   Selection,
@@ -18,7 +18,7 @@ import { Token } from '@src/constants'
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
-  const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
+  const nativeBalance = useBlockchainStore((store) => store.nativeBalance)
   const balances = useTokensStore((store) => store.balances)
   const tokens = useTokens()
   const chain = useChain()
@@ -53,16 +53,17 @@ export const Tokens: React.FC = () => {
               activeProps={{ underline: true, isFocused: true }}
             >
               <TextButton onPress={handleSelectCurrency}>
-                <Loader loading={nativeBalanceIsLoading}>
+                <Loader loading={!nativeBalance}>
                   {formattedNativeBalance}
                 </Loader>{' '}
                 <Text bold>{chain.currency}</Text>
               </TextButton>
             </Selection>
             {tokens.map((token) => {
+              const hasBalance = balances.has(token.address)
               const balance = balances.get(token.address)
-              const formattedBalance = balance?.value
-                ? formatNumber(balance.value, token.decimals)
+              const formattedBalance = balance
+                ? formatNumber(balance, token.decimals)
                 : '🤔'
 
               return (
@@ -71,9 +72,7 @@ export const Tokens: React.FC = () => {
                   activeProps={{ underline: true, isFocused: true }}
                 >
                   <TextButton onPress={() => handleSelectToken(token)}>
-                    <Loader loading={balance?.isLoading ?? true}>
-                      {formattedBalance}
-                    </Loader>{' '}
+                    <Loader loading={!hasBalance}>{formattedBalance}</Loader>{' '}
                     <Text bold>{token.symbol}</Text>
                   </TextButton>
                 </Selection>

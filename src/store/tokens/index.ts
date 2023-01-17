@@ -1,11 +1,12 @@
-import { DEFAULT_TOKENS, Token, TokenBalance } from '@src/constants'
+import { DEFAULT_TOKENS, Token } from '@src/constants'
+import { Nullable } from 'tsdef'
 import { Action } from '..'
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { addToken, loadBalances } from './actions'
 
 export interface TokensStore {
   tokens: Token[]
-  balances: Map<string, TokenBalance>
+  balances: Map<string, Nullable<string>>
   loadBalances: () => Promise<void>
   addToken: (token: Omit<Token, 'chainId'>) => void
 }

@@ -12,6 +12,7 @@ export const TokenTransfer: React.FC = () => {
   const token = useRouteData<ROUTE.TOKEN_TRANSFER>()
   const ERC20 = useContract(token.address, ERC20_ABI)
 
+  const hasBalance = balances.has(token.address)
   const balance = balances.get(token.address) ?? null
 
   const onTransfer = async (data: TransferInputs) => {
@@ -30,9 +31,9 @@ export const TokenTransfer: React.FC = () => {
   return (
     <TransferForm
       title={`${token.name} (${token.symbol})`}
-      balance={balance?.value ?? null}
+      balance={balance}
       decimals={token.decimals}
-      balanceIsLoading={balance?.isLoading ?? true}
+      balanceIsLoading={!hasBalance}
       onTransfer={onTransfer}
       onBack={() => navigate(ROUTE.TOKEN_ACTIONS, token)}
     />

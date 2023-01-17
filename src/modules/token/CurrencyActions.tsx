@@ -10,10 +10,22 @@ import { COLUMNS } from '@src/store'
 import { TextButton } from '@src/components/TextButton'
 import { useChain } from '@src/hooks'
 
+interface CurrencyAction {
+  label: string
+  onPress: () => void
+}
+
 export const CurrencyActions: React.FC = () => {
   const navigate = useNavigate()
   const parentZone = useSelectionZone()!
   const chain = useChain()
+
+  const actions: CurrencyAction[] = [
+    {
+      label: 'Send',
+      onPress: () => navigate(ROUTE.CURRENCY_TRANSFER),
+    },
+  ]
 
   return (
     <Box flexDirection="column">
@@ -25,16 +37,15 @@ export const CurrencyActions: React.FC = () => {
         nextKey="downArrow"
         isActive={parentZone.selection === COLUMNS.MAIN}
       >
-        <Selection>
-          {(isFocused) => (
-            <TextButton
-              isFocused={isFocused}
-              onPress={() => navigate(ROUTE.CURRENCY_TRANSFER)}
-            >
-              {isFocused ? '->' : '-'} Send
-            </TextButton>
-          )}
-        </Selection>
+        {actions.map((action) => (
+          <Selection key={action.label}>
+            {(isFocused) => (
+              <TextButton isFocused={isFocused} onPress={action.onPress}>
+                {isFocused ? '->' : '-'} {action.label}
+              </TextButton>
+            )}
+          </Selection>
+        ))}
       </SelectionZone>
     </Box>
   )

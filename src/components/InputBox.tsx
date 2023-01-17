@@ -10,6 +10,7 @@ export interface InputBoxProps extends InputProps {
   error?: string
   loading?: boolean
   postfix?: string
+  width?: string | number
 }
 
 export const InputBox: React.FC<InputBoxProps> = ({
@@ -19,6 +20,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
   focus = false,
   loading = false,
   postfix = '',
+  width,
   onChange,
   ...inputProps
 }) => {
@@ -43,6 +45,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
       borderStyle="classic"
       borderColor={disabled ? 'grey' : undefined}
       flexDirection="column"
+      width={width}
     >
       <Box>
         {label ? (

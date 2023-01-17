@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button } from '@components'
 import { InputBox } from '@components/InputBox'
 import { COLUMNS } from '@store'
 import {
@@ -16,9 +15,10 @@ export const ShowSeedPhrase: React.FC = () => {
   const wallet = useWallet()!
   const parentZone = useSelectionZone()!
 
-  const onCopy = () => {
-    console.log(wallet.mnemonic.path)
-  }
+  // TODO: Figure out how to copy text to the clipboard
+  // const onCopy = () => {
+  //   console.log(wallet.mnemonic.path)
+  // }
 
   return (
     <SelectionZone
@@ -48,9 +48,9 @@ export const ShowSeedPhrase: React.FC = () => {
             unauthorized transactions on your behalf.
           </Text>
         </Box>
-        <Selection activeProps={{ isFocused: true }}>
+        {/* <Selection activeProps={{ isFocused: true }}>
           <Button onPress={onCopy}>Copy to buffer</Button>
-        </Selection>
+        </Selection> */}
         <Selection activeProps={{ isFocused: true }}>
           <ButtonLink to={ROUTE.SECURITY}>Back</ButtonLink>
         </Selection>

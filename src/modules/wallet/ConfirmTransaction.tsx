@@ -107,6 +107,10 @@ export const ConfirmTransaction: React.FC = () => {
   const renderRawTransaction = () => {
     const tx = Object.fromEntries(
       Object.entries(populatedTx).map(([key, value]) => {
+        if (typeof value === 'object' && value.type === 'BigNumber') {
+          return [key, BigNumber.from(value).toString()]
+        }
+
         return [key, value?.toString() ?? value]
       }),
     )
@@ -145,13 +149,11 @@ export const ConfirmTransaction: React.FC = () => {
       )
 
       return (
-        <Box marginTop={1} flexDirection="column">
-          <Text>Call {signature} with params:</Text>
+        <Box flexDirection="column">
           <Box
             flexDirection="column"
             borderStyle="single"
             borderColor="green"
-            marginTop={1}
             paddingX={1}
           >
             <Box marginTop={-1}>
@@ -275,32 +277,54 @@ export const ConfirmTransaction: React.FC = () => {
               {' '}{GasPriceUnit}
             </Text>
           ) : null} */}
-          <Selection<InputBoxProps>
-            activeProps={{ focus: true }}
-            selectedByDefault
-          >
-            <InputBox
-              label="Gas price"
-              error={errors.gasPrice}
-              loading={gasPriceLoading}
-              postfix={` ${GasPriceUnit}`}
-              {...register('gasPrice')}
-            />
-          </Selection>
-          {/* {populatedTx.gasPrice ? (
-            <Text>
-              Suggested gas limit{' '}
-              {BigNumber.from(populatedTx.gasLimit).toString()}
-            </Text>
-          ) : null} */}
-          <Selection<InputBoxProps> activeProps={{ focus: true }}>
-            <InputBox
-              label="Gas limit"
-              error={errors.gasLimit}
-              loading={estimate.loading}
-              {...register('gasLimit')}
-            />
-          </Selection>
+          <Box>
+            <Selection<InputBoxProps>
+              activeProps={{ focus: true }}
+              selectedByDefault
+            >
+              <InputBox
+                label="Gas price"
+                error={errors.gasPrice}
+                loading={gasPriceLoading}
+                postfix={` ${GasPriceUnit}`}
+                width="50%"
+                {...register('gasPrice')}
+              />
+            </Selection>
+            {populatedTx.gasPrice ? (
+              <Box alignItems="center" marginLeft={2}>
+                <Text>
+                  Suggested gas price{' '}
+                  <Text bold>
+                    {formatUnits(populatedTx.gasPrice, GasPriceUnit).toString()}{' '}
+                    {GasPriceUnit}
+                  </Text>
+                </Text>
+              </Box>
+            ) : null}
+          </Box>
+
+          <Box>
+            <Selection<InputBoxProps> activeProps={{ focus: true }}>
+              <InputBox
+                label="Gas limit"
+                error={errors.gasLimit}
+                loading={estimate.loading}
+                width="50%"
+                {...register('gasLimit')}
+              />
+            </Selection>
+            {populatedTx.gasLimit ? (
+              <Box alignItems="center" marginLeft={2}>
+                <Text>
+                  Suggested gas limit{' '}
+                  <Text bold>
+                    {BigNumber.from(populatedTx.gasLimit).toString()}
+                  </Text>
+                </Text>
+              </Box>
+            ) : null}
+          </Box>
 
           {estimate.error ? (
             <Box justifyContent="center">

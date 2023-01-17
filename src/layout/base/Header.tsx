@@ -1,14 +1,14 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { useChain, useWallet, useNativeBalance } from '@hooks'
+import { useChain, useWallet } from '@hooks'
 import { Loader } from '@src/components/Loader'
-import { useWalletStore } from '@src/store'
+import { useBlockchainStore, useWalletStore } from '@src/store'
 import { formatNumber } from '@src/utils/formatNumber'
 
 export const Header: React.FC = () => {
   const wallet = useWallet()
   const chain = useChain()
-  const [nativeBalance, nativeBalanceIsLoading] = useNativeBalance()
+  const nativeBalance = useBlockchainStore((store) => store.nativeBalance)
   const pathId = useWalletStore((state) => state.pathId)
 
   // const link = `${chain.explorer}/address/${wallet.address}`
@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
       <Box flexDirection="row" justifyContent="space-between">
         <Text color="cyan">{wallet?.address}</Text>
         <Text>
-          <Loader loading={nativeBalanceIsLoading}>{formattedBalance}</Loader>{' '}
+          <Loader loading={!nativeBalance}>{formattedBalance}</Loader>{' '}
           {chain.currency}
         </Text>
       </Box>

@@ -22,10 +22,7 @@ export const loadBalances: TokensAction<'loadBalances'> =
         .map(async (token) => {
           const currentBalance = newBalances.get(token.address)
           if (currentBalance) {
-            newBalances.set(token.address, {
-              ...currentBalance,
-              isLoading: true,
-            })
+            newBalances.set(token.address, currentBalance)
           }
 
           const contract = new Contract(token.address, ERC20_ABI, provider)
@@ -33,22 +30,9 @@ export const loadBalances: TokensAction<'loadBalances'> =
             .balanceOf(wallet.address)
             .catch(() => null)
 
-          if (balance) {
-            newBalances.set(token.address, {
-              value: balance.toString(),
-              isLoading: false,
-            })
-          } else if (currentBalance) {
-            newBalances.set(token.address, {
-              ...currentBalance,
-              isLoading: false,
-            })
-          } else {
-            newBalances.set(token.address, {
-              value: null,
-              isLoading: false,
-            })
-          }
+          const value = (balance ? balance.toString() : currentBalance) ?? null
+
+          newBalances.set(token.address, value)
 
           set({ balances: new Map(newBalances) })
         }),
