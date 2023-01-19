@@ -13,6 +13,13 @@ export const DEFAULT_CHAINS: Chain[] = [
     explorer: 'http://testnet.bscscan.com/',
   },
   {
+    chainId: 1,
+    name: 'Ethereum',
+    rpc: 'https://eth.llamarpc.com',
+    currency: 'ETH',
+    explorer: 'https://etherscan.io/',
+  },
+  {
     chainId: 5,
     name: 'Ethereum Goerli',
     rpc: 'https://eth-goerli.public.blastapi.io',

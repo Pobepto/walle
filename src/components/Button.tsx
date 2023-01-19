@@ -38,11 +38,14 @@ export const Button: React.FC<ButtonProps> = (props) => {
     <Box
       justifyContent="center"
       borderStyle={isFocused ? 'bold' : 'round'}
+      borderColor={disabled ? 'grey' : ''}
       {...boxProps}
     >
       <Loader loading={isLoading} type={spinner}>
         {typeof text === 'string' ? (
-          <Text bold={isFocused}>{text}</Text>
+          <Text bold={isFocused} color={disabled ? 'grey' : ''}>
+            {text}
+          </Text>
         ) : (
           children
         )}

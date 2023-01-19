@@ -31,6 +31,7 @@ export interface SelectionSettings {
   prevKey?: SuperKey | SuperKey[]
   isActive?: boolean
   looped?: boolean
+  onChange?: (selection: number, prevSelection: number) => void
 }
 
 export const useSelection = ({
@@ -40,6 +41,7 @@ export const useSelection = ({
   nextKey,
   isActive,
   looped = false,
+  onChange,
 }: SelectionSettings) => {
   const [selection, setSelection] = useState(defaultSelection)
   const [amount, setAmount] = useState(_amount)
@@ -53,11 +55,23 @@ export const useSelection = ({
 
   const prevent = useInput((input) => {
     if (checkSuperKey(input, nextKey)) {
-      setSelection((i) => clamp(i + 1, 0, maxSelection, looped))
+      setSelection((i) => {
+        const newSelection = clamp(i + 1, 0, maxSelection, looped)
+
+        onChange && onChange(newSelection, i)
+
+        return newSelection
+      })
     }
 
     if (prevKey && checkSuperKey(input, prevKey)) {
-      setSelection((i) => clamp(i - 1, 0, maxSelection, looped))
+      setSelection((i) => {
+        const newSelection = clamp(i - 1, 0, maxSelection, looped)
+
+        onChange && onChange(newSelection, i)
+
+        return newSelection
+      })
     }
   }, isActive)
 

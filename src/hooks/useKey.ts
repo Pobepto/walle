@@ -7,6 +7,7 @@ export const useKey = (
   focused = false,
 ) => {
   return useInput((input) => {
+    console.log(input)
     if (checkSuperKey(input, key)) {
       handler(input.raw)
     }

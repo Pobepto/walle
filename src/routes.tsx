@@ -32,12 +32,14 @@ import {
   PasswordGuard,
   SignMessage,
   WalletConnectProposal,
+  Help,
 } from './modules'
 import { routerFactory } from './Router'
 import { SessionProposal } from './store/wallet-connect/actions'
 
 export enum ROUTE {
   WELCOME,
+  HELP,
   LOGIN,
   REGISTRATION,
   REGISTRATION_IMPORT,
@@ -116,6 +118,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.REGISTRATION_PASSWORD]: welcome(SetPassword),
   [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
   [ROUTE.WALLET]: base(Wallet),
+  [ROUTE.HELP]: base(Help),
   [ROUTE.SWITCH_ACCOUNT]: base(SwitchAccount),
   [ROUTE.ADD_CHAIN]: base(AddChain),
   [ROUTE.SWITCH_CHAIN]: base(SwitchChain),

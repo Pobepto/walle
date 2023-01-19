@@ -147,6 +147,7 @@ export const SelectionZone: React.FC<SelectionZoneProps> = ({
   isActive = false,
   looped,
   onChangeFocusZone,
+  onChange,
 }) => {
   const { selection, select, setAmount } = useSelection({
     defaultSelection,
@@ -154,6 +155,7 @@ export const SelectionZone: React.FC<SelectionZoneProps> = ({
     prevKey,
     isActive,
     looped,
+    onChange,
   })
 
   return (

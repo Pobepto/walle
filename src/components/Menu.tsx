@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Box } from 'ink'
-import { SelectionSettings, SuperKey, useKey } from '@hooks'
+import { SelectionSettings, SuperKey, useKey, useSelection } from '@hooks'
 import { TextButton } from './TextButton'
-import { Selection, SelectionZone } from './SelectionZone'
+import { Selection, UncontrolledSelectionZone } from './SelectionZone'
 
 export interface MenuItem {
   title: React.ReactNode
@@ -12,18 +12,25 @@ export interface MenuItem {
 
 type SubMenuItem = Omit<MenuItem, 'items'>
 
-interface MenuProps extends Omit<SelectionSettings, 'amount'> {
+interface MenuProps extends Omit<SelectionSettings, 'amount' | 'onChange'> {
   selectKey?: SuperKey | SuperKey[]
   items: MenuItem[]
+  onChangeSelection?: SelectionSettings['onChange']
 }
 
 interface PropsDrop {
   isActive: boolean
   items: SubMenuItem[]
   onReturn: () => void
+  onChangeSelection?: SelectionSettings['onChange']
 }
 
-const NestedMenu: React.FC<PropsDrop> = ({ isActive, onReturn, items }) => {
+const NestedMenu: React.FC<PropsDrop> = ({
+  isActive,
+  items,
+  onReturn,
+  onChangeSelection,
+}) => {
   useKey(['escape', 'leftArrow'], onReturn, isActive)
 
   return (
@@ -33,6 +40,7 @@ const NestedMenu: React.FC<PropsDrop> = ({ isActive, onReturn, items }) => {
         isActive={isActive}
         prevKey="upArrow"
         nextKey="downArrow"
+        onChangeSelection={onChangeSelection}
       />
     </Box>
   )
@@ -45,6 +53,7 @@ export const Menu: React.FC<MenuProps> = ({
   nextKey,
   looped,
   selectKey = 'return',
+  onChangeSelection,
 }) => {
   const [nestedMenusVisibility, setNestedMenusVisibility] = useState<
     Record<string, boolean>
@@ -53,6 +62,19 @@ export const Menu: React.FC<MenuProps> = ({
   const anyNestedMenuIsVisible = Object.values(nestedMenusVisibility).some(
     Boolean,
   )
+
+  const {
+    selection,
+    select,
+    setAmount,
+    isActive: menuIsActive,
+  } = useSelection({
+    prevKey,
+    nextKey,
+    isActive: isActive && !anyNestedMenuIsVisible,
+    looped,
+    onChange: onChangeSelection,
+  })
 
   const openNestedMenu = (id: string) => {
     setNestedMenusVisibility({
@@ -68,13 +90,31 @@ export const Menu: React.FC<MenuProps> = ({
     })
   }
 
+  const handleChangeSelection = (
+    id: string,
+    currSelection: number,
+    prevSelection: number,
+  ) => {
+    if (currSelection === prevSelection) {
+      process.nextTick(() => {
+        if (currSelection === 0) {
+          select(selection - 1)
+        } else {
+          select(selection + 1)
+        }
+
+        closeNestedMenu(id)
+      })
+    }
+  }
+
   return (
     <Box flexDirection="column">
-      <SelectionZone
-        prevKey={prevKey}
-        nextKey={nextKey}
-        isActive={isActive && !anyNestedMenuIsVisible}
-        looped={looped}
+      <UncontrolledSelectionZone
+        selection={selection}
+        select={select}
+        onChangeAmount={setAmount}
+        isActive={menuIsActive}
       >
         {items.map((item, index) => {
           const id = String(index)
@@ -102,12 +142,15 @@ export const Menu: React.FC<MenuProps> = ({
                   onReturn={() => closeNestedMenu(id)}
                   isActive={isActive}
                   items={item.items}
+                  onChangeSelection={(selection, prevSelection) =>
+                    handleChangeSelection(id, selection, prevSelection)
+                  }
                 />
               )}
             </Box>
           )
         })}
-      </SelectionZone>
+      </UncontrolledSelectionZone>
     </Box>
   )
 }
