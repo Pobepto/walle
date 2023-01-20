@@ -22,7 +22,7 @@ export const SignMessage: React.FC = () => {
   const utfMessage = toUtf8String(message)
 
   const sign = async () => {
-    navigate(ROUTE.WALLET)
+    navigate(ROUTE.HOME)
     const signedMessage = await wallet.signMessage(utfMessage)
     onSign(signedMessage)
   }
@@ -48,7 +48,7 @@ export const SignMessage: React.FC = () => {
           <Selection<ButtonProps> activeProps={{ isFocused: true }}>
             <Button
               onPress={() => {
-                navigate(ROUTE.WALLET)
+                navigate(ROUTE.HOME)
                 onReject()
               }}
               minWidth="20%"

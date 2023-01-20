@@ -46,7 +46,7 @@ export const Login: React.FC = () => {
     initSubscribers()
     await initSignClient()
 
-    navigate(ROUTE.WALLET)
+    navigate(ROUTE.HOME)
   })
 
   const login = () => {

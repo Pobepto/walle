@@ -60,11 +60,11 @@ export const bigNumberInRange =
   (value) => {
     const number = parseUnits(value, decimals)
 
-    if (number.lt(min)) {
+    if (number.lte(min)) {
       return `Must be bigger than ${min.toString()}`
     }
 
-    if (number.gt(max)) {
+    if (number.gte(max)) {
       return `Must be less than ${max.toString()}`
     }
   }

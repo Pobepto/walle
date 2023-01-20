@@ -44,9 +44,7 @@ export const useForm = <Values extends DefaultValues = DefaultValues>({
   const [errors, setErrors] = useState<Errors<Values>>({})
 
   const getIsValid = (errors: Errors<Values>) => {
-    return !Object.values(errors)
-      .filter(isDefined)
-      .some((err) => err.length)
+    return Object.values(errors).every((err) => !err)
   }
 
   const isValid = useMemo(() => getIsValid(errors), [errors])

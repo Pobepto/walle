@@ -52,7 +52,7 @@ export const SetPassword: React.FC = () => {
       await save(encrypted, USER_DATA)
       initSubscribers()
       await initSignClient()
-      navigate(ROUTE.WALLET)
+      navigate(ROUTE.HOME)
     } else {
       preventInput()
       // TODO: focus on first error

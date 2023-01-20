@@ -51,7 +51,7 @@ export const WalletConnect: React.FC = () => {
 
   const onDisconnect = async (topic: string) => {
     await disconnect(topic)
-    navigate(ROUTE.WALLET)
+    navigate(ROUTE.HOME)
   }
 
   useEffect(() => {

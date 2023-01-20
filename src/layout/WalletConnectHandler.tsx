@@ -15,7 +15,7 @@ export const WalletConnectHandler: React.FC = () => {
   useEffect(() => {
     signClient
       .on('session_delete', () => {
-        navigate(ROUTE.WALLET)
+        navigate(ROUTE.HOME)
       })
       .on('session_request', (requestEvent) => {
         const { requests } = useWalletConnectStore.getState()

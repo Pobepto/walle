@@ -1,39 +1,51 @@
 import { isAddress } from '@ethersproject/address'
 import { useBlockchainStore } from '@src/store'
 import { useEffect, useState } from 'react'
-import { Nullable } from 'tsdef'
 
-export const useENS = (addressOrEns: string) => {
+const ENSRegExp =
+  /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*\.[a-z]+$/i
+
+export const useENS = (addressOrName: string) => {
+  const isValidAddress = isAddress(addressOrName)
+
   const provider = useBlockchainStore((store) => store.provider)
-  const [address, setAddress] = useState<Nullable<string>>(
-    isAddress(addressOrEns) ? addressOrEns : null,
-  )
-  const [isEns, setIsEns] = useState(false)
+
+  const [state, setState] = useState({
+    loading: false,
+    address: isValidAddress ? addressOrName : null,
+  })
 
   useEffect(() => {
     const resolve = async () => {
       try {
-        const address = await provider.resolveName(addressOrEns)
+        setState({
+          loading: true,
+          address: state.address,
+        })
 
-        if (address) {
-          setIsEns(true)
-          setAddress(address)
-        }
+        const address = await provider.resolveName(addressOrName)
+
+        setState({
+          loading: false,
+          address,
+        })
       } catch {
-        setIsEns(false)
-        setAddress(null)
+        setState({
+          loading: false,
+          address: state.address,
+        })
       }
     }
 
-    if (addressOrEns && !isAddress(addressOrEns)) {
-      resolve()
-    } else {
-      setAddress(addressOrEns)
+    if (!isValidAddress) {
+      const isValidENS = addressOrName && ENSRegExp.test(addressOrName)
+
+      isValidENS && resolve()
     }
-  }, [addressOrEns])
+  }, [addressOrName])
 
   return {
-    address,
-    isEns,
+    ...state,
+    name: isValidAddress ? null : addressOrName,
   }
 }

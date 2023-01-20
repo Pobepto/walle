@@ -88,7 +88,7 @@ export const ConfirmTransaction: React.FC = () => {
   }
 
   const onReject = () => {
-    navigate(ROUTE.WALLET)
+    navigate(ROUTE.HOME)
     onRejectTx && onRejectTx()
   }
 

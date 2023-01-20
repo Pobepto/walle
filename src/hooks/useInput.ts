@@ -9,6 +9,14 @@ export const useInput = (
 ) => {
   const prevented = useRef(false)
 
+  // const { stdin } = useStdin()
+  // stdin?.on('data', (data: Buffer) => {
+  //   const input = String(data)
+  //   // console.log('Pressed', input)
+  //   // console.log('Pressed', input === '\u001bOP')
+  //   // console.log('Pressed', input === '\u0008')
+  // })
+
   useInputInk(
     (raw, key) => {
       if (prevented.current) {

@@ -3,7 +3,7 @@ import React from 'react'
 import { Chain, Token } from './constants'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
-  Wallet,
+  Home,
   SwitchAccount,
   Login,
   CreateWallet,
@@ -46,7 +46,7 @@ export enum ROUTE {
   REGISTRATION_CREATE,
   REGISTRATION_PASSWORD,
   FORGOT_PASSWORD,
-  WALLET,
+  HOME,
   SWITCH_ACCOUNT,
   TOKEN_ADD,
   SWITCH_CHAIN,
@@ -117,7 +117,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.REGISTRATION_CREATE]: welcome(CreateWallet),
   [ROUTE.REGISTRATION_PASSWORD]: welcome(SetPassword),
   [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
-  [ROUTE.WALLET]: base(Wallet),
+  [ROUTE.HOME]: base(Home),
   [ROUTE.HELP]: base(Help),
   [ROUTE.SWITCH_ACCOUNT]: base(SwitchAccount),
   [ROUTE.ADD_CHAIN]: base(AddChain),

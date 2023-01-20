@@ -1,4 +1,4 @@
-export * from './Wallet'
+export * from './Home'
 export * from './SwitchAccount'
 export * from './ConfirmTransaction'
 export * from './SignMessage'

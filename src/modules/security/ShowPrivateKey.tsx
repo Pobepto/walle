@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { Button } from '@components'
 import { InputBox } from '@components/InputBox'
 import { COLUMNS } from '@store'
 import {

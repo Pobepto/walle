@@ -5,13 +5,7 @@ import { ROUTE, useNavigate } from '@routes'
 import { isFileExist, USER_DATA } from '@utils'
 import { TextButton } from '@src/components/TextButton'
 import { version } from '../../../package.json'
-
-const WALLE_LOGO = `
- _ _ _ _____ __    __    _____ 
-| | | |  _  |  |  |  |  |   __|
-| | | |     |  |__|  |__|   __|
-|_____|__|__|_____|_____|_____|
-`
+import { WALLE_LOGO } from '@src/constants'
 
 export const Welcome: React.FC = () => {
   const navigate = useNavigate()

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { InputBox, InputBoxProps } from '@src/components/InputBox'
 import {
   Selection,
@@ -20,6 +20,7 @@ import {
 } from '@src/hooks'
 import { formatNumber } from '@src/utils/formatNumber'
 import { Nullable } from 'tsdef'
+import { useENS } from '@src/hooks/useEns'
 
 export type TransferInputs = {
   receiver: string
@@ -45,19 +46,35 @@ export const TransferForm: React.FC<TransferFormProps> = ({
 }) => {
   const parentZone = useSelectionZone()!
 
-  const { register, data, errors, isValid } = useForm<TransferInputs>({
-    rules: {
-      receiver: isAddress(),
-      amount: combine(
-        isNumber(),
-        balanceIsZero(balance ?? 0),
-        bigNumberInRange(0, balance ?? 0, decimals),
-      ),
-    },
-    options: {
-      validateAction: 'blur',
-    },
-  })
+  const [isENS, setIsENS] = useState(false)
+
+  const { register, data, errors, isValid, validateInput } =
+    useForm<TransferInputs>({
+      rules: {
+        receiver: (value, data) => {
+          if (!isENS) {
+            return isAddress()(value, data)
+          }
+        },
+        amount: combine(
+          isNumber(),
+          balanceIsZero(balance ?? 0),
+          bigNumberInRange(0, balance ?? 0, decimals),
+        ),
+      },
+      options: {
+        validateAction: 'blur',
+      },
+    })
+
+  const { loading: loadingENS, address: resolvedAddress } = useENS(
+    data.receiver,
+  )
+
+  useEffect(() => {
+    setIsENS(!!resolvedAddress)
+    validateInput('receiver', resolvedAddress!)
+  }, [resolvedAddress])
 
   const formattedBalance = balance
     ? formatNumber(balance, decimals, decimals)
@@ -73,6 +90,9 @@ export const TransferForm: React.FC<TransferFormProps> = ({
         <Box marginTop={-1}>
           <Text> {title} </Text>
         </Box>
+        <Loader loading={loadingENS}>
+          {resolvedAddress && <Text>Address: {resolvedAddress}</Text>}
+        </Loader>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox
             label="Receiver"
@@ -110,7 +130,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
                   onPress={() => onTransfer(data)}
                   minWidth="20%"
                   paddingX={1}
-                  isDisabled={!isValid}
+                  isDisabled={!isValid || loadingENS}
                 >
                   <Text>Transfer {'->'}</Text>
                 </Button>

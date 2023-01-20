@@ -19,7 +19,7 @@ export const MainMenu: React.FC = () => {
     {
       title: 'Home',
       onSelect: () => {
-        navigate(ROUTE.WALLET)
+        navigate(ROUTE.HOME)
         parentZone.select(COLUMNS.MAIN)
       },
     },
