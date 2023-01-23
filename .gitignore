@@ -1,5 +1,5 @@
 node_modules
-build
+lib
 yarn-error.log
 
 walle.data

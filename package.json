@@ -10,8 +10,11 @@
     "precommit": "lint-staged"
   },
   "bin": {
-    "eslint": "./bin/eslint.js"
+    "walle": "./bin/walle.js"
   },
+  "files": [
+    "lib/index.js"
+  ],
   "dependencies": {
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
