@@ -7,7 +7,8 @@
     "format": "prettier-eslint --write \"src/**/*.{ts,tsx}\"",
     "check": "tsc -noEmit",
     "commit": "git-cz",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prepare": "husky install"
   },
   "bin": {
     "walle": "./bin/walle.js"
