@@ -1,6 +1,6 @@
-import { SessionTypes } from '@walletconnect/types'
 import { useWalletStore, WalletConnectAction } from '@src/store'
 import { signClient } from '@src/wallet-connect'
+import { SessionTypes } from '@walletconnect/types'
 
 export const approve: WalletConnectAction<'approve'> =
   () => async (proposal) => {

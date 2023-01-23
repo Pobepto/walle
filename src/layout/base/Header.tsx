@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
+
 import { useChain, useWallet } from '@hooks'
 import { Loader } from '@src/components/Loader'
 import { useBlockchainStore, useWalletStore } from '@src/store'

@@ -1,5 +1,5 @@
-import { Key, useInput as useInputInk } from 'ink'
 import { useRef } from 'react'
+import { Key, useInput as useInputInk } from 'ink'
 
 export type UserInput = { key: Key; raw: string }
 

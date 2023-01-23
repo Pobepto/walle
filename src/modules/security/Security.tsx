@@ -1,3 +1,6 @@
+import React from 'react'
+import { Box, Text } from 'ink'
+
 import { Button, ButtonProps } from '@src/components'
 import {
   Selection,
@@ -6,8 +9,6 @@ import {
 } from '@src/components/SelectionZone'
 import { ROUTE, useNavigate } from '@src/routes'
 import { COLUMNS } from '@src/store'
-import { Box, Text } from 'ink'
-import React from 'react'
 
 export const Security: React.FC = () => {
   const parentZone = useSelectionZone()!

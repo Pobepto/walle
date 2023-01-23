@@ -1,10 +1,12 @@
 import React from 'react'
-import { ROUTE, useNavigate } from '@src/routes'
-import { useChain } from '@src/hooks'
-import { TransferForm, TransferInputs } from './TransferForm'
+
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { parseUnits } from '@ethersproject/units'
+import { useChain } from '@src/hooks'
+import { ROUTE, useNavigate } from '@src/routes'
 import { useBlockchainStore } from '@src/store'
+
+import { TransferForm, TransferInputs } from './TransferForm'
 
 export const CurrencyTransfer: React.FC = () => {
   const navigate = useNavigate()

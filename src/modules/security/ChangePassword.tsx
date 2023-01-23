@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Text } from 'ink'
+
 import { Button } from '@components'
 import { InputBox, InputBoxProps } from '@components/InputBox'
-import { COLUMNS, useWalletStore } from '@store'
+import { ButtonLink } from '@src/components/ButtonLink'
 import {
   Selection,
   SelectionZone,
@@ -11,7 +12,7 @@ import {
 import { length, useForm } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
 import { save, USER_DATA } from '@src/utils'
-import { ButtonLink } from '@src/components/ButtonLink'
+import { COLUMNS, useWalletStore } from '@store'
 
 type Inputs = {
   password: string

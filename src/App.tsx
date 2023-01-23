@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Box } from 'ink'
+
 import { useRoute } from './routes'
 import { saveUserSettings } from './utils'
 

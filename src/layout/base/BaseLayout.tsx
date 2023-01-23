@@ -1,11 +1,14 @@
 import React from 'react'
 import { Box } from 'ink'
+
+import { Selection, SelectionZone } from '@src/components/SelectionZone'
+
+import { WalletConnectHandler } from '../WalletConnectHandler'
+
+import { Footer } from './Footer'
 import { Header } from './Header'
 import { MainMenu } from './MainMenu'
 import { Tokens } from './Tokens'
-import { Selection, SelectionZone } from '@src/components/SelectionZone'
-import { Footer } from './Footer'
-import { WalletConnectHandler } from '../WalletConnectHandler'
 
 interface Props {
   children: React.ReactNode

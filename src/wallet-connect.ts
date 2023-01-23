@@ -1,5 +1,6 @@
-import SignClient from '@walletconnect/sign-client'
 import type { IKeyValueStorage } from '@walletconnect/keyvaluestorage'
+import SignClient from '@walletconnect/sign-client'
+
 import { useWalletConnectStore } from './store'
 
 export let signClient: SignClient

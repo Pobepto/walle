@@ -1,9 +1,9 @@
 import {
+  SerializedStore,
   useBlockchainStore,
+  useTokensStore,
   useWalletConnectStore,
   useWalletStore,
-  useTokensStore,
-  SerializedStore,
 } from '@src/store'
 
 export const serialize = (): string => {

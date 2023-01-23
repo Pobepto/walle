@@ -1,19 +1,20 @@
-import { Box, Text } from 'ink'
 import React from 'react'
+import { Box, Text } from 'ink'
+
 import { useTokens } from '@hooks'
-import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
+import { List } from '@src/components/List'
 import { Loader } from '@src/components/Loader'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { ROUTE, useNavigate } from '@src/routes'
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
-import { useChain } from '@src/hooks'
-import { formatNumber } from '@src/utils/formatNumber'
-import { List } from '@src/components/List'
 import { Token } from '@src/constants'
+import { useChain } from '@src/hooks'
+import { ROUTE, useNavigate } from '@src/routes'
+import { formatNumber } from '@src/utils/formatNumber'
+import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
 
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!

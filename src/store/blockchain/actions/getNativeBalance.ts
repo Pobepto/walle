@@ -1,4 +1,5 @@
 import { useWalletStore } from '@src/store/wallet'
+
 import { BlockchainAction } from '..'
 
 export const getNativeBalance: BlockchainAction<'getNativeBalance'> =

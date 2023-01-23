@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
+
 import { Button, Error } from '@components'
-import { useForm, useSelection, walletConnectLink } from '@hooks'
 import { InputBox } from '@components/InputBox'
-import { COLUMNS, useWalletConnectStore } from '@store'
-import { useSelectionZone } from '@src/components/SelectionZone'
+import { useForm, useSelection, walletConnectLink } from '@hooks'
 import { Loader } from '@src/components/Loader'
+import { useSelectionZone } from '@src/components/SelectionZone'
+import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { signClient } from '@src/wallet-connect'
-import { useAsync } from '@src/hooks/useAsync'
+import { COLUMNS, useWalletConnectStore } from '@store'
 
 type Inputs = {
   uri: string

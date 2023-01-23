@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { formatUnits, commify } from '@ethersproject/units'
+import { commify, formatUnits } from '@ethersproject/units'
 
 export const formatNumber = (v: string, decimals = 18, visibleDecimals = 5) => {
   try {

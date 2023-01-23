@@ -1,6 +1,7 @@
-import { TextProps, Text } from 'ink'
 import React from 'react'
+import { Text, TextProps } from 'ink'
 import { AnyFunction } from 'tsdef'
+
 import { SuperKey, useKey } from '@hooks'
 
 export interface TextButtonProps extends TextProps {

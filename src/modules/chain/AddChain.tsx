@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
+
 import { Button, ButtonProps, Error } from '@components'
+import { InputBox } from '@components/InputBox'
+import { JsonRpcProvider } from '@ethersproject/providers'
 import {
   combine,
   isIntegerNumber,
@@ -10,16 +13,14 @@ import {
   useForm,
   useSelection,
 } from '@hooks'
-import { InputBox } from '@components/InputBox'
-import { COLUMNS, useBlockchainStore } from '@store'
+import { ButtonLink } from '@src/components/ButtonLink'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { JsonRpcProvider } from '@ethersproject/providers'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { ButtonLink } from '@src/components/ButtonLink'
+import { COLUMNS, useBlockchainStore } from '@store'
 
 type Inputs = {
   name: string
@@ -157,7 +158,7 @@ export const AddChain: React.FC = () => {
               onPress={onSubmit}
               minWidth="20%"
               paddingX={1}
-              isDisabled={!isValid}
+              isDisabled={!isValid || !!rpcError}
             >
               Add chain
             </Button>

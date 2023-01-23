@@ -1,5 +1,3 @@
-import { Nullable } from 'tsdef'
-
 export interface Chain {
   chainId: number
   name: string

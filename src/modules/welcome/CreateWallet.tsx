@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
-import { useWalletStore } from '@store'
+
+import { Link } from '@components/Link'
 import { useWallet } from '@hooks'
 import { ROUTE } from '@routes'
-import { Link } from '@components/Link'
+import { useWalletStore } from '@store'
 
 export const CreateWallet: React.FC = () => {
   const wallet = useWallet()

@@ -1,5 +1,5 @@
-import { Box, DOMElement, Text } from 'ink'
 import React, { useEffect, useRef, useState } from 'react'
+import { Box, DOMElement, Text } from 'ink'
 
 export const Divider: React.FC<{ symbol?: string }> = ({ symbol = '-' }) => {
   const box = useRef<DOMElement>(null)

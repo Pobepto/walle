@@ -1,8 +1,10 @@
-import { Box, BoxProps, Text } from 'ink'
 import React from 'react'
-import { AnyFunction } from 'tsdef'
 import type { SpinnerName } from 'cli-spinners'
+import { Box, BoxProps, Text } from 'ink'
+import { AnyFunction } from 'tsdef'
+
 import { SuperKey, useKey } from '@hooks'
+
 import { Loader } from './Loader'
 
 export interface ButtonProps extends BoxProps {

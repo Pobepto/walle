@@ -1,41 +1,45 @@
-import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
 import React from 'react'
+
+import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
+import { TransactionReceipt } from '@ethersproject/providers'
+
+import { SessionProposal } from './store/wallet-connect/actions'
 import { Chain, Token } from './constants'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
-  Home,
-  SwitchAccount,
-  Login,
-  CreateWallet,
-  ImportWallet,
-  Registration,
-  SetPassword,
-  Welcome,
-  AddToken,
-  SwitchChain,
   AddChain,
-  ExternalChains,
-  TokenActions,
-  TokenTransfer,
-  TokenInfo,
+  AddToken,
+  ChangePassword,
+  ConfirmTransaction,
+  CreateWallet,
   CurrencyActions,
   CurrencyTransfer,
-  ConfirmTransaction,
+  ExternalChains,
+  ForgotPassword,
+  Help,
+  Home,
+  ImportWallet,
+  Login,
+  PasswordGuard,
+  Registration,
   Security,
+  SetPassword,
   ShowPrivateKey,
   ShowSeedPhrase,
-  ChangePassword,
-  ForgotPassword,
-  WalletConnect,
-  WalletConnectRequests,
-  WalletConnectPairings,
-  PasswordGuard,
   SignMessage,
+  StatusTransaction,
+  SwitchAccount,
+  SwitchChain,
+  TokenActions,
+  TokenInfo,
+  TokenTransfer,
+  WalletConnect,
+  WalletConnectPairings,
   WalletConnectProposal,
-  Help,
+  WalletConnectRequests,
+  Welcome,
 } from './modules'
 import { routerFactory } from './Router'
-import { SessionProposal } from './store/wallet-connect/actions'
 
 export enum ROUTE {
   WELCOME,
@@ -58,6 +62,7 @@ export enum ROUTE {
   CURRENCY_ACTIONS,
   CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
+  STATUS_TRANSACTION,
   SIGN_MESSAGE,
   SECURITY,
   SECURITY_SHOW_PRIVATE_KEY,
@@ -82,6 +87,9 @@ interface ROUTE_DATA {
     populatedTx: PopulatedTransaction
     onRejectTx?: () => void
     onApproveTx?: (hash: string) => void
+  }
+  [ROUTE.STATUS_TRANSACTION]: {
+    receipt: TransactionReceipt
   }
   [ROUTE.PASSWORD_GUARD]: ROUTE
   [ROUTE.SIGN_MESSAGE]: {
@@ -130,6 +138,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.CURRENCY_ACTIONS]: base(CurrencyActions),
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: base(ConfirmTransaction),
+  [ROUTE.STATUS_TRANSACTION]: base(StatusTransaction),
   [ROUTE.SIGN_MESSAGE]: base(SignMessage),
   [ROUTE.SECURITY]: base(Security),
   [ROUTE.SECURITY_SHOW_PRIVATE_KEY]: base(ShowPrivateKey),

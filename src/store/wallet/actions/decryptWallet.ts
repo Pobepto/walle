@@ -1,4 +1,5 @@
 import { Wallet } from '@ethersproject/wallet'
+
 import { WalletAction } from '..'
 
 export const decryptWallet: WalletAction<'decryptWallet'> =

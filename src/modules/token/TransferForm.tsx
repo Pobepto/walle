@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import { Box, Text } from 'ink'
+import { Nullable } from 'tsdef'
+
+import { Button, ButtonProps } from '@src/components'
 import { InputBox, InputBoxProps } from '@src/components/InputBox'
+import { Loader } from '@src/components/Loader'
 import {
   Selection,
   SelectionZone,
   SelectionZoneProps,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { Box, Text } from 'ink'
-import { COLUMNS } from '@src/store'
-import { Loader } from '@src/components/Loader'
-import { Button, ButtonProps } from '@src/components'
 import {
   balanceIsZero,
   bigNumberInRange,
@@ -18,9 +19,9 @@ import {
   isNumber,
   useForm,
 } from '@src/hooks'
+import { useENS } from '@src/hooks/useENS'
+import { COLUMNS } from '@src/store'
 import { formatNumber } from '@src/utils/formatNumber'
-import { Nullable } from 'tsdef'
-import { useENS } from '@src/hooks/useEns'
 
 export type TransferInputs = {
   receiver: string

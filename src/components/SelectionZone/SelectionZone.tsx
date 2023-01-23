@@ -1,4 +1,3 @@
-import { SelectionSettings, useSelection } from '@src/hooks'
 import React, {
   Children,
   cloneElement,
@@ -6,6 +5,9 @@ import React, {
   isValidElement,
   useEffect,
 } from 'react'
+
+import { SelectionSettings, useSelection } from '@src/hooks'
+
 import { FocusZone } from './FocusZone'
 import { Selection } from './Selection'
 import { SelectionContext } from './SelectionContext'

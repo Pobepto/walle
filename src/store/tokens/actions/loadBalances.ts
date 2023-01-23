@@ -1,9 +1,11 @@
+import { Nullable } from 'tsdef'
+
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { useBlockchainStore } from '@src/store/blockchain'
 import { ERC20_ABI } from '@src/store/blockchain/interfaces'
 import { useWalletStore } from '@src/store/wallet'
-import { Nullable } from 'tsdef'
+
 import { TokensAction } from '..'
 
 export const loadBalances: TokensAction<'loadBalances'> =

@@ -1,7 +1,9 @@
-import { useInput } from '@src/hooks'
+import React from 'react'
 import { Box, Text } from 'ink'
 import Spinner from 'ink-spinner'
-import React from 'react'
+
+import { useInput } from '@src/hooks'
+
 import { Error, Input, InputProps } from '.'
 
 export interface InputBoxProps extends InputProps {

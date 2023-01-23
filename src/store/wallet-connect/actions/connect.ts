@@ -1,7 +1,7 @@
-import { ProposalTypes, SignClientTypes } from '@walletconnect/types'
-import { parseUri } from '@walletconnect/utils'
 import { WalletConnectAction } from '@src/store'
 import { signClient } from '@src/wallet-connect'
+import { ProposalTypes, SignClientTypes } from '@walletconnect/types'
+import { parseUri } from '@walletconnect/utils'
 
 export type SessionProposal = Omit<
   SignClientTypes.BaseEventArgs<ProposalTypes.Struct>,

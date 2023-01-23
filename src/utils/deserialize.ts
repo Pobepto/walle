@@ -1,9 +1,9 @@
 import {
   SerializedStore,
   useBlockchainStore,
+  useTokensStore,
   useWalletConnectStore,
   useWalletStore,
-  useTokensStore,
 } from '@src/store'
 
 export const deserialize = (store: SerializedStore) => {

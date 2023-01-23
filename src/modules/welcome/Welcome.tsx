@@ -1,11 +1,12 @@
+import React from 'react'
 import { Box, Text } from 'ink'
 
-import React from 'react'
 import { ROUTE, useNavigate } from '@routes'
-import { isFileExist, USER_DATA } from '@utils'
 import { TextButton } from '@src/components/TextButton'
-import { version } from '../../../package.json'
 import { WALLE_LOGO } from '@src/constants'
+import { isFileExist, USER_DATA } from '@utils'
+
+import { version } from '../../../package.json'
 
 export const Welcome: React.FC = () => {
   const navigate = useNavigate()

@@ -1,15 +1,15 @@
+import React, { useMemo, useState } from 'react'
 import { Box, Text } from 'ink'
 
-import React, { useMemo, useState } from 'react'
-import { Button, Input, Error, ButtonProps, InputProps } from '@components'
-import { useClipboard, length, useForm } from '@hooks'
+import { Button, ButtonProps, Error, Input, InputProps } from '@components'
+import { length, useClipboard, useForm } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
-import { useWalletStore } from '@store'
 import {
   Selection,
   SelectionZone,
   SelectionZoneProps,
 } from '@src/components/SelectionZone'
+import { useWalletStore } from '@store'
 
 type Inputs = {
   [key: number]: string

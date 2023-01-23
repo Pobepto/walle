@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react'
+
 import { BigNumber } from '@ethersproject/bignumber'
 import { useBlockchainStore } from '@src/store'
-import { useEffect, useState } from 'react'
+
 import { useAsync } from './useAsync'
 
 export const useGasPrice = (suggestedGasPrice?: BigNumber) => {

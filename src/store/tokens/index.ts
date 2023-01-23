@@ -1,7 +1,10 @@
-import { DEFAULT_TOKENS, Token } from '@src/constants'
 import { Nullable } from 'tsdef'
-import { Action } from '..'
+
+import { DEFAULT_TOKENS, Token } from '@src/constants'
+
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
+import { Action } from '..'
+
 import { addToken, loadBalances } from './actions'
 
 export interface TokensStore {

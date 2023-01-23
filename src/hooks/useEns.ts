@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
+
 import { isAddress } from '@ethersproject/address'
 import { useBlockchainStore } from '@src/store'
-import { useEffect, useState } from 'react'
 
 const ENSRegExp =
   /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*\.[a-z]+$/i

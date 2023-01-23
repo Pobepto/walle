@@ -1,12 +1,12 @@
+import React from 'react'
 import { Box, Text } from 'ink'
 
-import React from 'react'
 import { ROUTE, useNavigate } from '@routes'
-import { isEqualToString, useForm, useSelection } from '@src/hooks'
-import { InputBox } from '@src/components/InputBox'
-import { remove, USER_DATA } from '@src/utils'
-import { TextButton } from '@src/components/TextButton'
 import { Button } from '@src/components'
+import { InputBox } from '@src/components/InputBox'
+import { TextButton } from '@src/components/TextButton'
+import { isEqualToString, useForm, useSelection } from '@src/hooks'
+import { remove, USER_DATA } from '@src/utils'
 
 type Inputs = {
   agreement: string

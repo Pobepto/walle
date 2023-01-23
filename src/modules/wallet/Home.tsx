@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Text } from 'ink'
 
-import { version } from '../../../package.json'
 import { GITHUB, WALLE_LOGO } from '@src/constants'
+
+import { version } from '../../../package.json'
 
 export const Home: React.FC = () => {
   return (

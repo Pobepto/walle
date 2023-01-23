@@ -1,3 +1,6 @@
+import React, { useState } from 'react'
+import { Box, Text } from 'ink'
+
 import { Error } from '@src/components'
 import { InputBox } from '@src/components/InputBox'
 import { Loader } from '@src/components/Loader'
@@ -6,8 +9,6 @@ import { useForm, useKey } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useWalletStore } from '@src/store'
 import { load, USER_DATA } from '@src/utils'
-import { Box, Text } from 'ink'
-import React, { useState } from 'react'
 
 type Inputs = {
   password: string

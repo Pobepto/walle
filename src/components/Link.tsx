@@ -1,5 +1,6 @@
-import { Text, TextProps } from 'ink'
 import React from 'react'
+import { Text, TextProps } from 'ink'
+
 import { SuperKey, useKey } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
 

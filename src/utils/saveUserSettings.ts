@@ -1,4 +1,5 @@
 import { useWalletStore } from '@src/store'
+
 import { save, USER_SETTINGS } from './fs'
 import { serialize } from './serialize'
 

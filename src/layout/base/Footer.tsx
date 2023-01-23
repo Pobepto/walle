@@ -1,7 +1,8 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { ROUTE, useNavigate } from '@src/routes'
+
 import { useKey } from '@src/hooks'
+import { ROUTE, useNavigate } from '@src/routes'
 
 export const Footer: React.FC = () => {
   const navigate = useNavigate()

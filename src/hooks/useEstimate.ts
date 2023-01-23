@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import { PopulatedTransaction } from '@ethersproject/contracts'
-import { useWallet } from './useWallet'
+
 import { BigNumber } from '@ethersproject/bignumber'
+import { PopulatedTransaction } from '@ethersproject/contracts'
+
+import { useWallet } from './useWallet'
 
 interface Estimate {
   loading: boolean

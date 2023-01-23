@@ -1,6 +1,8 @@
-import { Key } from 'ink'
 import { useEffect, useState } from 'react'
+import { Key } from 'ink'
+
 import { clamp } from '@utils/clamp'
+
 import { useInput, UserInput } from './useInput'
 
 export type SuperKey =

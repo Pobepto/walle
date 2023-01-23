@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Box } from 'ink'
+
 import { SelectionSettings, SuperKey, useKey, useSelection } from '@hooks'
-import { TextButton } from './TextButton'
+
 import { Selection, UncontrolledSelectionZone } from './SelectionZone'
+import { TextButton } from './TextButton'
 
 export interface MenuItem {
   title: React.ReactNode

@@ -1,6 +1,6 @@
+import React from 'react'
 import { Box, Text } from 'ink'
 import Spinner from 'ink-spinner'
-import React from 'react'
 
 interface ListProps {
   children: React.ReactNode | React.ReactNode[]

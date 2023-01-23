@@ -1,10 +1,11 @@
 import React from 'react'
-import { Box, Text, Newline } from 'ink'
-import { ROUTE, useRouteData, useNavigate } from '@src/routes'
-import { useSelectionZone } from '@src/components/SelectionZone'
-import { COLUMNS } from '@src/store'
+import { Box, Newline, Text } from 'ink'
+
 import { Button } from '@src/components'
+import { useSelectionZone } from '@src/components/SelectionZone'
 import { useChain } from '@src/hooks'
+import { ROUTE, useNavigate, useRouteData } from '@src/routes'
+import { COLUMNS } from '@src/store'
 
 export const TokenInfo: React.FC = () => {
   const navigate = useNavigate()

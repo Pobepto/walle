@@ -1,4 +1,5 @@
 import type { GetState, SetState } from 'zustand'
+
 import type { BlockchainStore } from './blockchain'
 import type { TokensStore } from './tokens'
 import type { WalletStore } from './wallet'
@@ -16,8 +17,8 @@ export interface SerializedStore {
   tokensStore: Pick<TokensStore, 'tokens'>
 }
 
-export * from './wallet'
 export * from './app'
 export * from './blockchain'
 export * from './tokens'
+export * from './wallet'
 export * from './wallet-connect'

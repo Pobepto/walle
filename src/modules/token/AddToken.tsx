@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
+
 import { Button } from '@components'
+import { InputBox } from '@components/InputBox'
+import { Contract } from '@ethersproject/contracts'
 import {
   combine,
   isAddress,
@@ -9,15 +12,13 @@ import {
   numberInRange,
   useForm,
 } from '@hooks'
-import { InputBox } from '@components/InputBox'
-import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { Contract } from '@ethersproject/contracts'
 import { ERC20_ABI } from '@src/store/blockchain/interfaces'
+import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
 
 type Inputs = {
   name: string

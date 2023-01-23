@@ -1,12 +1,13 @@
 import React from 'react'
 import { Box, Text } from 'ink'
+
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { COLUMNS, useWalletStore } from '@src/store'
 import { TextButton } from '@src/components/TextButton'
+import { COLUMNS, useWalletStore } from '@src/store'
 
 export const SwitchAccount: React.FC = () => {
   const parentZone = useSelectionZone()!

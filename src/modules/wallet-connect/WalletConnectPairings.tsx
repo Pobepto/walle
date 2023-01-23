@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
-import { COLUMNS, useWalletConnectStore } from '@store'
+
+import AsyncButton from '@src/components/AsyncButton'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { PairingTypes } from '@walletconnect/types'
 import { useKey } from '@src/hooks'
-import AsyncButton from '@src/components/AsyncButton'
+import { COLUMNS, useWalletConnectStore } from '@store'
+import { PairingTypes } from '@walletconnect/types'
 
 interface PairingProps {
   pairing: PairingTypes.Struct

@@ -1,13 +1,15 @@
 import { signClient } from '@src/wallet-connect'
 import { PairingTypes } from '@walletconnect/types'
-import { Action } from '..'
+
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
+import { Action } from '..'
+
 import {
   approve,
-  reject,
   approveRequest,
   connect,
   disconnect,
+  reject,
   rejectRequest,
   SessionProposal,
   SessionRequest,

@@ -1,5 +1,6 @@
-import { Wallet } from '@ethersproject/wallet'
 import { Nullable } from 'tsdef'
+
+import { Wallet } from '@ethersproject/wallet'
 import { useBlockchainStore, useWalletStore } from '@store'
 import { getDerivationPath } from '@utils'
 

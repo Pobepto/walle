@@ -1,6 +1,7 @@
+import { useMemo } from 'react'
+
 import { useTokensStore } from '@src/store'
 import { useBlockchainStore } from '@store/blockchain'
-import { useMemo } from 'react'
 
 export const useTokens = () => {
   const chainId = useBlockchainStore((store) => store.chainId)

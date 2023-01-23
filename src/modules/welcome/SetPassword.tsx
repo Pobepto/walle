@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
 import zxcvbn, { ZXCVBNResult } from 'zxcvbn'
+
+import AsyncButton from '@components/AsyncButton'
+import { InputBox } from '@components/InputBox'
 import { length, useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
-import { InputBox } from '@components/InputBox'
-import { useWalletStore } from '@store'
-import { save, USER_DATA } from '@utils'
-import AsyncButton from '@components/AsyncButton'
 import { initSubscribers } from '@src/store/initSubscribers'
 import { initSignClient } from '@src/wallet-connect'
+import { useWalletStore } from '@store'
+import { save, USER_DATA } from '@utils'
 
 type Inputs = {
   password: string

@@ -1,8 +1,14 @@
 import React from 'react'
 import { Box, Text } from 'ink'
+
+import AsyncButton from '@components/AsyncButton'
+import { InputBox } from '@components/InputBox'
 import { useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate } from '@routes'
-import { InputBox } from '@components/InputBox'
+import { TextButton } from '@src/components/TextButton'
+import { useAsync } from '@src/hooks/useAsync'
+import { initSubscribers } from '@src/store/initSubscribers'
+import { initSignClient } from '@src/wallet-connect'
 import { useWalletStore } from '@store'
 import {
   deserialize,
@@ -11,11 +17,6 @@ import {
   USER_DATA,
   USER_SETTINGS,
 } from '@utils'
-import AsyncButton from '@components/AsyncButton'
-import { TextButton } from '@src/components/TextButton'
-import { useAsync } from '@src/hooks/useAsync'
-import { initSignClient } from '@src/wallet-connect'
-import { initSubscribers } from '@src/store/initSubscribers'
 
 type Inputs = {
   password: string

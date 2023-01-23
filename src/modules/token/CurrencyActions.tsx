@@ -1,14 +1,15 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { ROUTE, useNavigate } from '@src/routes'
+
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { COLUMNS } from '@src/store'
 import { TextButton } from '@src/components/TextButton'
 import { useChain } from '@src/hooks'
+import { ROUTE, useNavigate } from '@src/routes'
+import { COLUMNS } from '@src/store'
 
 interface CurrencyAction {
   label: string

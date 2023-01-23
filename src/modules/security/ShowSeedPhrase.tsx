@@ -1,7 +1,8 @@
 import React from 'react'
 import { Box, Text } from 'ink'
+
 import { InputBox } from '@components/InputBox'
-import { COLUMNS } from '@store'
+import { ButtonLink } from '@src/components/ButtonLink'
 import {
   Selection,
   SelectionZone,
@@ -9,7 +10,7 @@ import {
 } from '@src/components/SelectionZone'
 import { useWallet } from '@src/hooks'
 import { ROUTE } from '@src/routes'
-import { ButtonLink } from '@src/components/ButtonLink'
+import { COLUMNS } from '@store'
 
 export const ShowSeedPhrase: React.FC = () => {
   const wallet = useWallet()!

@@ -1,6 +1,6 @@
 import React from 'react'
-import Spinner from 'ink-spinner'
 import type { SpinnerName } from 'cli-spinners'
+import Spinner from 'ink-spinner'
 
 interface Props {
   loading?: boolean

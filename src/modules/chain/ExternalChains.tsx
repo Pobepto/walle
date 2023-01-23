@@ -1,8 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Box, Text } from 'ink'
-import { TextButton, TextButtonProps } from '@components/TextButton'
+import fetch from 'node-fetch'
+
 import { ButtonProps } from '@components/Button'
-import { ROUTE, useNavigate } from '@src/routes'
+import { TextButton, TextButtonProps } from '@components/TextButton'
+import { Error } from '@src/components'
+import { ButtonLink } from '@src/components/ButtonLink'
+import { InputBox, InputBoxProps } from '@src/components/InputBox'
+import { List } from '@src/components/List'
 import {
   FocusZone,
   FocusZoneInfo,
@@ -10,15 +15,11 @@ import {
   UncontrolledSelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { COLUMNS } from '@store'
-import fetch from 'node-fetch'
-import { List } from '@src/components/List'
-import { InputBox, InputBoxProps } from '@src/components/InputBox'
-import { useInput, useSelection } from '@src/hooks'
 import { ExternalChain } from '@src/constants'
-import { ButtonLink } from '@src/components/ButtonLink'
-import { Error } from '@src/components'
+import { useInput, useSelection } from '@src/hooks'
 import { useAsync } from '@src/hooks/useAsync'
+import { ROUTE, useNavigate } from '@src/routes'
+import { COLUMNS } from '@store'
 
 enum FocusZones {
   CHAINS_LIST = 'CHAINS_LIST',

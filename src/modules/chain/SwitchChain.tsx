@@ -1,9 +1,11 @@
 import React, { useMemo, useState } from 'react'
 import { Box, Text } from 'ink'
-import { useBlockchainStore } from '@store/blockchain'
-import { TextButton, TextButtonProps } from '@components/TextButton'
+
 import { Button } from '@components/Button'
-import { ROUTE, useNavigate } from '@src/routes'
+import { TextButton, TextButtonProps } from '@components/TextButton'
+import { ButtonLink } from '@src/components/ButtonLink'
+import { InputBox, InputBoxProps } from '@src/components/InputBox'
+import { List } from '@src/components/List'
 import {
   FocusZone,
   FocusZoneInfo,
@@ -11,12 +13,11 @@ import {
   UncontrolledSelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { COLUMNS } from '@store'
-import { List } from '@src/components/List'
 import { Chain } from '@src/constants'
-import { ButtonLink } from '@src/components/ButtonLink'
 import { useInput, useSelection } from '@src/hooks'
-import { InputBox, InputBoxProps } from '@src/components/InputBox'
+import { ROUTE, useNavigate } from '@src/routes'
+import { COLUMNS } from '@store'
+import { useBlockchainStore } from '@store/blockchain'
 
 enum FocusZones {
   CHAINS_LIST = 'CHAINS_LIST',

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+
 import { useInput } from './useInput'
 
 // NOTE: A library like clipboardy/copy-paste does not work,

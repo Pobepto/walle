@@ -1,5 +1,5 @@
-import { Text, TextProps } from 'ink'
 import React from 'react'
+import { Text, TextProps } from 'ink'
 
 interface Props extends TextProps {
   text: string

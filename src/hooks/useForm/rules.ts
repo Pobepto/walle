@@ -1,6 +1,7 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { parseUnits } from '@ethersproject/units'
+
 import { Rule } from './useForm'
 
 type AnyNumber = BigNumber | string | number

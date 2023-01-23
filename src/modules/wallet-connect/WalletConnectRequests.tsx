@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { COLUMNS, useWalletConnectStore } from '@store'
+
+import { List } from '@src/components/List'
 import {
   Selection,
   SelectionZone,
@@ -8,7 +9,7 @@ import {
 } from '@src/components/SelectionZone'
 import { SuperKey, useKey, useWalletConnectRequestHandler } from '@src/hooks'
 import { SessionRequest } from '@src/store/wallet-connect/actions'
-import { List } from '@src/components/List'
+import { COLUMNS, useWalletConnectStore } from '@store'
 
 interface RequestItemProps {
   request: SessionRequest

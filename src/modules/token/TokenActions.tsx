@@ -1,13 +1,14 @@
 import React from 'react'
 import { Box, Text } from 'ink'
-import { ROUTE, useRouteData, useNavigate } from '@src/routes'
+
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { COLUMNS } from '@src/store'
 import { TextButton } from '@src/components/TextButton'
+import { ROUTE, useNavigate, useRouteData } from '@src/routes'
+import { COLUMNS } from '@src/store'
 
 interface TokenAction {
   label: string

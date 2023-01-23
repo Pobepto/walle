@@ -1,2 +1,2 @@
-export * from './getNativeBalance'
 export * from './addChain'
+export * from './getNativeBalance'

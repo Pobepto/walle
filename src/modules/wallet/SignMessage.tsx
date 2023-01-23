@@ -1,15 +1,16 @@
 import React from 'react'
-import { ROUTE, useNavigate, useRouteData } from '@src/routes'
+import { Box, Text } from 'ink'
+
+import { Button, ButtonProps, Error } from '@src/components'
+import { InputBox } from '@src/components/InputBox'
 import {
   Selection,
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { Box, Text } from 'ink'
-import { InputBox } from '@src/components/InputBox'
-import { Button, ButtonProps, Error } from '@src/components'
-import { COLUMNS } from '@src/store'
 import { useWallet } from '@src/hooks'
+import { ROUTE, useNavigate, useRouteData } from '@src/routes'
+import { COLUMNS } from '@src/store'
 import { toUtf8String } from '@src/utils'
 
 export const SignMessage: React.FC = () => {

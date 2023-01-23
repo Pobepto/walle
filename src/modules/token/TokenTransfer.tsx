@@ -1,10 +1,12 @@
 import React from 'react'
-import { ROUTE, useRouteData, useNavigate } from '@src/routes'
-import { useTokensStore } from '@src/store'
-import { useContract } from '@src/hooks'
-import { ERC20_ABI } from '@src/store/blockchain/interfaces'
-import { TransferForm, TransferInputs } from './TransferForm'
+
 import { parseUnits } from '@ethersproject/units'
+import { useContract } from '@src/hooks'
+import { ROUTE, useNavigate, useRouteData } from '@src/routes'
+import { useTokensStore } from '@src/store'
+import { ERC20_ABI } from '@src/store/blockchain/interfaces'
+
+import { TransferForm, TransferInputs } from './TransferForm'
 
 export const TokenTransfer: React.FC = () => {
   const navigate = useNavigate()
