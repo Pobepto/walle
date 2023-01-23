@@ -16,7 +16,7 @@ export const TokenInfo: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text>
+        <Text bold>
           {' '}
           {token.name} ({token.symbol}){' '}
         </Text>

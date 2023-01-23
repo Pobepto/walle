@@ -56,7 +56,7 @@ export const ChangePassword: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Change Password </Text>
+          <Text bold> Change Password </Text>
         </Box>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox

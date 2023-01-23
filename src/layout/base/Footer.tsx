@@ -17,7 +17,11 @@ export const Footer: React.FC = () => {
     <Box flexDirection="column" borderStyle="single" paddingX={1}>
       <Box flexDirection="row" justifyContent="space-between">
         <Text>
-          <Text bold>&quot;CTRL+H&quot;</Text> to open Help
+          <Text bold>&quot;Tab&quot;</Text> to switch
+        </Text>
+        <Text>
+          <Text bold>&quot;↑&quot;</Text> / <Text bold>&quot;↓&quot;</Text> to
+          move
         </Text>
       </Box>
     </Box>

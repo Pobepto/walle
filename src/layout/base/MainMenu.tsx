@@ -118,6 +118,13 @@ export const MainMenu: React.FC = () => {
       },
     },
     {
+      title: 'Help',
+      onSelect: () => {
+        navigate(ROUTE.HELP)
+        parentZone.select(COLUMNS.MAIN)
+      },
+    },
+    {
       title: 'Lock',
       onSelect: () => navigate(ROUTE.LOGIN),
     },

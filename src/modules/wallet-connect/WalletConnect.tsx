@@ -71,7 +71,7 @@ export const WalletConnect: React.FC = () => {
     return (
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Active session </Text>
+          <Text bold> Active session </Text>
         </Box>
         <Box flexDirection="column" borderStyle="classic" paddingX={1}>
           <Box marginTop={-1}>
@@ -99,7 +99,7 @@ export const WalletConnect: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Connect to WalletConnect </Text>
+        <Text bold> Connect to WalletConnect </Text>
       </Box>
       <InputBox
         label="WalletConnect v2 URI"

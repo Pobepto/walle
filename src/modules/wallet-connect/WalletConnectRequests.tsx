@@ -52,7 +52,7 @@ export const WalletConnectRequests: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Pending requests </Text>
+        <Text bold> Pending requests </Text>
       </Box>
       <SelectionZone
         prevKey="upArrow"

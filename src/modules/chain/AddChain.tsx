@@ -102,11 +102,11 @@ export const AddChain: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Add new chain </Text>
+        <Text bold> Add new chain </Text>
       </Box>
       {!!chain && (
         <Box borderStyle="single" borderColor="red" alignItems="center">
-          <Error text="Данные о сети были получены из внешнего источника, пожалуйста убедитесь в их надежности, прежде чем добавлять эту сеть" />
+          <Error text="The network data was obtained from an external source, please make sure it is reliable before adding this network" />
         </Box>
       )}
       <InputBox

@@ -90,7 +90,7 @@ export const AddToken: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Add new token </Text>
+          <Text bold> Add new token </Text>
         </Box>
         {error ? (
           <Box borderStyle="single" borderColor="redBright" paddingX={1}>

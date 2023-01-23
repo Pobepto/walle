@@ -31,7 +31,7 @@ export const SignMessage: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Sign message </Text>
+        <Text bold> Sign message </Text>
       </Box>
       <Text>You are signing:</Text>
       <InputBox onChange={() => undefined} value={utfMessage} disabled />

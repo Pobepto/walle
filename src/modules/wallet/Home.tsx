@@ -17,7 +17,9 @@ export const Home: React.FC = () => {
         <Box justifyContent="center">
           <Text>{WALLE_LOGO}</Text>
         </Box>
-        <Text>Github: {GITHUB}</Text>
+        <Text>
+          <Text bold>Github:</Text> <Text underline>{GITHUB}</Text>
+        </Text>
       </Box>
       <Box alignSelf="flex-end">
         <Text>Ver. {version}</Text>

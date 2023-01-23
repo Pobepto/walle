@@ -29,7 +29,7 @@ export const ShowPrivateKey: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Private Key </Text>
+          <Text bold> Private Key </Text>
         </Box>
         <InputBox
           onChange={() => undefined}

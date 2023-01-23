@@ -22,7 +22,7 @@ export const Security: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Security </Text>
+          <Text bold> Security </Text>
         </Box>
         <Text>The security settings of your wallet</Text>
 

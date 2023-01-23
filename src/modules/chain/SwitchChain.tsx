@@ -83,7 +83,7 @@ export const SwitchChain: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Select chain or add custom </Text>
+          <Text bold> Select chain or add custom </Text>
         </Box>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox label="Search" value={search} onChange={setSearch} />

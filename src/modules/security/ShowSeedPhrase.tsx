@@ -29,7 +29,7 @@ export const ShowSeedPhrase: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Seed Phrase </Text>
+          <Text bold> Seed Phrase </Text>
         </Box>
         <InputBox
           onChange={() => undefined}

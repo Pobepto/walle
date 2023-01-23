@@ -46,7 +46,7 @@ export const PasswordGuard: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Confirm password </Text>
+        <Text bold> Confirm password </Text>
       </Box>
       <Box width="90%" marginY={1}>
         <Text>Please confirm the password to access this feature</Text>

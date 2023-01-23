@@ -23,7 +23,7 @@ export const SwitchAccount: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Switch account </Text>
+          <Text bold> Switch account </Text>
         </Box>
         {[...Array(10)].map((_, index) => {
           return (

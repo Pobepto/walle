@@ -110,7 +110,7 @@ export const ExternalChains: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> Select chain from https://chainid.network </Text>
+          <Text bold> Select chain from https://chainid.network </Text>
         </Box>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox label="Search" value={search} onChange={setSearch} />

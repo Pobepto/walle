@@ -66,7 +66,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
         ) : null}
         {!loading && postfix ? <Text>{postfix}</Text> : null}
       </Box>
-      {error ? <Error text={error} /> : null}
+      {!loading && error ? <Error text={error} /> : null}
     </Box>
   )
 }

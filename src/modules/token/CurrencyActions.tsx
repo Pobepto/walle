@@ -31,7 +31,7 @@ export const CurrencyActions: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> {chain.currency} </Text>
+        <Text bold> {chain.currency} </Text>
       </Box>
       <SelectionZone
         prevKey="upArrow"

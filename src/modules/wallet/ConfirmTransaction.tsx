@@ -11,6 +11,7 @@ import {
 } from '@components/SelectionZone'
 import { TransactionDetails } from '@components/TransactionDetails'
 import { BigNumber } from '@ethersproject/bignumber'
+import { PopulatedTransaction } from '@ethersproject/contracts'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import {
   combine,
@@ -29,11 +30,6 @@ import { GasPriceUnit } from '@src/constants'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 
-enum STEP {
-  CONFIRM_TX,
-  WAITING,
-}
-
 type Inputs = {
   gasPrice: string
   gasLimit: string
@@ -47,7 +43,6 @@ enum DisplayMode {
 export const ConfirmTransaction: React.FC = () => {
   const navigate = useNavigate()
   const [isSending, setSending] = useState(false)
-  const [txHash, setTxHash] = useState<string>()
   const [displayMode, setDisplayMode] = useState<DisplayMode>(
     DisplayMode.PARSED,
   )
@@ -72,19 +67,22 @@ export const ConfirmTransaction: React.FC = () => {
   })
 
   const onSendTransaction = async () => {
-    populatedTx.gasLimit = BigNumber.from(data.gasLimit)
-    populatedTx.gasPrice = parseUnits(data.gasPrice, GasPriceUnit)
+    const tx: PopulatedTransaction = {
+      ...populatedTx,
+      gasLimit: BigNumber.from(data.gasLimit),
+      gasPrice: parseUnits(data.gasPrice, GasPriceUnit),
+    }
 
     try {
       setSending(true)
-      const receipt = await sendTransaction(populatedTx)
+      const receipt = await sendTransaction(tx)
 
       if (receipt) {
-        setTxHash(receipt.transactionHash)
         onApproveTx && onApproveTx(receipt.transactionHash)
+        navigate(ROUTE.STATUS_TRANSACTION, { receipt })
       }
     } catch (error) {
-      //
+      navigate(ROUTE.STATUS_TRANSACTION, { error: error?.toString() })
     }
   }
 
@@ -108,12 +106,13 @@ export const ConfirmTransaction: React.FC = () => {
   const gasFee = BigNumber.from(
     parseUnits(data.gasPrice || '0', GasPriceUnit),
   ).mul(data.gasLimit || '0')
+
   const total = gasFee.add(populatedTx.value ?? '0')
 
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Confirm </Text>
+        <Text bold> Confirm </Text>
       </Box>
       <SelectionZone
         prevKey="upArrow"
@@ -151,13 +150,6 @@ export const ConfirmTransaction: React.FC = () => {
           </SelectionZone>
         </Selection>
 
-        {/* {populatedTx.gasPrice ? (
-            <Text>
-              Suggested gas price{' '}
-              {formatUnits(populatedTx.gasPrice, GasPriceUnit).toString()}
-              {' '}{GasPriceUnit}
-            </Text>
-          ) : null} */}
         <Box>
           <Selection<InputBoxProps>
             activeProps={{ focus: true }}

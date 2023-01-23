@@ -47,7 +47,7 @@ export const WalletConnectProposal: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Connect to WalletConnect </Text>
+        <Text bold> Connect to WalletConnect </Text>
       </Box>
       <Text>
         {metadata.name} {metadata.url}

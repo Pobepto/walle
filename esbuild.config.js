@@ -5,7 +5,7 @@ esbuild.build({
   entryPoints: ['src/index.tsx'],
   platform: 'node',
   bundle: true,
-  outfile: 'build/out.js',
+  outfile: 'build/index.js',
   color: true,
   plugins: [],
   watch: {

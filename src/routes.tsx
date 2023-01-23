@@ -89,7 +89,8 @@ interface ROUTE_DATA {
     onApproveTx?: (hash: string) => void
   }
   [ROUTE.STATUS_TRANSACTION]: {
-    receipt: TransactionReceipt
+    receipt?: TransactionReceipt
+    error?: string
   }
   [ROUTE.PASSWORD_GUARD]: ROUTE
   [ROUTE.SIGN_MESSAGE]: {

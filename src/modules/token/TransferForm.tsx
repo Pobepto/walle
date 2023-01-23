@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Box, Text } from 'ink'
 import { Nullable } from 'tsdef'
 
@@ -17,6 +17,7 @@ import {
   combine,
   isAddress,
   isNumber,
+  useDidMountEffect,
   useForm,
 } from '@src/hooks'
 import { useENS } from '@src/hooks/useENS'
@@ -72,7 +73,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
     data.receiver,
   )
 
-  useEffect(() => {
+  useDidMountEffect(() => {
     setIsENS(!!resolvedAddress)
     validateInput('receiver', resolvedAddress!)
   }, [resolvedAddress])
@@ -89,7 +90,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text> {title} </Text>
+          <Text bold> {title} </Text>
         </Box>
         <Loader loading={loadingENS}>
           {resolvedAddress && <Text>Address: {resolvedAddress}</Text>}

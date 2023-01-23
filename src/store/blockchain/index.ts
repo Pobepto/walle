@@ -25,7 +25,7 @@ export interface BlockchainStore {
 
   sendTransaction: (
     populatedTx: PopulatedTransaction,
-  ) => Promise<TransactionReceipt | undefined>
+  ) => Promise<TransactionReceipt>
 }
 
 export type BlockchainAction<T extends keyof BlockchainStore> = Action<

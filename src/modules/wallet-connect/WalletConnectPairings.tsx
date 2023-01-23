@@ -59,25 +59,29 @@ export const WalletConnectPairings: React.FC = () => {
   return (
     <Box flexDirection="column">
       <Box marginTop={-1}>
-        <Text> Connected dapps </Text>
+        <Text bold> Connected dapps </Text>
       </Box>
-      <SelectionZone
-        prevKey="upArrow"
-        nextKey="downArrow"
-        isActive={parentZone.selection === COLUMNS.MAIN}
-      >
-        {pairings.map((pairing) => (
-          <Selection key={pairing.topic}>
-            {(isActive) => (
-              <Pairing
-                pairing={pairing}
-                isActive={isActive}
-                onDelete={disconnect}
-              />
-            )}
-          </Selection>
-        ))}
-      </SelectionZone>
+      {pairings.length ? (
+        <SelectionZone
+          prevKey="upArrow"
+          nextKey="downArrow"
+          isActive={parentZone.selection === COLUMNS.MAIN}
+        >
+          {pairings.map((pairing) => (
+            <Selection key={pairing.topic}>
+              {(isActive) => (
+                <Pairing
+                  pairing={pairing}
+                  isActive={isActive}
+                  onDelete={disconnect}
+                />
+              )}
+            </Selection>
+          ))}
+        </SelectionZone>
+      ) : (
+        <Text>Empty</Text>
+      )}
     </Box>
   )
 }
