@@ -7,13 +7,17 @@ export const rejectRequest: WalletConnectAction<'rejectRequest'> =
   (set, get) => async (request) => {
     const { requests } = get()
 
-    await signClient.respond({
-      topic: request.topic,
-      response: formatJsonRpcError(
-        request.id,
-        getSdkError('USER_REJECTED_METHODS').message,
-      ),
-    })
+    try {
+      await signClient.respond({
+        topic: request.topic,
+        response: formatJsonRpcError(
+          request.id,
+          getSdkError('USER_REJECTED_METHODS').message,
+        ),
+      })
+    } catch (err) {
+      //
+    }
 
     const pendingRequests = requests.filter((req) => req.id !== request.id)
 

@@ -25,20 +25,14 @@ interface FormOptions {
 interface FormArgs<Values> {
   initialValues?: Partial<Values>
   rules?: Partial<Rules<Values>>
-  options?: FormOptions
-}
-
-const defaultOptions: FormOptions = {
-  validateAction: 'blur',
+  validateAction?: ValidateAction | 'never'
 }
 
 export const useForm = <Values extends DefaultValues = DefaultValues>({
   initialValues = {},
   rules = {},
-  options = defaultOptions,
+  validateAction = 'blur',
 }: FormArgs<Values> = {}) => {
-  const { validateAction } = options
-
   const [data, setData] = useState(initialValues as Values)
   const [errors, setErrors] = useState<Errors<Values>>({})
 

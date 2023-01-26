@@ -118,10 +118,13 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
           <Text bold> Send {chain.currency} </Text>
         </Box>
         <Text>
-          Send {formatUnits(value ?? '0').toString()} {chain.currency}
+          Send{' '}
+          <Text bold>
+            {formatUnits(value ?? '0').toString()} {chain.currency}
+          </Text>
         </Text>
         <Text>
-          To <Text bold>{to}</Text>
+          to <Text bold>{to}</Text>
         </Text>
       </Box>
     )

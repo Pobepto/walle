@@ -33,9 +33,7 @@ export const ChangePassword: React.FC = () => {
         }
       },
     },
-    options: {
-      validateAction: 'blur',
-    },
+    validateAction: 'blur',
   })
 
   const onPasswordChange = async () => {

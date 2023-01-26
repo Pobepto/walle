@@ -1,4 +1,5 @@
 import React from 'react'
+import { Boxes } from 'cli-boxes'
 import { Box, Text } from 'ink'
 import Spinner from 'ink-spinner'
 
@@ -13,6 +14,7 @@ export interface InputBoxProps extends InputProps {
   loading?: boolean
   postfix?: string
   width?: string | number
+  borderStyle?: keyof Boxes
 }
 
 export const InputBox: React.FC<InputBoxProps> = ({
@@ -24,6 +26,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
   postfix = '',
   width,
   onChange,
+  borderStyle = 'classic',
   ...inputProps
 }) => {
   const disabled = inputProps.disabled || loading
@@ -44,7 +47,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
 
   return (
     <Box
-      borderStyle="classic"
+      borderStyle={borderStyle}
       borderColor={disabled ? 'grey' : undefined}
       flexDirection="column"
       width={width}

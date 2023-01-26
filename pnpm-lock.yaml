@@ -21,6 +21,7 @@ specifiers:
   '@walletconnect/sign-client': ^2.2.1
   '@walletconnect/types': ^2.2.1
   '@walletconnect/utils': ^2.2.1
+  cli-boxes: ^2.2.1
   cli-spinners: ^2.6.1
   commitizen: ^4.2.4
   cz-simple-gitmoji: ^1.0.1
@@ -80,6 +81,7 @@ devDependencies:
   '@types/zxcvbn': 4.4.1
   '@typescript-eslint/eslint-plugin': 5.21.0_3pkyrc4fw5t5novybddanxmrai
   '@typescript-eslint/parser': 5.21.0_bu5nx2ceh465k42g5d76k2cgzu
+  cli-boxes: 2.2.1
   cli-spinners: 2.6.1
   commitizen: 4.2.4
   cz-simple-gitmoji: 1.0.1
@@ -1385,7 +1387,6 @@ packages:
   /cli-boxes/2.2.1:
     resolution: {integrity: sha512-y4coMcylgSCdVinjiDBuR8PCC2bLjyGTwEmPb9NHR/QaNU6EUOXcTY/s6VjGMD6ENSEaeQYHCY0GNGS5jfMwPw==}
     engines: {node: '>=6'}
-    dev: false
 
   /cli-cursor/2.1.0:
     resolution: {integrity: sha1-s12sN2R5+sw+lHR9QdDQ9SOP/LU=}

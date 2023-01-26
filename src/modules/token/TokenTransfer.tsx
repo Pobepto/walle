@@ -32,7 +32,7 @@ export const TokenTransfer: React.FC = () => {
 
   return (
     <TransferForm
-      title={`${token.name} (${token.symbol})`}
+      title={`Transfer ${token.name} (${token.symbol})`}
       balance={balance}
       decimals={token.decimals}
       balanceIsLoading={!hasBalance}

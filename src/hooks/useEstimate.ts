@@ -18,35 +18,38 @@ export const useEstimate = (populatedTx: PopulatedTransaction) => {
     gasLimit: BigNumber.from(populatedTx.gasLimit ?? 0),
   })
 
-  useEffect(() => {
-    const call = async () => {
+  const call = async () => {
+    setEstimate({
+      loading: true,
+      gasLimit: estimate.gasLimit,
+    })
+
+    try {
+      const usedGas = await wallet.estimateGas(populatedTx)
+      const fivePercent = usedGas.mul(5).div(100)
+      const gasLimit = usedGas.add(fivePercent)
+
       setEstimate({
-        loading: true,
+        loading: false,
+        gasLimit,
+      })
+    } catch (err: any) {
+      setEstimate({
+        loading: false,
+        error: `${err?.code}: ${err?.reason}`,
         gasLimit: estimate.gasLimit,
       })
-
-      try {
-        const usedGas = await wallet.estimateGas(populatedTx)
-        const fivePercent = usedGas.mul(5).div(100)
-        const gasLimit = usedGas.add(fivePercent)
-
-        setEstimate({
-          loading: false,
-          gasLimit,
-        })
-      } catch (err: any) {
-        setEstimate({
-          loading: false,
-          error: `${err?.code}: ${err?.reason}`,
-          gasLimit: estimate.gasLimit,
-        })
-      }
     }
+  }
 
+  useEffect(() => {
     if (estimate.gasLimit.eq(0)) {
       call()
     }
   }, [populatedTx])
 
-  return estimate
+  return {
+    ...estimate,
+    call,
+  }
 }

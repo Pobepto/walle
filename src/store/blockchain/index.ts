@@ -3,13 +3,13 @@ import { Nullable } from 'tsdef'
 import { PopulatedTransaction } from '@ethersproject/contracts'
 import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
-import { Chain, DEFAULT_CHAIN, DEFAULT_CHAINS } from '@src/constants'
+import { Chain, DEFAULT_CHAIN, DEFAULT_CHAINS, Token } from '@src/constants'
 
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { Action, useWalletStore } from '..'
 
 import { sendTransaction } from './actions/sendTransaction'
-import { addChain, getNativeBalance } from './actions'
+import { addChain, getNativeBalance, loadToken } from './actions'
 
 export interface BlockchainStore {
   chainId: number
@@ -19,6 +19,10 @@ export interface BlockchainStore {
   provider: JsonRpcProvider
   getSigner: () => Wallet
   updateProvider: () => void
+
+  loadToken: (
+    address: string,
+  ) => Promise<Pick<Token, 'name' | 'symbol' | 'decimals'>>
 
   nativeBalance: Nullable<string>
   getNativeBalance: () => Promise<void>
@@ -56,6 +60,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
         set({ provider })
       }
     },
+    loadToken: loadToken(set, get),
 
     getNativeBalance: getNativeBalance(set, get),
     nativeBalance: null,

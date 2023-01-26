@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
 
 import { Button } from '@components'
 import { InputBox } from '@components/InputBox'
-import { Contract } from '@ethersproject/contracts'
 import {
   combine,
   isAddress,
@@ -17,7 +16,7 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { ERC20_ABI } from '@src/store/blockchain/interfaces'
+import { useAsync } from '@src/hooks/useAsync'
 import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
 
 type Inputs = {
@@ -29,56 +28,42 @@ type Inputs = {
 
 export const AddToken: React.FC = () => {
   const parentZone = useSelectionZone()!
-  const [tokenInfoIsLoading, setTokenInfoLoading] = useState(false)
-  const [error, setError] = useState('')
+
   const addToken = useTokensStore((state) => state.addToken)
-  const provider = useBlockchainStore((state) => state.provider)
+  const loadToken = useBlockchainStore((state) => state.loadToken)
 
   const { errors, register, change, inputIsValid, isValid, data } =
     useForm<Inputs>({
       rules: {
+        address: isAddress(),
         name: length(1),
         symbol: length(1),
-        decimals: combine(isIntegerNumber(), numberInRange(0, 18)),
-        address: isAddress(),
+        decimals: combine(isIntegerNumber(), numberInRange(1, 18)),
       },
     })
 
   const onSubmit = () => {
     addToken({
+      address: data.address,
       name: data.name,
       symbol: data.symbol,
       decimals: Number(data.decimals),
-      address: data.address,
     })
   }
 
+  const { execute, error, isLoading, clearError } = useAsync(loadToken)
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const contract = new Contract(data.address, ERC20_ABI, provider)
-
-        setError('')
-        setTokenInfoLoading(true)
-
-        const [name, symbol, decimals] = await Promise.all([
-          contract.callStatic.name(),
-          contract.callStatic.symbol(),
-          contract.callStatic.decimals(),
-        ])
-
-        change('name', name, true)
-        change('symbol', symbol, true)
-        change('decimals', decimals.toString(), true)
-      } catch {
-        setError("Can't load information about this token")
-      } finally {
-        setTokenInfoLoading(false)
-      }
-    }
-
     if (inputIsValid('address')) {
-      load()
+      execute(data.address)
+        .then(({ name, symbol, decimals }) => {
+          change('name', name, true)
+          change('symbol', symbol, true)
+          change('decimals', decimals.toString(), true)
+        })
+        .catch(() => null)
+    } else {
+      clearError()
     }
   }, [data.address])
 
@@ -92,15 +77,11 @@ export const AddToken: React.FC = () => {
         <Box marginTop={-1}>
           <Text bold> Add new token </Text>
         </Box>
-        {error ? (
-          <Box borderStyle="single" borderColor="redBright" paddingX={1}>
-            <Text color="red">{error}</Text>
-          </Box>
-        ) : null}
+
         <Selection activeProps={{ focus: true }}>
           <InputBox
             label="Address"
-            error={errors.address}
+            error={error || errors.address}
             {...register('address')}
           />
         </Selection>
@@ -108,7 +89,7 @@ export const AddToken: React.FC = () => {
           <InputBox
             label="Name"
             error={errors.name}
-            loading={tokenInfoIsLoading}
+            loading={isLoading}
             {...register('name')}
           />
         </Selection>
@@ -116,7 +97,7 @@ export const AddToken: React.FC = () => {
           <InputBox
             label="Symbol"
             error={errors.symbol}
-            loading={tokenInfoIsLoading}
+            loading={isLoading}
             {...register('symbol')}
           />
         </Selection>
@@ -124,7 +105,7 @@ export const AddToken: React.FC = () => {
           <InputBox
             label="Decimals"
             error={errors.decimals}
-            loading={tokenInfoIsLoading}
+            loading={isLoading}
             {...register('decimals')}
           />
         </Selection>

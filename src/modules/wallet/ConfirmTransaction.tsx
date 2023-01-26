@@ -61,9 +61,7 @@ export const ConfirmTransaction: React.FC = () => {
       gasPrice: combine(isNumber()),
       gasLimit: combine(isIntegerNumber(), numberInRange(21000, Infinity)),
     },
-    options: {
-      validateAction: 'blur',
-    },
+    validateAction: 'blur',
   })
 
   const onSendTransaction = async () => {
@@ -91,14 +89,18 @@ export const ConfirmTransaction: React.FC = () => {
     onRejectTx && onRejectTx()
   }
 
+  const onEstimate = () => {
+    estimate.call()
+  }
+
   useEffect(() => {
-    if (gasPrice) {
+    if (gasPrice && !gasPrice.eq(0)) {
       change('gasPrice', formatUnits(gasPrice, GasPriceUnit).toString(), true)
     }
   }, [gasPrice])
 
   useEffect(() => {
-    if (estimate.gasLimit) {
+    if (estimate.gasLimit && !estimate.gasLimit.eq(0)) {
       change('gasLimit', estimate.gasLimit.toString(), true)
     }
   }, [estimate.gasLimit])
@@ -134,6 +136,7 @@ export const ConfirmTransaction: React.FC = () => {
                 <TextButton
                   onPress={() => setDisplayMode(DisplayMode.PARSED)}
                   underline={displayMode === DisplayMode.PARSED}
+                  autoPress
                 >
                   Parsed
                 </TextButton>
@@ -142,6 +145,7 @@ export const ConfirmTransaction: React.FC = () => {
                 <TextButton
                   onPress={() => setDisplayMode(DisplayMode.RAW)}
                   underline={displayMode === DisplayMode.RAW}
+                  autoPress
                 >
                   Raw
                 </TextButton>
@@ -149,6 +153,8 @@ export const ConfirmTransaction: React.FC = () => {
             </Box>
           </SelectionZone>
         </Selection>
+
+        <Divider symbol="—" />
 
         <Box>
           <Selection<InputBoxProps>
@@ -214,7 +220,10 @@ export const ConfirmTransaction: React.FC = () => {
           </Loader>
         </Text>
         <Text>
-          Total: {formatUnits(total)} {chain.currency}
+          Total:{' '}
+          <Loader loading={gasPriceLoading || estimate.loading}>
+            {formatUnits(total)} {chain.currency}
+          </Loader>
         </Text>
 
         <Divider symbol="—" />
@@ -229,6 +238,11 @@ export const ConfirmTransaction: React.FC = () => {
               <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                 <Button onPress={onReject} minWidth="20%" paddingX={1}>
                   Reject
+                </Button>
+              </Selection>
+              <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+                <Button onPress={onEstimate} minWidth="20%" paddingX={1}>
+                  Estimate
                 </Button>
               </Selection>
               <Selection<ButtonProps> activeProps={{ isFocused: true }}>

@@ -12,15 +12,15 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import {
-  balanceIsZero,
   bigNumberInRange,
   combine,
   isAddress,
+  isENS,
   isNumber,
   useDidMountEffect,
+  useENS,
   useForm,
 } from '@src/hooks'
-import { useENS } from '@src/hooks/useENS'
 import { COLUMNS } from '@src/store'
 import { formatNumber } from '@src/utils/formatNumber'
 
@@ -47,35 +47,30 @@ export const TransferForm: React.FC<TransferFormProps> = ({
   onTransfer,
 }) => {
   const parentZone = useSelectionZone()!
+  const [isExistENS, setExistENS] = useState(false)
 
-  const [isENS, setIsENS] = useState(false)
-
-  const { register, data, errors, isValid, validateInput } =
-    useForm<TransferInputs>({
-      rules: {
-        receiver: (value, data) => {
-          if (!isENS) {
-            return isAddress()(value, data)
+  const { register, data, errors, isValid } = useForm<TransferInputs>({
+    rules: {
+      receiver: (value, data) => {
+        if (!isExistENS) {
+          if (isENS(value)) {
+            return 'Address for this name not found'
           }
-        },
-        amount: combine(
-          isNumber(),
-          balanceIsZero(balance ?? 0),
-          bigNumberInRange(0, balance ?? 0, decimals),
-        ),
+
+          return isAddress()(value, data)
+        }
       },
-      options: {
-        validateAction: 'blur',
-      },
-    })
+      amount: combine(isNumber(), bigNumberInRange(0, balance ?? 0, decimals)),
+    },
+    validateAction: 'blur',
+  })
 
   const { loading: loadingENS, address: resolvedAddress } = useENS(
     data.receiver,
   )
 
   useDidMountEffect(() => {
-    setIsENS(!!resolvedAddress)
-    validateInput('receiver', resolvedAddress!)
+    setExistENS(!!resolvedAddress)
   }, [resolvedAddress])
 
   const formattedBalance = balance

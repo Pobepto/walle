@@ -140,6 +140,8 @@ export const MainMenu: React.FC = () => {
         items={menuItems}
         prevKey="upArrow"
         nextKey="downArrow"
+        selectKey={['return', 'rightArrow']}
+        expandMenuKey={['return', 'rightArrow']}
       />
     </>
   )

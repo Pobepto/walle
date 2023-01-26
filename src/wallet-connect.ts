@@ -47,7 +47,7 @@ export const initSignClient = async () => {
       icons: ['https://avatars.githubusercontent.com/u/37784886'],
     },
     storage,
-    // logger: 'silent',
+    logger: 'silent',
   }
 
   try {

@@ -29,9 +29,7 @@ export const SetPassword: React.FC = () => {
         }
       },
     },
-    options: {
-      validateAction: 'never',
-    },
+    validateAction: 'never',
   })
 
   const {

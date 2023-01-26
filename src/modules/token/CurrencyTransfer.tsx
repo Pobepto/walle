@@ -28,7 +28,7 @@ export const CurrencyTransfer: React.FC = () => {
 
   return (
     <TransferForm
-      title={`${chain.currency}`}
+      title={`Send ${chain.currency}`}
       balance={nativeBalance}
       decimals={18}
       balanceIsLoading={!nativeBalance}

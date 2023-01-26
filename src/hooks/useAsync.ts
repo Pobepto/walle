@@ -15,14 +15,22 @@ export const useAsync = <Args extends any[], Return>(
       const result = await func(...args)
       setState({ isLoading: false, error: '' })
       return Promise.resolve(result)
-    } catch (err) {
-      setState({ isLoading: false, error: err?.toString() ?? 'Unknown error' })
+    } catch (err: any) {
+      setState({
+        isLoading: false,
+        error: err?.message ?? err?.toString() ?? 'Unknown error',
+      })
       return Promise.reject(err)
     }
   }
 
+  const clearError = () => {
+    setState({ ...state, error: '' })
+  }
+
   return {
     execute,
+    clearError,
     ...state,
   }
 }

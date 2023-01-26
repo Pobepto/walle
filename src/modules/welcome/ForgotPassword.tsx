@@ -20,9 +20,7 @@ export const ForgotPassword: React.FC = () => {
     rules: {
       agreement: isEqualToString(REQUIRED_WORD),
     },
-    options: {
-      validateAction: 'never',
-    },
+    validateAction: 'never',
   })
 
   const {

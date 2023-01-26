@@ -1,6 +1,6 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { parseUnits } from '@ethersproject/units'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 
 import { Rule } from './useForm'
 
@@ -61,12 +61,12 @@ export const bigNumberInRange =
   (value) => {
     const number = parseUnits(value, decimals)
 
-    if (number.lte(min)) {
-      return `Must be bigger than ${min.toString()}`
+    if (number.lt(min)) {
+      return `Must be bigger than ${formatUnits(min, decimals)}`
     }
 
-    if (number.gte(max)) {
-      return `Must be less than ${max.toString()}`
+    if (number.gt(max)) {
+      return `Must be less than ${formatUnits(max, decimals)}`
     }
   }
 

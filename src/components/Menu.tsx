@@ -16,22 +16,25 @@ type SubMenuItem = Omit<MenuItem, 'items'>
 
 interface MenuProps extends Omit<SelectionSettings, 'amount' | 'onChange'> {
   selectKey?: SuperKey | SuperKey[]
+  expandMenuKey?: SuperKey | SuperKey[]
   items: MenuItem[]
   onChangeSelection?: SelectionSettings['onChange']
 }
 
-interface PropsDrop {
+interface NestedMenuProps {
+  selectKey?: SuperKey | SuperKey[]
   isActive: boolean
   items: SubMenuItem[]
   onReturn: () => void
   onChangeSelection?: SelectionSettings['onChange']
 }
 
-const NestedMenu: React.FC<PropsDrop> = ({
+const NestedMenu: React.FC<NestedMenuProps> = ({
   isActive,
   items,
   onReturn,
   onChangeSelection,
+  selectKey,
 }) => {
   useKey(['escape', 'leftArrow'], onReturn, isActive)
 
@@ -42,6 +45,7 @@ const NestedMenu: React.FC<PropsDrop> = ({
         isActive={isActive}
         prevKey="upArrow"
         nextKey="downArrow"
+        selectKey={selectKey}
         onChangeSelection={onChangeSelection}
       />
     </Box>
@@ -55,6 +59,7 @@ export const Menu: React.FC<MenuProps> = ({
   nextKey,
   looped,
   selectKey = 'return',
+  expandMenuKey = 'rightArrow',
   onChangeSelection,
 }) => {
   const [nestedMenusVisibility, setNestedMenusVisibility] = useState<
@@ -127,7 +132,7 @@ export const Menu: React.FC<MenuProps> = ({
               <Selection>
                 {(isFocused) => (
                   <TextButton
-                    selectKey={item.items ? 'rightArrow' : selectKey}
+                    selectKey={item.items ? expandMenuKey : selectKey}
                     isFocused={isFocused || isVisible}
                     onPress={
                       item.items
@@ -147,6 +152,7 @@ export const Menu: React.FC<MenuProps> = ({
                   onChangeSelection={(selection, prevSelection) =>
                     handleChangeSelection(id, selection, prevSelection)
                   }
+                  selectKey={selectKey}
                 />
               )}
             </Box>
