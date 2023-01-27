@@ -41,10 +41,12 @@ export const initSignClient = async () => {
     projectId: '83bd22fbdde53e66f042e2c6fc181fc3',
     relayUrl: 'wss://relay.walletconnect.com',
     metadata: {
-      name: 'Walle Wallet',
-      description: 'Walle Wallet for WalletConnect',
-      url: 'https://walletconnect.com/',
-      icons: ['https://avatars.githubusercontent.com/u/37784886'],
+      name: 'Walle CLI',
+      description: 'Walle CLI for WalletConnect',
+      url: 'https://github.com/Pobepto/walle',
+      icons: [
+        'https://raw.githubusercontent.com/Pobepto/walle/main/github/500.png',
+      ],
     },
     storage,
     logger: 'silent',

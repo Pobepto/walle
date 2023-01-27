@@ -1,6 +1,6 @@
 {
   "name": "@walleproject/cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "start": "node lib/index.js",
     "watch": "node esbuild.config.js",
@@ -10,6 +10,37 @@
     "precommit": "lint-staged",
     "prepare": "husky install"
   },
+  "description": "CLI Crypto Wallet for EVM Networks (Ethereum, Polygon, BNB Chain)",
+  "contributors": [
+    {
+      "name": "Pobepto",
+      "url": "https://github.com/Pobepto"
+    },
+    {
+      "name": "RealPeha",
+      "url": "https://github.com/RealPeha"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pobepto/walle"
+  },
+  "bugs": {
+    "url": "https://github.com/Pobepto/walle/issues"
+  },
+  "homepage": "https://github.com/Pobepto/walle#readme",
+  "keywords": [
+    "cli",
+    "terminal",
+    "crypto",
+    "ethereum",
+    "blockchain",
+    "cryptocurrency",
+    "wallet",
+    "evm",
+    "walletconnect"
+  ],
   "bin": {
     "walle": "./bin/walle.js"
   },
