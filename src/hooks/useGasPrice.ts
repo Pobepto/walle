@@ -21,3 +21,24 @@ export const useGasPrice = (suggestedGasPrice?: BigNumber) => {
 
   return [price, isLoading] as const
 }
+
+// export const useGasData = (populatedTx: PopulatedTransaction) => {
+//   const provider = useBlockchainStore((store) => store.provider)
+//   const [gasData, setGasData] = useState<Omit<FeeData, 'lastBaseFeePerGas'>>({
+//     maxFeePerGas: BigNumber.from(populatedTx.maxFeePerGas ?? 0),
+//     maxPriorityFeePerGas: BigNumber.from(populatedTx.maxPriorityFeePerGas ?? 0),
+//     gasPrice: BigNumber.from(populatedTx.gasPrice ?? 0),
+//   })
+
+//   const { execute, isLoading } = useAsync(() => {
+//     return provider.getFeeData().catch(() => ({}))
+//   })
+
+//   useEffect(() => {
+//     // if (price.eq(0)) {
+//     //   execute().then(setPrice)
+//     // }
+//   }, [])
+
+//   return [gasData, isLoading] as const
+// }
