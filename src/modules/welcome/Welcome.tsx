@@ -21,7 +21,7 @@ export const Welcome: React.FC = () => {
   return (
     <Box flexDirection="column" justifyContent="center" alignItems="center">
       <Box flexDirection="column" marginBottom={1}>
-        <Text>{WALLE_LOGO}</Text>
+        <Text color="yellowBright">{WALLE_LOGO}</Text>
         <Text>Walle - Non-Custodial CLI Wallet</Text>
       </Box>
       <TextButton selectKey="any" onPress={onEnter} isFocused>
