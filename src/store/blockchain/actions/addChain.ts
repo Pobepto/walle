@@ -10,9 +10,15 @@ export const addChain: BlockchainAction<'addChain'> =
       throw new Error('Invalid rpc')
     }
 
-    const chains = get().chains.slice()
+    const chains = [...get().chains]
 
-    chains.push(chain)
+    const alreadyAddedChain = chains.find((c) => c.chainId === chain.chainId)
+
+    if (alreadyAddedChain) {
+      Object.assign(alreadyAddedChain, chain)
+    } else {
+      chains.push(chain)
+    }
 
     set({ chains })
   }

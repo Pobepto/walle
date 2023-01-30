@@ -28,14 +28,14 @@ export const MainMenu: React.FC = () => {
       title: 'Wallet',
       items: [
         {
-          title: 'Switch chain',
+          title: 'Chains',
           onSelect: () => {
             navigate(ROUTE.SWITCH_CHAIN)
             parentZone.select(COLUMNS.MAIN)
           },
         },
         {
-          title: 'Switch account',
+          title: 'Accounts',
           onSelect: () => {
             navigate(ROUTE.SWITCH_ACCOUNT)
             parentZone.select(COLUMNS.MAIN)

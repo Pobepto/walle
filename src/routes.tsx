@@ -78,6 +78,7 @@ export enum ROUTE {
 interface ROUTE_DATA {
   [ROUTE.ADD_CHAIN]?: {
     chain?: Partial<Chain>
+    edit?: boolean
   }
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
