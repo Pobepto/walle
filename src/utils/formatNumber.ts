@@ -1,11 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { commify, formatUnits } from '@ethersproject/units'
+import { ZERO } from '@src/constants'
 
 export const formatNumber = (v: string, decimals = 18, visibleDecimals = 5) => {
   try {
     const bv = BigNumber.from(v)
 
-    if (bv.eq(BigNumber.from(0))) {
+    if (bv.eq(ZERO)) {
       return '0'
     }
 

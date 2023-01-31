@@ -1,3 +1,5 @@
+import { BigNumber } from '@ethersproject/bignumber'
+
 import { Chain, Token } from './types'
 
 export * from './types'
@@ -12,6 +14,7 @@ export const WALLE_LOGO = `
 export const GITHUB = 'https://github.com/Pobepto/walle'
 
 export const GasPriceUnit = 'gwei'
+export const ZERO = BigNumber.from(0)
 
 export const DEFAULT_CHAINS: Chain[] = [
   {

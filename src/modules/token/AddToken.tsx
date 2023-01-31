@@ -104,6 +104,7 @@ export const AddToken: React.FC = () => {
         <Selection activeProps={{ focus: true }}>
           <InputBox
             label="Decimals"
+            type="number"
             error={errors.decimals}
             loading={isLoading}
             {...register('decimals')}

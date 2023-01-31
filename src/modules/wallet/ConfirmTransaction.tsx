@@ -58,7 +58,7 @@ export const ConfirmTransaction: React.FC = () => {
 
   const { register, change, data, errors, isValid } = useForm<Inputs>({
     rules: {
-      gasPrice: combine(isNumber()),
+      gasPrice: isNumber(),
       gasLimit: combine(isIntegerNumber(), numberInRange(21000, Infinity)),
     },
     validateAction: 'blur',
@@ -163,6 +163,7 @@ export const ConfirmTransaction: React.FC = () => {
           >
             <InputBox
               label="Gas price"
+              type="number"
               error={errors.gasPrice}
               loading={gasPriceLoading}
               postfix={` ${GasPriceUnit}`}
@@ -187,6 +188,7 @@ export const ConfirmTransaction: React.FC = () => {
           <Selection<InputBoxProps> activeProps={{ focus: true }}>
             <InputBox
               label="Gas limit"
+              type="number"
               error={errors.gasLimit}
               loading={estimate.loading}
               width="50%"

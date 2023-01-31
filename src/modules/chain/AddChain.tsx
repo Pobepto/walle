@@ -123,6 +123,7 @@ export const AddChain: React.FC = () => {
       />
       <InputBox
         label="Chain Id"
+        type="number"
         error={errors.chainId}
         loading={networkIsLoading}
         disabled

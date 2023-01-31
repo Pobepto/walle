@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { PopulatedTransaction } from '@ethersproject/contracts'
+import { ZERO } from '@src/constants'
 
 import { useWallet } from './useWallet'
 
@@ -15,7 +16,7 @@ export const useEstimate = (populatedTx: PopulatedTransaction) => {
   const wallet = useWallet()!
   const [estimate, setEstimate] = useState<Estimate>({
     loading: false,
-    gasLimit: BigNumber.from(populatedTx.gasLimit ?? 0),
+    gasLimit: populatedTx.gasLimit ?? ZERO,
   })
 
   const call = async () => {

@@ -4,6 +4,7 @@ import { Box, Text } from 'ink'
 import Spinner from 'ink-spinner'
 
 import { useInput } from '@src/hooks'
+import { isNumeric } from '@src/utils/isNumeric'
 
 import { Error, Input, InputProps } from '.'
 
@@ -34,6 +35,10 @@ export const InputBox: React.FC<InputBoxProps> = ({
   const handleChange = (value: string) => {
     if (type === 'number') {
       value = value.replace(',', '.')
+
+      if (value && !isNumeric(value)) {
+        return
+      }
     }
 
     onChange(value)
