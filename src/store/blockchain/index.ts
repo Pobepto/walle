@@ -9,13 +9,14 @@ import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
 import { Action, useWalletStore } from '..'
 
 import { sendTransaction } from './actions/sendTransaction'
-import { addChain, getNativeBalance, loadToken } from './actions'
+import { addChain, deleteChain, getNativeBalance, loadToken } from './actions'
 
 export interface BlockchainStore {
   chainId: number
   setChainId: (chainId: number) => void
   chains: Chain[]
   addChain: (chain: Chain) => Promise<void>
+  deleteChain: (chainId: number) => void
   provider: JsonRpcProvider
   getSigner: () => Wallet
   updateProvider: () => void
@@ -45,6 +46,7 @@ export const useBlockchainStore = createWithSubscribeSelector<BlockchainStore>(
     },
     chains: DEFAULT_CHAINS,
     addChain: addChain(set, get),
+    deleteChain: deleteChain(set, get),
     provider: new JsonRpcProvider(DEFAULT_CHAIN.rpc, 'any'),
     getSigner() {
       const { provider } = get()

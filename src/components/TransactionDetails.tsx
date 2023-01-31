@@ -29,9 +29,9 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   const chain = useChain()
   const [showFullData, setShowFullData] = useState(false)
 
-  const { data, value, to } = tx
+  const { data, value = BigNumber.from(0), to } = tx
 
-  const renderRawTransaction = () => {
+  if (displayMode === DisplayMode.RAW) {
     const stringifiedTx = Object.fromEntries(
       Object.entries(tx).map(([key, value]) => {
         if (typeof value === 'object' && value.type === 'BigNumber') {
@@ -57,10 +57,6 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   }
 
   if (contract) {
-    if (displayMode === DisplayMode.RAW) {
-      return renderRawTransaction()
-    }
-
     const calldata = data ?? '0x'
     const sighash = calldata.slice(0, 10)
     const fragment = contract.interface.getFunction(sighash)
@@ -85,7 +81,6 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
           </Box>
           {onlyStringArgs.map((arg) => {
             const value = params[arg]
-
             return (
               <Text key={arg}>
                 <Text bold>{arg}:</Text> {value.toString()}
@@ -93,9 +88,9 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
             )
           })}
         </Box>
-        {value && value.gt(0) ? (
+        {value.gt(0) ? (
           <Text>
-            And send {formatUnits(value).toString()} {chain.currency}
+            And send {formatUnits(value)} {chain.currency}
           </Text>
         ) : null}
       </Box>
@@ -103,10 +98,6 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   }
 
   if (!data || data === '0x') {
-    if (displayMode === DisplayMode.RAW) {
-      return renderRawTransaction()
-    }
-
     return (
       <Box
         flexDirection="column"
@@ -120,7 +111,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
         <Text>
           Send{' '}
           <Text bold>
-            {formatUnits(value ?? '0').toString()} {chain.currency}
+            {formatUnits(value)} {chain.currency}
           </Text>
         </Text>
         <Text>
@@ -130,29 +121,41 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
     )
   }
 
-  const displayData = showFullData ? data : `${data.slice(0, 256)}...`
+  const needSliceData = data.length > 256
+  const displayData =
+    showFullData || !needSliceData ? data : `${data.slice(0, 256)}...`
 
   return (
-    <Box marginTop={1} flexDirection="column">
+    <Box flexDirection="column">
       <Text>Call contract</Text>
       <Text bold>{to}</Text>
 
-      <Box marginTop={1}>
-        <Text>with data:</Text>
-      </Box>
-      <Box borderStyle="single" borderColor="green" paddingX={1}>
+      <Box
+        flexDirection="column"
+        borderStyle="single"
+        borderColor="green"
+        paddingX={1}
+      >
+        <Box marginTop={-1}>
+          <Text bold> Data </Text>
+        </Box>
         <Text>{displayData}</Text>
       </Box>
-      <Box justifyContent="center" marginBottom={1}>
-        <TextButton
-          onPress={() => setShowFullData((v) => !v)}
-          isFocused={isFocused}
-        >
-          {displayData.length < data.length
-            ? '🔽 Show full data 🔽'
-            : '🔼 Show less data 🔼'}
-        </TextButton>
-      </Box>
+      {value.gt(0) ? (
+        <Text>
+          And send {formatUnits(value)} {chain.currency}
+        </Text>
+      ) : null}
+      {needSliceData ? (
+        <Box justifyContent="center">
+          <TextButton
+            onPress={() => setShowFullData((v) => !v)}
+            isFocused={isFocused}
+          >
+            {showFullData ? '🔼 Show less data 🔼' : '🔽 Show full data 🔽'}
+          </TextButton>
+        </Box>
+      ) : null}
     </Box>
   )
 }

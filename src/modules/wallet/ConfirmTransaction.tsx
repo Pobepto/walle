@@ -95,7 +95,7 @@ export const ConfirmTransaction: React.FC = () => {
 
   useEffect(() => {
     if (gasPrice && !gasPrice.eq(0)) {
-      change('gasPrice', formatUnits(gasPrice, GasPriceUnit).toString(), true)
+      change('gasPrice', formatUnits(gasPrice, GasPriceUnit), true)
     }
   }, [gasPrice])
 
@@ -175,7 +175,7 @@ export const ConfirmTransaction: React.FC = () => {
               <Text>
                 Suggested gas price{' '}
                 <Text bold>
-                  {formatUnits(populatedTx.gasPrice, GasPriceUnit).toString()}{' '}
+                  {formatUnits(populatedTx.gasPrice, GasPriceUnit)}{' '}
                   {GasPriceUnit}
                 </Text>
               </Text>

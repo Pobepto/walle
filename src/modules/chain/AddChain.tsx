@@ -19,6 +19,7 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@store'
 
@@ -36,9 +37,10 @@ export const AddChain: React.FC = () => {
   const [networkIsLoading, setNetworkLoading] = useState(false)
   const [rpcError, setRpcError] = useState('')
 
-  const { chain } = useRouteData<ROUTE.ADD_CHAIN>() ?? {}
+  const { chain, edit } = useRouteData<ROUTE.ADD_CHAIN>() ?? {}
 
   const addChain = useBlockchainStore((state) => state.addChain)
+  const chains = useBlockchainStore((state) => state.chains)
 
   const { errors, data, isValid, register, change, inputIsValid } =
     useForm<Inputs>({
@@ -58,6 +60,10 @@ export const AddChain: React.FC = () => {
       },
     })
 
+  const isAlreadyAddedChain = Boolean(
+    chains.find((c) => c.chainId.toString() === data.chainId),
+  )
+
   const { selection } = useSelection({
     amount: 5,
     prevKey: 'upArrow',
@@ -65,14 +71,18 @@ export const AddChain: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const onSubmit = async () => {
-    await addChain({
+  const { execute: callAddChain, isLoading: addChainIsLoading } = useAsync(() =>
+    addChain({
       name: data.name,
       rpc: data.rpc,
       chainId: Number(data.chainId),
       currency: data.currency,
       explorer: data.explorer,
-    })
+    }),
+  )
+
+  const onSubmit = async () => {
+    await callAddChain()
     navigate(ROUTE.SWITCH_CHAIN)
   }
 
@@ -104,7 +114,7 @@ export const AddChain: React.FC = () => {
       <Box marginTop={-1}>
         <Text bold> Add new chain </Text>
       </Box>
-      {!!chain && (
+      {!edit && !!chain && (
         <Box borderStyle="single" borderColor="red" alignItems="center">
           <Error text="The network data was obtained from an external source, please make sure it is reliable before adding this network" />
         </Box>
@@ -158,9 +168,10 @@ export const AddChain: React.FC = () => {
               onPress={onSubmit}
               minWidth="20%"
               paddingX={1}
-              isDisabled={!isValid || !!rpcError}
+              isLoading={addChainIsLoading}
+              isDisabled={!isValid || !!rpcError || networkIsLoading}
             >
-              Add chain
+              {isAlreadyAddedChain ? 'Edit chain' : 'Add chain'}
             </Button>
           </Selection>
         </Box>
