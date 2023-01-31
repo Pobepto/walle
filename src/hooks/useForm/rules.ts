@@ -1,6 +1,7 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits, parseUnits } from '@ethersproject/units'
+import { isNumeric } from '@src/utils/isNumeric'
 
 import { Rule } from './useForm'
 
@@ -29,7 +30,7 @@ export const isIntegerNumber =
 export const isNumber =
   <T>(): Rule<T> =>
   (value) => {
-    return Number.isFinite(parseFloat(value)) ? undefined : 'Must be a number'
+    return isNumeric(value) ? undefined : 'Must be a number'
   }
 
 export const balanceIsZero =
