@@ -8,7 +8,7 @@ esbuild.build({
   outfile: 'lib/index.js',
   color: true,
   plugins: [],
-  minify: false,
+  minify: true,
   watch: {
     onRebuild(error, result) {
       if (error) console.error('❌ Watch build failed:\n', error)
