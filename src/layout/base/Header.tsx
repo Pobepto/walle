@@ -11,6 +11,9 @@ export const Header: React.FC = () => {
   const chain = useChain()
   const nativeBalance = useBlockchainStore((store) => store.nativeBalance)
   const pathId = useWalletStore((state) => state.pathId)
+  const accounts = useWalletStore((state) => state.accounts)
+
+  const account = accounts.find((account) => account.pathId === pathId)
 
   // const link = `${chain.explorer}/address/${wallet.address}`
   const formattedBalance = nativeBalance
@@ -21,7 +24,7 @@ export const Header: React.FC = () => {
     <Box flexDirection="column" borderStyle="single" paddingX={1}>
       <Box marginTop={-1} justifyContent="space-between">
         <Text bold> {chain.name} </Text>
-        <Text bold> Account {pathId + 1} </Text>
+        <Text bold> {account?.name} </Text>
       </Box>
       <Box flexDirection="row" justifyContent="space-between">
         <Text color="cyan">{wallet?.address}</Text>

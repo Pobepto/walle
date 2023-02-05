@@ -13,7 +13,7 @@ export type Action<TState extends object, TValue = (...args: any[]) => any> = (
 export interface SerializedStore {
   blockchainStore: Pick<BlockchainStore, 'chainId' | 'chains'>
   walletConnectStore: Pick<WalletConnectStore, 'store' | 'requests'>
-  walletStore: Pick<WalletStore, 'pathId'>
+  walletStore: Pick<WalletStore, 'pathId' | 'accounts'>
   tokensStore: Pick<TokensStore, 'tokens'>
 }
 

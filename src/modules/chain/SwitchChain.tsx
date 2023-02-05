@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Box, Text } from 'ink'
 import { Undefinable } from 'tsdef'
 
 import { Button } from '@components/Button'
-import { TextButton } from '@components/TextButton'
+import {
+  ActionItem,
+  ActionItemProps,
+  ItemAction,
+} from '@src/components/ActionItem'
 import { ButtonLink } from '@src/components/ButtonLink'
 import { Divider } from '@src/components/Divider'
 import { InputBox, InputBoxProps } from '@src/components/InputBox'
@@ -12,7 +16,6 @@ import {
   FocusZone,
   FocusZoneInfo,
   Selection,
-  SelectionZone,
   UncontrolledSelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
@@ -26,87 +29,6 @@ enum FocusZones {
   CHAINS_LIST = 'CHAINS_LIST',
 }
 
-interface ChainItemProps {
-  chain: Chain
-  isFocused?: boolean
-  onActivate: (isActive: boolean) => void
-  onSwitch: (chain: Chain) => void
-  onEdit: (chain: Chain) => void
-  onDelete: (chain: Chain) => void
-}
-
-const ChainItem: React.FC<ChainItemProps> = ({
-  chain,
-  isFocused = false,
-  onActivate,
-  onSwitch,
-  onEdit,
-  onDelete,
-}) => {
-  const chainId = useBlockchainStore((store) => store.chainId)
-  const chains = useBlockchainStore((store) => store.chains)
-  const [isActive, setActive] = useState(false)
-
-  const currentChain = chains.find((chain) => chain.chainId === chainId)!
-
-  useEffect(() => {
-    if (!isFocused) {
-      setActive(false)
-    }
-  }, [isFocused])
-
-  useEffect(() => {
-    onActivate(isActive)
-  }, [isActive])
-
-  return (
-    <Box justifyContent="space-between">
-      <TextButton isFocused={isFocused} onPress={() => setActive((v) => !v)}>
-        {isFocused ? '->' : '-'} {chain.name} [{chain.chainId}]
-      </TextButton>
-      {isActive && (
-        <Box paddingRight={1}>
-          <SelectionZone isActive prevKey="leftArrow" nextKey="rightArrow">
-            {currentChain.chainId !== chain.chainId && (
-              <Selection>
-                {(isFocused) => (
-                  <TextButton
-                    isFocused={isFocused}
-                    onPress={() => onSwitch(chain)}
-                  >
-                    {isFocused ? '->' : ''}Switch
-                  </TextButton>
-                )}
-              </Selection>
-            )}
-            <Text> </Text>
-            <Selection>
-              {(isFocused) => (
-                <TextButton isFocused={isFocused} onPress={() => onEdit(chain)}>
-                  {isFocused ? '->' : ''}Edit
-                </TextButton>
-              )}
-            </Selection>
-            <Text> </Text>
-            {chains.length > 1 && (
-              <Selection>
-                {(isFocused) => (
-                  <TextButton
-                    isFocused={isFocused}
-                    onPress={() => onDelete(chain)}
-                  >
-                    {isFocused ? '->' : ''}Delete
-                  </TextButton>
-                )}
-              </Selection>
-            )}
-          </SelectionZone>
-        </Box>
-      )}
-    </Box>
-  )
-}
-
 export const SwitchChain: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
@@ -116,9 +38,10 @@ export const SwitchChain: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
   const [search, setSearch] = useState('')
-  const chainIsActive = useRef(false)
+  const actionModeIsActive = useRef(false)
   const focusZone = useRef<Undefinable<FocusZoneInfo>>(undefined)
   const chains = useBlockchainStore((store) => store.chains)
+  const currentChainId = useBlockchainStore((store) => store.chainId)
   const setChainId = useBlockchainStore((store) => store.setChainId)
   const deleteChain = useBlockchainStore((store) => store.deleteChain)
 
@@ -130,6 +53,26 @@ export const SwitchChain: React.FC = () => {
   }
   const handleDeleteChain = (chain: Chain) => {
     deleteChain(chain.chainId)
+  }
+
+  const getChainActions = (chain: Chain): ItemAction[] => {
+    return [
+      {
+        label: 'Switch',
+        isVisible: currentChainId !== chain.chainId,
+        onAction: () => handleSwitchChain(chain),
+      },
+      {
+        label: 'Edit',
+        isVisible: true,
+        onAction: () => handleEditChain(chain),
+      },
+      {
+        label: 'Delete',
+        isVisible: chains.length > 1,
+        onAction: () => handleDeleteChain(chain),
+      },
+    ]
   }
 
   const foundChains = useMemo(() => {
@@ -150,7 +93,11 @@ export const SwitchChain: React.FC = () => {
   useInput(({ key, raw }) => {
     const zone = focusZone.current
 
-    if (!zone || chainIsActive.current || zone.id !== FocusZones.CHAINS_LIST)
+    if (
+      !zone ||
+      actionModeIsActive.current ||
+      zone.id !== FocusZones.CHAINS_LIST
+    )
       return
 
     if (key.leftArrow) {
@@ -189,22 +136,22 @@ export const SwitchChain: React.FC = () => {
         </Selection>
         <FocusZone id={FocusZones.CHAINS_LIST}>
           <List viewport={5} selection={selection - 2}>
-            {foundChains.map((chain) => (
-              <Selection<ChainItemProps>
-                key={chain.chainId}
-                activeProps={{ isFocused: true }}
-              >
-                <ChainItem
-                  chain={chain}
-                  onActivate={(isActive) => {
-                    chainIsActive.current = isActive
-                  }}
-                  onSwitch={handleSwitchChain}
-                  onEdit={handleEditChain}
-                  onDelete={handleDeleteChain}
-                />
-              </Selection>
-            ))}
+            {foundChains.map((chain) => {
+              return (
+                <Selection<ActionItemProps>
+                  key={chain.chainId}
+                  activeProps={{ isFocused: true }}
+                >
+                  <ActionItem
+                    label={`${chain.name} [${chain.chainId}]`}
+                    onActionModeChange={(isActive) => {
+                      actionModeIsActive.current = isActive
+                    }}
+                    actions={getChainActions(chain)}
+                  />
+                </Selection>
+              )
+            })}
           </List>
         </FocusZone>
         <Divider symbol="—" />

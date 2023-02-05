@@ -37,7 +37,7 @@ export const MainMenu: React.FC = () => {
         {
           title: 'Accounts',
           onSelect: () => {
-            navigate(ROUTE.SWITCH_ACCOUNT)
+            navigate(ROUTE.ACCOUNTS)
             parentZone.select(COLUMNS.MAIN)
           },
         },

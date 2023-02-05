@@ -7,6 +7,8 @@ import { SessionProposal } from './store/wallet-connect/actions'
 import { Chain, Token } from './constants'
 import { BaseLayout, WelcomeLayout } from './layout'
 import {
+  Accounts,
+  AccountsCreate,
   AddChain,
   AddToken,
   ChangePassword,
@@ -28,7 +30,6 @@ import {
   ShowSeedPhrase,
   SignMessage,
   StatusTransaction,
-  SwitchAccount,
   SwitchChain,
   TokenActions,
   TokenInfo,
@@ -40,6 +41,7 @@ import {
   Welcome,
 } from './modules'
 import { routerFactory } from './Router'
+import { Account } from './store'
 
 export enum ROUTE {
   WELCOME,
@@ -51,7 +53,8 @@ export enum ROUTE {
   REGISTRATION_PASSWORD,
   FORGOT_PASSWORD,
   HOME,
-  SWITCH_ACCOUNT,
+  ACCOUNTS,
+  ACCOUNTS_CREATE,
   TOKEN_ADD,
   SWITCH_CHAIN,
   ADD_CHAIN,
@@ -106,6 +109,9 @@ interface ROUTE_DATA {
   [ROUTE.WALLET_CONNECT_PROPOSAL]: {
     proposal: SessionProposal
   }
+  [ROUTE.ACCOUNTS_CREATE]?: {
+    account?: Account
+  }
 }
 
 const layout = (
@@ -129,7 +135,8 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
   [ROUTE.HOME]: base(Home),
   [ROUTE.HELP]: base(Help),
-  [ROUTE.SWITCH_ACCOUNT]: base(SwitchAccount),
+  [ROUTE.ACCOUNTS]: base(Accounts),
+  [ROUTE.ACCOUNTS_CREATE]: base(AccountsCreate),
   [ROUTE.ADD_CHAIN]: base(AddChain),
   [ROUTE.SWITCH_CHAIN]: base(SwitchChain),
   [ROUTE.EXTERNAL_CHAINS]: base(ExternalChains),
