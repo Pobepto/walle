@@ -10,7 +10,7 @@ export const formatNumber = (v: string, decimals = 18, visibleDecimals = 5) => {
       return '0'
     }
 
-    if (bv.lt(BigNumber.from(10).pow(6))) {
+    if (bv.lt(BigNumber.from(10).pow(decimals - 6))) {
       return '< 0.000001'
     }
 
