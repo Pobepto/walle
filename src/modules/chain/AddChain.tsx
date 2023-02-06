@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Box, Text } from 'ink'
 
-import { Button, ButtonProps, Error } from '@components'
+import { Button, ButtonProps, Error as ErrorLabel } from '@components'
 import { InputBox } from '@components/InputBox'
-import { JsonRpcProvider } from '@ethersproject/providers'
 import {
   combine,
   isIntegerNumber,
@@ -34,12 +33,11 @@ type Inputs = {
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
-  const [networkIsLoading, setNetworkLoading] = useState(false)
-  const [rpcError, setRpcError] = useState('')
 
-  const { chain, edit } = useRouteData<ROUTE.ADD_CHAIN>() ?? {}
+  const { chain, edit } = useRouteData<ROUTE.ADD_CHAIN>()
 
   const addChain = useBlockchainStore((state) => state.addChain)
+  const loadChainId = useBlockchainStore((state) => state.loadChainId)
   const chains = useBlockchainStore((state) => state.chains)
 
   const { errors, data, isValid, register, change, inputIsValid } =
@@ -86,26 +84,20 @@ export const AddChain: React.FC = () => {
     navigate(ROUTE.SWITCH_CHAIN)
   }
 
+  const {
+    execute: callLoadChainId,
+    isLoading: chainIdIsLoading,
+    error: providerError,
+    clearError,
+  } = useAsync(loadChainId)
+
   useEffect(() => {
-    const check = async () => {
-      try {
-        setNetworkLoading(true)
-        const provider = new JsonRpcProvider(data.rpc, 'any')
-        const providerNetwork = await provider.getNetwork()
-
-        change('chainId', providerNetwork.chainId.toString(), true)
-      } catch {
-        setRpcError("Can't get chain id from this rpc")
-        change('chainId', '', true)
-      } finally {
-        setNetworkLoading(false)
-      }
-    }
-
-    setRpcError('')
-
     if (inputIsValid('rpc')) {
-      check()
+      callLoadChainId(data.rpc)
+        .then((chainId) => change('chainId', chainId, true))
+        .catch(() => change('chainId', '', true))
+    } else {
+      clearError()
     }
   }, [data.rpc])
 
@@ -116,7 +108,7 @@ export const AddChain: React.FC = () => {
       </Box>
       {!edit && !!chain && (
         <Box borderStyle="single" borderColor="red" alignItems="center">
-          <Error text="The network data was obtained from an external source, please make sure it is reliable before adding this network" />
+          <ErrorLabel text="The network data was obtained from an external source, please make sure it is reliable before adding this network" />
         </Box>
       )}
       <InputBox
@@ -127,7 +119,7 @@ export const AddChain: React.FC = () => {
       />
       <InputBox
         label="Rpc"
-        error={rpcError || errors.rpc}
+        error={providerError || errors.rpc}
         focus={selection === 1}
         {...register('rpc')}
       />
@@ -135,7 +127,7 @@ export const AddChain: React.FC = () => {
         label="Chain Id"
         type="number"
         error={errors.chainId}
-        loading={networkIsLoading}
+        loading={chainIdIsLoading}
         disabled
         {...register('chainId')}
       />
@@ -170,7 +162,7 @@ export const AddChain: React.FC = () => {
               minWidth="20%"
               paddingX={1}
               isLoading={addChainIsLoading}
-              isDisabled={!isValid || !!rpcError || networkIsLoading}
+              isDisabled={!isValid || !!providerError || chainIdIsLoading}
             >
               {isAlreadyAddedChain ? 'Edit chain' : 'Add chain'}
             </Button>
