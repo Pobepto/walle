@@ -22,7 +22,7 @@ export const AccountsCreate: React.FC = () => {
   const accounts = useWalletStore((state) => state.accounts)
   const createAccount = useWalletStore((state) => state.createAccount)
 
-  const { account } = useRouteData<ROUTE.ACCOUNTS_CREATE>() ?? {}
+  const { account } = useRouteData<ROUTE.ACCOUNTS_CREATE>()
   const isEdit = !!account
 
   const { errors, register, isValid, data } = useForm<Inputs>({

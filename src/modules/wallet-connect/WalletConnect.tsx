@@ -23,7 +23,7 @@ export const WalletConnect: React.FC = () => {
   const disconnect = useWalletConnectStore((store) => store.disconnect)
   const connected = useWalletConnectStore((store) => store.connected())
 
-  const { uri } = useRouteData<ROUTE.WALLET_CONNECT>() ?? {}
+  const { uri } = useRouteData<ROUTE.WALLET_CONNECT>()
 
   const { errors, data, isValid, register } = useForm<Inputs>({
     initialValues: {
