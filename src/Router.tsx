@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { IsUnknown, Nullable } from 'tsdef'
 
 type AnyEnum = number | string
@@ -8,10 +14,10 @@ interface RouterContextValue<
   RoutesData extends Partial<Record<Route, unknown>>,
 > {
   route: Route
-  navigate: <T extends Route>(
+  navigate: (<T extends Route>(
     to: T,
     ...[arg]: IsUnknown<RoutesData[T], [], [data: RoutesData[T]]>
-  ) => void
+  ) => void) & { back: () => void }
   data?: RoutesData[Route]
 }
 
@@ -20,6 +26,7 @@ export type RoutesMap<Route extends AnyEnum> = Record<Route, () => JSX.Element>
 interface RouterProps<Route> {
   children: React.ReactNode | React.ReactNode[]
   defaultRoute: Route
+  historyLimit?: number
 }
 
 interface RedirectProps<
@@ -39,7 +46,11 @@ export const routerFactory = <
   const RouterContext =
     createContext<Nullable<RouterContextValue<Route, RoutesData>>>(null)
 
-  const Router: React.FC<RouterProps<Route>> = ({ children, defaultRoute }) => {
+  const Router: React.FC<RouterProps<Route>> = ({
+    children,
+    defaultRoute,
+    historyLimit = 5,
+  }) => {
     const [state, setState] = useState<{
       route: Route
       data?: RoutesData[Route]
@@ -47,12 +58,32 @@ export const routerFactory = <
       route: defaultRoute,
       data: undefined,
     })
+    const history = useRef<
+      {
+        route: Route
+        data?: RoutesData[Route]
+      }[]
+    >([])
 
     const navigate = <T extends Route>(to: T, data?: RoutesData[T]) => {
+      history.current.push({ ...state })
+      history.current = history.current.slice(-historyLimit)
+
       setState({
         route: to,
         data,
       })
+    }
+
+    navigate.back = () => {
+      const prevRoute = history.current.pop()
+
+      if (prevRoute) {
+        setState({
+          route: prevRoute.route,
+          data: prevRoute.data,
+        })
+      }
     }
 
     return (
