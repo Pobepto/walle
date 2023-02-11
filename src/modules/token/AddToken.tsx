@@ -17,6 +17,7 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { useAsync } from '@src/hooks/useAsync'
+import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
 
 type Inputs = {
@@ -28,12 +29,24 @@ type Inputs = {
 
 export const AddToken: React.FC = () => {
   const parentZone = useSelectionZone()!
+  const navigate = useNavigate()
 
   const addToken = useTokensStore((state) => state.addToken)
   const loadToken = useBlockchainStore((state) => state.loadToken)
 
+  const { token } = useRouteData<ROUTE.TOKEN_ADD>()
+  const isEdit = !!token
+
   const { errors, register, change, inputIsValid, isValid, data } =
     useForm<Inputs>({
+      initialValues: isEdit
+        ? {
+            address: token.address,
+            name: token.name ?? '',
+            symbol: token.symbol ?? '',
+            decimals: String(token.decimals ?? ''),
+          }
+        : {},
       rules: {
         address: isAddress(),
         name: length(1),
@@ -49,6 +62,7 @@ export const AddToken: React.FC = () => {
       symbol: data.symbol,
       decimals: Number(data.decimals),
     })
+    navigate.back()
   }
 
   const { execute, error, isLoading, clearError } = useAsync(loadToken)
@@ -75,7 +89,7 @@ export const AddToken: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box marginTop={-1}>
-          <Text bold> Add new token </Text>
+          <Text bold> {isEdit ? 'Edit token' : 'Add new token'} </Text>
         </Box>
 
         <Selection activeProps={{ focus: true }}>
@@ -113,7 +127,7 @@ export const AddToken: React.FC = () => {
 
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={onSubmit} isDisabled={!isValid}>
-            Add token
+            {isEdit ? 'Update' : 'Add'}
           </Button>
         </Selection>
       </Box>

@@ -33,6 +33,7 @@ import {
   SwitchChain,
   TokenActions,
   TokenInfo,
+  Tokens,
   TokenTransfer,
   WalletConnect,
   WalletConnectPairings,
@@ -59,6 +60,7 @@ export enum ROUTE {
   SWITCH_CHAIN,
   ADD_CHAIN,
   EXTERNAL_CHAINS,
+  TOKENS,
   TOKEN_ACTIONS,
   TOKEN_TRANSFER,
   TOKEN_INFO,
@@ -79,9 +81,12 @@ export enum ROUTE {
 }
 
 interface ROUTE_DATA {
-  [ROUTE.ADD_CHAIN]?: {
+  [ROUTE.ADD_CHAIN]: {
     chain?: Partial<Chain>
     edit?: boolean
+  }
+  [ROUTE.TOKEN_ADD]: {
+    token?: Partial<Omit<Token, 'chainId'>> & Pick<Token, 'address'>
   }
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
@@ -103,13 +108,13 @@ interface ROUTE_DATA {
     onReject: () => void
     onSign: (signedData: string) => void
   }
-  [ROUTE.WALLET_CONNECT]?: {
+  [ROUTE.WALLET_CONNECT]: {
     uri?: string
   }
   [ROUTE.WALLET_CONNECT_PROPOSAL]: {
     proposal: SessionProposal
   }
-  [ROUTE.ACCOUNTS_CREATE]?: {
+  [ROUTE.ACCOUNTS_CREATE]: {
     account?: Account
   }
 }
@@ -140,6 +145,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.ADD_CHAIN]: base(AddChain),
   [ROUTE.SWITCH_CHAIN]: base(SwitchChain),
   [ROUTE.EXTERNAL_CHAINS]: base(ExternalChains),
+  [ROUTE.TOKENS]: base(Tokens),
   [ROUTE.TOKEN_ADD]: base(AddToken),
   [ROUTE.TOKEN_ACTIONS]: base(TokenActions),
   [ROUTE.TOKEN_TRANSFER]: base(TokenTransfer),

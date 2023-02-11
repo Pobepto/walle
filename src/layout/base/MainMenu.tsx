@@ -42,9 +42,9 @@ export const MainMenu: React.FC = () => {
           },
         },
         {
-          title: 'Add token',
+          title: 'Tokens',
           onSelect: () => {
-            navigate(ROUTE.TOKEN_ADD)
+            navigate(ROUTE.TOKENS)
             parentZone.select(COLUMNS.MAIN)
           },
         },
