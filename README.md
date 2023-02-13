@@ -2,9 +2,9 @@
   <img src="https://raw.githubusercontent.com/Pobepto/walle/main/github/logo.png" height="200">
 </p>
 
-# 👾 WALLE - CLI Crypto Wallet for EVM Networks & DAps Suport
+# 👾 WALLE - CLI Crypto Wallet for EVM Networks & DApps Support
 
-Walle is the ultimate wallet for the tech-savvy crypto enthusiast, boasting a sleek terminal-based interface and an arsenal of features for managing and handling multiple assets with ease, including seed phrase import, ERC-20 token suport, transactions, balance tracking, network switching, wallet switching, WalletConnect integration, and encrypted storage, making it the go-to choice for anyone looking to take their crypto game to the next level.
+Walle is the ultimate wallet for the tech-savvy crypto enthusiast, boasting a sleek terminal-based interface and an arsenal of features for managing and handling multiple assets with ease, including seed phrase import, ERC-20 token support, transactions, balance tracking, network switching, wallet switching, WalletConnect integration, and encrypted storage, making it the go-to choice for anyone looking to take their crypto game to the next level.
 
 <details>
 <summary>The Poem of Walle</summary>
@@ -31,17 +31,17 @@ Walle is the ultimate wallet for the tech-savvy crypto enthusiast, boasting a sl
 
 ## Features
 
-- [x] Suports any EVM networks
-- [x] Suports native and ERC-20 tokens
-- [x] Suports multiple accounts
-- [x] Suports WalletConnect v2
-- [x] Suports wallet encryption with scrypt
-- [ ] Suports EIP-1559 transactions
-- [ ] Suports contract integration
-- [ ] Suports signTypeData
-- [ ] Suports NFT
-- [ ] Suports built-in DAps
-- [ ] Suports non-EVM networks
+- [x] Supports any EVM networks
+- [x] Supports native and ERC-20 tokens
+- [x] Supports multiple accounts
+- [x] Supports WalletConnect v2
+- [x] Supports wallet encryption with scrypt
+- [ ] Supports EIP-1559 transactions
+- [ ] Supports contract integration
+- [ ] Supports signTypeData
+- [ ] Supports NFT
+- [ ] Supports built-in DAps
+- [ ] Supports non-EVM networks
 
 ## Install
 
