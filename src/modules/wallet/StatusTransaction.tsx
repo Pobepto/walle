@@ -2,7 +2,8 @@ import React from 'react'
 import { Box, Text } from 'ink'
 
 import { formatUnits } from '@ethersproject/units'
-import { Button } from '@src/components'
+import { Button, ButtonProps } from '@src/components'
+import { Selection, SelectionZone } from '@src/components/SelectionZone'
 import { useChain } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 
@@ -13,6 +14,10 @@ export const StatusTransaction: React.FC = () => {
 
   const handleContinue = () => {
     navigate(ROUTE.HOME)
+  }
+
+  const handleBack = () => {
+    navigate.back()
   }
 
   if (error || !receipt) {
@@ -29,20 +34,21 @@ export const StatusTransaction: React.FC = () => {
           </Box>
           <Text>{error}</Text>
         </Box>
-        <Button onPress={handleContinue} isFocused>
-          Continue...
-        </Button>
+        <SelectionZone isActive prevKey="leftArrow" nextKey="rightArrow">
+          <Box justifyContent="center">
+            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+              <Button onPress={handleBack}>Back</Button>
+            </Selection>
+            <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+              <Button onPress={handleContinue}>Continue...</Button>
+            </Selection>
+          </Box>
+        </SelectionZone>
       </Box>
     )
   }
 
-  const gasFee = receipt.effectiveGasPrice.mul(receipt.gasUsed)
-
-  // ✅❗️❌🟢🔴  🤡
-  // 🤕 😵      🤡
-  // ♿️        🤡
-  // 🔞        🤡
-  // 👏        🤡
+  const txFee = receipt.effectiveGasPrice.mul(receipt.gasUsed)
 
   return (
     <Box
@@ -62,7 +68,7 @@ export const StatusTransaction: React.FC = () => {
         <Text>Block number: {receipt.blockNumber}</Text>
         <Text>Gas used: {receipt.gasUsed.toString()}</Text>
         <Text>
-          Transaction fee: {formatUnits(gasFee)} {chain.currency}
+          Transaction fee: {formatUnits(txFee)} {chain.currency}
         </Text>
       </Box>
       <Button onPress={handleContinue} isFocused>

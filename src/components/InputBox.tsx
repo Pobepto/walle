@@ -59,7 +59,9 @@ export const InputBox: React.FC<InputBoxProps> = ({
     >
       <Box>
         {label ? (
-          <Text color={disabled ? 'grey' : undefined}>{label}: </Text>
+          <Box>
+            <Text color={disabled ? 'grey' : undefined}>{label}: </Text>
+          </Box>
         ) : null}
         <Input
           focus={focus}
