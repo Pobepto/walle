@@ -1,45 +1,55 @@
 import { useEffect, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
+import { PopulatedTransaction } from '@ethersproject/contracts'
 import { ZERO } from '@src/constants'
 import { useBlockchainStore } from '@src/store'
 
 import { useAsync } from './useAsync'
 
-export const useGasPrice = (suggestedGasPrice?: BigNumber) => {
-  const provider = useBlockchainStore((store) => store.provider)
-  const [price, setPrice] = useState(suggestedGasPrice ?? ZERO)
-
-  const { execute, isLoading } = useAsync(() => {
-    return provider.getGasPrice().catch(() => ZERO)
-  })
-
-  useEffect(() => {
-    if (price.eq(0)) {
-      execute().then(setPrice)
-    }
-  }, [])
-
-  return [price, isLoading] as const
+interface GasData {
+  maxFeePerGas: BigNumber
+  maxPriorityFeePerGas: BigNumber
+  gasPrice: BigNumber
 }
 
-// export const useGasData = (populatedTx: PopulatedTransaction) => {
-//   const provider = useBlockchainStore((store) => store.provider)
-//   const [gasData, setGasData] = useState<Omit<FeeData, 'lastBaseFeePerGas'>>({
-//     maxFeePerGas: BigNumber.from(populatedTx.maxFeePerGas ?? 0),
-//     maxPriorityFeePerGas: BigNumber.from(populatedTx.maxPriorityFeePerGas ?? 0),
-//     gasPrice: BigNumber.from(populatedTx.gasPrice ?? 0),
-//   })
+export const useGasData = (populatedTx: PopulatedTransaction) => {
+  const provider = useBlockchainStore((store) => store.provider)
+  const [gasData, setGasData] = useState<GasData>({
+    maxFeePerGas: populatedTx.maxFeePerGas ?? ZERO,
+    maxPriorityFeePerGas: populatedTx.maxPriorityFeePerGas ?? ZERO,
+    gasPrice: populatedTx.gasPrice ?? ZERO,
+  })
 
-//   const { execute, isLoading } = useAsync(() => {
-//     return provider.getFeeData().catch(() => ({}))
-//   })
+  const { execute, isLoading } = useAsync(async () => {
+    try {
+      const loadedGasData = await provider.getFeeData()
 
-//   useEffect(() => {
-//     // if (price.eq(0)) {
-//     //   execute().then(setPrice)
-//     // }
-//   }, [])
+      return {
+        maxFeePerGas: loadedGasData.maxFeePerGas ?? gasData.maxFeePerGas,
+        maxPriorityFeePerGas:
+          loadedGasData.maxPriorityFeePerGas ?? gasData.maxPriorityFeePerGas,
+        gasPrice: loadedGasData.gasPrice ?? gasData.gasPrice,
+      }
+    } catch {
+      return gasData
+    }
+  })
 
-//   return [gasData, isLoading] as const
-// }
+  const call = () => {
+    execute().then(setGasData)
+  }
+
+  useEffect(() => {
+    if (gasData.gasPrice.gt(0)) return
+    if (gasData.maxFeePerGas.gt(0) && gasData.maxPriorityFeePerGas.gt(0)) return
+
+    call()
+  }, [])
+
+  return {
+    data: gasData,
+    loading: isLoading,
+    call,
+  }
+}
