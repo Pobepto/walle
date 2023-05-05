@@ -36,9 +36,9 @@ Walle is the ultimate wallet for the tech-savvy crypto enthusiast, boasting a sl
 - [x] Supports multiple accounts
 - [x] Supports WalletConnect v2
 - [x] Supports wallet encryption with scrypt
-- [ ] Supports EIP-1559 transactions
-- [ ] Supports contract integration
+- [x] Supports EIP-1559 transactions
 - [ ] Supports signTypeData
+- [ ] Supports contract integration
 - [ ] Supports NFT
 - [ ] Supports built-in DAps
 - [ ] Supports non-EVM networks
