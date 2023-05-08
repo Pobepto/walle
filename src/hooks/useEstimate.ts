@@ -13,7 +13,7 @@ interface Estimate {
 }
 
 export const useEstimate = (populatedTx: PopulatedTransaction) => {
-  const wallet = useWallet()!
+  const wallet = useWallet()
   const [estimate, setEstimate] = useState<Estimate>({
     loading: false,
     gasLimit: populatedTx.gasLimit ?? ZERO,

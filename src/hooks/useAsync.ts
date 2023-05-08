@@ -14,14 +14,20 @@ export const useAsync = <Args extends any[], Return>(
     try {
       const result = await func(...args)
       setState({ isLoading: false, error: '' })
+
       return Promise.resolve(result)
     } catch (err: any) {
       setState({
         isLoading: false,
         error: err?.message ?? err?.toString() ?? 'Unknown error',
       })
+
       return Promise.reject(err)
     }
+  }
+
+  const safeExecute = (...args: Args) => {
+    return execute(...args).catch(() => null)
   }
 
   const clearError = () => {
@@ -30,6 +36,7 @@ export const useAsync = <Args extends any[], Return>(
 
   return {
     execute,
+    safeExecute,
     clearError,
     ...state,
   }

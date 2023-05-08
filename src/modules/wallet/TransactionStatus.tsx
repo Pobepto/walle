@@ -7,10 +7,10 @@ import { Selection, SelectionZone } from '@src/components/SelectionZone'
 import { useChain } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 
-export const StatusTransaction: React.FC = () => {
+export const TransactionStatus: React.FC = () => {
   const navigate = useNavigate()
   const chain = useChain()
-  const { receipt, error } = useRouteData<ROUTE.STATUS_TRANSACTION>()
+  const { receipt, error } = useRouteData<ROUTE.TRANSACTION_STATUS>()
 
   const handleContinue = () => {
     navigate(ROUTE.HOME)

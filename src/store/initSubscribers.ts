@@ -34,9 +34,9 @@ export const initSubscribers = () => {
   )
 
   useWalletStore.subscribe(
-    (state) => [state.pathId, state.phrase],
-    ([, phrase]) => {
-      if (phrase) {
+    (state) => [state.activePathId, state.mnemonicOrPrivateKey],
+    ([, mnemonicOrPrivateKey]) => {
+      if (mnemonicOrPrivateKey) {
         useBlockchainStore.getState().getNativeBalance()
         useTokensStore.getState().loadBalances()
       }

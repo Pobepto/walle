@@ -69,7 +69,11 @@ export const AddChain: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const { execute: callAddChain, isLoading: addChainIsLoading } = useAsync(() =>
+  const {
+    safeExecute: callAddChain,
+    isLoading: addChainIsLoading,
+    error: addChainError,
+  } = useAsync(() =>
     addChain({
       name: data.name,
       rpc: data.rpc,
@@ -167,6 +171,9 @@ export const AddChain: React.FC = () => {
               {isAlreadyAddedChain ? 'Edit chain' : 'Add chain'}
             </Button>
           </Selection>
+        </Box>
+        <Box justifyContent="center">
+          <ErrorLabel text={addChainError} />
         </Box>
       </SelectionZone>
     </Box>

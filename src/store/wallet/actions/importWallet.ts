@@ -1,16 +1,22 @@
 import { Wallet } from '@ethersproject/wallet'
 
-import { WalletAction } from '..'
+import { WalletAction, WalletType } from '..'
+
+export const getWalletType = (mnemonicOrPrivateKey: string) => {
+  try {
+    new Wallet(mnemonicOrPrivateKey)
+    return WalletType.PRIVATE_KEY
+  } catch {
+    try {
+      Wallet.fromMnemonic(mnemonicOrPrivateKey)
+      return WalletType.MNEMONIC
+    } catch {
+      return null
+    }
+  }
+}
 
 export const importWallet: WalletAction<'importWallet'> =
-  (set) => (mnemonic) => {
-    try {
-      const {
-        mnemonic: { phrase },
-      } = Wallet.fromMnemonic(mnemonic)
-
-      set({ phrase })
-    } catch (err) {
-      throw new Error('Impossible to import wallet from mnemomic')
-    }
+  (set) => (mnemonicOrPrivateKey) => {
+    set({ mnemonicOrPrivateKey, type: getWalletType(mnemonicOrPrivateKey) })
   }

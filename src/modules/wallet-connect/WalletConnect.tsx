@@ -41,23 +41,29 @@ export const WalletConnect: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const { execute, isLoading, error } = useAsync((call: () => Promise<any>) =>
-    call(),
+  const { safeExecute, isLoading, error } = useAsync(
+    (call: () => Promise<any>) => {
+      return call()
+    },
   )
 
-  const onConnect = async () => {
-    await connect(data.uri)
-    select(0)
+  const onConnect = () => {
+    safeExecute(async () => {
+      await connect(data.uri)
+      select(0)
+    })
   }
 
-  const onDisconnect = async (topic: string) => {
-    await disconnect(topic)
-    navigate(ROUTE.HOME)
+  const onDisconnect = (topic: string) => {
+    safeExecute(async () => {
+      await disconnect(topic)
+      navigate(ROUTE.HOME)
+    })
   }
 
   useEffect(() => {
     if (uri) {
-      execute(onConnect)
+      onConnect()
     }
   }, [])
 
@@ -83,7 +89,7 @@ export const WalletConnect: React.FC = () => {
         </Box>
         <Button
           isFocused={parentZone.selection === COLUMNS.MAIN}
-          onPress={() => execute(() => onDisconnect(topic))}
+          onPress={() => onDisconnect(topic)}
         >
           Disconnect
         </Button>
@@ -111,7 +117,7 @@ export const WalletConnect: React.FC = () => {
       />
       <Button
         isFocused={parentZone.selection === COLUMNS.MAIN && selection === 1}
-        onPress={() => execute(onConnect)}
+        onPress={onConnect}
         isDisabled={!isValid}
       >
         Connect

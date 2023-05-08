@@ -15,7 +15,7 @@ import { toUtf8String } from '@src/utils'
 
 export const SignMessage: React.FC = () => {
   const navigate = useNavigate()
-  const wallet = useWallet()!
+  const wallet = useWallet()
   const parentZone = useSelectionZone()!
   const { message, onReject, onSign, warning } =
     useRouteData<ROUTE.SIGN_MESSAGE>()

@@ -29,12 +29,12 @@ import {
   ShowPrivateKey,
   ShowSeedPhrase,
   SignMessage,
-  StatusTransaction,
   SwitchChain,
   TokenActions,
   TokenInfo,
   Tokens,
   TokenTransfer,
+  TransactionStatus,
   WalletConnect,
   WalletConnectPairings,
   WalletConnectProposal,
@@ -67,7 +67,7 @@ export enum ROUTE {
   CURRENCY_ACTIONS,
   CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
-  STATUS_TRANSACTION,
+  TRANSACTION_STATUS,
   SIGN_MESSAGE,
   SECURITY,
   SECURITY_SHOW_PRIVATE_KEY,
@@ -97,7 +97,7 @@ interface ROUTE_DATA {
     onRejectTx?: () => void
     onApproveTx?: (hash: string) => void
   }
-  [ROUTE.STATUS_TRANSACTION]: {
+  [ROUTE.TRANSACTION_STATUS]: {
     receipt?: TransactionReceipt
     error?: string
   }
@@ -153,7 +153,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.CURRENCY_ACTIONS]: base(CurrencyActions),
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: base(ConfirmTransaction),
-  [ROUTE.STATUS_TRANSACTION]: base(StatusTransaction),
+  [ROUTE.TRANSACTION_STATUS]: base(TransactionStatus),
   [ROUTE.SIGN_MESSAGE]: base(SignMessage),
   [ROUTE.SECURITY]: base(Security),
   [ROUTE.SECURITY_SHOW_PRIVATE_KEY]: base(ShowPrivateKey),

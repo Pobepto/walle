@@ -23,8 +23,10 @@ export const WalletConnectProposal: React.FC = () => {
   } = proposal
   const { metadata } = proposer
 
-  const { execute, isLoading, error } = useAsync((call: () => Promise<any>) =>
-    call(),
+  const { safeExecute, isLoading, error } = useAsync(
+    (call: () => Promise<any>) => {
+      return call()
+    },
   )
 
   const { selection } = useSelection({
@@ -34,14 +36,18 @@ export const WalletConnectProposal: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const onReject = async () => {
-    await reject(proposal)
-    navigate(ROUTE.WALLET_CONNECT, {})
+  const onReject = () => {
+    safeExecute(async () => {
+      await reject(proposal)
+      navigate(ROUTE.WALLET_CONNECT, {})
+    })
   }
 
-  const onApprove = async () => {
-    await approve(proposal)
-    navigate(ROUTE.WALLET_CONNECT, {})
+  const onApprove = () => {
+    safeExecute(async () => {
+      await approve(proposal)
+      navigate(ROUTE.WALLET_CONNECT, {})
+    })
   }
 
   return (
@@ -56,7 +62,7 @@ export const WalletConnectProposal: React.FC = () => {
         <Text bold>Review permissions</Text>
       </Box>
       {Object.entries(requiredNamespaces).map(([chain, namespace]) => {
-        const { chains, events, methods } = namespace
+        const { chains = [], events, methods } = namespace
         return (
           <Box
             marginY={1}
@@ -89,14 +95,14 @@ export const WalletConnectProposal: React.FC = () => {
       <Button
         isFocused={parentZone.selection === COLUMNS.MAIN && selection === 0}
         isDisabled={isLoading}
-        onPress={() => execute(onReject)}
+        onPress={onReject}
       >
         Reject
       </Button>
       <Button
         isFocused={parentZone.selection === COLUMNS.MAIN && selection === 1}
         isDisabled={isLoading}
-        onPress={() => execute(onApprove)}
+        onPress={onApprove}
       >
         Approve
       </Button>

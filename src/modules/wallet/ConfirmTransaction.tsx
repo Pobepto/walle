@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Text } from 'ink'
+import { Box, Newline, Text } from 'ink'
 
 import { Button, ButtonProps, Error } from '@components'
 import { InputBox, InputBoxProps } from '@components/InputBox'
@@ -69,14 +69,19 @@ export const ConfirmTransaction: React.FC = () => {
     validateAction: 'blur',
   })
 
-  const isEIP1599 =
-    !populatedTx.gasPrice &&
-    (populatedTx.maxFeePerGas || gas.data.maxFeePerGas.gt(0))
+  const [isEIP1599, setEIP1599] = useState(
+    Boolean(
+      !populatedTx.gasPrice &&
+        (populatedTx.maxFeePerGas || gas.data.maxFeePerGas.gt(0)),
+    ),
+  )
 
   const onSendTransaction = async () => {
+    const { gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas } = data
+
     let tx: PopulatedTransaction = {
       ...populatedTx,
-      gasLimit: BigNumber.from(data.gasLimit),
+      gasLimit: BigNumber.from(gasLimit),
     }
 
     if (isEIP1599) {
@@ -84,11 +89,8 @@ export const ConfirmTransaction: React.FC = () => {
       tx = {
         ...tx,
         type: 2,
-        maxFeePerGas: parseUnits(data.maxFeePerGas, GasPriceUnit),
-        maxPriorityFeePerGas: parseUnits(
-          data.maxPriorityFeePerGas,
-          GasPriceUnit,
-        ),
+        maxFeePerGas: parseUnits(maxFeePerGas, GasPriceUnit),
+        maxPriorityFeePerGas: parseUnits(maxPriorityFeePerGas, GasPriceUnit),
       }
     } else {
       delete tx.maxFeePerGas
@@ -96,7 +98,7 @@ export const ConfirmTransaction: React.FC = () => {
       tx = {
         ...tx,
         type: 0,
-        gasPrice: parseUnits(data.gasPrice, GasPriceUnit),
+        gasPrice: parseUnits(gasPrice, GasPriceUnit),
       }
     }
 
@@ -106,10 +108,10 @@ export const ConfirmTransaction: React.FC = () => {
 
       if (receipt) {
         onApproveTx && onApproveTx(receipt.transactionHash)
-        navigate(ROUTE.STATUS_TRANSACTION, { receipt })
+        navigate(ROUTE.TRANSACTION_STATUS, { receipt })
       }
-    } catch (error) {
-      navigate(ROUTE.STATUS_TRANSACTION, { error: error?.toString() })
+    } catch (error: any) {
+      navigate(ROUTE.TRANSACTION_STATUS, { error: error?.toString() })
     }
   }
 
@@ -119,7 +121,15 @@ export const ConfirmTransaction: React.FC = () => {
   }
 
   const onEstimate = () => estimate.call()
-  const onUpdateGas = () => gas.call()
+  const onUpdateGas = () => gas.load()
+  const onChangeFeeType = () => {
+    if (isEIP1599) {
+      setEIP1599(false)
+    } else {
+      setEIP1599(true)
+      gas.load()
+    }
+  }
 
   useEffect(() => {
     const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } = gas.data
@@ -147,7 +157,7 @@ export const ConfirmTransaction: React.FC = () => {
     parseUnits(data.gasPrice || '0', GasPriceUnit),
   ).mul(data.gasLimit || '0')
 
-  const total = gasFee.add(populatedTx.value ?? '0')
+  const totalFee = gasFee.add(populatedTx.value ?? '0')
 
   return (
     <Box flexDirection="column">
@@ -207,7 +217,7 @@ export const ConfirmTransaction: React.FC = () => {
                   error={errors.maxFeePerGas}
                   loading={gas.loading}
                   postfix={` ${GasPriceUnit}`}
-                  width="50%"
+                  width="60%"
                   {...register('maxFeePerGas')}
                 />
               </Selection>
@@ -230,7 +240,7 @@ export const ConfirmTransaction: React.FC = () => {
                   error={errors.maxPriorityFeePerGas}
                   loading={gas.loading}
                   postfix={` ${GasPriceUnit}`}
-                  width="50%"
+                  width="60%"
                   {...register('maxPriorityFeePerGas')}
                 />
               </Selection>
@@ -259,14 +269,15 @@ export const ConfirmTransaction: React.FC = () => {
                 error={errors.gasPrice}
                 loading={gas.loading}
                 postfix={` ${GasPriceUnit}`}
-                width="50%"
+                width="60%"
                 {...register('gasPrice')}
               />
             </Selection>
             {populatedTx.gasPrice ? (
               <Box alignItems="center" marginLeft={2}>
                 <Text>
-                  Suggested gas price{' '}
+                  Suggested gas price
+                  <Newline />
                   <Text bold>
                     {formatGasPrice(populatedTx.gasPrice)} {GasPriceUnit}
                   </Text>
@@ -283,14 +294,15 @@ export const ConfirmTransaction: React.FC = () => {
               type="number"
               error={errors.gasLimit}
               loading={estimate.loading}
-              width="50%"
+              width="60%"
               {...register('gasLimit')}
             />
           </Selection>
           {populatedTx.gasLimit ? (
             <Box alignItems="center" marginLeft={2}>
               <Text>
-                Suggested gas limit{' '}
+                Suggested gas limit
+                <Newline />
                 <Text bold>
                   {BigNumber.from(populatedTx.gasLimit).toString()}
                 </Text>
@@ -316,11 +328,35 @@ export const ConfirmTransaction: React.FC = () => {
         <Text>
           Total:{' '}
           <Loader loading={gas.loading || estimate.loading}>
-            {formatUnits(total)} {chain.currency}
+            {formatUnits(totalFee)} {chain.currency}
           </Loader>
         </Text>
 
         <Divider symbol="—" />
+
+        <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
+          <SelectionZone prevKey="leftArrow" nextKey="rightArrow">
+            <Box justifyContent="center">
+              {gas.data.isSupportEIP1599 && (
+                <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+                  <Button onPress={onChangeFeeType} minWidth="20%" paddingX={1}>
+                    <Text>To {isEIP1599 ? 'legacy' : 'EIP1599'}</Text>
+                  </Button>
+                </Selection>
+              )}
+              <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+                <Button onPress={onUpdateGas} minWidth="20%" paddingX={1}>
+                  Update gas price
+                </Button>
+              </Selection>
+              <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+                <Button onPress={onEstimate} minWidth="20%" paddingX={1}>
+                  Estimate
+                </Button>
+              </Selection>
+            </Box>
+          </SelectionZone>
+        </Selection>
 
         <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
           <SelectionZone
@@ -328,20 +364,10 @@ export const ConfirmTransaction: React.FC = () => {
             nextKey="rightArrow"
             defaultSelection={3}
           >
-            <Box justifyContent="space-around">
+            <Box justifyContent="space-between">
               <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                 <Button onPress={onReject} minWidth="20%" paddingX={1}>
                   Reject
-                </Button>
-              </Selection>
-              <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-                <Button onPress={onUpdateGas} minWidth="20%" paddingX={1}>
-                  Update gas
-                </Button>
-              </Selection>
-              <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-                <Button onPress={onEstimate} minWidth="20%" paddingX={1}>
-                  Estimate
                 </Button>
               </Selection>
               <Selection<ButtonProps> activeProps={{ isFocused: true }}>

@@ -1,6 +1,6 @@
 import { Wallet } from '@ethersproject/wallet'
 
-import { WalletAction } from '..'
+import { WalletAction, WalletType } from '..'
 
 export const generateWallet: WalletAction<'generateWallet'> = (set) => () => {
   const wallet = Wallet.createRandom()
@@ -8,5 +8,5 @@ export const generateWallet: WalletAction<'generateWallet'> = (set) => () => {
     mnemonic: { phrase },
   } = wallet
 
-  set({ phrase })
+  set({ mnemonicOrPrivateKey: phrase, type: WalletType.MNEMONIC })
 }

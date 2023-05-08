@@ -10,7 +10,6 @@ import {
   createAccount,
   decryptWallet,
   deleteAccount,
-  deriveMnemonicAddress,
   encryptWallet,
   generateWallet,
   importWallet,
@@ -22,14 +21,19 @@ export interface Account {
   pathId: number
 }
 
-export interface WalletStore {
-  pathId: number
-  phrase: Nullable<string>
+export enum WalletType {
+  MNEMONIC = 'MNEMONIC',
+  PRIVATE_KEY = 'PRIVATE_KEY',
+}
+
+export type WalletStore = {
+  activePathId: number
+  type: Nullable<WalletType>
+  mnemonicOrPrivateKey: Nullable<string>
   accounts: Account[]
   getWallet: (pathId?: number) => Wallet
   generateWallet: () => void
-  importWallet: (mnemonic: string) => void
-  deriveMnemonicAddress: () => void
+  importWallet: (mnemonicOrPrivateKey: string) => void
   encryptWallet: (password: string) => Promise<string>
   decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
   logout: () => void
@@ -45,36 +49,40 @@ export type WalletAction<T extends keyof WalletStore> = Action<
 
 export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   (set, get) => ({
-    pathId: 0,
-    phrase: null,
+    activePathId: 0,
+    type: null,
+    mnemonicOrPrivateKey: null,
     accounts: [
       {
         name: 'Main',
         pathId: 0,
       },
     ],
-    getWallet: (defaultPathId?: number) => {
-      const { phrase, pathId } = get()
+    getWallet: (pathId?: number) => {
+      const { mnemonicOrPrivateKey, type, activePathId } = get()
 
-      if (!phrase) {
-        throw new Error('Phrase is null')
+      if (!mnemonicOrPrivateKey || !type) {
+        throw new Error('Wallet not exist')
+      }
+
+      if (type === WalletType.PRIVATE_KEY) {
+        return new Wallet(mnemonicOrPrivateKey)
       }
 
       return Wallet.fromMnemonic(
-        phrase!,
-        getDerivationPath(defaultPathId ?? pathId),
+        mnemonicOrPrivateKey,
+        getDerivationPath(pathId ?? activePathId),
       )
     },
     generateWallet: generateWallet(set, get),
     importWallet: importWallet(set, get),
-    deriveMnemonicAddress: deriveMnemonicAddress(set, get),
     encryptWallet: encryptWallet(set, get),
     decryptWallet: decryptWallet(set, get),
     logout: logout(set, get),
     createAccount: createAccount(set, get),
     deleteAccount: deleteAccount(set, get),
     selectAccount: (accountId: number) => {
-      set({ pathId: accountId })
+      set({ activePathId: accountId })
     },
   }),
 )

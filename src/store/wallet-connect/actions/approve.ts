@@ -16,7 +16,7 @@ export const approve: WalletConnectAction<'approve'> =
     const namespaces: SessionTypes.Namespaces = {}
 
     Object.entries(requiredNamespaces).forEach(([chain, namespace]) => {
-      const { chains, methods, events } = namespace
+      const { chains = [], methods, events } = namespace
       const accounts = chains
         .map((chainId) => {
           return selectedAccounts.map((account) => `${chainId}:${account}`)
