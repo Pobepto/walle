@@ -1,5 +1,4 @@
-/* eslint-disable no-useless-escape */
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Box, Text } from 'ink'
 import { Worker } from 'worker_threads'
 
@@ -15,31 +14,61 @@ import {
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
 import { numberInRange } from '@src/hooks'
 import { useForm } from '@src/hooks'
+import { useWalletStore } from '@src/store'
+
+const workerCode = `
+  const { Wallet } = require('@ethersproject/wallet')
+  const { parentPort, workerData } = require('worker_threads')
+
+  const isMatchPattern = (address, pattern) => {
+    if (!pattern.startsWith('0x')) {
+      address = address.slice(2)
+    }
+
+    const regexp = pattern.replaceAll('*', '\\\\w{1,}')
+
+    return new RegExp(regexp).test(address)
+  }
+
+  const step = 50
+  let attempts = 0
+  let wallet = Wallet.createRandom()
+
+  while (!isMatchPattern(wallet.address, workerData.pattern)) {
+    wallet = Wallet.createRandom()
+    attempts++
+
+    if (attempts >= step) {
+      parentPort.postMessage({ attempts })
+      attempts = 0
+    }
+  }
+
+  parentPort.postMessage({ phrase: wallet.mnemonic.phrase })
+`
 
 type Inputs = {
   pattern: string
   threads: string
 }
 
-const calculateDifficulty = (pattern: string) => {
-  if (!pattern) {
-    return 0
-  }
+const computeDifficulty = (pattern: string) => {
+  const validChars = pattern.replace('0x', '').replace(/[^a-f0-9]/gi, '').length
 
-  if (pattern.startsWith('0x')) {
-    pattern = pattern.slice(2)
-  }
+  return validChars ? Math.pow(16, validChars) : 0
+}
 
-  const uniqueChars = pattern.replace(/[^a-f0-9]/gi, '').length
-
-  return uniqueChars === 0 ? 0 : Math.pow(16, uniqueChars)
+const computeProbability = (difficulty: number, attempts: number) => {
+  return Math.round(10000 * (1 - Math.pow(1 - 1 / difficulty, attempts))) / 100
 }
 
 export const CreateWallet: React.FC = () => {
   const [wallet, setWallet] = useState(() => Wallet.createRandom())
+  const createWallet = useWalletStore((store) => store.createWallet)
   const [generationInProgress, setGenerationInProgress] = useState(false)
   const { data, errors, isValid, register } = useForm<Inputs>({
     initialValues: {
+      pattern: '',
       threads: '1',
     },
     rules: {
@@ -47,69 +76,56 @@ export const CreateWallet: React.FC = () => {
     },
   })
   const workers = useRef<Worker[]>([])
-  const [displayPhrase, setPhraseVisibility] = useState(false)
+  const startTime = useRef(Date.now())
+  const [totalAttempts, setTotalAttempts] = useState(0)
+  const [displayMnemonic, setPhraseVisibility] = useState(false)
   const [advanced, setAdvanced] = useState(false)
   const navigate = useNavigate()
 
   const { pattern, threads = '1' } = data
 
-  const terminate = () => {
+  const terminateWorkers = () => {
     workers.current.map((worker) => worker.terminate())
     workers.current = []
   }
 
   const regenerate = async () => {
     if (workers.current.length) {
-      terminate()
+      terminateWorkers()
       return
     }
 
-    if (pattern && pattern.length) {
+    if (pattern && pattern.length && pattern !== '0x') {
       setGenerationInProgress(true)
 
       workers.current = [...Array(Number(threads))].map(
         () =>
-          new Worker(
-            `
-          const { Wallet } = require('@ethersproject/wallet')
-          const { parentPort, workerData } = require('worker_threads')
-          
-          const isMatchPattern = (address, pattern) => {
-            if (!pattern.startsWith('0x')) {
-              address = address.slice(2)
-            }
-          
-            const regexp = pattern.replaceAll('*', '\\\\w{1,}')
-          
-            return new RegExp(regexp).test(address)
-          }
-          
-          let wallet = Wallet.createRandom()
-        
-          while (!isMatchPattern(wallet.address, workerData.pattern)) {
-            wallet = Wallet.createRandom()
-          }
-
-          parentPort.postMessage({ phrase: wallet.mnemonic.phrase })
-        `,
-            {
-              eval: true,
-              workerData: { pattern },
-            },
-          ),
+          new Worker(workerCode, {
+            eval: true,
+            workerData: { pattern },
+          }),
       )
 
-      const { phrase } = await Promise.race(
+      setTotalAttempts(0)
+      startTime.current = Date.now()
+
+      const phrase = await Promise.any(
         workers.current.map((worker) => {
-          return new Promise<{ phrase?: string }>((resolve) => {
-            worker.on('error', () => resolve({}))
-            worker.on('message', resolve)
-            worker.on('exit', () => resolve({}))
+          return new Promise<string | undefined>((resolve) => {
+            worker.on('error', () => resolve(undefined))
+            worker.on('exit', () => resolve(undefined))
+            worker.on('message', ({ phrase, attempts }) => {
+              if (phrase) {
+                resolve(phrase)
+              } else if (attempts) {
+                setTotalAttempts((v) => v + attempts)
+              }
+            })
           })
         }),
       )
 
-      terminate()
+      terminateWorkers()
 
       if (phrase) {
         setWallet(Wallet.fromMnemonic(phrase))
@@ -121,7 +137,19 @@ export const CreateWallet: React.FC = () => {
     }
   }
 
-  const difficulty = calculateDifficulty(pattern)
+  const onCreateWallet = () => {
+    createWallet(wallet.mnemonic.phrase)
+    navigate(ROUTE.REGISTRATION_PASSWORD)
+  }
+
+  const difficulty = computeDifficulty(pattern)
+  const probability = computeProbability(difficulty, totalAttempts)
+  const speed = useMemo(
+    () => Math.floor((1000 * totalAttempts) / (Date.now() - startTime.current)),
+    [totalAttempts],
+  )
+  const probability50 =
+    Math.floor(Math.log(0.5) / Math.log(1 - 1 / difficulty)) || 0
 
   return (
     <Box
@@ -138,7 +166,7 @@ export const CreateWallet: React.FC = () => {
         <SelectionZone prevKey="upArrow" nextKey="downArrow" isActive>
           <Selection<TextButtonProps> activeProps={{ isFocused: true }}>
             <TextButton onPress={() => setPhraseVisibility((v) => !v)}>
-              {displayPhrase ? 'Hide mnemonic' : 'Show mnemonic'}
+              {displayMnemonic ? 'Hide mnemonic' : 'Show mnemonic'}
             </TextButton>
           </Selection>
 
@@ -146,7 +174,7 @@ export const CreateWallet: React.FC = () => {
             width="50%"
             onChange={() => null}
             value={
-              displayPhrase
+              displayMnemonic
                 ? wallet.mnemonic.phrase
                 : wallet.mnemonic.phrase
                     .split(' ')
@@ -183,13 +211,10 @@ export const CreateWallet: React.FC = () => {
                 />
               </Selection>
               <Box flexDirection="column" width="50%">
-                <Text>Difficulty: {difficulty}</Text>
-                <Text>
-                  50% probability:{' '}
-                  {Math.floor(Math.log(0.5) / Math.log(1 - 1 / difficulty)) ||
-                    0}{' '}
-                  addresses
-                </Text>
+                <Text>Generated: {totalAttempts} addresses</Text>
+                <Text>Speed: {speed} addr/s</Text>
+                <Text>50% probability: {probability50} addresses</Text>
+                <Text>Probability: {probability}%</Text>
               </Box>
             </>
           )}
@@ -225,7 +250,8 @@ export const CreateWallet: React.FC = () => {
                 )}
                 <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                   <Button
-                    onPress={() => navigate(ROUTE.REGISTRATION_PASSWORD)}
+                    minWidth="10"
+                    onPress={onCreateWallet}
                     isDisabled={generationInProgress}
                   >
                     Save

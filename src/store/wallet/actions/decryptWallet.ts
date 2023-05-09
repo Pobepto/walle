@@ -1,10 +1,13 @@
 import { Wallet } from '@ethersproject/wallet'
 
-import { WalletAction } from '..'
+import { WalletAction, WalletType } from '..'
 
 export const decryptWallet: WalletAction<'decryptWallet'> =
   (set) => async (password, encryptedWallet) => {
     const wallet = await Wallet.fromEncryptedJson(encryptedWallet, password)
 
-    set({ mnemonicOrPrivateKey: wallet.mnemonic.phrase })
+    set({
+      mnemonicOrPrivateKey: wallet.mnemonic.phrase,
+      type: WalletType.MNEMONIC,
+    })
   }

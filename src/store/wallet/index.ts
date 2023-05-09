@@ -8,10 +8,10 @@ import { Action } from '..'
 
 import {
   createAccount,
+  createWallet,
   decryptWallet,
   deleteAccount,
   encryptWallet,
-  generateWallet,
   importWallet,
   logout,
 } from './actions'
@@ -32,7 +32,7 @@ export type WalletStore = {
   mnemonicOrPrivateKey: Nullable<string>
   accounts: Account[]
   getWallet: (pathId?: number) => Wallet
-  generateWallet: () => void
+  createWallet: (mnemonic: string) => void
   importWallet: (mnemonicOrPrivateKey: string) => void
   encryptWallet: (password: string) => Promise<string>
   decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
@@ -74,7 +74,7 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
         getDerivationPath(pathId ?? activePathId),
       )
     },
-    generateWallet: generateWallet(set, get),
+    createWallet: createWallet(set, get),
     importWallet: importWallet(set, get),
     encryptWallet: encryptWallet(set, get),
     decryptWallet: decryptWallet(set, get),
