@@ -17,7 +17,11 @@ export const createAccount: WalletAction<'createAccount'> =
       let newAccountId = accountId
 
       if (newAccountId === undefined) {
-        for (let i = 0; i <= accounts.length; i++) {
+        const pathIds = accounts.map((account) => account.pathId)
+        const startPathId = Math.min(...pathIds)
+        const endPathId = Math.max(...pathIds)
+
+        for (let i = startPathId + 1; i <= endPathId + 1; i++) {
           if (!accounts.find((account) => account.pathId === i)) {
             newAccountId = i
             break

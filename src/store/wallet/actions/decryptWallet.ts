@@ -7,7 +7,9 @@ export const decryptWallet: WalletAction<'decryptWallet'> =
     const wallet = await Wallet.fromEncryptedJson(encryptedWallet, password)
 
     set({
-      mnemonicOrPrivateKey: wallet.mnemonic.phrase,
-      type: WalletType.MNEMONIC,
+      mnemonicOrPrivateKey: wallet.mnemonic?.phrase ?? wallet.privateKey,
+      type: wallet.mnemonic?.phrase
+        ? WalletType.MNEMONIC
+        : WalletType.PRIVATE_KEY,
     })
   }

@@ -32,8 +32,8 @@ export type WalletStore = {
   mnemonicOrPrivateKey: Nullable<string>
   accounts: Account[]
   getWallet: (pathId?: number) => Wallet
-  createWallet: (mnemonic: string) => void
-  importWallet: (mnemonicOrPrivateKey: string) => void
+  createWallet: (mnemonic: string, pathId?: number) => void
+  importWallet: (mnemonicOrPrivateKey: string, pathId?: number) => void
   encryptWallet: (password: string) => Promise<string>
   decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
   logout: () => void
@@ -52,12 +52,7 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
     activePathId: 0,
     type: null,
     mnemonicOrPrivateKey: null,
-    accounts: [
-      {
-        name: 'Main',
-        pathId: 0,
-      },
-    ],
+    accounts: [],
     getWallet: (pathId?: number) => {
       const { mnemonicOrPrivateKey, type, activePathId } = get()
 

@@ -8,18 +8,20 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { combine, length, useForm } from '@src/hooks'
+import { combine, length, numberInRange, useForm } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useWalletStore } from '@src/store'
+import { COLUMNS, useWalletStore, WalletType } from '@src/store'
 
 type Inputs = {
   name: string
+  pathId: string
 }
 
 export const AccountsCreate: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const accounts = useWalletStore((state) => state.accounts)
+  const walletType = useWalletStore((state) => state.type)
   const createAccount = useWalletStore((state) => state.createAccount)
 
   const { account } = useRouteData<ROUTE.ACCOUNTS_CREATE>()
@@ -28,6 +30,7 @@ export const AccountsCreate: React.FC = () => {
   const { errors, register, isValid, data } = useForm<Inputs>({
     initialValues: {
       name: account?.name ?? '',
+      pathId: account?.pathId.toString() ?? '',
     },
     rules: {
       name: combine(length(1), (name) => {
@@ -38,13 +41,25 @@ export const AccountsCreate: React.FC = () => {
           return 'Account with this name already exists'
         }
       }),
+      pathId: combine(numberInRange(0, 2147483647), (pathId) => {
+        if (!pathId) return
+
+        if (
+          !isEdit &&
+          accounts.find((account) => account.pathId === Number(pathId))
+        ) {
+          return 'Account with this pathId already exists'
+        }
+      }),
     },
   })
 
   const onCreate = () => {
-    createAccount(data.name, account?.pathId)
+    createAccount(data.name, data.pathId ? Number(data.pathId) : undefined)
     navigate(ROUTE.ACCOUNTS)
   }
+
+  const isSupportAccounts = walletType === WalletType.MNEMONIC
 
   return (
     <SelectionZone
@@ -57,13 +72,25 @@ export const AccountsCreate: React.FC = () => {
           <Text bold> {isEdit ? 'Edit' : 'Create'} account </Text>
         </Box>
 
+        {isSupportAccounts && !isEdit && (
+          <Selection activeProps={{ focus: true }}>
+            <InputBox
+              label="pathId"
+              type="number"
+              placeholder="auto"
+              error={errors.pathId}
+              {...register('pathId')}
+            />
+          </Selection>
+        )}
+
         <Selection activeProps={{ focus: true }}>
           <InputBox label="Name" error={errors.name} {...register('name')} />
         </Selection>
 
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={onCreate} isDisabled={!isValid}>
-            {isEdit ? 'Edit' : 'Create'}
+            {isEdit ? 'Save' : 'Create'}
           </Button>
         </Selection>
       </Box>

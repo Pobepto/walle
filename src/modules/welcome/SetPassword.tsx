@@ -70,7 +70,7 @@ export const SetPassword: React.FC = () => {
     <Box flexDirection="column">
       <Text>Set password to protect your wallet</Text>
       <InputBox
-        label="New password"
+        label="Password"
         mask="*"
         error={errors.password}
         focus={selection === 0}

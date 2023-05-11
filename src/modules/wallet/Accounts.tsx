@@ -11,13 +11,14 @@ import {
 } from '@src/components/SelectionZone'
 import { TextButtonProps } from '@src/components/TextButton'
 import { ROUTE, useNavigate } from '@src/routes'
-import { Account, COLUMNS, useWalletStore } from '@src/store'
+import { Account, COLUMNS, useWalletStore, WalletType } from '@src/store'
 
 export const Accounts: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const accounts = useWalletStore((state) => state.accounts)
-  const pathId = useWalletStore((state) => state.pathId)
+  const pathId = useWalletStore((state) => state.activePathId)
+  const walletType = useWalletStore((state) => state.type)
   const selectAccount = useWalletStore((state) => state.selectAccount)
   const deleteAccount = useWalletStore((state) => state.deleteAccount)
 
@@ -44,6 +45,8 @@ export const Accounts: React.FC = () => {
     ]
   }
 
+  const isSupportAccounts = walletType === WalletType.MNEMONIC
+
   return (
     <SelectionZone
       prevKey="upArrow"
@@ -55,11 +58,20 @@ export const Accounts: React.FC = () => {
           <Box marginTop={-1}>
             <Text bold> Manage accounts </Text>
           </Box>
-          <Selection activeProps={{ isFocused: true }}>
-            <Button onPress={() => navigate(ROUTE.ACCOUNTS_CREATE, {})}>
-              Create account
-            </Button>
-          </Selection>
+          {isSupportAccounts ? (
+            <Selection activeProps={{ isFocused: true }}>
+              <Button onPress={() => navigate(ROUTE.ACCOUNTS_CREATE, {})}>
+                Create account
+              </Button>
+            </Selection>
+          ) : (
+            <Box borderStyle="single" borderColor="yellow">
+              <Text>
+                Wallet imported by private key has no support for create
+                accounts
+              </Text>
+            </Box>
+          )}
           <List viewport={5} selection={selection}>
             {accounts
               .sort((a, b) => a.pathId - b.pathId)
@@ -70,7 +82,11 @@ export const Accounts: React.FC = () => {
                     activeProps={{ isFocused: true }}
                   >
                     <ActionItem
-                      label={`${account.name} [${account.pathId}]`}
+                      label={
+                        isSupportAccounts
+                          ? `${account.name} [${account.pathId}]`
+                          : account.name
+                      }
                       actions={getAccountActions(account)}
                     />
                   </Selection>

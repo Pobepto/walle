@@ -15,6 +15,7 @@ import { TextButton, TextButtonProps } from '@src/components/TextButton'
 import { numberInRange } from '@src/hooks'
 import { useForm } from '@src/hooks'
 import { useWalletStore } from '@src/store'
+import { getDerivationPath } from '@src/utils'
 
 const workerCode = `
   const { Wallet } = require('@ethersproject/wallet')
@@ -32,10 +33,14 @@ const workerCode = `
 
   const step = 50
   let attempts = 0
-  let wallet = Wallet.createRandom()
+  let wallet = Wallet.createRandom({
+    path: workerData.path
+  })
 
   while (!isMatchPattern(wallet.address, workerData.pattern)) {
-    wallet = Wallet.createRandom()
+    wallet = Wallet.createRandom({
+      path: workerData.path
+    })
     attempts++
 
     if (attempts >= step) {
@@ -50,6 +55,7 @@ const workerCode = `
 type Inputs = {
   pattern: string
   threads: string
+  pathId: string
 }
 
 const computeDifficulty = (pattern: string) => {
@@ -70,9 +76,11 @@ export const CreateWallet: React.FC = () => {
     initialValues: {
       pattern: '',
       threads: '1',
+      pathId: '0',
     },
     rules: {
-      threads: numberInRange(1, Infinity),
+      threads: numberInRange(1, 32),
+      pathId: numberInRange(0, 2147483647),
     },
   })
   const workers = useRef<Worker[]>([])
@@ -95,6 +103,8 @@ export const CreateWallet: React.FC = () => {
       return
     }
 
+    const path = getDerivationPath(Number(data.pathId))
+
     if (pattern && pattern.length && pattern !== '0x') {
       setGenerationInProgress(true)
 
@@ -102,7 +112,7 @@ export const CreateWallet: React.FC = () => {
         () =>
           new Worker(workerCode, {
             eval: true,
-            workerData: { pattern },
+            workerData: { pattern, path },
           }),
       )
 
@@ -128,17 +138,17 @@ export const CreateWallet: React.FC = () => {
       terminateWorkers()
 
       if (phrase) {
-        setWallet(Wallet.fromMnemonic(phrase))
+        setWallet(Wallet.fromMnemonic(phrase, path))
       }
 
       setGenerationInProgress(false)
     } else {
-      setWallet(Wallet.createRandom())
+      setWallet(Wallet.createRandom({ path }))
     }
   }
 
   const onCreateWallet = () => {
-    createWallet(wallet.mnemonic.phrase)
+    createWallet(wallet.mnemonic.phrase, Number(data.pathId))
     navigate(ROUTE.REGISTRATION_PASSWORD)
   }
 
@@ -196,7 +206,18 @@ export const CreateWallet: React.FC = () => {
                   width="50%"
                   placeholder="0x*"
                   disabled={generationInProgress}
+                  error={errors.pattern}
                   {...register('pattern')}
+                />
+              </Selection>
+              <Selection<InputBoxProps> activeProps={{ focus: true }}>
+                <InputBox
+                  label="pathId"
+                  width="50%"
+                  placeholder="0"
+                  disabled={generationInProgress}
+                  error={errors.pathId}
+                  {...register('pathId')}
                 />
               </Selection>
               <Selection<InputBoxProps> activeProps={{ focus: true }}>
@@ -224,11 +245,10 @@ export const CreateWallet: React.FC = () => {
               activeProps={{ isActive: true }}
               selectedByDefault
             >
-              <SelectionZone
-                prevKey="leftArrow"
-                nextKey="rightArrow"
-                defaultSelection={1}
-              >
+              <SelectionZone prevKey="leftArrow" nextKey="rightArrow">
+                <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+                  <Button onPress={navigate.back}>Back</Button>
+                </Selection>
                 {advanced ? (
                   <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                     <Button
@@ -244,11 +264,14 @@ export const CreateWallet: React.FC = () => {
                 ) : (
                   <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                     <Button minWidth="13" onPress={() => setAdvanced(true)}>
-                      Advanced generation
+                      Generation settings
                     </Button>
                   </Selection>
                 )}
-                <Selection<ButtonProps> activeProps={{ isFocused: true }}>
+                <Selection<ButtonProps>
+                  activeProps={{ isFocused: true }}
+                  selectedByDefault
+                >
                   <Button
                     minWidth="10"
                     onPress={onCreateWallet}
