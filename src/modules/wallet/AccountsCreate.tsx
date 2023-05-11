@@ -12,11 +12,6 @@ import { combine, length, numberInRange, useForm } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useWalletStore, WalletType } from '@src/store'
 
-type Inputs = {
-  name: string
-  pathId: string
-}
-
 export const AccountsCreate: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
@@ -27,7 +22,7 @@ export const AccountsCreate: React.FC = () => {
   const { account } = useRouteData<ROUTE.ACCOUNTS_CREATE>()
   const isEdit = !!account
 
-  const { errors, register, isValid, data } = useForm<Inputs>({
+  const { errors, register, isValid, data } = useForm({
     initialValues: {
       name: account?.name ?? '',
       pathId: account?.pathId.toString() ?? '',

@@ -52,12 +52,6 @@ const workerCode = `
   parentPort.postMessage({ phrase: wallet.mnemonic.phrase })
 `
 
-type Inputs = {
-  pattern: string
-  threads: string
-  pathId: string
-}
-
 const computeDifficulty = (pattern: string) => {
   const validChars = pattern.replace('0x', '').replace(/[^a-f0-9]/gi, '').length
 
@@ -72,7 +66,7 @@ export const CreateWallet: React.FC = () => {
   const [wallet, setWallet] = useState(() => Wallet.createRandom())
   const createWallet = useWalletStore((store) => store.createWallet)
   const [generationInProgress, setGenerationInProgress] = useState(false)
-  const { data, errors, isValid, register } = useForm<Inputs>({
+  const { data, errors, isValid, register } = useForm({
     initialValues: {
       pattern: '',
       threads: '1',
@@ -214,6 +208,7 @@ export const CreateWallet: React.FC = () => {
                 <InputBox
                   label="pathId"
                   width="50%"
+                  type="number"
                   placeholder="0"
                   disabled={generationInProgress}
                   error={errors.pathId}

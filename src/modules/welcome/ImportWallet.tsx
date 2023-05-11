@@ -14,19 +14,15 @@ import { ROUTE, useNavigate } from '@src/routes'
 import { useWalletStore, WalletType } from '@src/store'
 import { getWalletType } from '@src/store/wallet/actions'
 
-type Inputs = {
-  mnemonicOrPrivateKey: string
-  pathId: string
-}
-
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
   const importWallet = useWalletStore((state) => state.importWallet)
   const [advanced, setAdvanced] = useState(false)
   const [displaySecret, setVisibility] = useState(false)
 
-  const { data, errors, isValid, register } = useForm<Inputs>({
+  const { data, errors, isValid, register } = useForm({
     initialValues: {
+      mnemonicOrPrivateKey: '',
       pathId: '',
     },
     rules: {

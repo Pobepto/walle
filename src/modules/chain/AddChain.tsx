@@ -22,14 +22,6 @@ import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@store'
 
-type Inputs = {
-  name: string
-  rpc: string
-  chainId: string
-  explorer: string
-  currency: string
-}
-
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
@@ -40,23 +32,22 @@ export const AddChain: React.FC = () => {
   const loadChainId = useBlockchainStore((state) => state.loadChainId)
   const chains = useBlockchainStore((state) => state.chains)
 
-  const { errors, data, isValid, register, change, inputIsValid } =
-    useForm<Inputs>({
-      initialValues: {
-        name: chain?.name ?? '',
-        rpc: chain?.rpc ?? '',
-        chainId: String(chain?.chainId ?? ''),
-        explorer: chain?.explorer ?? '',
-        currency: chain?.currency ?? '',
-      },
-      rules: {
-        name: length(1),
-        rpc: link(),
-        chainId: combine(isIntegerNumber(), numberInRange(1, Infinity)),
-        explorer: link(),
-        currency: length(1),
-      },
-    })
+  const { errors, data, isValid, register, change, inputIsValid } = useForm({
+    initialValues: {
+      name: chain?.name ?? '',
+      rpc: chain?.rpc ?? '',
+      chainId: String(chain?.chainId ?? ''),
+      explorer: chain?.explorer ?? '',
+      currency: chain?.currency ?? '',
+    },
+    rules: {
+      name: length(1),
+      rpc: link(),
+      chainId: combine(isIntegerNumber(), numberInRange(1, Infinity)),
+      explorer: link(),
+      currency: length(1),
+    },
+  })
 
   const isAlreadyAddedChain = Boolean(
     chains.find((c) => c.chainId.toString() === data.chainId),

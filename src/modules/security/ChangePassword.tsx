@@ -14,17 +14,16 @@ import { ROUTE, useNavigate } from '@src/routes'
 import { save, USER_DATA } from '@src/utils'
 import { COLUMNS, useWalletStore } from '@store'
 
-type Inputs = {
-  password: string
-  repeatPassword: string
-}
-
 export const ChangePassword: React.FC = () => {
   const navigate = useNavigate()
   const parentZone = useSelectionZone()!
   const encryptWallet = useWalletStore((store) => store.encryptWallet)
 
-  const { data, errors, register, isValid } = useForm<Inputs>({
+  const { data, errors, register, isValid } = useForm({
+    initialValues: {
+      password: '',
+      repeatPassword: '',
+    },
     rules: {
       password: length(1),
       repeatPassword: (value, data) => {

@@ -8,15 +8,14 @@ import { TextButton } from '@src/components/TextButton'
 import { isEqualToString, useForm, useSelection } from '@src/hooks'
 import { remove, USER_DATA } from '@src/utils'
 
-type Inputs = {
-  agreement: string
-}
-
 const REQUIRED_WORD = 'DELETE'
 
 export const ForgotPassword: React.FC = () => {
   const navigate = useNavigate()
-  const { errors, register, validate } = useForm<Inputs>({
+  const { errors, register, validate } = useForm({
+    initialValues: {
+      agreement: '',
+    },
     rules: {
       agreement: isEqualToString(REQUIRED_WORD),
     },

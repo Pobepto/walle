@@ -18,14 +18,14 @@ import {
   USER_SETTINGS,
 } from '@utils'
 
-type Inputs = {
-  password: string
-}
-
 export const Login: React.FC = () => {
   const navigate = useNavigate()
   const decryptWallet = useWalletStore((state) => state.decryptWallet)
-  const { data, register } = useForm<Inputs>()
+  const { data, register } = useForm({
+    initialValues: {
+      password: '',
+    },
+  })
 
   const { selection, select } = useSelection({
     amount: 3,

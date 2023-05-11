@@ -30,13 +30,6 @@ import { GasPriceUnit } from '@src/constants'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useBlockchainStore } from '@src/store'
 
-type Inputs = {
-  gasPrice: string
-  maxFeePerGas: string
-  maxPriorityFeePerGas: string
-  gasLimit: string
-}
-
 enum DisplayMode {
   PARSED,
   RAW,
@@ -61,7 +54,13 @@ export const ConfirmTransaction: React.FC = () => {
   const estimate = useEstimate(populatedTx)
   const gas = useGasData(populatedTx)
 
-  const { register, change, data, errors, isValid } = useForm<Inputs>({
+  const { register, change, data, errors, isValid } = useForm({
+    initialValues: {
+      gasPrice: '',
+      maxFeePerGas: '',
+      maxPriorityFeePerGas: '',
+      gasLimit: '',
+    },
     rules: {
       gasPrice: isNumber(),
       gasLimit: combine(isIntegerNumber(), numberInRange(21000, Infinity)),

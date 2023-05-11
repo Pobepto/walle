@@ -11,10 +11,6 @@ import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { signClient } from '@src/wallet-connect'
 import { COLUMNS, useWalletConnectStore } from '@store'
 
-type Inputs = {
-  uri: string
-}
-
 export const WalletConnect: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
@@ -25,7 +21,7 @@ export const WalletConnect: React.FC = () => {
 
   const { uri } = useRouteData<ROUTE.WALLET_CONNECT>()
 
-  const { errors, data, isValid, register } = useForm<Inputs>({
+  const { errors, data, isValid, register } = useForm({
     initialValues: {
       uri: uri ?? '',
     },

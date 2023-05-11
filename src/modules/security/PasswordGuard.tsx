@@ -10,10 +10,6 @@ import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { COLUMNS, useWalletStore } from '@src/store'
 import { load, USER_DATA } from '@src/utils'
 
-type Inputs = {
-  password: string
-}
-
 export const PasswordGuard: React.FC = () => {
   const parentZone = useSelectionZone()!
   const route = useRouteData<ROUTE.PASSWORD_GUARD>()
@@ -22,7 +18,11 @@ export const PasswordGuard: React.FC = () => {
 
   const [error, setError] = useState('')
   const [inProgress, setInProgress] = useState(false)
-  const { data, register } = useForm<Inputs>()
+  const { data, register } = useForm({
+    initialValues: {
+      password: '',
+    },
+  })
 
   useKey(
     'return',

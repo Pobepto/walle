@@ -50,6 +50,10 @@ export const TransferForm: React.FC<TransferFormProps> = ({
   const [isExistENS, setExistENS] = useState(false)
 
   const { register, data, errors, isValid } = useForm<TransferInputs>({
+    initialValues: {
+      receiver: '',
+      amount: '',
+    },
     rules: {
       receiver: (value, data) => {
         if (!isExistENS) {
