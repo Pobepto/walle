@@ -1,13 +1,16 @@
 import { useWalletStore } from '@src/store'
 
-import { save, USER_SETTINGS } from './fs'
-import { serialize } from './serialize'
+import { getWalletSettings, save, WALLE_SETTINGS } from './fs'
+import { serializeUserSettings, serializeWalletSettings } from './serialize'
 
 export const saveUserSettings = () => {
-  setTimeout(() => {
+  setTimeout(async () => {
     try {
-      useWalletStore.getState().getWallet()
-      save(serialize(), USER_SETTINGS).then(saveUserSettings)
+      const { getWallet, activeWallet } = useWalletStore.getState()
+      getWallet()
+      await save(serializeWalletSettings(), getWalletSettings(activeWallet!))
+      await save(serializeUserSettings(), WALLE_SETTINGS)
+      saveUserSettings()
     } catch (error) {
       saveUserSettings()
     }

@@ -39,6 +39,7 @@ import {
   WalletConnectPairings,
   WalletConnectProposal,
   WalletConnectRequests,
+  Wallets,
   Welcome,
 } from './modules'
 import { routerFactory } from './Router'
@@ -54,6 +55,7 @@ export enum ROUTE {
   REGISTRATION_PASSWORD,
   FORGOT_PASSWORD,
   HOME,
+  WALLETS,
   ACCOUNTS,
   ACCOUNTS_CREATE,
   TOKEN_ADD,
@@ -81,6 +83,12 @@ export enum ROUTE {
 }
 
 interface ROUTE_DATA {
+  [ROUTE.LOGIN]: {
+    wallet: string
+  }
+  [ROUTE.FORGOT_PASSWORD]: {
+    wallet: string
+  }
   [ROUTE.ADD_CHAIN]: {
     chain?: Partial<Chain>
     edit?: boolean
@@ -140,6 +148,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
   [ROUTE.HOME]: base(Home),
   [ROUTE.HELP]: base(Help),
+  [ROUTE.WALLETS]: welcome(Wallets),
   [ROUTE.ACCOUNTS]: base(Accounts),
   [ROUTE.ACCOUNTS_CREATE]: base(AccountsCreate),
   [ROUTE.ADD_CHAIN]: base(AddChain),

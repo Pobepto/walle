@@ -12,6 +12,7 @@ export const MainMenu: React.FC = () => {
   const parentZone = useSelectionZone()!
 
   const logout = useWalletStore((state) => state.logout)
+  const activeWallet = useWalletStore((state) => state.activeWallet)
   const disconnect = useWalletConnectStore((store) => store.disconnect)
   const pendingRequests = useWalletConnectStore((store) => store.requests)
   const connected = useWalletConnectStore((store) => store.connected())
@@ -51,8 +52,8 @@ export const MainMenu: React.FC = () => {
         {
           title: 'Logout',
           onSelect: () => {
+            navigate(ROUTE.WALLETS)
             logout()
-            navigate(ROUTE.REGISTRATION)
           },
         },
       ],
@@ -126,7 +127,10 @@ export const MainMenu: React.FC = () => {
     },
     {
       title: 'Lock',
-      onSelect: () => navigate(ROUTE.LOGIN),
+      onSelect: () => {
+        navigate(ROUTE.LOGIN, { wallet: activeWallet! })
+        logout()
+      },
     },
   ]
 

@@ -10,11 +10,15 @@ export type Action<TState extends object, TValue = (...args: any[]) => any> = (
   get: GetState<TState>,
 ) => TValue
 
-export interface SerializedStore {
+export interface SerializedWalletSettings {
   blockchainStore: Pick<BlockchainStore, 'chainId' | 'chains'>
   walletConnectStore: Pick<WalletConnectStore, 'store' | 'requests'>
   walletStore: Pick<WalletStore, 'accountIndex' | 'addressIndex' | 'accounts'>
   tokensStore: Pick<TokensStore, 'tokens'>
+}
+
+export interface SerializedUserSettings {
+  walletStore: Pick<WalletStore, 'wallets'>
 }
 
 export * from './app'

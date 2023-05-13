@@ -9,7 +9,6 @@ import { ROUTE, useNavigate } from '@routes'
 import { initSubscribers } from '@src/store/initSubscribers'
 import { initSignClient } from '@src/wallet-connect'
 import { useWalletStore } from '@store'
-import { save, USER_DATA } from '@utils'
 
 export const SetPassword: React.FC = () => {
   const navigate = useNavigate()
@@ -46,8 +45,7 @@ export const SetPassword: React.FC = () => {
     const [isValid] = validate()
 
     if (isValid) {
-      const encrypted = await encryptWallet(data.password)
-      await save(encrypted, USER_DATA)
+      await encryptWallet(data.password)
       initSubscribers()
       await initSignClient()
       navigate(ROUTE.HOME)

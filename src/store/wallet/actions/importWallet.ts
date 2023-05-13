@@ -17,9 +17,13 @@ export const getWalletType = (mnemonicOrPrivateKey: string) => {
 }
 
 export const importWallet: WalletAction<'importWallet'> =
-  (set) =>
-  (mnemonicOrPrivateKey, accountIndex = 0, addressIndex = 0) => {
+  (set, get) =>
+  (name, mnemonicOrPrivateKey, accountIndex = 0, addressIndex = 0) => {
+    const { wallets } = get()
+
     set({
+      activeWallet: name,
+      wallets: [...wallets, name],
       mnemonicOrPrivateKey,
       accountIndex,
       addressIndex,

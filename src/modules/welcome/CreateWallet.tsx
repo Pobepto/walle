@@ -12,8 +12,7 @@ import {
   SelectionZoneProps,
 } from '@src/components/SelectionZone'
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
-import { numberInRange } from '@src/hooks'
-import { useForm } from '@src/hooks'
+import { numberInRange, useForm } from '@src/hooks'
 import { useWalletStore } from '@src/store'
 import { getDerivationPath } from '@src/utils'
 
@@ -66,14 +65,27 @@ export const CreateWallet: React.FC = () => {
   const [wallet, setWallet] = useState(() => Wallet.createRandom())
   const createWallet = useWalletStore((store) => store.createWallet)
   const [generationInProgress, setGenerationInProgress] = useState(false)
+  const wallets = useWalletStore((store) => store.wallets)
   const { data, errors, isValid, register } = useForm({
     initialValues: {
+      name: '',
       pattern: '',
       threads: '1',
       accountIndex: '0',
       addressIndex: '0',
     },
     rules: {
+      name: (value) => {
+        value = value.trim()
+
+        if (!value) {
+          return 'Required'
+        }
+
+        if (wallets.includes(value)) {
+          return 'Wallet with this name already exist'
+        }
+      },
       threads: numberInRange(1, 32),
       accountIndex: numberInRange(0, 2147483647),
       addressIndex: numberInRange(0, 2147483647),
@@ -148,6 +160,7 @@ export const CreateWallet: React.FC = () => {
 
   const onCreateWallet = () => {
     createWallet(
+      data.name,
       wallet.mnemonic.phrase,
       Number(data.accountIndex),
       Number(data.addressIndex),
@@ -200,6 +213,18 @@ export const CreateWallet: React.FC = () => {
           <Text color="cyan">
             {generationInProgress ? `0x${'?'.repeat(32)}` : wallet.address}
           </Text>
+
+          <Selection<InputBoxProps>
+            activeProps={{ focus: true }}
+            selectedByDefault
+          >
+            <InputBox
+              label="Wallet name"
+              width="50%"
+              error={errors.name}
+              {...register('name')}
+            />
+          </Selection>
 
           {advanced && (
             <>
@@ -256,10 +281,7 @@ export const CreateWallet: React.FC = () => {
           )}
 
           <Box>
-            <Selection<SelectionZoneProps>
-              activeProps={{ isActive: true }}
-              selectedByDefault
-            >
+            <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>
               <SelectionZone prevKey="leftArrow" nextKey="rightArrow">
                 <Selection<ButtonProps> activeProps={{ isFocused: true }}>
                   <Button onPress={navigate.back}>Back</Button>
@@ -290,7 +312,7 @@ export const CreateWallet: React.FC = () => {
                   <Button
                     minWidth="10"
                     onPress={onCreateWallet}
-                    isDisabled={generationInProgress}
+                    isDisabled={generationInProgress || !isValid}
                   >
                     Save
                   </Button>
