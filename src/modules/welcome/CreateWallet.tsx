@@ -70,11 +70,13 @@ export const CreateWallet: React.FC = () => {
     initialValues: {
       pattern: '',
       threads: '1',
-      pathId: '0',
+      accountIndex: '0',
+      addressIndex: '0',
     },
     rules: {
       threads: numberInRange(1, 32),
-      pathId: numberInRange(0, 2147483647),
+      accountIndex: numberInRange(0, 2147483647),
+      addressIndex: numberInRange(0, 2147483647),
     },
   })
   const workers = useRef<Worker[]>([])
@@ -97,7 +99,10 @@ export const CreateWallet: React.FC = () => {
       return
     }
 
-    const path = getDerivationPath(Number(data.pathId))
+    const path = getDerivationPath(
+      Number(data.accountIndex),
+      Number(data.addressIndex),
+    )
 
     if (pattern && pattern.length && pattern !== '0x') {
       setGenerationInProgress(true)
@@ -142,7 +147,11 @@ export const CreateWallet: React.FC = () => {
   }
 
   const onCreateWallet = () => {
-    createWallet(wallet.mnemonic.phrase, Number(data.pathId))
+    createWallet(
+      wallet.mnemonic.phrase,
+      Number(data.accountIndex),
+      Number(data.addressIndex),
+    )
     navigate(ROUTE.REGISTRATION_PASSWORD)
   }
 
@@ -206,13 +215,24 @@ export const CreateWallet: React.FC = () => {
               </Selection>
               <Selection<InputBoxProps> activeProps={{ focus: true }}>
                 <InputBox
-                  label="pathId"
+                  label="accountIndex"
                   width="50%"
                   type="number"
                   placeholder="0"
                   disabled={generationInProgress}
-                  error={errors.pathId}
-                  {...register('pathId')}
+                  error={errors.accountIndex}
+                  {...register('accountIndex')}
+                />
+              </Selection>
+              <Selection<InputBoxProps> activeProps={{ focus: true }}>
+                <InputBox
+                  label="addressIndex"
+                  width="50%"
+                  type="number"
+                  placeholder="0"
+                  disabled={generationInProgress}
+                  error={errors.addressIndex}
+                  {...register('addressIndex')}
                 />
               </Selection>
               <Selection<InputBoxProps> activeProps={{ focus: true }}>

@@ -18,7 +18,8 @@ import {
 
 export interface Account {
   name: string
-  pathId: number
+  accountIndex: number
+  addressIndex: number
 }
 
 export enum WalletType {
@@ -27,19 +28,32 @@ export enum WalletType {
 }
 
 export type WalletStore = {
-  activePathId: number
+  accountIndex: number
+  addressIndex: number
   type: Nullable<WalletType>
   mnemonicOrPrivateKey: Nullable<string>
   accounts: Account[]
-  getWallet: (pathId?: number) => Wallet
-  createWallet: (mnemonic: string, pathId?: number) => void
-  importWallet: (mnemonicOrPrivateKey: string, pathId?: number) => void
+  getWallet: (base?: boolean) => Wallet
+  createWallet: (
+    mnemonic: string,
+    accountIndex?: number,
+    addressIndex?: number,
+  ) => void
+  importWallet: (
+    mnemonicOrPrivateKey: string,
+    accountIndex?: number,
+    addressIndex?: number,
+  ) => void
   encryptWallet: (password: string) => Promise<string>
   decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
   logout: () => void
-  createAccount: (name: string, accountId?: number) => void
-  deleteAccount: (accountId: number) => void
-  selectAccount: (accountIndex: number) => void
+  createAccount: (
+    name: string,
+    accountIndex?: number,
+    addressIndex?: number,
+  ) => void
+  deleteAccount: (accountIndex: number, addressIndex: number) => void
+  selectAccount: (accountIndex: number, addressIndex: number) => void
 }
 
 export type WalletAction<T extends keyof WalletStore> = Action<
@@ -49,12 +63,13 @@ export type WalletAction<T extends keyof WalletStore> = Action<
 
 export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   (set, get) => ({
-    activePathId: 0,
+    accountIndex: 0,
+    addressIndex: 0,
     type: null,
     mnemonicOrPrivateKey: null,
     accounts: [],
-    getWallet: (pathId?: number) => {
-      const { mnemonicOrPrivateKey, type, activePathId } = get()
+    getWallet: (base = false) => {
+      const { mnemonicOrPrivateKey, type, accountIndex, addressIndex } = get()
 
       if (!mnemonicOrPrivateKey || !type) {
         throw new Error('Wallet not exist')
@@ -66,7 +81,7 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
 
       return Wallet.fromMnemonic(
         mnemonicOrPrivateKey,
-        getDerivationPath(pathId ?? activePathId),
+        base ? undefined : getDerivationPath(accountIndex, addressIndex),
       )
     },
     createWallet: createWallet(set, get),
@@ -76,8 +91,8 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
     logout: logout(set, get),
     createAccount: createAccount(set, get),
     deleteAccount: deleteAccount(set, get),
-    selectAccount: (accountId: number) => {
-      set({ activePathId: accountId })
+    selectAccount: (accountIndex, addressIndex) => {
+      set({ accountIndex, addressIndex })
     },
   }),
 )

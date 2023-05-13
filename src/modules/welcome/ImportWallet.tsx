@@ -23,7 +23,8 @@ export const ImportWallet: React.FC = () => {
   const { data, errors, isValid, register } = useForm({
     initialValues: {
       mnemonicOrPrivateKey: '',
-      pathId: '',
+      accountIndex: '',
+      addressIndex: '',
     },
     rules: {
       mnemonicOrPrivateKey: (value) => {
@@ -43,14 +44,19 @@ export const ImportWallet: React.FC = () => {
           }
         }
       },
-      pathId: numberInRange(0, 2147483647),
+      accountIndex: numberInRange(0, 2147483647),
+      addressIndex: numberInRange(0, 2147483647),
     },
   })
 
   const walletType = getWalletType(data.mnemonicOrPrivateKey)
 
   const onImport = () => {
-    importWallet(data.mnemonicOrPrivateKey, Number(data.pathId))
+    importWallet(
+      data.mnemonicOrPrivateKey,
+      Number(data.accountIndex),
+      Number(data.addressIndex),
+    )
     navigate(ROUTE.REGISTRATION_PASSWORD)
   }
 
@@ -94,20 +100,36 @@ export const ImportWallet: React.FC = () => {
             />
           </Selection>
           {advanced && (
-            <Selection<InputBoxProps> activeProps={{ focus: true }}>
-              <InputBox
-                label="pathId"
-                width="50%"
-                placeholder="0"
-                disabled={walletType === WalletType.PRIVATE_KEY}
-                error={
-                  walletType === WalletType.PRIVATE_KEY
-                    ? 'Wallet imported by private key does not support pathId'
-                    : errors.pathId
-                }
-                {...register('pathId')}
-              />
-            </Selection>
+            <>
+              <Selection<InputBoxProps> activeProps={{ focus: true }}>
+                <InputBox
+                  label="accountIndex"
+                  width="50%"
+                  placeholder="0"
+                  disabled={walletType === WalletType.PRIVATE_KEY}
+                  error={
+                    walletType === WalletType.PRIVATE_KEY
+                      ? 'Wallet imported by private key does not support accountIndex'
+                      : errors.accountIndex
+                  }
+                  {...register('accountIndex')}
+                />
+              </Selection>
+              <Selection<InputBoxProps> activeProps={{ focus: true }}>
+                <InputBox
+                  label="addressIndex"
+                  width="50%"
+                  placeholder="0"
+                  disabled={walletType === WalletType.PRIVATE_KEY}
+                  error={
+                    walletType === WalletType.PRIVATE_KEY
+                      ? 'Wallet imported by private key does not support addressIndex'
+                      : errors.addressIndex
+                  }
+                  {...register('addressIndex')}
+                />
+              </Selection>
+            </>
           )}
           <Box>
             <Selection<SelectionZoneProps> activeProps={{ isActive: true }}>

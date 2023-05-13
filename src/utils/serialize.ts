@@ -9,7 +9,7 @@ import {
 export const serialize = (): string => {
   const { chainId, chains } = useBlockchainStore.getState()
   const { store, requests } = useWalletConnectStore.getState()
-  const { pathId, accounts } = useWalletStore.getState()
+  const { accountIndex, addressIndex, accounts } = useWalletStore.getState()
   const { tokens } = useTokensStore.getState()
 
   const fileObject: SerializedStore = {
@@ -22,7 +22,8 @@ export const serialize = (): string => {
       requests,
     },
     walletStore: {
-      pathId,
+      accountIndex,
+      addressIndex,
       accounts,
     },
     tokensStore: {

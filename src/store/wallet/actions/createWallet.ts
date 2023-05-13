@@ -2,15 +2,17 @@ import { WalletAction, WalletType } from '..'
 
 export const createWallet: WalletAction<'createWallet'> =
   (set) =>
-  (mnemonic, pathId = 0) => {
+  (mnemonic, accountIndex = 0, addressIndex = 0) => {
     set({
       mnemonicOrPrivateKey: mnemonic,
-      activePathId: pathId,
+      accountIndex,
+      addressIndex,
       type: WalletType.MNEMONIC,
       accounts: [
         {
           name: 'Main',
-          pathId,
+          accountIndex,
+          addressIndex,
         },
       ],
     })

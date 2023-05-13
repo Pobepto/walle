@@ -34,7 +34,11 @@ export const initSubscribers = () => {
   )
 
   useWalletStore.subscribe(
-    (state) => [state.activePathId, state.mnemonicOrPrivateKey],
+    (state) => [
+      state.accountIndex,
+      state.addressIndex,
+      state.mnemonicOrPrivateKey,
+    ],
     ([, mnemonicOrPrivateKey]) => {
       if (mnemonicOrPrivateKey) {
         useBlockchainStore.getState().getNativeBalance()

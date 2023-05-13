@@ -25,7 +25,8 @@ export const AccountsCreate: React.FC = () => {
   const { errors, register, isValid, data } = useForm({
     initialValues: {
       name: account?.name ?? '',
-      pathId: account?.pathId.toString() ?? '',
+      accountIndex: account?.accountIndex.toString() ?? '0',
+      addressIndex: account?.addressIndex.toString() ?? '',
     },
     rules: {
       name: combine(length(1), (name) => {
@@ -36,21 +37,33 @@ export const AccountsCreate: React.FC = () => {
           return 'Account with this name already exists'
         }
       }),
-      pathId: combine(numberInRange(0, 2147483647), (pathId) => {
-        if (!pathId) return
+      accountIndex: numberInRange(0, 2147483647),
+      addressIndex: combine(
+        numberInRange(0, 2147483647),
+        (addressIndex, data) => {
+          if (!addressIndex) return
 
-        if (
-          !isEdit &&
-          accounts.find((account) => account.pathId === Number(pathId))
-        ) {
-          return 'Account with this pathId already exists'
-        }
-      }),
+          if (
+            !isEdit &&
+            accounts.find(
+              (account) =>
+                account.accountIndex === Number(data.accountIndex) &&
+                account.addressIndex === Number(addressIndex),
+            )
+          ) {
+            return 'Account with this address index already exists'
+          }
+        },
+      ),
     },
   })
 
   const onCreate = () => {
-    createAccount(data.name, data.pathId ? Number(data.pathId) : undefined)
+    createAccount(
+      data.name,
+      data.accountIndex ? Number(data.accountIndex) : undefined,
+      data.addressIndex ? Number(data.addressIndex) : undefined,
+    )
     navigate(ROUTE.ACCOUNTS)
   }
 
@@ -68,18 +81,29 @@ export const AccountsCreate: React.FC = () => {
         </Box>
 
         {isSupportAccounts && !isEdit && (
-          <Selection activeProps={{ focus: true }}>
-            <InputBox
-              label="pathId"
-              type="number"
-              placeholder="auto"
-              error={errors.pathId}
-              {...register('pathId')}
-            />
-          </Selection>
+          <>
+            <Selection activeProps={{ focus: true }}>
+              <InputBox
+                label="accountIndex"
+                type="number"
+                placeholder="auto"
+                error={errors.accountIndex}
+                {...register('accountIndex')}
+              />
+            </Selection>
+            <Selection activeProps={{ focus: true }}>
+              <InputBox
+                label="addressIndex"
+                type="number"
+                placeholder="auto"
+                error={errors.addressIndex}
+                {...register('addressIndex')}
+              />
+            </Selection>
+          </>
         )}
 
-        <Selection activeProps={{ focus: true }}>
+        <Selection activeProps={{ focus: true }} selectedByDefault>
           <InputBox label="Name" error={errors.name} {...register('name')} />
         </Selection>
 

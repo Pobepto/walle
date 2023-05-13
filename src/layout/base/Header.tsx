@@ -10,10 +10,15 @@ export const Header: React.FC = () => {
   const wallet = useWallet()
   const chain = useChain()
   const nativeBalance = useBlockchainStore((store) => store.nativeBalance)
-  const pathId = useWalletStore((state) => state.activePathId)
+  const accountIndex = useWalletStore((state) => state.accountIndex)
+  const addressIndex = useWalletStore((state) => state.addressIndex)
   const accounts = useWalletStore((state) => state.accounts)
 
-  const account = accounts.find((account) => account.pathId === pathId)
+  const account = accounts.find(
+    (account) =>
+      account.accountIndex === accountIndex &&
+      account.addressIndex === addressIndex,
+  )
 
   // const link = `${chain.explorer}/address/${wallet.address}`
   const formattedBalance = nativeBalance
