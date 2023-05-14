@@ -6,7 +6,7 @@ import { Button } from '@src/components'
 import { InputBox } from '@src/components/InputBox'
 import { TextButton } from '@src/components/TextButton'
 import { isEqualToString, useForm, useSelection } from '@src/hooks'
-import { getWalletData, getWalletSettings, remove } from '@src/utils'
+import { getWalletDataPath, getWalletSettingsPath, remove } from '@src/utils'
 
 const REQUIRED_WORD = 'DELETE'
 
@@ -38,8 +38,8 @@ export const ForgotPassword: React.FC = () => {
     const [isValid] = validate()
 
     if (isValid) {
-      remove(getWalletData(wallet))
-      remove(getWalletSettings(wallet))
+      remove(getWalletDataPath(wallet))
+      remove(getWalletSettingsPath(wallet))
       navigate(ROUTE.WELCOME)
     } else {
       preventInput()

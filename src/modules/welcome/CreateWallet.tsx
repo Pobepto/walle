@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react'
+import filenamify from 'filenamify'
 import { Box, Text } from 'ink'
 import { Worker } from 'worker_threads'
 
@@ -76,7 +77,9 @@ export const CreateWallet: React.FC = () => {
     },
     rules: {
       name: (value) => {
-        value = value.trim()
+        value = filenamify(value.trim(), {
+          replacement: '',
+        })
 
         if (!value) {
           return 'Required'

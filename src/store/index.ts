@@ -17,9 +17,7 @@ export interface SerializedWalletSettings {
   tokensStore: Pick<TokensStore, 'tokens'>
 }
 
-export interface SerializedUserSettings {
-  walletStore: Pick<WalletStore, 'wallets'>
-}
+export type SerializedUserSettings = Pick<WalletStore, 'wallets'>
 
 export * from './app'
 export * from './blockchain'

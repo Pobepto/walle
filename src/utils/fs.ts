@@ -1,14 +1,13 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-export const USER_DATA = path.join(__dirname, 'walle.data')
 export const WALLE_SETTINGS = path.join(__dirname, 'walle.settings.json')
 
-export const getWalletData = (wallet: string) => {
+export const getWalletDataPath = (wallet: string) => {
   return path.join(__dirname, `walle.${wallet}.data`)
 }
 
-export const getWalletSettings = (wallet: string) => {
+export const getWalletSettingsPath = (wallet: string) => {
   return path.join(__dirname, `walle.${wallet}.settings.json`)
 }
 

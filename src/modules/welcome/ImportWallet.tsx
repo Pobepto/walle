@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import filenamify from 'filenamify'
 import { Box, Text } from 'ink'
 
 import { Wallet } from '@ethersproject/wallet'
@@ -30,7 +31,9 @@ export const ImportWallet: React.FC = () => {
     },
     rules: {
       name: (value) => {
-        value = value.trim()
+        value = filenamify(value.trim(), {
+          replacement: '',
+        })
 
         if (!value) {
           return 'Required'

@@ -1,6 +1,6 @@
 import { useWalletStore } from '@src/store'
 
-import { getWalletSettings, save, WALLE_SETTINGS } from './fs'
+import { getWalletSettingsPath, save, WALLE_SETTINGS } from './fs'
 import { serializeUserSettings, serializeWalletSettings } from './serialize'
 
 export const saveUserSettings = () => {
@@ -8,7 +8,10 @@ export const saveUserSettings = () => {
     try {
       const { getWallet, activeWallet } = useWalletStore.getState()
       getWallet()
-      await save(serializeWalletSettings(), getWalletSettings(activeWallet!))
+      await save(
+        serializeWalletSettings(),
+        getWalletSettingsPath(activeWallet!),
+      )
       await save(serializeUserSettings(), WALLE_SETTINGS)
       saveUserSettings()
     } catch (error) {

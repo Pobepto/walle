@@ -39,9 +39,7 @@ export const serializeUserSettings = (): string => {
   const { wallets } = useWalletStore.getState()
 
   const fileObject: SerializedUserSettings = {
-    walletStore: {
-      wallets,
-    },
+    wallets,
   }
 
   return JSON.stringify(fileObject)

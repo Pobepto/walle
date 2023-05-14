@@ -1,4 +1,4 @@
-import { getWalletData, save } from '@src/utils'
+import { getWalletDataPath, save } from '@src/utils'
 
 import { WalletAction } from '..'
 
@@ -12,5 +12,5 @@ export const encryptWallet: WalletAction<'encryptWallet'> =
 
     const encrypted = await getWallet(true).encrypt(password)
 
-    await save(encrypted, getWalletData(activeWallet))
+    await save(encrypted, getWalletDataPath(activeWallet))
   }
