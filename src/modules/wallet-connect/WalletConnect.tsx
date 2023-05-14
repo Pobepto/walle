@@ -6,10 +6,11 @@ import { InputBox } from '@components/InputBox'
 import { useForm, useSelection, walletConnectLink } from '@hooks'
 import { Loader } from '@src/components/Loader'
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { signClient } from '@src/wallet-connect'
-import { COLUMNS, useWalletConnectStore } from '@store'
+import { useWalletConnectStore } from '@store'
 
 export const WalletConnect: React.FC = () => {
   const parentZone = useSelectionZone()!

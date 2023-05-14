@@ -18,9 +18,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useBlockchainStore } from '@store'
+import { useBlockchainStore } from '@store'
 
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!

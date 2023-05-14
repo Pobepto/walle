@@ -1,13 +1,14 @@
+import { useAppStore } from '@src/store/app'
+
 import { WalletAction, WalletType } from '..'
 
 export const createWallet: WalletAction<'createWallet'> =
-  (set, get) =>
+  (set) =>
   (name, mnemonic, accountIndex = 0, addressIndex = 0) => {
-    const { wallets } = get()
+    useAppStore.getState().addWallet(name)
 
     set({
       activeWallet: name,
-      wallets: [...wallets, name],
       mnemonicOrPrivateKey: mnemonic,
       accountIndex,
       addressIndex,

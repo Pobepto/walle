@@ -1,5 +1,6 @@
 import { Wallet } from '@ethersproject/wallet'
-import { getWalletDataPath, load } from '@src/utils'
+import { getWalletDataPath } from '@src/store'
+import { load } from '@src/utils'
 
 import { WalletAction, WalletType } from '..'
 

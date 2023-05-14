@@ -7,8 +7,8 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { TextButton } from '@src/components/TextButton'
+import { COLUMNS } from '@src/constants'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS } from '@src/store'
 
 interface TokenAction {
   label: string

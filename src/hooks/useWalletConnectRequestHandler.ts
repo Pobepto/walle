@@ -1,6 +1,7 @@
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS, useWalletConnectStore } from '@src/store'
+import { useWalletConnectStore } from '@src/store'
 import { SessionRequest } from '@src/store/wallet-connect/actions'
 import { EIP155_SIGNING_METHODS } from '@src/store/wallet-connect/constants'
 import { bignumberifyTx } from '@src/utils/bignumberifyTx'

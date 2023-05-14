@@ -7,8 +7,9 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useKey } from '@src/hooks'
-import { COLUMNS, useWalletConnectStore } from '@store'
+import { useWalletConnectStore } from '@store'
 import { PairingTypes } from '@walletconnect/types'
 
 interface PairingProps {

@@ -8,9 +8,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { combine, length, numberInRange, useForm } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useWalletStore, WalletType } from '@src/store'
+import { useWalletStore, WalletType } from '@src/store'
 
 export const AccountsCreate: React.FC = () => {
   const parentZone = useSelectionZone()!

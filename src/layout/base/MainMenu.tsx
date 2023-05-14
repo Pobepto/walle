@@ -4,8 +4,9 @@ import { Box, Text } from 'ink'
 import { Menu, MenuItem } from '@components'
 import { ROUTE, useNavigate } from '@routes'
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { signClient } from '@src/wallet-connect'
-import { COLUMNS, useWalletConnectStore, useWalletStore } from '@store'
+import { useWalletConnectStore, useWalletStore } from '@store'
 
 export const MainMenu: React.FC = () => {
   const navigate = useNavigate()

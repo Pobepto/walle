@@ -5,9 +5,10 @@ import { Error } from '@src/components'
 import { InputBox } from '@src/components/InputBox'
 import { Loader } from '@src/components/Loader'
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useForm, useKey } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useWalletStore } from '@src/store'
+import { useWalletStore } from '@src/store'
 
 export const PasswordGuard: React.FC = () => {
   const parentZone = useSelectionZone()!

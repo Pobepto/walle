@@ -8,9 +8,9 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useWallet } from '@src/hooks'
 import { ROUTE } from '@src/routes'
-import { COLUMNS } from '@store'
 
 export const ShowPrivateKey: React.FC = () => {
   const wallet = useWallet()

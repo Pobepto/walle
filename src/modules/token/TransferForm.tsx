@@ -11,6 +11,7 @@ import {
   SelectionZoneProps,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import {
   bigNumberInRange,
   combine,
@@ -21,7 +22,6 @@ import {
   useENS,
   useForm,
 } from '@src/hooks'
-import { COLUMNS } from '@src/store'
 import { formatNumber } from '@src/utils/formatNumber'
 
 export type TransferInputs = {

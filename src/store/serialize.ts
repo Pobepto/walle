@@ -1,19 +1,20 @@
 import {
-  SerializedUserSettings,
-  SerializedWalletSettings,
+  SerializedAppState,
+  SerializedWalletState,
+  useAppStore,
   useBlockchainStore,
   useTokensStore,
   useWalletConnectStore,
   useWalletStore,
 } from '@src/store'
 
-export const serializeWalletSettings = (): string => {
+export const serializeWalletState = (): string => {
   const { chainId, chains } = useBlockchainStore.getState()
   const { store, requests } = useWalletConnectStore.getState()
   const { accountIndex, addressIndex, accounts } = useWalletStore.getState()
   const { tokens } = useTokensStore.getState()
 
-  const fileObject: SerializedWalletSettings = {
+  const fileObject: SerializedWalletState = {
     blockchainStore: {
       chainId,
       chains,
@@ -35,10 +36,10 @@ export const serializeWalletSettings = (): string => {
   return JSON.stringify(fileObject)
 }
 
-export const serializeUserSettings = (): string => {
-  const { wallets } = useWalletStore.getState()
+export const serializeAppState = (): string => {
+  const { wallets } = useAppStore.getState()
 
-  const fileObject: SerializedUserSettings = {
+  const fileObject: SerializedAppState = {
     wallets,
   }
 

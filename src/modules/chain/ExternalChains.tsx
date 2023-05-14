@@ -15,11 +15,10 @@ import {
   UncontrolledSelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { ExternalChain } from '@src/constants'
+import { COLUMNS, ExternalChain } from '@src/constants'
 import { useInput, useSelection } from '@src/hooks'
 import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS } from '@store'
 
 enum FocusZones {
   CHAINS_LIST = 'CHAINS_LIST',

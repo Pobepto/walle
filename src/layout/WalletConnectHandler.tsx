@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useClipboard, useWalletConnectRequestHandler } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS, useWalletConnectStore } from '@src/store'
+import { useWalletConnectStore } from '@src/store'
 import { signClient } from '@src/wallet-connect'
 
 export const WalletConnectHandler: React.FC = () => {

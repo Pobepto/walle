@@ -9,9 +9,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { length, useForm } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS, useWalletStore } from '@store'
+import { useWalletStore } from '@store'
 
 export const ChangePassword: React.FC = () => {
   const navigate = useNavigate()

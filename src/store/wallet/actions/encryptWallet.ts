@@ -1,4 +1,5 @@
-import { getWalletDataPath, save } from '@src/utils'
+import { getWalletDataPath } from '@src/store'
+import { save } from '@src/utils'
 
 import { WalletAction } from '..'
 
