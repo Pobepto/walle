@@ -59,6 +59,10 @@ export const AddToken: React.FC = () => {
   const { execute, error, isLoading, clearError } = useAsync(loadToken)
 
   useEffect(() => {
+    if (isEdit) {
+      return
+    }
+
     if (inputIsValid('address')) {
       execute(data.address)
         .then(({ name, symbol, decimals }) => {

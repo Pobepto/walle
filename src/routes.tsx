@@ -31,6 +31,7 @@ import {
   SignMessage,
   SwitchChain,
   TokenActions,
+  TokenApprove,
   TokenInfo,
   Tokens,
   TokenTransfer,
@@ -65,6 +66,7 @@ export enum ROUTE {
   TOKENS,
   TOKEN_ACTIONS,
   TOKEN_TRANSFER,
+  TOKEN_APPROVE,
   TOKEN_INFO,
   CURRENCY_ACTIONS,
   CURRENCY_TRANSFER,
@@ -98,6 +100,7 @@ interface ROUTE_DATA {
   }
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
+  [ROUTE.TOKEN_APPROVE]: Token
   [ROUTE.TOKEN_INFO]: Token
   [ROUTE.CONFIRM_TRANSACTION]: {
     target?: Contract
@@ -158,6 +161,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.TOKEN_ADD]: base(AddToken),
   [ROUTE.TOKEN_ACTIONS]: base(TokenActions),
   [ROUTE.TOKEN_TRANSFER]: base(TokenTransfer),
+  [ROUTE.TOKEN_APPROVE]: base(TokenApprove),
   [ROUTE.TOKEN_INFO]: base(TokenInfo),
   [ROUTE.CURRENCY_ACTIONS]: base(CurrencyActions),
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
