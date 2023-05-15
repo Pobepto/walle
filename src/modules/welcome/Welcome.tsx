@@ -4,14 +4,13 @@ import { Box, Text } from 'ink'
 import { ROUTE, useNavigate } from '@routes'
 import { TextButton } from '@src/components/TextButton'
 import { WALLE_LOGO } from '@src/constants'
-import { useWalletStore } from '@src/store'
-import { restoreUserSettings } from '@src/utils'
+import { restoreAppState, useAppStore } from '@src/store'
 
 import { version } from '../../../package.json'
 
 export const Welcome: React.FC = () => {
   const navigate = useNavigate()
-  const wallets = useWalletStore((store) => store.wallets)
+  const wallets = useAppStore((store) => store.wallets)
   const initPromise = useRef<Promise<void>>()
 
   const onEnter = async () => {
@@ -25,7 +24,7 @@ export const Welcome: React.FC = () => {
   }
 
   useEffect(() => {
-    initPromise.current = restoreUserSettings()
+    initPromise.current = restoreAppState()
   }, [])
 
   return (

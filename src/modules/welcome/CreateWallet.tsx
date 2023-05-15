@@ -14,7 +14,7 @@ import {
 } from '@src/components/SelectionZone'
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
 import { numberInRange, useForm } from '@src/hooks'
-import { useWalletStore } from '@src/store'
+import { useAppStore, useWalletStore } from '@src/store'
 import { getDerivationPath } from '@src/utils'
 
 const workerCode = `
@@ -66,7 +66,7 @@ export const CreateWallet: React.FC = () => {
   const [wallet, setWallet] = useState(() => Wallet.createRandom())
   const createWallet = useWalletStore((store) => store.createWallet)
   const [generationInProgress, setGenerationInProgress] = useState(false)
-  const wallets = useWalletStore((store) => store.wallets)
+  const wallets = useAppStore((store) => store.wallets)
   const { data, errors, isValid, register } = useForm({
     initialValues: {
       name: '',

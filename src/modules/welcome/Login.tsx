@@ -7,8 +7,8 @@ import { useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate, useRouteData } from '@routes'
 import { TextButton } from '@src/components/TextButton'
 import { useAsync } from '@src/hooks/useAsync'
+import { restoreWalletState } from '@src/store'
 import { initSubscribers } from '@src/store/initSubscribers'
-import { restoreWalletSettings } from '@src/utils'
 import { initSignClient } from '@src/wallet-connect'
 import { useWalletStore } from '@store'
 
@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
   const { execute, isLoading, error } = useAsync(async () => {
     await decryptWallet(wallet, data.password)
 
-    await restoreWalletSettings(wallet)
+    await restoreWalletState(wallet)
     initSubscribers()
     await initSignClient()
 

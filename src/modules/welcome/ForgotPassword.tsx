@@ -1,12 +1,13 @@
 import React from 'react'
 import { Box, Text } from 'ink'
 
+import { Button } from '@components'
+import { InputBox } from '@components/InputBox'
+import { TextButton } from '@components/TextButton'
+import { isEqualToString, useForm, useSelection } from '@hooks'
 import { ROUTE, useNavigate, useRouteData } from '@routes'
-import { Button } from '@src/components'
-import { InputBox } from '@src/components/InputBox'
-import { TextButton } from '@src/components/TextButton'
-import { isEqualToString, useForm, useSelection } from '@src/hooks'
-import { getWalletDataPath, getWalletSettingsPath, remove } from '@src/utils'
+import { getWalletDataPath, getWalletSettingsPath } from '@src/store'
+import { remove } from '@utils'
 
 const REQUIRED_WORD = 'DELETE'
 

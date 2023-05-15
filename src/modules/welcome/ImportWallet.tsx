@@ -12,13 +12,13 @@ import {
 } from '@src/components/SelectionZone'
 import { numberInRange, useForm } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { useWalletStore, WalletType } from '@src/store'
+import { useAppStore, useWalletStore, WalletType } from '@src/store'
 import { getWalletType } from '@src/store/wallet/actions'
 
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
   const importWallet = useWalletStore((state) => state.importWallet)
-  const wallets = useWalletStore((state) => state.wallets)
+  const wallets = useAppStore((state) => state.wallets)
   const [advanced, setAdvanced] = useState(false)
   const [displaySecret, setVisibility] = useState(false)
 

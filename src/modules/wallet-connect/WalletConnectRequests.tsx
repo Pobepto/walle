@@ -7,9 +7,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { SuperKey, useKey, useWalletConnectRequestHandler } from '@src/hooks'
 import { SessionRequest } from '@src/store/wallet-connect/actions'
-import { COLUMNS, useWalletConnectStore } from '@store'
+import { useWalletConnectStore } from '@store'
 
 interface RequestItemProps {
   request: SessionRequest

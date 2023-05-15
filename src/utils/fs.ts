@@ -1,15 +1,4 @@
 import fs from 'fs/promises'
-import path from 'path'
-
-export const WALLE_SETTINGS = path.join(__dirname, 'walle.settings.json')
-
-export const getWalletDataPath = (wallet: string) => {
-  return path.join(__dirname, `walle.${wallet}.data`)
-}
-
-export const getWalletSettingsPath = (wallet: string) => {
-  return path.join(__dirname, `walle.${wallet}.settings.json`)
-}
 
 export const save = async (data: string, file: string): Promise<void> => {
   // TODO: Add try catch later

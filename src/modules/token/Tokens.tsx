@@ -10,10 +10,10 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { TextButtonProps } from '@src/components/TextButton'
-import { Token } from '@src/constants'
+import { COLUMNS, Token } from '@src/constants'
 import { useTokens } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS, useTokensStore } from '@src/store'
+import { useTokensStore } from '@src/store'
 
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!

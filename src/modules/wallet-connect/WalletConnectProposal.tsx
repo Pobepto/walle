@@ -5,9 +5,10 @@ import { Button, Error } from '@components'
 import { useSelection } from '@hooks'
 import { Loader } from '@src/components/Loader'
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useBlockchainStore, useWalletConnectStore } from '@store'
+import { useBlockchainStore, useWalletConnectStore } from '@store'
 
 export const WalletConnectProposal: React.FC = () => {
   const parentZone = useSelectionZone()!

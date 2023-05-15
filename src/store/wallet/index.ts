@@ -29,7 +29,6 @@ export enum WalletType {
 
 export type WalletStore = {
   activeWallet: Nullable<string>
-  wallets: string[]
   accountIndex: number
   addressIndex: number
   type: Nullable<WalletType>
@@ -68,7 +67,6 @@ export type WalletAction<T extends keyof WalletStore> = Action<
 export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   (set, get) => ({
     activeWallet: null,
-    wallets: [],
     accountIndex: 0,
     addressIndex: 0,
     type: null,

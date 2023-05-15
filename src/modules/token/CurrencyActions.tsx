@@ -7,9 +7,9 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { TextButton } from '@src/components/TextButton'
+import { COLUMNS } from '@src/constants'
 import { useChain } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS } from '@src/store'
 
 interface CurrencyAction {
   label: string

@@ -10,8 +10,9 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { TextButtonProps } from '@src/components/TextButton'
+import { COLUMNS } from '@src/constants'
 import { ROUTE, useNavigate } from '@src/routes'
-import { Account, COLUMNS, useWalletStore, WalletType } from '@src/store'
+import { Account, useWalletStore, WalletType } from '@src/store'
 
 export const Accounts: React.FC = () => {
   const parentZone = useSelectionZone()!

@@ -26,9 +26,9 @@ import {
 import { Divider } from '@src/components/Divider'
 import { Loader } from '@src/components/Loader'
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
-import { GasPriceUnit } from '@src/constants'
+import { COLUMNS, GasPriceUnit } from '@src/constants'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useBlockchainStore } from '@src/store'
+import { useBlockchainStore } from '@src/store'
 
 enum DisplayMode {
   PARSED,

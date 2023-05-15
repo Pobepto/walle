@@ -10,11 +10,11 @@ import {
 } from '@src/components/SelectionZone'
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
 import { ROUTE, useNavigate } from '@src/routes'
-import { useWalletStore } from '@src/store'
+import { useAppStore } from '@src/store'
 
 export const Wallets: React.FC = () => {
   const navigate = useNavigate()
-  const wallets = useWalletStore((store) => store.wallets)
+  const wallets = useAppStore((store) => store.wallets)
 
   const login = (wallet: string) => {
     navigate(ROUTE.LOGIN, { wallet })
