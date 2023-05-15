@@ -1,3 +1,9 @@
+export enum COLUMNS {
+  MENU,
+  MAIN,
+  TOKENS,
+}
+
 export interface Chain {
   chainId: number
   name: string

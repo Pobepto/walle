@@ -33,7 +33,6 @@ export const CurrencyTransfer: React.FC = () => {
       decimals={18}
       balanceIsLoading={!nativeBalance}
       onTransfer={onTransfer}
-      onBack={() => navigate(ROUTE.CURRENCY_ACTIONS)}
     />
   )
 }

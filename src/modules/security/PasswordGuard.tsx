@@ -5,16 +5,17 @@ import { Error } from '@src/components'
 import { InputBox } from '@src/components/InputBox'
 import { Loader } from '@src/components/Loader'
 import { useSelectionZone } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useForm, useKey } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useWalletStore } from '@src/store'
-import { load, USER_DATA } from '@src/utils'
+import { useWalletStore } from '@src/store'
 
 export const PasswordGuard: React.FC = () => {
   const parentZone = useSelectionZone()!
   const route = useRouteData<ROUTE.PASSWORD_GUARD>()
   const navigate = useNavigate()
   const decryptWallet = useWalletStore((store) => store.decryptWallet)
+  const activeWallet = useWalletStore((store) => store.activeWallet)
 
   const [error, setError] = useState('')
   const [inProgress, setInProgress] = useState(false)
@@ -31,8 +32,7 @@ export const PasswordGuard: React.FC = () => {
 
       try {
         setInProgress(true)
-        const encrypted = await load(USER_DATA)
-        await decryptWallet(data.password, encrypted)
+        await decryptWallet(activeWallet!, data.password)
         navigate(route)
       } catch {
         setError('Invalid password')

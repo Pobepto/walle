@@ -31,6 +31,7 @@ import {
   SignMessage,
   SwitchChain,
   TokenActions,
+  TokenApprove,
   TokenInfo,
   Tokens,
   TokenTransfer,
@@ -39,6 +40,7 @@ import {
   WalletConnectPairings,
   WalletConnectProposal,
   WalletConnectRequests,
+  Wallets,
   Welcome,
 } from './modules'
 import { routerFactory } from './Router'
@@ -54,6 +56,7 @@ export enum ROUTE {
   REGISTRATION_PASSWORD,
   FORGOT_PASSWORD,
   HOME,
+  WALLETS,
   ACCOUNTS,
   ACCOUNTS_CREATE,
   TOKEN_ADD,
@@ -63,6 +66,7 @@ export enum ROUTE {
   TOKENS,
   TOKEN_ACTIONS,
   TOKEN_TRANSFER,
+  TOKEN_APPROVE,
   TOKEN_INFO,
   CURRENCY_ACTIONS,
   CURRENCY_TRANSFER,
@@ -81,6 +85,12 @@ export enum ROUTE {
 }
 
 interface ROUTE_DATA {
+  [ROUTE.LOGIN]: {
+    wallet: string
+  }
+  [ROUTE.FORGOT_PASSWORD]: {
+    wallet: string
+  }
   [ROUTE.ADD_CHAIN]: {
     chain?: Partial<Chain>
     edit?: boolean
@@ -90,6 +100,7 @@ interface ROUTE_DATA {
   }
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
+  [ROUTE.TOKEN_APPROVE]: Token
   [ROUTE.TOKEN_INFO]: Token
   [ROUTE.CONFIRM_TRANSACTION]: {
     target?: Contract
@@ -140,6 +151,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
   [ROUTE.HOME]: base(Home),
   [ROUTE.HELP]: base(Help),
+  [ROUTE.WALLETS]: welcome(Wallets),
   [ROUTE.ACCOUNTS]: base(Accounts),
   [ROUTE.ACCOUNTS_CREATE]: base(AccountsCreate),
   [ROUTE.ADD_CHAIN]: base(AddChain),
@@ -149,6 +161,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.TOKEN_ADD]: base(AddToken),
   [ROUTE.TOKEN_ACTIONS]: base(TokenActions),
   [ROUTE.TOKEN_TRANSFER]: base(TokenTransfer),
+  [ROUTE.TOKEN_APPROVE]: base(TokenApprove),
   [ROUTE.TOKEN_INFO]: base(TokenInfo),
   [ROUTE.CURRENCY_ACTIONS]: base(CurrencyActions),
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),

@@ -1,22 +1,31 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Box, Text } from 'ink'
 
 import { ROUTE, useNavigate } from '@routes'
 import { TextButton } from '@src/components/TextButton'
 import { WALLE_LOGO } from '@src/constants'
-import { isFileExist, USER_DATA } from '@utils'
+import { restoreAppState, useAppStore } from '@src/store'
 
 import { version } from '../../../package.json'
 
 export const Welcome: React.FC = () => {
   const navigate = useNavigate()
+  const wallets = useAppStore((store) => store.wallets)
+  const initPromise = useRef<Promise<void>>()
 
   const onEnter = async () => {
-    const isExist = await isFileExist(USER_DATA)
-    const route = isExist ? ROUTE.LOGIN : ROUTE.REGISTRATION
+    await initPromise.current
 
-    navigate(route)
+    if (wallets.length) {
+      navigate(ROUTE.WALLETS)
+    } else {
+      navigate(ROUTE.REGISTRATION)
+    }
   }
+
+  useEffect(() => {
+    initPromise.current = restoreAppState()
+  }, [])
 
   return (
     <Box flexDirection="column" justifyContent="center" alignItems="center">

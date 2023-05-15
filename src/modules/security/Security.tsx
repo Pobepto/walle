@@ -7,8 +7,9 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS, useWalletStore, WalletType } from '@src/store'
+import { useWalletStore, WalletType } from '@src/store'
 
 export const Security: React.FC = () => {
   const parentZone = useSelectionZone()!

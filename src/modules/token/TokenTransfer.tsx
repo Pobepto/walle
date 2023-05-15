@@ -37,7 +37,6 @@ export const TokenTransfer: React.FC = () => {
       decimals={token.decimals}
       balanceIsLoading={!hasBalance}
       onTransfer={onTransfer}
-      onBack={() => navigate(ROUTE.TOKEN_ACTIONS, token)}
     />
   )
 }

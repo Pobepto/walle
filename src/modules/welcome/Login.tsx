@@ -4,22 +4,17 @@ import { Box, Text } from 'ink'
 import AsyncButton from '@components/AsyncButton'
 import { InputBox } from '@components/InputBox'
 import { useForm, useSelection } from '@hooks'
-import { ROUTE, useNavigate } from '@routes'
+import { ROUTE, useNavigate, useRouteData } from '@routes'
 import { TextButton } from '@src/components/TextButton'
 import { useAsync } from '@src/hooks/useAsync'
+import { restoreWalletState } from '@src/store'
 import { initSubscribers } from '@src/store/initSubscribers'
 import { initSignClient } from '@src/wallet-connect'
 import { useWalletStore } from '@store'
-import {
-  deserialize,
-  isFileExist,
-  load,
-  USER_DATA,
-  USER_SETTINGS,
-} from '@utils'
 
 export const Login: React.FC = () => {
   const navigate = useNavigate()
+  const { wallet } = useRouteData<ROUTE.LOGIN>()
   const decryptWallet = useWalletStore((state) => state.decryptWallet)
   const { data, register } = useForm({
     initialValues: {
@@ -35,15 +30,9 @@ export const Login: React.FC = () => {
   })
 
   const { execute, isLoading, error } = useAsync(async () => {
-    const encrypted = await load(USER_DATA)
-    await decryptWallet(data.password, encrypted)
+    await decryptWallet(wallet, data.password)
 
-    const isExist = await isFileExist(USER_SETTINGS)
-    if (isExist) {
-      const store = await load(USER_SETTINGS)
-      deserialize(JSON.parse(store))
-    }
-
+    await restoreWalletState(wallet)
     initSubscribers()
     await initSignClient()
 
@@ -81,7 +70,7 @@ export const Login: React.FC = () => {
         <Box alignItems="center" justifyContent="center">
           <TextButton
             isFocused={selection === 2}
-            onPress={() => navigate(ROUTE.FORGOT_PASSWORD)}
+            onPress={() => navigate(ROUTE.FORGOT_PASSWORD, { wallet })}
             color={selection === 2 ? 'red' : undefined}
           >
             Forgot password?

@@ -28,6 +28,7 @@ export enum WalletType {
 }
 
 export type WalletStore = {
+  activeWallet: Nullable<string>
   accountIndex: number
   addressIndex: number
   type: Nullable<WalletType>
@@ -35,17 +36,19 @@ export type WalletStore = {
   accounts: Account[]
   getWallet: (base?: boolean) => Wallet
   createWallet: (
+    name: string,
     mnemonic: string,
     accountIndex?: number,
     addressIndex?: number,
   ) => void
   importWallet: (
+    name: string,
     mnemonicOrPrivateKey: string,
     accountIndex?: number,
     addressIndex?: number,
   ) => void
-  encryptWallet: (password: string) => Promise<string>
-  decryptWallet: (password: string, encryptedWallet: string) => Promise<void>
+  encryptWallet: (password: string) => Promise<void>
+  decryptWallet: (wallet: string, password: string) => Promise<void>
   logout: () => void
   createAccount: (
     name: string,
@@ -63,6 +66,7 @@ export type WalletAction<T extends keyof WalletStore> = Action<
 
 export const useWalletStore = createWithSubscribeSelector<WalletStore>(
   (set, get) => ({
+    activeWallet: null,
     accountIndex: 0,
     addressIndex: 0,
     type: null,

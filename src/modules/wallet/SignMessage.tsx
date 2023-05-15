@@ -8,9 +8,9 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useWallet } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS } from '@src/store'
 import { toUtf8String } from '@src/utils'
 
 export const SignMessage: React.FC = () => {

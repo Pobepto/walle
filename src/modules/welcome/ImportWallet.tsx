@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import filenamify from 'filenamify'
 import { Box, Text } from 'ink'
 
 import { Wallet } from '@ethersproject/wallet'
@@ -11,22 +12,37 @@ import {
 } from '@src/components/SelectionZone'
 import { numberInRange, useForm } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { useWalletStore, WalletType } from '@src/store'
+import { useAppStore, useWalletStore, WalletType } from '@src/store'
 import { getWalletType } from '@src/store/wallet/actions'
 
 export const ImportWallet: React.FC = () => {
   const navigate = useNavigate()
   const importWallet = useWalletStore((state) => state.importWallet)
+  const wallets = useAppStore((state) => state.wallets)
   const [advanced, setAdvanced] = useState(false)
   const [displaySecret, setVisibility] = useState(false)
 
   const { data, errors, isValid, register } = useForm({
     initialValues: {
+      name: '',
       mnemonicOrPrivateKey: '',
       accountIndex: '',
       addressIndex: '',
     },
     rules: {
+      name: (value) => {
+        value = filenamify(value.trim(), {
+          replacement: '',
+        })
+
+        if (!value) {
+          return 'Required'
+        }
+
+        if (wallets.includes(value)) {
+          return 'Wallet with this name already exist'
+        }
+      },
       mnemonicOrPrivateKey: (value) => {
         value = value.trim()
 
@@ -53,6 +69,7 @@ export const ImportWallet: React.FC = () => {
 
   const onImport = () => {
     importWallet(
+      data.name,
       data.mnemonicOrPrivateKey,
       Number(data.accountIndex),
       Number(data.addressIndex),
@@ -87,6 +104,7 @@ export const ImportWallet: React.FC = () => {
           <Text>Test 2</Text>
         </Box>
       )} */}
+
       <Box alignItems="center" flexDirection="column">
         <SelectionZone prevKey="upArrow" nextKey="downArrow" isActive>
           <Selection<InputBoxProps> activeProps={{ focus: true }}>
@@ -99,6 +117,16 @@ export const ImportWallet: React.FC = () => {
               {...register('mnemonicOrPrivateKey')}
             />
           </Selection>
+
+          <Selection<InputBoxProps> activeProps={{ focus: true }}>
+            <InputBox
+              label="Wallet name"
+              width="50%"
+              error={errors.name}
+              {...register('name')}
+            />
+          </Selection>
+
           {advanced && (
             <>
               <Selection<InputBoxProps> activeProps={{ focus: true }}>

@@ -9,10 +9,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { length, useForm } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { save, USER_DATA } from '@src/utils'
-import { COLUMNS, useWalletStore } from '@store'
+import { useWalletStore } from '@store'
 
 export const ChangePassword: React.FC = () => {
   const navigate = useNavigate()
@@ -37,8 +37,7 @@ export const ChangePassword: React.FC = () => {
 
   const onPasswordChange = async () => {
     try {
-      const encrypted = await encryptWallet(data.password)
-      await save(encrypted, USER_DATA)
+      await encryptWallet(data.password)
       navigate(ROUTE.SECURITY)
     } catch (err) {
       console.log(err)

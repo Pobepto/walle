@@ -1,4 +1,5 @@
 import { Wallet } from '@ethersproject/wallet'
+import { useAppStore } from '@src/store/app'
 
 import { WalletAction, WalletType } from '..'
 
@@ -18,8 +19,11 @@ export const getWalletType = (mnemonicOrPrivateKey: string) => {
 
 export const importWallet: WalletAction<'importWallet'> =
   (set) =>
-  (mnemonicOrPrivateKey, accountIndex = 0, addressIndex = 0) => {
+  (name, mnemonicOrPrivateKey, accountIndex = 0, addressIndex = 0) => {
+    useAppStore.getState().addWallet(name)
+
     set({
+      activeWallet: name,
       mnemonicOrPrivateKey,
       accountIndex,
       addressIndex,

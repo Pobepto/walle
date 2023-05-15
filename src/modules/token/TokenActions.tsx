@@ -7,8 +7,8 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { TextButton } from '@src/components/TextButton'
+import { COLUMNS } from '@src/constants'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS } from '@src/store'
 
 interface TokenAction {
   label: string
@@ -26,13 +26,13 @@ export const TokenActions: React.FC = () => {
       onPress: () => navigate(ROUTE.TOKEN_TRANSFER, token),
     },
     {
-      label: 'Info',
+      label: 'Approve',
+      onPress: () => navigate(ROUTE.TOKEN_APPROVE, token),
+    },
+    {
+      label: 'Details',
       onPress: () => navigate(ROUTE.TOKEN_INFO, token),
     },
-    // {
-    //   label: 'Call',
-    //   onPress: () => null,
-    // },
   ]
 
   return (

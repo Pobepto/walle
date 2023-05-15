@@ -16,9 +16,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
+import { useBlockchainStore, useTokensStore } from '@store'
 
 export const AddToken: React.FC = () => {
   const parentZone = useSelectionZone()!
@@ -58,6 +59,10 @@ export const AddToken: React.FC = () => {
   const { execute, error, isLoading, clearError } = useAsync(loadToken)
 
   useEffect(() => {
+    if (isEdit) {
+      return
+    }
+
     if (inputIsValid('address')) {
       execute(data.address)
         .then(({ name, symbol, decimals }) => {

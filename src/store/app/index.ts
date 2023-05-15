@@ -2,18 +2,18 @@ import create from 'zustand'
 
 import { Action } from '..'
 
-export enum COLUMNS {
-  MENU,
-  MAIN,
-  TOKENS,
-}
-
 export interface AppStore {
-  empty?: any
+  wallets: string[]
+  addWallet: (wallet: string) => void
 }
 
 export type AppAction = Action<AppStore>
 
-export const useAppStore = create<AppStore>((set) => ({
-  // empty
+export const useAppStore = create<AppStore>((set, get) => ({
+  wallets: [],
+  addWallet: (wallet) => {
+    const { wallets } = get()
+
+    set({ wallets: [...wallets, wallet] })
+  },
 }))

@@ -10,11 +10,11 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { TextButton, TextButtonProps } from '@src/components/TextButton'
-import { Token } from '@src/constants'
+import { COLUMNS, Token } from '@src/constants'
 import { useChain } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
 import { formatNumber } from '@src/utils/formatNumber'
-import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
+import { useBlockchainStore, useTokensStore } from '@store'
 
 export const Tokens: React.FC = () => {
   const parentZone = useSelectionZone()!

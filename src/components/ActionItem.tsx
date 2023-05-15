@@ -1,6 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Box, Text } from 'ink'
 
+import { SuperKey } from '@src/hooks'
+
 import { Selection, SelectionZone } from './SelectionZone'
 import { TextButton } from './TextButton'
 
@@ -15,12 +17,18 @@ export interface ActionItemProps {
   isFocused?: boolean
   onActionModeChange?: (isActive: boolean) => void
   actions: ItemAction[]
+  openActionsKey?: SuperKey | SuperKey[]
+  labelPrefix?: string
+  labelFocusedPrefix?: string
 }
 
 export const ActionItem: React.FC<ActionItemProps> = ({
   label,
   isFocused = false,
   actions,
+  openActionsKey = 'return',
+  labelPrefix = '-',
+  labelFocusedPrefix = '->',
   onActionModeChange,
 }) => {
   const [actionsIsActive, setActionsActive] = useState(false)
@@ -39,9 +47,10 @@ export const ActionItem: React.FC<ActionItemProps> = ({
     <Box justifyContent="space-between">
       <TextButton
         isFocused={isFocused}
+        selectKey={openActionsKey}
         onPress={() => setActionsActive((v) => !v)}
       >
-        {isFocused ? '->' : '-'} {label}
+        {isFocused ? labelFocusedPrefix : labelPrefix} {label}
       </TextButton>
       {actionsIsActive && (
         <Box paddingRight={1}>
