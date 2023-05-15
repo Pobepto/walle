@@ -19,10 +19,9 @@ import {
   UncontrolledSelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { Chain } from '@src/constants'
+import { Chain, COLUMNS } from '@src/constants'
 import { useInput, useSelection } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
-import { COLUMNS } from '@store'
 import { useBlockchainStore } from '@store/blockchain'
 
 enum FocusZones {

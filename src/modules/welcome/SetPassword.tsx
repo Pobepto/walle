@@ -9,18 +9,16 @@ import { ROUTE, useNavigate } from '@routes'
 import { initSubscribers } from '@src/store/initSubscribers'
 import { initSignClient } from '@src/wallet-connect'
 import { useWalletStore } from '@store'
-import { save, USER_DATA } from '@utils'
-
-type Inputs = {
-  password: string
-  repeatPassword: string
-}
 
 export const SetPassword: React.FC = () => {
   const navigate = useNavigate()
   const [passwordStrength, setPasswordStrength] = useState<ZXCVBNResult>()
   const encryptWallet = useWalletStore((state) => state.encryptWallet)
-  const { data, errors, register, validate } = useForm<Inputs>({
+  const { data, errors, register, validate } = useForm({
+    initialValues: {
+      password: '',
+      repeatPassword: '',
+    },
     rules: {
       password: length(1),
       repeatPassword: (value, data) => {
@@ -47,8 +45,7 @@ export const SetPassword: React.FC = () => {
     const [isValid] = validate()
 
     if (isValid) {
-      const encrypted = await encryptWallet(data.password)
-      await save(encrypted, USER_DATA)
+      await encryptWallet(data.password)
       initSubscribers()
       await initSignClient()
       navigate(ROUTE.HOME)
@@ -70,7 +67,7 @@ export const SetPassword: React.FC = () => {
     <Box flexDirection="column">
       <Text>Set password to protect your wallet</Text>
       <InputBox
-        label="New password"
+        label="Password"
         mask="*"
         error={errors.password}
         focus={selection === 0}

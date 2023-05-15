@@ -16,16 +16,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useBlockchainStore, useTokensStore } from '@store'
-
-type Inputs = {
-  name: string
-  symbol: string
-  decimals: string
-  address: string
-}
+import { useBlockchainStore, useTokensStore } from '@store'
 
 export const AddToken: React.FC = () => {
   const parentZone = useSelectionZone()!
@@ -37,23 +31,20 @@ export const AddToken: React.FC = () => {
   const { token } = useRouteData<ROUTE.TOKEN_ADD>()
   const isEdit = !!token
 
-  const { errors, register, change, inputIsValid, isValid, data } =
-    useForm<Inputs>({
-      initialValues: isEdit
-        ? {
-            address: token.address,
-            name: token.name ?? '',
-            symbol: token.symbol ?? '',
-            decimals: String(token.decimals ?? ''),
-          }
-        : {},
-      rules: {
-        address: isAddress(),
-        name: length(1),
-        symbol: length(1),
-        decimals: combine(isIntegerNumber(), numberInRange(1, 18)),
-      },
-    })
+  const { data, errors, register, change, inputIsValid, isValid } = useForm({
+    initialValues: {
+      address: token?.address ?? '',
+      name: token?.name ?? '',
+      symbol: token?.symbol ?? '',
+      decimals: String(token?.decimals ?? ''),
+    },
+    rules: {
+      address: isAddress(),
+      name: length(1),
+      symbol: length(1),
+      decimals: combine(isIntegerNumber(), numberInRange(1, 18)),
+    },
+  })
 
   const onSubmit = () => {
     addToken({
@@ -68,6 +59,10 @@ export const AddToken: React.FC = () => {
   const { execute, error, isLoading, clearError } = useAsync(loadToken)
 
   useEffect(() => {
+    if (isEdit) {
+      return
+    }
+
     if (inputIsValid('address')) {
       execute(data.address)
         .then(({ name, symbol, decimals }) => {

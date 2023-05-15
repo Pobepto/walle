@@ -11,6 +11,7 @@ import {
   SelectionZoneProps,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import {
   bigNumberInRange,
   combine,
@@ -21,7 +22,7 @@ import {
   useENS,
   useForm,
 } from '@src/hooks'
-import { COLUMNS } from '@src/store'
+import { useNavigate } from '@src/routes'
 import { formatNumber } from '@src/utils/formatNumber'
 
 export type TransferInputs = {
@@ -34,7 +35,6 @@ interface TransferFormProps {
   decimals: number
   balanceIsLoading: boolean
   title: string
-  onBack: () => void
   onTransfer: (data: TransferInputs) => void
 }
 
@@ -43,13 +43,17 @@ export const TransferForm: React.FC<TransferFormProps> = ({
   balance,
   decimals = 18,
   balanceIsLoading,
-  onBack,
   onTransfer,
 }) => {
   const parentZone = useSelectionZone()!
+  const navigate = useNavigate()
   const [isExistENS, setExistENS] = useState(false)
 
-  const { register, data, errors, isValid } = useForm<TransferInputs>({
+  const { register, data, errors, isValid } = useForm({
+    initialValues: {
+      receiver: '',
+      amount: '',
+    },
     rules: {
       receiver: (value, data) => {
         if (!isExistENS) {
@@ -118,7 +122,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
           >
             <Box justifyContent="space-around">
               <Selection<ButtonProps> activeProps={{ isFocused: true }}>
-                <Button onPress={onBack} minWidth="20%" paddingX={1}>
+                <Button onPress={navigate.back} minWidth="20%" paddingX={1}>
                   <Text>{'<-'} Back</Text>
                 </Button>
               </Selection>

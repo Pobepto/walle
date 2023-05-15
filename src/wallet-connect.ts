@@ -6,6 +6,10 @@ import { useWalletConnectStore } from './store'
 export let signClient: SignClient
 
 export const initSignClient = async () => {
+  if (signClient) {
+    return Promise.resolve()
+  }
+
   const storage: IKeyValueStorage = {
     setItem: (key, value) => {
       const { store } = useWalletConnectStore.getState()

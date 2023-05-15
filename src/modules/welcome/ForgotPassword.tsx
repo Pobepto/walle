@@ -1,22 +1,23 @@
 import React from 'react'
 import { Box, Text } from 'ink'
 
-import { ROUTE, useNavigate } from '@routes'
-import { Button } from '@src/components'
-import { InputBox } from '@src/components/InputBox'
-import { TextButton } from '@src/components/TextButton'
-import { isEqualToString, useForm, useSelection } from '@src/hooks'
-import { remove, USER_DATA } from '@src/utils'
-
-type Inputs = {
-  agreement: string
-}
+import { Button } from '@components'
+import { InputBox } from '@components/InputBox'
+import { TextButton } from '@components/TextButton'
+import { isEqualToString, useForm, useSelection } from '@hooks'
+import { ROUTE, useNavigate, useRouteData } from '@routes'
+import { getWalletDataPath, getWalletSettingsPath } from '@src/store'
+import { remove } from '@utils'
 
 const REQUIRED_WORD = 'DELETE'
 
 export const ForgotPassword: React.FC = () => {
   const navigate = useNavigate()
-  const { errors, register, validate } = useForm<Inputs>({
+  const { wallet } = useRouteData<ROUTE.FORGOT_PASSWORD>()
+  const { errors, register, validate } = useForm({
+    initialValues: {
+      agreement: '',
+    },
     rules: {
       agreement: isEqualToString(REQUIRED_WORD),
     },
@@ -38,7 +39,8 @@ export const ForgotPassword: React.FC = () => {
     const [isValid] = validate()
 
     if (isValid) {
-      remove(USER_DATA)
+      remove(getWalletDataPath(wallet))
+      remove(getWalletSettingsPath(wallet))
       navigate(ROUTE.WELCOME)
     } else {
       preventInput()
@@ -88,7 +90,7 @@ export const ForgotPassword: React.FC = () => {
         <Box alignItems="center" justifyContent="center">
           <TextButton
             isFocused={selection === 2}
-            onPress={() => navigate(ROUTE.LOGIN)}
+            onPress={() => navigate(ROUTE.LOGIN, { wallet })}
           >
             Back
           </TextButton>

@@ -8,26 +8,26 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
-import { combine, length, useForm } from '@src/hooks'
+import { COLUMNS } from '@src/constants'
+import { combine, length, numberInRange, useForm } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useWalletStore } from '@src/store'
-
-type Inputs = {
-  name: string
-}
+import { useWalletStore, WalletType } from '@src/store'
 
 export const AccountsCreate: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const accounts = useWalletStore((state) => state.accounts)
+  const walletType = useWalletStore((state) => state.type)
   const createAccount = useWalletStore((state) => state.createAccount)
 
   const { account } = useRouteData<ROUTE.ACCOUNTS_CREATE>()
   const isEdit = !!account
 
-  const { errors, register, isValid, data } = useForm<Inputs>({
+  const { errors, register, isValid, data } = useForm({
     initialValues: {
       name: account?.name ?? '',
+      accountIndex: account?.accountIndex.toString() ?? '0',
+      addressIndex: account?.addressIndex.toString() ?? '',
     },
     rules: {
       name: combine(length(1), (name) => {
@@ -38,13 +38,37 @@ export const AccountsCreate: React.FC = () => {
           return 'Account with this name already exists'
         }
       }),
+      accountIndex: numberInRange(0, 2147483647),
+      addressIndex: combine(
+        numberInRange(0, 2147483647),
+        (addressIndex, data) => {
+          if (!addressIndex) return
+
+          if (
+            !isEdit &&
+            accounts.find(
+              (account) =>
+                account.accountIndex === Number(data.accountIndex) &&
+                account.addressIndex === Number(addressIndex),
+            )
+          ) {
+            return 'Account with this address index already exists'
+          }
+        },
+      ),
     },
   })
 
   const onCreate = () => {
-    createAccount(data.name, account?.pathId)
+    createAccount(
+      data.name,
+      data.accountIndex ? Number(data.accountIndex) : undefined,
+      data.addressIndex ? Number(data.addressIndex) : undefined,
+    )
     navigate(ROUTE.ACCOUNTS)
   }
+
+  const isSupportAccounts = walletType === WalletType.MNEMONIC
 
   return (
     <SelectionZone
@@ -57,13 +81,36 @@ export const AccountsCreate: React.FC = () => {
           <Text bold> {isEdit ? 'Edit' : 'Create'} account </Text>
         </Box>
 
-        <Selection activeProps={{ focus: true }}>
+        {isSupportAccounts && !isEdit && (
+          <>
+            <Selection activeProps={{ focus: true }}>
+              <InputBox
+                label="accountIndex"
+                type="number"
+                placeholder="auto"
+                error={errors.accountIndex}
+                {...register('accountIndex')}
+              />
+            </Selection>
+            <Selection activeProps={{ focus: true }}>
+              <InputBox
+                label="addressIndex"
+                type="number"
+                placeholder="auto"
+                error={errors.addressIndex}
+                {...register('addressIndex')}
+              />
+            </Selection>
+          </>
+        )}
+
+        <Selection activeProps={{ focus: true }} selectedByDefault>
           <InputBox label="Name" error={errors.name} {...register('name')} />
         </Selection>
 
         <Selection activeProps={{ isFocused: true }}>
           <Button onPress={onCreate} isDisabled={!isValid}>
-            {isEdit ? 'Edit' : 'Create'}
+            {isEdit ? 'Save' : 'Create'}
           </Button>
         </Selection>
       </Box>

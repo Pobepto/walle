@@ -29,16 +29,18 @@ import {
   ShowPrivateKey,
   ShowSeedPhrase,
   SignMessage,
-  StatusTransaction,
   SwitchChain,
   TokenActions,
+  TokenApprove,
   TokenInfo,
   Tokens,
   TokenTransfer,
+  TransactionStatus,
   WalletConnect,
   WalletConnectPairings,
   WalletConnectProposal,
   WalletConnectRequests,
+  Wallets,
   Welcome,
 } from './modules'
 import { routerFactory } from './Router'
@@ -54,6 +56,7 @@ export enum ROUTE {
   REGISTRATION_PASSWORD,
   FORGOT_PASSWORD,
   HOME,
+  WALLETS,
   ACCOUNTS,
   ACCOUNTS_CREATE,
   TOKEN_ADD,
@@ -63,11 +66,12 @@ export enum ROUTE {
   TOKENS,
   TOKEN_ACTIONS,
   TOKEN_TRANSFER,
+  TOKEN_APPROVE,
   TOKEN_INFO,
   CURRENCY_ACTIONS,
   CURRENCY_TRANSFER,
   CONFIRM_TRANSACTION,
-  STATUS_TRANSACTION,
+  TRANSACTION_STATUS,
   SIGN_MESSAGE,
   SECURITY,
   SECURITY_SHOW_PRIVATE_KEY,
@@ -81,6 +85,12 @@ export enum ROUTE {
 }
 
 interface ROUTE_DATA {
+  [ROUTE.LOGIN]: {
+    wallet: string
+  }
+  [ROUTE.FORGOT_PASSWORD]: {
+    wallet: string
+  }
   [ROUTE.ADD_CHAIN]: {
     chain?: Partial<Chain>
     edit?: boolean
@@ -90,6 +100,7 @@ interface ROUTE_DATA {
   }
   [ROUTE.TOKEN_ACTIONS]: Token
   [ROUTE.TOKEN_TRANSFER]: Token
+  [ROUTE.TOKEN_APPROVE]: Token
   [ROUTE.TOKEN_INFO]: Token
   [ROUTE.CONFIRM_TRANSACTION]: {
     target?: Contract
@@ -97,7 +108,7 @@ interface ROUTE_DATA {
     onRejectTx?: () => void
     onApproveTx?: (hash: string) => void
   }
-  [ROUTE.STATUS_TRANSACTION]: {
+  [ROUTE.TRANSACTION_STATUS]: {
     receipt?: TransactionReceipt
     error?: string
   }
@@ -140,6 +151,7 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.FORGOT_PASSWORD]: welcome(ForgotPassword),
   [ROUTE.HOME]: base(Home),
   [ROUTE.HELP]: base(Help),
+  [ROUTE.WALLETS]: welcome(Wallets),
   [ROUTE.ACCOUNTS]: base(Accounts),
   [ROUTE.ACCOUNTS_CREATE]: base(AccountsCreate),
   [ROUTE.ADD_CHAIN]: base(AddChain),
@@ -149,11 +161,12 @@ const router = routerFactory<ROUTE, ROUTE_DATA>({
   [ROUTE.TOKEN_ADD]: base(AddToken),
   [ROUTE.TOKEN_ACTIONS]: base(TokenActions),
   [ROUTE.TOKEN_TRANSFER]: base(TokenTransfer),
+  [ROUTE.TOKEN_APPROVE]: base(TokenApprove),
   [ROUTE.TOKEN_INFO]: base(TokenInfo),
   [ROUTE.CURRENCY_ACTIONS]: base(CurrencyActions),
   [ROUTE.CURRENCY_TRANSFER]: base(CurrencyTransfer),
   [ROUTE.CONFIRM_TRANSACTION]: base(ConfirmTransaction),
-  [ROUTE.STATUS_TRANSACTION]: base(StatusTransaction),
+  [ROUTE.TRANSACTION_STATUS]: base(TransactionStatus),
   [ROUTE.SIGN_MESSAGE]: base(SignMessage),
   [ROUTE.SECURITY]: base(Security),
   [ROUTE.SECURITY_SHOW_PRIVATE_KEY]: base(ShowPrivateKey),

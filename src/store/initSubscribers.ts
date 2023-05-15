@@ -2,16 +2,27 @@ import { useBlockchainStore } from './blockchain'
 import { useTokensStore } from './tokens'
 import { useWalletStore } from './wallet'
 
+let isInited = false
+
 const updateBalance = async () => {
-  await Promise.all([
-    useBlockchainStore.getState().getNativeBalance(),
-    useTokensStore.getState().loadBalances(),
-  ])
+  try {
+    await Promise.all([
+      useBlockchainStore.getState().getNativeBalance(),
+      useTokensStore.getState().loadBalances(),
+    ])
+  } catch {
+    //
+  }
 
   setTimeout(updateBalance, 5_000)
 }
 
 export const initSubscribers = () => {
+  if (isInited) {
+    return
+  }
+
+  isInited = true
   setTimeout(updateBalance, 5_000)
 
   useBlockchainStore.subscribe(
@@ -34,9 +45,13 @@ export const initSubscribers = () => {
   )
 
   useWalletStore.subscribe(
-    (state) => [state.pathId, state.phrase],
-    ([, phrase]) => {
-      if (phrase) {
+    (state) => [
+      state.accountIndex,
+      state.addressIndex,
+      state.mnemonicOrPrivateKey,
+    ],
+    ([, mnemonicOrPrivateKey]) => {
+      if (mnemonicOrPrivateKey) {
         useBlockchainStore.getState().getNativeBalance()
         useTokensStore.getState().loadBalances()
       }

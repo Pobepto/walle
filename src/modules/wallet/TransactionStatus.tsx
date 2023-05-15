@@ -7,10 +7,10 @@ import { Selection, SelectionZone } from '@src/components/SelectionZone'
 import { useChain } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 
-export const StatusTransaction: React.FC = () => {
+export const TransactionStatus: React.FC = () => {
   const navigate = useNavigate()
   const chain = useChain()
-  const { receipt, error } = useRouteData<ROUTE.STATUS_TRANSACTION>()
+  const { receipt, error } = useRouteData<ROUTE.TRANSACTION_STATUS>()
 
   const handleContinue = () => {
     navigate(ROUTE.HOME)
@@ -63,12 +63,21 @@ export const StatusTransaction: React.FC = () => {
             {receipt.status ? 'Success' : 'Failed'}
           </Text>
         </Box>
-        <Text>To: {receipt.to}</Text>
-        <Text>Hash: {receipt.transactionHash}</Text>
-        <Text>Block number: {receipt.blockNumber}</Text>
-        <Text>Gas used: {receipt.gasUsed.toString()}</Text>
         <Text>
-          Transaction fee: {formatUnits(txFee)} {chain.currency}
+          <Text bold>To:</Text> {receipt.to}
+        </Text>
+        <Text>
+          <Text bold>Hash:</Text> {receipt.transactionHash}
+        </Text>
+        <Text>
+          <Text bold>Block number:</Text> {receipt.blockNumber}
+        </Text>
+        <Text>
+          <Text bold>Gas used:</Text> {receipt.gasUsed.toString()}
+        </Text>
+        <Text>
+          <Text bold>Transaction fee:</Text> {formatUnits(txFee)}{' '}
+          {chain.currency}
         </Text>
       </Box>
       <Button onPress={handleContinue} isFocused>

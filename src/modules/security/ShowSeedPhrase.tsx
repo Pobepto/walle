@@ -8,12 +8,12 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useWallet } from '@src/hooks'
 import { ROUTE } from '@src/routes'
-import { COLUMNS } from '@store'
 
 export const ShowSeedPhrase: React.FC = () => {
-  const wallet = useWallet()!
+  const wallet = useWallet()
   const parentZone = useSelectionZone()!
 
   // TODO: Figure out how to copy text to the clipboard

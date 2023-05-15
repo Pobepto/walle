@@ -10,23 +10,31 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { TextButtonProps } from '@src/components/TextButton'
+import { COLUMNS } from '@src/constants'
 import { ROUTE, useNavigate } from '@src/routes'
-import { Account, COLUMNS, useWalletStore } from '@src/store'
+import { Account, useWalletStore, WalletType } from '@src/store'
 
 export const Accounts: React.FC = () => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
   const accounts = useWalletStore((state) => state.accounts)
-  const pathId = useWalletStore((state) => state.pathId)
+  const accountIndex = useWalletStore((state) => state.accountIndex)
+  const addressIndex = useWalletStore((state) => state.addressIndex)
+  const walletType = useWalletStore((state) => state.type)
   const selectAccount = useWalletStore((state) => state.selectAccount)
   const deleteAccount = useWalletStore((state) => state.deleteAccount)
 
   const getAccountActions = (account: Account): ItemAction[] => {
+    const isNotActiveAccount =
+      account.accountIndex !== accountIndex ||
+      account.addressIndex !== addressIndex
+
     return [
       {
         label: 'Switch',
-        isVisible: account.pathId !== pathId,
-        onAction: () => selectAccount(account.pathId),
+        isVisible: isNotActiveAccount,
+        onAction: () =>
+          selectAccount(account.accountIndex, account.addressIndex),
       },
       {
         label: 'Edit',
@@ -38,11 +46,14 @@ export const Accounts: React.FC = () => {
       },
       {
         label: 'Delete',
-        isVisible: accounts.length > 1 && account.pathId !== pathId,
-        onAction: () => deleteAccount(account.pathId),
+        isVisible: accounts.length > 1 && isNotActiveAccount,
+        onAction: () =>
+          deleteAccount(account.accountIndex, account.addressIndex),
       },
     ]
   }
+
+  const isSupportAccounts = walletType === WalletType.MNEMONIC
 
   return (
     <SelectionZone
@@ -55,22 +66,39 @@ export const Accounts: React.FC = () => {
           <Box marginTop={-1}>
             <Text bold> Manage accounts </Text>
           </Box>
-          <Selection activeProps={{ isFocused: true }}>
-            <Button onPress={() => navigate(ROUTE.ACCOUNTS_CREATE, {})}>
-              Create account
-            </Button>
-          </Selection>
+          {isSupportAccounts ? (
+            <Selection activeProps={{ isFocused: true }}>
+              <Button onPress={() => navigate(ROUTE.ACCOUNTS_CREATE, {})}>
+                Create account
+              </Button>
+            </Selection>
+          ) : (
+            <Box borderStyle="single" borderColor="yellow">
+              <Text>
+                Wallet imported by private key has no support for create
+                accounts
+              </Text>
+            </Box>
+          )}
           <List viewport={5} selection={selection}>
             {accounts
-              .sort((a, b) => a.pathId - b.pathId)
+              .sort(
+                (a, b) =>
+                  a.accountIndex - b.accountIndex ||
+                  a.addressIndex - b.addressIndex,
+              )
               .map((account) => {
                 return (
                   <Selection<TextButtonProps>
-                    key={account.pathId}
                     activeProps={{ isFocused: true }}
+                    key={`${account.accountIndex}|${account.addressIndex}`}
                   >
                     <ActionItem
-                      label={`${account.name} [${account.pathId}]`}
+                      label={
+                        isSupportAccounts
+                          ? `[${account.accountIndex}/${account.addressIndex}] ${account.name}`
+                          : account.name
+                      }
                       actions={getAccountActions(account)}
                     />
                   </Selection>

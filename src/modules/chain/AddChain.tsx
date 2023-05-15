@@ -18,17 +18,10 @@ import {
   SelectionZone,
   useSelectionZone,
 } from '@src/components/SelectionZone'
+import { COLUMNS } from '@src/constants'
 import { useAsync } from '@src/hooks/useAsync'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
-import { COLUMNS, useBlockchainStore } from '@store'
-
-type Inputs = {
-  name: string
-  rpc: string
-  chainId: string
-  explorer: string
-  currency: string
-}
+import { useBlockchainStore } from '@store'
 
 export const AddChain: React.FC = () => {
   const parentZone = useSelectionZone()!
@@ -40,23 +33,22 @@ export const AddChain: React.FC = () => {
   const loadChainId = useBlockchainStore((state) => state.loadChainId)
   const chains = useBlockchainStore((state) => state.chains)
 
-  const { errors, data, isValid, register, change, inputIsValid } =
-    useForm<Inputs>({
-      initialValues: {
-        name: chain?.name ?? '',
-        rpc: chain?.rpc ?? '',
-        chainId: String(chain?.chainId ?? ''),
-        explorer: chain?.explorer ?? '',
-        currency: chain?.currency ?? '',
-      },
-      rules: {
-        name: length(1),
-        rpc: link(),
-        chainId: combine(isIntegerNumber(), numberInRange(1, Infinity)),
-        explorer: link(),
-        currency: length(1),
-      },
-    })
+  const { errors, data, isValid, register, change, inputIsValid } = useForm({
+    initialValues: {
+      name: chain?.name ?? '',
+      rpc: chain?.rpc ?? '',
+      chainId: String(chain?.chainId ?? ''),
+      explorer: chain?.explorer ?? '',
+      currency: chain?.currency ?? '',
+    },
+    rules: {
+      name: length(1),
+      rpc: link(),
+      chainId: combine(isIntegerNumber(), numberInRange(1, Infinity)),
+      explorer: link(),
+      currency: length(1),
+    },
+  })
 
   const isAlreadyAddedChain = Boolean(
     chains.find((c) => c.chainId.toString() === data.chainId),
@@ -69,7 +61,11 @@ export const AddChain: React.FC = () => {
     isActive: parentZone.selection === COLUMNS.MAIN,
   })
 
-  const { execute: callAddChain, isLoading: addChainIsLoading } = useAsync(() =>
+  const {
+    safeExecute: callAddChain,
+    isLoading: addChainIsLoading,
+    error: addChainError,
+  } = useAsync(() =>
     addChain({
       name: data.name,
       rpc: data.rpc,
@@ -167,6 +163,9 @@ export const AddChain: React.FC = () => {
               {isAlreadyAddedChain ? 'Edit chain' : 'Add chain'}
             </Button>
           </Selection>
+        </Box>
+        <Box justifyContent="center">
+          <ErrorLabel text={addChainError} />
         </Box>
       </SelectionZone>
     </Box>

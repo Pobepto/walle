@@ -16,7 +16,8 @@ export const Help: React.FC = () => {
         </Text>
         <Text>
           Use <Text bold>&quot;↑&quot;</Text> / <Text bold>&quot;↓&quot;</Text>{' '}
-          to move to select inputs or buttons
+          / <Text bold>&quot;←&quot;</Text> / <Text bold>&quot;→&quot;</Text> to
+          move to select inputs or buttons
         </Text>
         <Text>
           Use <Text bold>&quot;Ctrl + Backspace&quot;</Text> to clear input

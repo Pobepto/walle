@@ -10,10 +10,15 @@ export const Header: React.FC = () => {
   const wallet = useWallet()
   const chain = useChain()
   const nativeBalance = useBlockchainStore((store) => store.nativeBalance)
-  const pathId = useWalletStore((state) => state.pathId)
+  const accountIndex = useWalletStore((state) => state.accountIndex)
+  const addressIndex = useWalletStore((state) => state.addressIndex)
   const accounts = useWalletStore((state) => state.accounts)
 
-  const account = accounts.find((account) => account.pathId === pathId)
+  const account = accounts.find(
+    (account) =>
+      account.accountIndex === accountIndex &&
+      account.addressIndex === addressIndex,
+  )
 
   // const link = `${chain.explorer}/address/${wallet.address}`
   const formattedBalance = nativeBalance
@@ -27,7 +32,7 @@ export const Header: React.FC = () => {
         <Text bold> {account?.name} </Text>
       </Box>
       <Box flexDirection="row" justifyContent="space-between">
-        <Text color="cyan">{wallet?.address}</Text>
+        <Text color="cyan">{wallet.address}</Text>
         <Text>
           <Loader loading={!nativeBalance}>{formattedBalance}</Loader>{' '}
           {chain.currency}
