@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { formatUnits, parseUnits, PreparedTransactionRequest } from 'ethers'
 import { Box, Newline, Text } from 'ink'
 
 import { Button, ButtonProps, Error } from '@components'
@@ -10,9 +11,6 @@ import {
   useSelectionZone,
 } from '@components/SelectionZone'
 import { TransactionDetails } from '@components/TransactionDetails'
-import { BigNumber } from '@ethersproject/bignumber'
-import { PopulatedTransaction } from '@ethersproject/contracts'
-import { formatUnits, parseUnits } from '@ethersproject/units'
 import {
   combine,
   isIntegerNumber,
@@ -35,7 +33,7 @@ enum DisplayMode {
   RAW,
 }
 
-const formatGasPrice = (gasPrice: BigNumber) => {
+const formatGasPrice = (gasPrice: bigint) => {
   return formatUnits(gasPrice, GasPriceUnit).toString()
 }
 
@@ -71,16 +69,16 @@ export const ConfirmTransaction: React.FC = () => {
   const [isEIP1599, setEIP1599] = useState(
     Boolean(
       !populatedTx.gasPrice &&
-        (populatedTx.maxFeePerGas || gas.data.maxFeePerGas.gt(0)),
+        (populatedTx.maxFeePerGas || gas.data.maxFeePerGas > 0n),
     ),
   )
 
   const onSendTransaction = async () => {
     const { gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas } = data
 
-    let tx: PopulatedTransaction = {
+    let tx: PreparedTransactionRequest = {
       ...populatedTx,
-      gasLimit: BigNumber.from(gasLimit),
+      gasLimit: BigInt(gasLimit),
     }
 
     if (isEIP1599) {
@@ -106,7 +104,7 @@ export const ConfirmTransaction: React.FC = () => {
       const receipt = await sendTransaction(tx)
 
       if (receipt) {
-        onApproveTx && onApproveTx(receipt.transactionHash)
+        onApproveTx && onApproveTx(receipt.hash)
         navigate(ROUTE.TRANSACTION_STATUS, { receipt })
       }
     } catch (error: any) {
@@ -133,30 +131,29 @@ export const ConfirmTransaction: React.FC = () => {
   useEffect(() => {
     const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } = gas.data
 
-    if (gasPrice.gt(0)) {
+    if (gasPrice > 0) {
       change('gasPrice', formatGasPrice(gasPrice), true)
     }
 
-    if (maxFeePerGas.gt(0)) {
+    if (maxFeePerGas > 0) {
       change('maxFeePerGas', formatGasPrice(maxFeePerGas), true)
     }
 
-    if (maxPriorityFeePerGas.gt(0)) {
+    if (maxPriorityFeePerGas > 0) {
       change('maxPriorityFeePerGas', formatGasPrice(maxPriorityFeePerGas), true)
     }
   }, [gas.data])
 
   useEffect(() => {
-    if (estimate.gasLimit.gt(0)) {
+    if (estimate.gasLimit > 0) {
       change('gasLimit', estimate.gasLimit.toString(), true)
     }
   }, [estimate.gasLimit])
 
-  const gasFee = BigNumber.from(
-    parseUnits(data.gasPrice || '0', GasPriceUnit),
-  ).mul(data.gasLimit || '0')
+  const gasFee =
+    parseUnits(data.gasPrice || '0', GasPriceUnit) * BigInt(data.gasLimit || 0n)
 
-  const totalFee = gasFee.add(populatedTx.value ?? '0')
+  const totalFee = gasFee + (populatedTx.value ?? 0n)
 
   return (
     <Box flexDirection="column">
@@ -302,9 +299,7 @@ export const ConfirmTransaction: React.FC = () => {
               <Text>
                 Suggested gas limit
                 <Newline />
-                <Text bold>
-                  {BigNumber.from(populatedTx.gasLimit).toString()}
-                </Text>
+                <Text bold>{populatedTx.gasLimit}</Text>
               </Text>
             </Box>
           ) : null}

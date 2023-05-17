@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import { Wallet } from 'ethers'
 import filenamify from 'filenamify'
 import { Box, Text } from 'ink'
 
-import { Wallet } from '@ethersproject/wallet'
 import { Button, ButtonProps } from '@src/components'
 import { InputBox, InputBoxProps } from '@src/components/InputBox'
 import {
@@ -54,7 +54,7 @@ export const ImportWallet: React.FC = () => {
           new Wallet(value)
         } catch {
           try {
-            Wallet.fromMnemonic(value)
+            Wallet.fromPhrase(value)
           } catch {
             return 'Phrase or private key is invalid'
           }

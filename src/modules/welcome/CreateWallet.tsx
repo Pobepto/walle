@@ -1,9 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react'
+import { HDNodeWallet } from 'ethers'
 import filenamify from 'filenamify'
 import { Box, Text } from 'ink'
 import { Worker } from 'worker_threads'
 
-import { Wallet } from '@ethersproject/wallet'
 import { ROUTE, useNavigate } from '@routes'
 import { Button, ButtonProps } from '@src/components'
 import { InputBox, InputBoxProps } from '@src/components/InputBox'
@@ -18,7 +18,7 @@ import { useAppStore, useWalletStore } from '@src/store'
 import { getDerivationPath } from '@src/utils'
 
 const workerCode = `
-  const { Wallet } = require('@ethersproject/wallet')
+  const { HDNodeWallet } = require('ethers')
   const { parentPort, workerData } = require('worker_threads')
 
   const isMatchPattern = (address, pattern) => {
@@ -33,14 +33,10 @@ const workerCode = `
 
   const step = 50
   let attempts = 0
-  let wallet = Wallet.createRandom({
-    path: workerData.path
-  })
+  let wallet = HDNodeWallet.createRandom(undefined, workerData.path)
 
   while (!isMatchPattern(wallet.address, workerData.pattern)) {
-    wallet = Wallet.createRandom({
-      path: workerData.path
-    })
+    wallet = HDNodeWallet.createRandom(undefined, workerData.path)
     attempts++
 
     if (attempts >= step) {
@@ -63,7 +59,7 @@ const computeProbability = (difficulty: number, attempts: number) => {
 }
 
 export const CreateWallet: React.FC = () => {
-  const [wallet, setWallet] = useState(() => Wallet.createRandom())
+  const [wallet, setWallet] = useState(() => HDNodeWallet.createRandom())
   const createWallet = useWalletStore((store) => store.createWallet)
   const [generationInProgress, setGenerationInProgress] = useState(false)
   const wallets = useAppStore((store) => store.wallets)
@@ -136,7 +132,10 @@ export const CreateWallet: React.FC = () => {
       const phrase = await Promise.any(
         workers.current.map((worker) => {
           return new Promise<string | undefined>((resolve) => {
-            worker.on('error', () => resolve(undefined))
+            worker.on('error', (err) => {
+              console.log(err)
+              resolve(undefined)
+            })
             worker.on('exit', () => resolve(undefined))
             worker.on('message', ({ phrase, attempts }) => {
               if (phrase) {
@@ -152,19 +151,19 @@ export const CreateWallet: React.FC = () => {
       terminateWorkers()
 
       if (phrase) {
-        setWallet(Wallet.fromMnemonic(phrase, path))
+        setWallet(HDNodeWallet.fromPhrase(phrase, undefined, path))
       }
 
       setGenerationInProgress(false)
     } else {
-      setWallet(Wallet.createRandom({ path }))
+      setWallet(HDNodeWallet.createRandom(undefined, path))
     }
   }
 
   const onCreateWallet = () => {
     createWallet(
       data.name,
-      wallet.mnemonic.phrase,
+      wallet.mnemonic!.phrase,
       Number(data.accountIndex),
       Number(data.addressIndex),
     )
@@ -204,9 +203,9 @@ export const CreateWallet: React.FC = () => {
             onChange={() => null}
             value={
               displayMnemonic
-                ? wallet.mnemonic.phrase
-                : wallet.mnemonic.phrase
-                    .split(' ')
+                ? wallet.mnemonic!.phrase
+                : wallet
+                    .mnemonic!.phrase.split(' ')
                     .map((word) => '*'.repeat(word.length))
                     .join(' ')
             }

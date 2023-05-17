@@ -1,7 +1,6 @@
+import { Contract } from 'ethers'
 import { Nullable } from 'tsdef'
 
-import { BigNumber } from '@ethersproject/bignumber'
-import { Contract } from '@ethersproject/contracts'
 import { useBlockchainStore } from '@src/store/blockchain'
 import { ERC20_ABI } from '@src/store/blockchain/interfaces'
 import { useWalletStore } from '@src/store/wallet'
@@ -28,8 +27,8 @@ export const loadBalances: TokensAction<'loadBalances'> =
           }
 
           const contract = new Contract(token.address, ERC20_ABI, provider)
-          const balance: Nullable<BigNumber> = await contract.callStatic
-            .balanceOf(wallet.address)
+          const balance: Nullable<bigint> = await contract.balanceOf
+            .staticCall(wallet.address)
             .catch(() => null)
 
           const value = (balance ? balance.toString() : currentBalance) ?? null

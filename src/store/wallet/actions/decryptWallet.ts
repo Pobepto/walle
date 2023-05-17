@@ -1,4 +1,5 @@
-import { Wallet } from '@ethersproject/wallet'
+import { HDNodeWallet, Wallet } from 'ethers'
+
 import { getWalletDataPath } from '@src/store'
 import { load } from '@src/utils'
 
@@ -11,9 +12,13 @@ export const decryptWallet: WalletAction<'decryptWallet'> =
 
     set({
       activeWallet: walletName,
-      mnemonicOrPrivateKey: wallet.mnemonic?.phrase ?? wallet.privateKey,
-      type: wallet.mnemonic?.phrase
-        ? WalletType.MNEMONIC
-        : WalletType.PRIVATE_KEY,
+      mnemonicOrPrivateKey:
+        wallet instanceof HDNodeWallet && wallet.mnemonic
+          ? wallet.mnemonic.phrase
+          : wallet.privateKey,
+      type:
+        wallet instanceof HDNodeWallet && wallet.mnemonic
+          ? WalletType.MNEMONIC
+          : WalletType.PRIVATE_KEY,
     })
   }

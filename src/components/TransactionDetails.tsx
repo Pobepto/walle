@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
+import { Contract, formatUnits, PopulatedTransaction } from 'ethers'
 import { Box, Text } from 'ink'
 
-import { FormatTypes } from '@ethersproject/abi'
-import { BigNumber } from '@ethersproject/bignumber'
-import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
-import { formatUnits } from '@ethersproject/units'
 import { useChain } from '@hooks'
 import { TextButton } from '@src/components/TextButton'
 
@@ -29,7 +26,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   const chain = useChain()
   const [showFullData, setShowFullData] = useState(false)
 
-  const { data, value = BigNumber.from(0), to } = tx
+  const { data, value = 0n, to } = tx
 
   if (displayMode === DisplayMode.RAW) {
     const stringifiedTx = Object.fromEntries(
@@ -60,10 +57,10 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
     const calldata = data ?? '0x'
     const sighash = calldata.slice(0, 10)
     const fragment = contract.interface.getFunction(sighash)
-    const signature = `${fragment.name}(${fragment.inputs
-      .map((input) => input.format(FormatTypes.full))
+    const signature = `${fragment!.name}(${fragment!.inputs
+      .map((input) => input.format('full'))
       .join(', ')})`
-    const params = contract.interface.decodeFunctionData(fragment, calldata)
+    const params = contract.interface.decodeFunctionData(fragment!, calldata)
     const onlyStringArgs = Object.keys(params).filter((key) =>
       isNaN(Number(key)),
     )

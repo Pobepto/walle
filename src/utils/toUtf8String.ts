@@ -1,5 +1,4 @@
-import { BytesLike } from '@ethersproject/bytes'
-import { toUtf8String as _toUtf8String } from '@ethersproject/strings'
+import { BytesLike, toUtf8String as _toUtf8String } from 'ethers'
 
 export const toUtf8String = (bytes: BytesLike) => {
   try {

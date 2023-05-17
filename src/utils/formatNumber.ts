@@ -1,22 +1,20 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { commify, formatUnits } from '@ethersproject/units'
-import { ZERO } from '@src/constants'
+import { formatUnits } from 'ethers'
 
 export const formatNumber = (v: string, decimals = 18, visibleDecimals = 5) => {
   try {
-    const bv = BigNumber.from(v)
+    const bv = BigInt(v)
 
-    if (bv.eq(ZERO)) {
+    if (bv === 0n) {
       return '0'
     }
 
-    if (bv.lt(BigNumber.from(10).pow(decimals - 6))) {
+    if (bv < 10n ** (BigInt(decimals) - 6n)) {
       return '< 0.000001'
     }
 
-    const remainder = bv.mod(BigNumber.from(10).pow(decimals - visibleDecimals))
+    const remainder = bv % 10n ** (BigInt(decimals) - BigInt(visibleDecimals))
 
-    return commify(formatUnits(bv.sub(remainder), decimals))
+    return formatUnits(bv - remainder, decimals)
   } catch {
     return v
   }

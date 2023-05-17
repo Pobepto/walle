@@ -1,8 +1,11 @@
+import {
+  JsonRpcProvider,
+  PreparedTransactionRequest,
+  TransactionReceipt,
+  Wallet,
+} from 'ethers'
 import { Nullable } from 'tsdef'
 
-import { PopulatedTransaction } from '@ethersproject/contracts'
-import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
-import { Wallet } from '@ethersproject/wallet'
 import { Chain, DEFAULT_CHAIN, DEFAULT_CHAINS, Token } from '@src/constants'
 
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
@@ -36,7 +39,7 @@ export interface BlockchainStore {
   getNativeBalance: () => Promise<void>
 
   sendTransaction: (
-    populatedTx: PopulatedTransaction,
+    populatedTx: PreparedTransactionRequest,
   ) => Promise<TransactionReceipt>
 }
 

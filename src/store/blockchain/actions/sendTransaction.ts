@@ -8,5 +8,5 @@ export const sendTransaction: BlockchainAction<'sendTransaction'> =
     const tx = await signer.sendTransaction(populatedTx)
     const result = await tx.wait()
 
-    return result
+    return result!
   }

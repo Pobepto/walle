@@ -1,6 +1,6 @@
-import { ContractInterface } from '@ethersproject/contracts'
+import { InterfaceAbi } from 'ethers'
 
-export const ERC20_ABI: ContractInterface = [
+export const ERC20_ABI: InterfaceAbi = [
   // Read-Only Functions
   'function balanceOf(address owner) view returns (uint256)',
   'function allowance(address owner, address spender) view returns (uint256)',

@@ -1,7 +1,6 @@
 import React from 'react'
+import { parseUnits, PreparedTransactionRequest } from 'ethers'
 
-import { PopulatedTransaction } from '@ethersproject/contracts'
-import { parseUnits } from '@ethersproject/units'
 import { useChain } from '@src/hooks'
 import { ROUTE, useNavigate } from '@src/routes'
 import { useBlockchainStore } from '@src/store'
@@ -16,7 +15,7 @@ export const CurrencyTransfer: React.FC = () => {
   const onTransfer = async (data: TransferInputs) => {
     const value = parseUnits(data.amount, 18)
 
-    const populatedTx: PopulatedTransaction = {
+    const populatedTx: PreparedTransactionRequest = {
       to: data.receiver,
       value,
     }

@@ -1,22 +1,19 @@
 import { useEffect, useState } from 'react'
-
-import { BigNumber } from '@ethersproject/bignumber'
-import { PopulatedTransaction } from '@ethersproject/contracts'
-import { ZERO } from '@src/constants'
+import { PreparedTransactionRequest } from 'ethers'
 
 import { useWallet } from './useWallet'
 
 interface Estimate {
   loading: boolean
   error?: string
-  gasLimit: BigNumber
+  gasLimit: bigint
 }
 
-export const useEstimate = (populatedTx: PopulatedTransaction) => {
+export const useEstimate = (populatedTx: PreparedTransactionRequest) => {
   const wallet = useWallet()
   const [estimate, setEstimate] = useState<Estimate>({
     loading: false,
-    gasLimit: populatedTx.gasLimit ?? ZERO,
+    gasLimit: populatedTx.gasLimit ?? 0n,
   })
 
   const call = async () => {
@@ -27,8 +24,8 @@ export const useEstimate = (populatedTx: PopulatedTransaction) => {
 
     try {
       const usedGas = await wallet.estimateGas(populatedTx)
-      const fivePercent = usedGas.mul(5).div(100)
-      const gasLimit = usedGas.add(fivePercent)
+      const fivePercent = (usedGas * 5n) / 100n
+      const gasLimit = usedGas + fivePercent
 
       setEstimate({
         loading: false,
@@ -44,7 +41,7 @@ export const useEstimate = (populatedTx: PopulatedTransaction) => {
   }
 
   useEffect(() => {
-    if (estimate.gasLimit.eq(0)) {
+    if (estimate.gasLimit === 0n) {
       call()
     }
   }, [populatedTx])
