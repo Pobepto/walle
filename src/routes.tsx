@@ -1,7 +1,9 @@
 import React from 'react'
-
-import { Contract, PopulatedTransaction } from '@ethersproject/contracts'
-import { TransactionReceipt } from '@ethersproject/providers'
+import {
+  Contract,
+  PreparedTransactionRequest,
+  TransactionReceipt,
+} from 'ethers'
 
 import { SessionProposal } from './store/wallet-connect/actions'
 import { Chain, Token } from './constants'
@@ -104,7 +106,7 @@ interface ROUTE_DATA {
   [ROUTE.TOKEN_INFO]: Token
   [ROUTE.CONFIRM_TRANSACTION]: {
     target?: Contract
-    populatedTx: PopulatedTransaction
+    populatedTx: PreparedTransactionRequest
     onRejectTx?: () => void
     onApproveTx?: (hash: string) => void
   }

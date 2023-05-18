@@ -1,25 +1,23 @@
 import { useEffect, useState } from 'react'
+import { PreparedTransactionRequest } from 'ethers'
 
-import { BigNumber } from '@ethersproject/bignumber'
-import { PopulatedTransaction } from '@ethersproject/contracts'
-import { ZERO } from '@src/constants'
 import { useBlockchainStore } from '@src/store'
 
 import { useAsync } from './useAsync'
 
 interface GasData {
-  maxFeePerGas: BigNumber
-  maxPriorityFeePerGas: BigNumber
-  gasPrice: BigNumber
+  maxFeePerGas: bigint
+  maxPriorityFeePerGas: bigint
+  gasPrice: bigint
   isSupportEIP1599: boolean
 }
 
-export const useGasData = (populatedTx: PopulatedTransaction) => {
+export const useGasData = (populatedTx: PreparedTransactionRequest) => {
   const provider = useBlockchainStore((store) => store.provider)
   const [gasData, setGasData] = useState<GasData>({
-    maxFeePerGas: populatedTx.maxFeePerGas ?? ZERO,
-    maxPriorityFeePerGas: populatedTx.maxPriorityFeePerGas ?? ZERO,
-    gasPrice: populatedTx.gasPrice ?? ZERO,
+    maxFeePerGas: populatedTx.maxFeePerGas ?? 0n,
+    maxPriorityFeePerGas: populatedTx.maxPriorityFeePerGas ?? 0n,
+    gasPrice: populatedTx.gasPrice ?? 0n,
     isSupportEIP1599: false,
   })
 
@@ -32,7 +30,7 @@ export const useGasData = (populatedTx: PopulatedTransaction) => {
         maxPriorityFeePerGas:
           fee.maxPriorityFeePerGas ?? gasData.maxPriorityFeePerGas,
         gasPrice: fee.gasPrice ?? gasData.gasPrice,
-        isSupportEIP1599: Boolean(fee.maxFeePerGas && fee.maxFeePerGas.gt(0)),
+        isSupportEIP1599: Boolean(fee.maxFeePerGas && fee.maxFeePerGas > 0),
       }
     } catch {
       return gasData
@@ -45,13 +43,13 @@ export const useGasData = (populatedTx: PopulatedTransaction) => {
 
   useEffect(() => {
     if (
-      gasData.gasPrice.gt(0) ||
-      (gasData.maxFeePerGas.gt(0) && gasData.maxPriorityFeePerGas.gt(0))
+      gasData.gasPrice > 0n ||
+      (gasData.maxFeePerGas > 0n && gasData.maxPriorityFeePerGas > 0n)
     ) {
       provider.getFeeData().then((fee) => {
         setGasData({
           ...gasData,
-          isSupportEIP1599: Boolean(fee.maxFeePerGas && fee.maxFeePerGas.gt(0)),
+          isSupportEIP1599: Boolean(fee.maxFeePerGas && fee.maxFeePerGas > 0n),
         })
       })
     } else {

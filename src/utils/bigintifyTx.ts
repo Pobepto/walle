@@ -1,7 +1,8 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { PopulatedTransaction } from '@ethersproject/contracts'
+import { PreparedTransactionRequest } from 'ethers'
 
-export const bignumberifyTx = (tx: Record<string, unknown>) => {
+export const bigintifyTx = (
+  tx: Record<string, string | number>,
+): PreparedTransactionRequest => {
   return Object.fromEntries(
     Object.entries(tx).map(([key, value]) => {
       if (
@@ -14,14 +15,14 @@ export const bignumberifyTx = (tx: Record<string, unknown>) => {
         ].indexOf(key) !== -1 &&
         value
       ) {
-        return [key, BigNumber.from(value)]
+        return [key, BigInt(value)]
       }
 
       if (['nonce', 'chainId'].indexOf(key) !== -1 && value) {
-        return [key, BigNumber.from(value).toNumber()]
+        return [key, Number(BigInt(value))]
       }
 
       return [key, value]
     }),
-  ) as PopulatedTransaction
+  )
 }

@@ -1,13 +1,10 @@
 import { useMemo } from 'react'
-
-import { Signer } from '@ethersproject/abstract-signer'
-import { Contract, ContractInterface } from '@ethersproject/contracts'
-import { Provider } from '@ethersproject/providers'
+import { Contract, ContractRunner, InterfaceAbi } from 'ethers'
 
 export const useContract = (
   address: string,
-  abi: ContractInterface,
-  provider?: Signer | Provider,
+  abi: InterfaceAbi,
+  provider?: ContractRunner,
 ) => {
   return useMemo(
     () => new Contract(address, abi, provider),

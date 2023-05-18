@@ -1,4 +1,4 @@
-import { Contract } from '@ethersproject/contracts'
+import { Contract } from 'ethers'
 
 import { ERC20_ABI } from '../interfaces'
 import { BlockchainAction } from '..'
@@ -11,9 +11,9 @@ export const loadToken: BlockchainAction<'loadToken'> =
     try {
       const [name, symbol, decimals]: [string, string, number] =
         await Promise.all([
-          contract.callStatic.name(),
-          contract.callStatic.symbol(),
-          contract.callStatic.decimals(),
+          contract.name.staticCall(),
+          contract.symbol.staticCall(),
+          contract.decimals.staticCall(),
         ])
 
       return { name, symbol, decimals }

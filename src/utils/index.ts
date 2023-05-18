@@ -1,4 +1,3 @@
-export * from './bignumberifyTx'
 export * from './clamp'
 export * from './formatNumber'
 export * from './fs'

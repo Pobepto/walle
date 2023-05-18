@@ -1,6 +1,6 @@
+import { HDNodeWallet, Wallet } from 'ethers'
 import { Nullable } from 'tsdef'
 
-import { Wallet } from '@ethersproject/wallet'
 import { getDerivationPath } from '@src/utils'
 
 import { createWithSubscribeSelector } from '../createWithSubscribeSelector'
@@ -34,7 +34,7 @@ export type WalletStore = {
   type: Nullable<WalletType>
   mnemonicOrPrivateKey: Nullable<string>
   accounts: Account[]
-  getWallet: (base?: boolean) => Wallet
+  getWallet: (base?: boolean) => HDNodeWallet | Wallet
   createWallet: (
     name: string,
     mnemonic: string,
@@ -83,9 +83,14 @@ export const useWalletStore = createWithSubscribeSelector<WalletStore>(
         return new Wallet(mnemonicOrPrivateKey)
       }
 
-      return Wallet.fromMnemonic(
+      if (base) {
+        return HDNodeWallet.fromPhrase(mnemonicOrPrivateKey)
+      }
+
+      return HDNodeWallet.fromPhrase(
         mnemonicOrPrivateKey,
-        base ? undefined : getDerivationPath(accountIndex, addressIndex),
+        undefined,
+        getDerivationPath(accountIndex, addressIndex),
       )
     },
     createWallet: createWallet(set, get),

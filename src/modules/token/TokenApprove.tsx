@@ -1,7 +1,7 @@
 import React from 'react'
+import { parseUnits } from 'ethers'
 import { Box, Text } from 'ink'
 
-import { parseUnits } from '@ethersproject/units'
 import { Button, ButtonProps } from '@src/components'
 import { InputBox, InputBoxProps } from '@src/components/InputBox'
 import {
@@ -35,7 +35,7 @@ export const TokenApprove: React.FC = () => {
 
   const onApprove = async () => {
     const amount = parseUnits(data.amount, token.decimals)
-    const populatedTx = await ERC20.populateTransaction.approve(
+    const populatedTx = await ERC20.approve.populateTransaction(
       data.spender,
       amount.toString(),
     )

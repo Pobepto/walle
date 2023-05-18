@@ -1,4 +1,5 @@
-import { JsonRpcProvider } from '@ethersproject/providers'
+import { JsonRpcProvider } from 'ethers'
+
 import { BlockchainAction } from '@src/store'
 
 export const loadChainId: BlockchainAction<'loadChainId'> =

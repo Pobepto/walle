@@ -1,6 +1,6 @@
 import React from 'react'
+import { parseUnits } from 'ethers'
 
-import { parseUnits } from '@ethersproject/units'
 import { useContract } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { useTokensStore } from '@src/store'
@@ -19,7 +19,7 @@ export const TokenTransfer: React.FC = () => {
 
   const onTransfer = async (data: TransferInputs) => {
     const amount = parseUnits(data.amount, token.decimals)
-    const populatedTx = await ERC20.populateTransaction.transfer(
+    const populatedTx = await ERC20.transfer.populateTransaction(
       data.receiver,
       amount.toString(),
     )

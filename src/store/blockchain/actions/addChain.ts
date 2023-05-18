@@ -1,4 +1,5 @@
-import { JsonRpcProvider } from '@ethersproject/providers'
+import { JsonRpcProvider } from 'ethers'
+
 import { BlockchainAction } from '@src/store'
 
 export const addChain: BlockchainAction<'addChain'> =
@@ -6,7 +7,7 @@ export const addChain: BlockchainAction<'addChain'> =
     const provider = new JsonRpcProvider(chain.rpc, 'any')
     const providerNetwork = await provider.getNetwork()
 
-    if (providerNetwork.chainId !== chain.chainId) {
+    if (Number(providerNetwork.chainId) !== chain.chainId) {
       throw new Error('Invalid rpc')
     }
 

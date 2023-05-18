@@ -15,7 +15,7 @@ export const Home: React.FC = () => {
     >
       <Box flexDirection="column">
         <Box justifyContent="center">
-          <Text>{WALLE_LOGO}</Text>
+          <Text color="yellowBright">{WALLE_LOGO}</Text>
         </Box>
         <Text>
           <Text bold>Github:</Text> <Text underline>{GITHUB}</Text>

@@ -1,7 +1,7 @@
 import React from 'react'
+import { formatUnits } from 'ethers'
 import { Box, Text } from 'ink'
 
-import { formatUnits } from '@ethersproject/units'
 import { Button, ButtonProps } from '@src/components'
 import { Selection, SelectionZone } from '@src/components/SelectionZone'
 import { useChain } from '@src/hooks'
@@ -48,7 +48,7 @@ export const TransactionStatus: React.FC = () => {
     )
   }
 
-  const txFee = receipt.effectiveGasPrice.mul(receipt.gasUsed)
+  const txFee = receipt.gasPrice * receipt.gasUsed
 
   return (
     <Box
@@ -67,7 +67,7 @@ export const TransactionStatus: React.FC = () => {
           <Text bold>To:</Text> {receipt.to}
         </Text>
         <Text>
-          <Text bold>Hash:</Text> {receipt.transactionHash}
+          <Text bold>Hash:</Text> {receipt.hash}
         </Text>
         <Text>
           <Text bold>Block number:</Text> {receipt.blockNumber}

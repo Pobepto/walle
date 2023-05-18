@@ -1,11 +1,10 @@
-import { getAddress } from '@ethersproject/address'
-import { BigNumber } from '@ethersproject/bignumber'
-import { formatUnits, parseUnits } from '@ethersproject/units'
+import { formatUnits, getAddress, parseUnits } from 'ethers'
+
 import { isNumeric } from '@src/utils/isNumeric'
 
 import { Rule } from './useForm'
 
-type AnyNumber = BigNumber | string | number
+type AnyNumber = bigint | string | number
 
 export const length =
   <T>(min: number, max = Infinity): Rule<T> =>
@@ -36,9 +35,9 @@ export const isNumber =
 export const balanceIsZero =
   <T>(balance: AnyNumber): Rule<T> =>
   () => {
-    const bn = BigNumber.from(balance)
+    const bn = BigInt(balance)
 
-    if (bn.eq(0)) {
+    if (bn === 0n) {
       return 'Balance is empty'
     }
   }
@@ -62,11 +61,11 @@ export const bigNumberInRange =
   (value) => {
     const number = parseUnits(value, decimals)
 
-    if (number.lt(min)) {
+    if (number < min) {
       return `Must be bigger than ${formatUnits(min, decimals)}`
     }
 
-    if (number.gt(max)) {
+    if (number > max) {
       return `Must be less than ${formatUnits(max, decimals)}`
     }
   }

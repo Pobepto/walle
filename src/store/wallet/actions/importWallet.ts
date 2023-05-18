@@ -1,4 +1,5 @@
-import { Wallet } from '@ethersproject/wallet'
+import { Wallet } from 'ethers'
+
 import { useAppStore } from '@src/store/app'
 
 import { WalletAction, WalletType } from '..'
@@ -9,7 +10,7 @@ export const getWalletType = (mnemonicOrPrivateKey: string) => {
     return WalletType.PRIVATE_KEY
   } catch {
     try {
-      Wallet.fromMnemonic(mnemonicOrPrivateKey)
+      Wallet.fromPhrase(mnemonicOrPrivateKey)
       return WalletType.MNEMONIC
     } catch {
       return null
