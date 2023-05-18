@@ -217,7 +217,7 @@ export const ConfirmTransaction: React.FC = () => {
                   {...register('maxFeePerGas')}
                 />
               </Selection>
-              {populatedTx.maxFeePerGas ? (
+              {populatedTx.maxFeePerGas && populatedTx.maxFeePerGas !== 0n ? (
                 <Box alignItems="center" marginLeft={2}>
                   <Text>
                     Suggested max fee{' '}
@@ -240,7 +240,8 @@ export const ConfirmTransaction: React.FC = () => {
                   {...register('maxPriorityFeePerGas')}
                 />
               </Selection>
-              {populatedTx.maxPriorityFeePerGas ? (
+              {populatedTx.maxPriorityFeePerGas &&
+              populatedTx.maxPriorityFeePerGas !== 0n ? (
                 <Box alignItems="center" marginLeft={2}>
                   <Text>
                     Suggested priority fee{' '}
@@ -269,7 +270,7 @@ export const ConfirmTransaction: React.FC = () => {
                 {...register('gasPrice')}
               />
             </Selection>
-            {populatedTx.gasPrice ? (
+            {populatedTx.gasPrice && populatedTx.gasPrice !== 0n ? (
               <Box alignItems="center" marginLeft={2}>
                 <Text>
                   Suggested gas price
@@ -294,12 +295,12 @@ export const ConfirmTransaction: React.FC = () => {
               {...register('gasLimit')}
             />
           </Selection>
-          {populatedTx.gasLimit ? (
+          {populatedTx.gasLimit && populatedTx.gasLimit !== 0n ? (
             <Box alignItems="center" marginLeft={2}>
               <Text>
                 Suggested gas limit
                 <Newline />
-                <Text bold>{populatedTx.gasLimit}</Text>
+                <Text bold>{populatedTx.gasLimit.toString()}</Text>
               </Text>
             </Box>
           ) : null}

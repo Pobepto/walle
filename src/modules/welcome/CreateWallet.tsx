@@ -132,10 +132,7 @@ export const CreateWallet: React.FC = () => {
       const phrase = await Promise.any(
         workers.current.map((worker) => {
           return new Promise<string | undefined>((resolve) => {
-            worker.on('error', (err) => {
-              console.log(err)
-              resolve(undefined)
-            })
+            worker.on('error', () => resolve(undefined))
             worker.on('exit', () => resolve(undefined))
             worker.on('message', ({ phrase, attempts }) => {
               if (phrase) {

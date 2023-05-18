@@ -4,6 +4,7 @@ import { ROUTE, useNavigate } from '@src/routes'
 import { useWalletConnectStore } from '@src/store'
 import { SessionRequest } from '@src/store/wallet-connect/actions'
 import { EIP155_SIGNING_METHODS } from '@src/store/wallet-connect/constants'
+import { bigintifyTx } from '@src/utils/bigintifyTx'
 
 export const useWalletConnectRequestHandler = () => {
   const navigate = useNavigate()
@@ -44,7 +45,7 @@ export const useWalletConnectRequestHandler = () => {
       case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
         parentZone.select(COLUMNS.MAIN)
         return navigate(ROUTE.CONFIRM_TRANSACTION, {
-          populatedTx: request.params[0],
+          populatedTx: bigintifyTx(request.params[0]),
           onRejectTx: () => rejectRequest(sessionRequest),
           onApproveTx: (hash) => approveRequest(sessionRequest, hash),
         })
