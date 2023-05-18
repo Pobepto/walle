@@ -1,6 +1,6 @@
 {
   "name": "@walleproject/cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "start": "node lib/index.js",
     "dev": "node esbuild.config.js --watch",
