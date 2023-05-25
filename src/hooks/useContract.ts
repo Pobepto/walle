@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
-import { Contract, ContractRunner, InterfaceAbi } from 'ethers'
+import { Contract, InterfaceAbi } from 'ethers'
 
-export const useContract = (
-  address: string,
-  abi: InterfaceAbi,
-  provider?: ContractRunner,
-) => {
+import { useBlockchainStore } from '@src/store'
+
+export const useContract = (address: string, abi: InterfaceAbi) => {
+  const provider = useBlockchainStore((store) => store.provider)
+
   return useMemo(
     () => new Contract(address, abi, provider),
     [address, abi, provider],

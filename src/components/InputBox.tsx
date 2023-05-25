@@ -14,6 +14,7 @@ export interface InputBoxProps extends InputProps {
   postfix?: string
   width?: string | number
   borderStyle?: keyof Boxes
+  children?: React.ReactNode | React.ReactNode[]
 }
 
 export const InputBox: React.FC<InputBoxProps> = ({
@@ -25,6 +26,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
   width,
   onChange,
   borderStyle = 'classic',
+  children,
   ...inputProps
 }) => {
   const disabled = inputProps.disabled || loading
@@ -61,6 +63,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
         ) : null}
         {!loading && postfix ? <Text>{postfix}</Text> : null}
       </Box>
+      {children}
       {!loading && error ? <Error text={error} /> : null}
     </Box>
   )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Text } from 'ink'
 import { Nullable } from 'tsdef'
 
@@ -15,11 +15,8 @@ import { COLUMNS } from '@src/constants'
 import {
   bigNumberInRange,
   combine,
-  isAddress,
-  isENS,
   isNumber,
-  useDidMountEffect,
-  useENS,
+  useAddressResolver,
   useForm,
 } from '@src/hooks'
 import { useNavigate } from '@src/routes'
@@ -47,7 +44,12 @@ export const TransferForm: React.FC<TransferFormProps> = ({
 }) => {
   const parentZone = useSelectionZone()!
   const navigate = useNavigate()
-  const [isExistENS, setExistENS] = useState(false)
+  const {
+    rule,
+    useResolve,
+    loading: loadingENS,
+    resolvedAddress,
+  } = useAddressResolver()
 
   const { register, data, errors, isValid } = useForm({
     initialValues: {
@@ -55,27 +57,13 @@ export const TransferForm: React.FC<TransferFormProps> = ({
       amount: '',
     },
     rules: {
-      receiver: (value, data) => {
-        if (!isExistENS) {
-          if (isENS(value)) {
-            return 'Address for this name not found'
-          }
-
-          return isAddress()(value, data)
-        }
-      },
+      receiver: rule,
       amount: combine(isNumber(), bigNumberInRange(0, balance ?? 0, decimals)),
     },
     validateAction: 'blur',
   })
 
-  const { loading: loadingENS, address: resolvedAddress } = useENS(
-    data.receiver,
-  )
-
-  useDidMountEffect(() => {
-    setExistENS(!!resolvedAddress)
-  }, [resolvedAddress])
+  useResolve(data.receiver)
 
   const formattedBalance = balance
     ? formatNumber(balance, decimals, decimals)
@@ -91,15 +79,16 @@ export const TransferForm: React.FC<TransferFormProps> = ({
         <Box marginTop={-1}>
           <Text bold> {title} </Text>
         </Box>
-        <Loader loading={loadingENS}>
-          {resolvedAddress && <Text>Address: {resolvedAddress}</Text>}
-        </Loader>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox
             label="Receiver"
             error={errors.receiver}
             {...register('receiver')}
-          />
+          >
+            <Loader loading={loadingENS}>
+              {resolvedAddress && <Text>Address: {resolvedAddress}</Text>}
+            </Loader>
+          </InputBox>
         </Selection>
         <Text>
           <Text bold>Balance:</Text>{' '}

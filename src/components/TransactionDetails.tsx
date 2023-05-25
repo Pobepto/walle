@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Contract, formatUnits, PopulatedTransaction } from 'ethers'
+import { Contract, formatUnits, PreparedTransactionRequest } from 'ethers'
 import { Box, Text } from 'ink'
 
 import { useChain } from '@hooks'
@@ -7,7 +7,7 @@ import { TextButton } from '@src/components/TextButton'
 
 interface TransactionDetailsProps {
   contract?: Contract
-  tx: PopulatedTransaction
+  tx: PreparedTransactionRequest
   displayMode: DisplayMode
   isFocused?: boolean
 }
@@ -29,17 +29,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   const { data, value = 0n, to } = tx
 
   if (displayMode === DisplayMode.RAW) {
-    const stringifiedTx = Object.fromEntries(
-      Object.entries(tx).map(([key, value]) => {
-        if (typeof value === 'object' && value.type === 'BigNumber') {
-          return [key, BigNumber.from(value).toString()]
-        }
-
-        return [key, value?.toString() ?? value]
-      }),
-    )
-
-    const stringified = JSON.stringify(stringifiedTx, null, 2)
+    const stringified = JSON.stringify(tx, null, 2)
 
     return (
       <Box
@@ -60,10 +50,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
     const signature = `${fragment!.name}(${fragment!.inputs
       .map((input) => input.format('full'))
       .join(', ')})`
-    const params = contract.interface.decodeFunctionData(fragment!, calldata)
-    const onlyStringArgs = Object.keys(params).filter((key) =>
-      isNaN(Number(key)),
-    )
+    const args = contract.interface.decodeFunctionData(fragment!, calldata)
 
     return (
       <Box flexDirection="column">
@@ -76,16 +63,17 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
           <Box marginTop={-1}>
             <Text bold> {signature} </Text>
           </Box>
-          {onlyStringArgs.map((arg) => {
-            const value = params[arg]
+          {args.map((arg, i) => {
+            const param = fragment!.inputs[i].name
+
             return (
-              <Text key={arg}>
-                <Text bold>{arg}:</Text> {value.toString()}
+              <Text key={param}>
+                <Text bold>{param}:</Text> {arg.toString()}
               </Text>
             )
           })}
         </Box>
-        {value.gt(0) ? (
+        {value > 0n ? (
           <Text>
             And send {formatUnits(value)} {chain.currency}
           </Text>
@@ -138,7 +126,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
         </Box>
         <Text>{displayData}</Text>
       </Box>
-      {value.gt(0) ? (
+      {value > 0n ? (
         <Text>
           And send {formatUnits(value)} {chain.currency}
         </Text>

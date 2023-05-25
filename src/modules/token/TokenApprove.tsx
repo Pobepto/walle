@@ -4,6 +4,7 @@ import { Box, Text } from 'ink'
 
 import { Button, ButtonProps } from '@src/components'
 import { InputBox, InputBoxProps } from '@src/components/InputBox'
+import { Loader } from '@src/components/Loader'
 import {
   Selection,
   SelectionZone,
@@ -11,7 +12,7 @@ import {
   useSelectionZone,
 } from '@src/components/SelectionZone'
 import { COLUMNS } from '@src/constants'
-import { isAddress, isNumber, useContract, useForm } from '@src/hooks'
+import { isNumber, useAddressResolver, useContract, useForm } from '@src/hooks'
 import { ROUTE, useNavigate, useRouteData } from '@src/routes'
 import { ERC20_ABI } from '@src/store/blockchain/interfaces'
 
@@ -20,6 +21,12 @@ export const TokenApprove: React.FC = () => {
   const navigate = useNavigate()
   const token = useRouteData<ROUTE.TOKEN_APPROVE>()
   const ERC20 = useContract(token.address, ERC20_ABI)
+  const {
+    rule,
+    useResolve,
+    loading: loadingENS,
+    resolvedAddress,
+  } = useAddressResolver()
 
   const { register, data, errors, isValid } = useForm({
     initialValues: {
@@ -27,11 +34,13 @@ export const TokenApprove: React.FC = () => {
       amount: '',
     },
     rules: {
-      spender: isAddress(),
+      spender: rule,
       amount: isNumber(),
     },
     validateAction: 'blur',
   })
+
+  useResolve(data.spender)
 
   const onApprove = async () => {
     const amount = parseUnits(data.amount, token.decimals)
@@ -61,7 +70,11 @@ export const TokenApprove: React.FC = () => {
             label="Spender"
             error={errors.spender}
             {...register('spender')}
-          />
+          >
+            <Loader loading={loadingENS}>
+              {resolvedAddress && <Text>Address: {resolvedAddress}</Text>}
+            </Loader>
+          </InputBox>
         </Selection>
         <Selection<InputBoxProps> activeProps={{ focus: true }}>
           <InputBox
@@ -88,7 +101,7 @@ export const TokenApprove: React.FC = () => {
                   onPress={onApprove}
                   minWidth="20%"
                   paddingX={1}
-                  isDisabled={!isValid}
+                  isDisabled={!isValid || loadingENS}
                 >
                   <Text>Approve {'->'}</Text>
                 </Button>
